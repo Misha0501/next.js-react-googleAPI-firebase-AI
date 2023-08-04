@@ -237,4 +237,4 @@ sketch
 # End of https://www.toptal.com/developers/gitignore/api/nextjs,jetbrains+all,webstorm+all,react
 .idea/*
 /.env
-/prisma/
+/prisma/migrations
