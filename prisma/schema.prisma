@@ -44,6 +44,7 @@ model User {
   image         String?
   accounts      Account[]
   sessions      Session[]
+  applicationUser ApplicationUser?
 }
 
 model VerificationToken {
@@ -56,22 +57,23 @@ model VerificationToken {
 
 model ApplicationUser {
   id            Int        @id @default(autoincrement())
-  userId             String
+  userId             String @unique
   user User @relation(fields: [userId], references: [id])
   username          String   @unique
   firstName         String
   lastName          String
+  memberships Membership[]
   createdAt  DateTime   @default(now())
   updatedAt  DateTime   @updatedAt
 }
 
 model Membership {
   id            Int        @id @default(autoincrement())
-  applicationUserId             String
+  applicationUserId             Int
   applicationUser ApplicationUser @relation(fields: [applicationUserId], references: [id])
-  companyId             String
+  companyId             Int
   company Company @relation(fields: [companyId], references: [id])
-  idActive          Boolean    @default(true)
+  isActive          Boolean    @default(true)
   applicationUserRole  String
   createdAt  DateTime   @default(now())
   updatedAt  DateTime   @updatedAt
