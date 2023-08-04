@@ -1,0 +1,39 @@
+version: "3.7"
+
+services:
+  web:
+    build:
+      context: ./
+      target: runner
+    volumes:
+      - .:/app
+    command: npm run dev
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: development
+  db:
+    image: postgres
+    container_name: real-estate-db-container
+    restart: always
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: real-estate-db
+    ports:
+      - "5432:5432"
+    volumes:
+      - real-estate-db:/var/lib/postgresql/data
+
+  pgadmin:
+    container_name: real-estate-pgadmin4_container
+    image: dpage/pgadmin4
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: root
+    ports:
+      - "5051:80"
+
+volumes:
+  real-estate-db:
