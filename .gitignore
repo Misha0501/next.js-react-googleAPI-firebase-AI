@@ -238,3 +238,5 @@ sketch
 .idea/*
 /.env
 /prisma/migrations
+
+/app/lib/firebase/firebaseAdminCredentials.ts
