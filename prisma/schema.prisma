@@ -1,45 +1,65 @@
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider          = "postgresql"
+  url               = env("DATABASE_URL")
   shadowDatabaseUrl = env("SHADOW_DATABASE_URL") // Only needed when using a cloud provider that doesn't support the creation of new databases, like Heroku. Learn more: https://pris.ly/d/migrate-shadow
 }
 
 generator client {
-  provider        = "prisma-client-js"
-  previewFeatures = ["referentialActions"] // You won't need this in Prisma 3.X or higher.
+  provider = "prisma-client-js"
 }
 
 model ApplicationUser {
-  id            Int        @id @default(autoincrement())
-  firebaseUID         String @default("")
-  email               String @unique
-  displayName         String @default("")
-  providerId          String @default("")
-  memberships Membership[]
-  createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt
+  id          Int          @id @default(autoincrement())
+  firebaseUID String       @default("")
+  email       String       @unique
+  displayName String       @default("")
+  providerId  String       @default("")
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  Membership  Membership[]
 }
 
 model Membership {
-  id            Int        @id @default(autoincrement())
-  applicationUserId             Int
-  applicationUser ApplicationUser @relation(fields: [applicationUserId], references: [id])
-  companyId             Int
-  company Company @relation(fields: [companyId], references: [id])
-  isActive          Boolean    @default(true)
-  applicationUserRole  String
-  createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt
+  id                  Int             @id @default(autoincrement())
+  applicationUserId   Int
+  applicationUser     ApplicationUser @relation(fields: [applicationUserId], references: [id])
+  companyId           Int
+  company             Company         @relation(fields: [companyId], references: [id])
+  isActive            Boolean         @default(true)
+  applicationUserRole String
+  createdAt           DateTime        @default(now())
+  updatedAt           DateTime        @updatedAt
 }
 
 model Company {
-  id            Int        @id @default(autoincrement())
-  memberships         Membership[]
-  name          String   @unique
-  address               String
-  phoneNumber          String
-  description          String
-  createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt
+  id          Int          @id @default(autoincrement())
+  memberships Membership[]
+  name        String       @unique
+  address     String
+  phoneNumber String
+  description String
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
 }
 
+model AdministratieveArea {
+  id         Int        @id @default(autoincrement())
+  name       String     @default("")
+  localities Locality[]
+}
+
+model Locality {
+  id                    Int                 @id @default(autoincrement())
+  name                  String              @default("")
+  administratieveAreaId Int
+  administratieveArea   AdministratieveArea @relation(fields: [administratieveAreaId], references: [id])
+}
+
+model ListingImage {
+  id                Int      @id @default(autoincrement())
+  listingId         Int
+  positionInListing Int
+  url               String
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
