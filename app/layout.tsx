@@ -1,6 +1,6 @@
 import './globals.css'
 import type {Metadata} from 'next'
-import AuthProvider from './context/AuthProvider'
+import {AuthContextProvider} from './context/AuthContext'
 
 import {Inter} from 'next/font/google'
 
@@ -11,17 +11,13 @@ export const metadata: Metadata = {
     description: 'Real estate website for Bulgarian market with User Experience first approach',
 }
 
-export default function RootLayout({
-                                       children,
-                                   }: {
-    children: React.ReactNode
-}) {
+export default function RootLayout({children,}: { children: React.ReactNode }) {
     return (
         <html lang="en">
         <body className={inter.className}>
-            <AuthProvider>
-                {children}
-            </AuthProvider>
+        <AuthContextProvider>
+            {children}
+        </AuthContextProvider>
         </body>
         </html>
     )
