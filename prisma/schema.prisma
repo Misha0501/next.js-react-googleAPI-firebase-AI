@@ -1,45 +1,271 @@
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider          = "postgresql"
+  url               = env("DATABASE_URL")
   shadowDatabaseUrl = env("SHADOW_DATABASE_URL") // Only needed when using a cloud provider that doesn't support the creation of new databases, like Heroku. Learn more: https://pris.ly/d/migrate-shadow
 }
 
 generator client {
-  provider        = "prisma-client-js"
-  previewFeatures = ["referentialActions"] // You won't need this in Prisma 3.X or higher.
+  provider = "prisma-client-js"
 }
 
 model ApplicationUser {
-  id            Int        @id @default(autoincrement())
-  firebaseUID         String @default("")
-  email               String @unique
-  displayName         String @default("")
-  providerId          String @default("")
-  memberships Membership[]
-  createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt
+  id           Int            @id @default(autoincrement())
+  firebaseUID  String         @default("")
+  email        String         @unique
+  displayName  String         @default("")
+  providerId   String         @default("")
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  Membership   Membership[]
+  Invoice      Invoice[]
+  Listing      Listing[]
+  SavedListing SavedListing[]
+  SavedSearch  SavedSearch[]
 }
 
 model Membership {
-  id            Int        @id @default(autoincrement())
-  applicationUserId             Int
-  applicationUser ApplicationUser @relation(fields: [applicationUserId], references: [id])
-  companyId             Int
-  company Company @relation(fields: [companyId], references: [id])
-  isActive          Boolean    @default(true)
-  applicationUserRole  String
-  createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt
+  id                  Int             @id @default(autoincrement())
+  applicationUserId   Int
+  applicationUser     ApplicationUser @relation(fields: [applicationUserId], references: [id])
+  companyId           Int
+  company             Company         @relation(fields: [companyId], references: [id])
+  isActive            Boolean         @default(true)
+  applicationUserRole String
+  createdAt           DateTime        @default(now())
+  updatedAt           DateTime        @updatedAt
 }
 
 model Company {
-  id            Int        @id @default(autoincrement())
-  memberships         Membership[]
-  name          String   @unique
-  address               String
-  phoneNumber          String
-  description          String
-  createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt
+  id          Int          @id @default(autoincrement())
+  memberships Membership[]
+  name        String       @unique
+  address     String
+  phoneNumber String
+  description String
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  Listing     Listing[]
 }
 
+model AdministratieveArea {
+  id         Int        @id @default(autoincrement())
+  name       String     @default("")
+  localities Locality[]
+}
+
+model Locality {
+  id                    Int                 @id @default(autoincrement())
+  name                  String              @default("")
+  administratieveAreaId Int
+  administratieveArea   AdministratieveArea @relation(fields: [administratieveAreaId], references: [id])
+  Listing               Listing[]
+  SavedSearch           SavedSearch[]
+}
+
+model ListingImage {
+  id                Int      @id @default(autoincrement())
+  listingId         Int
+  listing           Listing  @relation(fields: [listingId], references: [id])
+  positionInListing Int?
+  url               String
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
+
+model Currency {
+  id               Int                @id @default(autoincrement())
+  name             String
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+  SubscriptionPlan SubscriptionPlan[]
+  ListingPrice     ListingPrice[]
+}
+
+model SubscriptionPlan {
+  id               Int            @id @default(autoincrement())
+  name             String
+  currencyId       Int
+  currency         Currency       @relation(fields: [currencyId], references: [id])
+  subscriptions    Subscription[]
+  daysPerInterval  Int
+  pricePerInterval Float?         @db.DoublePrecision
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+}
+
+model Subscription {
+  id                    Int              @id @default(autoincrement())
+  name                  String
+  subscriptionPlanId    Int
+  subscriptionPlan      SubscriptionPlan @relation(fields: [subscriptionPlanId], references: [id])
+  listingId             Int
+  listing               Listing          @relation(fields: [listingId], references: [id])
+  startsAt              DateTime?        @default(now())
+  endsAt                DateTime?
+  renewedAt             DateTime?
+  canceledAt            DateTime?
+  renewedSubscriptionId Int?             @unique
+  renewedSubscription   Subscription?    @relation("RenewedSubscription", fields: [renewedSubscriptionId], references: [id])
+  renewedSubscriptions  Subscription[]   @relation("RenewedSubscription")
+  createdAt             DateTime         @default(now())
+  updatedAt             DateTime         @updatedAt
+  Invoice               Invoice?
+}
+
+model Invoice {
+  id                Int             @id @default(autoincrement())
+  applicationUserId Int
+  applicationUser   ApplicationUser @relation(fields: [applicationUserId], references: [id])
+  subscriptionId    Int?            @unique
+  subscription      Subscription?   @relation(fields: [subscriptionId], references: [id])
+  amount            Float?          @db.DoublePrecision
+  description       String?
+  invoiceDate       DateTime?       @default(now())
+  dueData           DateTime?
+  endsAt            DateTime?
+  payedAt           DateTime?
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+}
+
+enum ListingType {
+  RENT
+  SALE
+}
+
+enum InteriorType {
+  UNFURNISHED
+  FURNISHED
+}
+
+enum UpkeepType {
+  EXCELLENT
+  GOOD
+  FAIR
+  POOR
+}
+
+enum HeatingType {
+  BOILER
+  CENTRAL
+}
+
+model PropertyType {
+  id          Int           @id @default(autoincrement())
+  name        String
+  listings    Listing[]
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  SavedSearch SavedSearch[]
+}
+
+// TODO: remove ? and default from fields where not needed
+model Listing {
+  id                          Int                          @id @default(autoincrement())
+  applicationUserId           Int
+  applicationUser             ApplicationUser              @relation(fields: [applicationUserId], references: [id])
+  companyId                   Int?
+  company                     Company?                     @relation(fields: [companyId], references: [id])
+  localityId                  Int?
+  locality                    Locality?                    @relation(fields: [localityId], references: [id])
+  listingType                 ListingType                  @default(SALE)
+  interiorType                InteriorType                 @default(FURNISHED)
+  upkeepType                  UpkeepType                   @default(EXCELLENT)
+  propertyTypeId              Int?
+  propertyType                PropertyType?                @relation(fields: [propertyTypeId], references: [id])
+  description                 String?
+  listingDescriptionKeyPoints ListingDescriptionKeyPoint[]
+  areaTotal                   Float?                       @db.DoublePrecision
+  areaLiving                  Float?                       @db.DoublePrecision
+  areaLand                    Float?                       @db.DoublePrecision
+  volume                      Float?                       @db.DoublePrecision
+  areaOutside                 Float?                       @db.DoublePrecision
+  areaGarage                  Float?                       @db.DoublePrecision
+  streetName                  String?
+  houseNumber                 String?
+  postalCode                  String?
+  longitude                   String?
+  latitude                    String?
+  rooms                       Int?
+  bathrooms                   Int?
+  bedrooms                    Int?
+  parking                     Int?
+  constructedYear             DateTime?
+  floorNumber                 Int?
+  numberOfFloorsProperty      Int?
+  numberOfFloorsCommon        Int?
+  heatingType                 HeatingType?                 @default(BOILER)
+  active                      Boolean?                     @db.Boolean
+  activeUntil                 DateTime?
+  createdAt                   DateTime                     @default(now())
+  updatedAt                   DateTime                     @updatedAt
+  ListingImage                ListingImage[]
+  Subscription                Subscription[]
+  SavedListing                SavedListing[]
+  ListingPrice                ListingPrice[]
+}
+
+model ListingDescriptionKeyPoint {
+  id          Int      @id @default(autoincrement())
+  title       String
+  listingId   Int
+  listing     Listing  @relation(fields: [listingId], references: [id])
+  description String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model ListingPrice {
+  id         Int      @id @default(autoincrement())
+  listingId  Int
+  listing    Listing  @relation(fields: [listingId], references: [id])
+  currencyId Int
+  currency   Currency @relation(fields: [currencyId], references: [id])
+  tax        Float?   @db.DoublePrecision
+  price      Float?   @db.DoublePrecision
+
+  updatedListingPriceId Int?           @unique
+  updatedListingPrice   ListingPrice?  @relation("UpdatedPrice", fields: [updatedListingPriceId], references: [id])
+  listingPrices         ListingPrice[] @relation("UpdatedPrice")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model SavedListing {
+  id                Int             @id @default(autoincrement())
+  listingId         Int
+  listing           Listing         @relation(fields: [listingId], references: [id])
+  applicationUserId Int
+  applicationUser   ApplicationUser @relation(fields: [applicationUserId], references: [id])
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+}
+
+model SavedSearch {
+  id                 Int             @id @default(autoincrement())
+  applicationUserId  Int
+  applicationUser    ApplicationUser @relation(fields: [applicationUserId], references: [id])
+  localityId         Int?
+  locality           Locality?       @relation(fields: [localityId], references: [id])
+  listingType        ListingType     @default(SALE)
+  interiorType       InteriorType    @default(FURNISHED)
+  upkeepType         UpkeepType      @default(EXCELLENT)
+  propertyTypeId     Int?
+  propertyType       PropertyType?   @relation(fields: [propertyTypeId], references: [id])
+  areaLivingMin      Float?          @db.DoublePrecision
+  areaLivingMax      Float?          @db.DoublePrecision
+  areaTotalMin       Float?          @db.DoublePrecision
+  areaTotalMax       Float?          @db.DoublePrecision
+  roomsMin           Int?
+  roomsMax           Int?
+  bathroomsMin       Int?
+  bathroomsMax       Int?
+  bedroomsMin        Int?
+  bedroomsMax        Int?
+  constructedYearMin DateTime?
+  constructedYearMax DateTime?
+  heatingType        HeatingType?
+  createdAt          DateTime        @default(now())
+  updatedAt          DateTime        @updatedAt
+}
