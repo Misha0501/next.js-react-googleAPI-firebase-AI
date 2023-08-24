@@ -130,7 +130,7 @@ model Invoice {
 
 enum ListingType {
   RENT
-  SALE
+  SELL
 }
 
 enum InteriorType {
