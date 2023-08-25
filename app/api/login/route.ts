@@ -4,6 +4,7 @@ import {z} from "zod";
 import axios, {AxiosError} from "axios";
 import {FirebaseAPISignInAuthResponse} from "@/types";
 import { cookies } from 'next/headers'
+import {firebaseAdmin} from "@/app/lib/firebase/configAdmin";
 
 /**
  * POST Route to login
@@ -28,8 +29,8 @@ export async function POST(req: Request) {
 
         const oneDay = 24 * 60 * 60 * 1000
 
-        cookies().set('authToken', authToken, { expires: Date.now() - oneDay });
-        cookies().set('refreshToken', refreshToken, { expires: Date.now() - oneDay });
+        cookies().set('authToken', authToken, { expires: Date.now() + oneDay });
+        cookies().set('refreshToken', refreshToken, { expires: Date.now() + oneDay });
 
         return NextResponse.json({email: response.data.email, authToken, refreshToken})
     } catch (error) {
