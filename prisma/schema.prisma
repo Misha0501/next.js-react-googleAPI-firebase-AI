@@ -168,7 +168,7 @@ model Listing {
   company                     Company?                     @relation(fields: [companyId], references: [id])
   localityId                  Int?
   locality                    Locality?                    @relation(fields: [localityId], references: [id])
-  listingType                 ListingType                  @default(SALE)
+  listingType                 ListingType
   interiorType                InteriorType                 @default(FURNISHED)
   upkeepType                  UpkeepType                   @default(EXCELLENT)
   propertyTypeId              Int?
@@ -248,7 +248,7 @@ model SavedSearch {
   applicationUser    ApplicationUser @relation(fields: [applicationUserId], references: [id])
   localityId         Int?
   locality           Locality?       @relation(fields: [localityId], references: [id])
-  listingType        ListingType     @default(SALE)
+  listingType        ListingType
   interiorType       InteriorType    @default(FURNISHED)
   upkeepType         UpkeepType      @default(EXCELLENT)
   propertyTypeId     Int?
