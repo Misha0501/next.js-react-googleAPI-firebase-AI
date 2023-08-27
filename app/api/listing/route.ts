@@ -1,42 +1,17 @@
 import {NextRequest, NextResponse} from 'next/server'
-import {ApplicationUser, PrismaClient} from '@prisma/client'
+import {ApplicationUser} from '@prisma/client'
 import {listingSchema, listingsSearchParamSchema} from "@/app/lib/validations/listing";
 import {z} from "zod"
 import {ResponseError} from "@/classes/ResponseError";
 import {getApplicationUserServer} from "@/app/lib/getApplicationUserServer";
-import {redis} from "@/app/lib/redis";
-import {createPrismaRedisCache} from "prisma-redis-middleware";
-import {Prisma} from "@prisma/client/extension";
 import {valuesFromSearchParams} from "@/app/lib/validations/valuesFromSearchParams";
 import {
     prismaQueryConditionsFromArray,
     prismaQueryConditionsFromMinMaxValidDateStringValue,
     prismaQueryConditionsFromMinMaxValue
 } from "@/app/lib/db";
+import {prisma} from "@/app/lib/db/client";
 
-const prisma = new PrismaClient();
-
-
-const cacheMiddleware: Prisma.Middleware = createPrismaRedisCache({
-    models: [
-        {model: "Listing"},
-    ],
-    storage: {type: "redis", options: {client: redis, invalidation: {referencesTTL: 300}, log: console}},
-    cacheTime: 300,
-    // excludeModels: ["Product", "Cart"],
-    // excludeMethods: ["count", "groupBy"],
-    onHit: (key) => {
-        console.log("hit", key);
-    },
-    onMiss: (key) => {
-        console.log("miss", key);
-    },
-    onError: (key) => {
-        console.log("error", key);
-    },
-});
-
-prisma.$use(cacheMiddleware);
 
 /**
  * POST Route to post new listing.

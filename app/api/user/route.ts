@@ -1,10 +1,7 @@
 import {NextResponse} from 'next/server'
-import {PrismaClient} from '@prisma/client'
 import {z} from "zod"
 import {getApplicationUserServer} from "@/app/lib/getApplicationUserServer";
 import {ResponseError} from "@/classes/ResponseError";
-
-const prisma = new PrismaClient();
 
 /**
  * POST Route to register new users. it's only invoked be Google functions

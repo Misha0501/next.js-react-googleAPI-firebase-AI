@@ -1,8 +1,8 @@
 import {DecodedIdToken} from "firebase-admin/lib/auth/token-verifier";
 import {getDecodedIdToken} from "@/app/lib/getDecodedIdToken";
-import {PrismaClient, ApplicationUser} from '@prisma/client'
+import {ApplicationUser} from '@prisma/client'
+import {prisma} from "@/app/lib/db/client";
 
-const prisma = new PrismaClient();
 export const getApplicationUserServer = async (): Promise<ApplicationUser> => {
     try {
 

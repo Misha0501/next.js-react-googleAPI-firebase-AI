@@ -4,7 +4,6 @@ import {z} from "zod";
 import axios, {AxiosError} from "axios";
 import {FirebaseAPISignInAuthResponse} from "@/types";
 import { cookies } from 'next/headers'
-import {firebaseAdmin} from "@/app/lib/firebase/configAdmin";
 
 /**
  * POST Route to login
