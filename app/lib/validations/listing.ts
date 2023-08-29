@@ -48,11 +48,11 @@ export const listingSchema = z.object({
     areaTotal: z.number().max(1000000, {
         message: "AreaTotal can not exceed 1000000",
     }),
-    areaLiving: z.number().optional(),
-    areaLand: z.number().optional(),
-    volume: z.number().optional(),
-    areaOutside: z.number().optional(),
-    areaGarage: z.number().optional(),
+    areaLiving: z.number().max(1000000).optional(),
+    areaLand: z.number().max(1000000).optional(),
+    volume: z.number().max(1000000).optional(),
+    areaOutside: z.number().max(1000000).optional(),
+    areaGarage: z.number().max(1000000).optional(),
     streetName: z.string().optional(),
     houseNumber: z.string().optional(),
     longitude: z.string().optional(),
@@ -79,11 +79,43 @@ export const listingSchema = z.object({
     heatingType: z.enum(HEATING_TYPE_VALID_VALUES).optional(),
 })
 
+export const listingSchemaPutRequest = listingSchema.extend({
+    id: z.number(),
+    postalCode: z.string().optional(),
+    localityId: z.number().optional(),
+    listingType: z.enum(LISTING_TYPE_VALID_VALUES).optional(),
+    interiorType: z.enum(INTERIOR_TYPE_VALID_VALUES).optional(),
+    propertyTypeId: z.number().optional(),
+    upkeepType: z.enum(UPKEEP_TYPE_VALID_VALUES).optional(),
+    images: z
+        .array(
+            z.object({
+                id: z.number(),
+                url: z.string(),
+                positionInListing: z.number()
+            })
+        ).min(3, {
+            message: "There should be at least 3 images of the property"
+        }).max(30, {
+            message: "There can be max 30 images of the property"
+        })
+        .optional()
+        .nullable(),
+})
+
+export const listingSchemaDeleteRequest = z.object({
+    id: z.number()
+})
+
 const searchParamSchema = z.string().array()
 
 export const listingsSearchParamSchema = z.object({
-    page: searchParamSchema.pipe(z.coerce.string()).optional(),
-    limit: searchParamSchema.pipe(z.coerce.string()).optional(),
+    page: searchParamSchema.max(1).pipe(
+        z.coerce.number().min(0).max(1000000)
+    ).optional(),
+    pageSize: searchParamSchema.max(1).pipe(
+        z.coerce.number().min(0).max(100)
+    ).optional(),
     locality: searchParamSchema.pipe(z.coerce.string()).optional(),
     heatingType: searchParamSchema.min(1).max(2).refine(
         userInputArray => userInputArray.every(el => HEATING_TYPE_VALID_VALUES.includes(el)),

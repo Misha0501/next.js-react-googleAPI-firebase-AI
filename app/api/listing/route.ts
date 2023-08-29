@@ -1,6 +1,11 @@
 import {NextRequest, NextResponse} from 'next/server'
 import {ApplicationUser} from '@prisma/client'
-import {listingSchema, listingsSearchParamSchema} from "@/app/lib/validations/listing";
+import {
+    listingSchema,
+    listingSchemaDeleteRequest,
+    listingSchemaPutRequest,
+    listingsSearchParamSchema
+} from "@/app/lib/validations/listing";
 import {z} from "zod"
 import {ResponseError} from "@/classes/ResponseError";
 import {getApplicationUserServer} from "@/app/lib/getApplicationUserServer";
@@ -101,10 +106,12 @@ export async function GET(req: NextRequest) {
 
         const totalRecordsCount = await prisma.listing.count();
 
+        // Get listing that weren't deleted and that match the search criteria
         const listings = await prisma.listing.findMany({
             skip: offsetRecords,
             take: pageSize,
             where: {
+                deleted: null,
                 ...prismaQueryConditions
             }
         });
@@ -210,6 +217,175 @@ export async function POST(req: Request) {
         })
 
         return NextResponse.json(listing)
+    } catch (error) {
+        console.error(error)
+        if (error instanceof z.ZodError) {
+            return new Response(error.message, {status: 422})
+        }
+
+        if (error instanceof ResponseError) {
+            return new Response(error.message, {status: error.status})
+        }
+
+        if (error.errorInfo && error.errorInfo.code) {
+            return new Response('Firebase ID token is invalid or it has expired. Get a fresh ID token and try again.', {status: 400})
+        }
+
+        return new Response('Something went wrong please try again later', {
+            status: 500,
+        })
+    }
+}
+
+/**
+ * PUT Route to update listing.
+ * @param req
+ * @constructor
+ */
+export async function PUT(req: Request) {
+    try {
+        const applicationUser: ApplicationUser = await getApplicationUserServer()
+        const parsedValues = listingSchemaPutRequest.parse(await req.json());
+        const {
+            id,
+            postalCode,
+            localityId,
+            listingType,
+            interiorType,
+            propertyTypeId,
+            upkeepType,
+            images,
+            description,
+            areaTotal,
+            areaLiving,
+            areaLand,
+            volume,
+            areaOutside,
+            areaGarage,
+            streetName,
+            houseNumber,
+            longitude,
+            latitude,
+            rooms,
+            bathrooms,
+            bedrooms,
+            parking,
+            constructedYear,
+            floorNumber,
+            numberOfFloorsProperty,
+            numberOfFloorsCommon,
+            heatingType
+        } = parsedValues
+
+        const listing = await prisma.listing.findUnique({
+            where: {
+                id,
+            },
+        })
+        if(!listing) throw new ResponseError("Listing with provided id wasn't found.", 404)
+
+        const applicationUserId = applicationUser.id;
+
+        if(applicationUserId !== listing.applicationUserId) throw new ResponseError("You aren't allowed to changed this property", 401)
+
+        const updatedListing = await prisma.listing.update({
+            where: {
+                id
+            },
+            data: {
+                postalCode,
+                localityId,
+                listingType,
+                interiorType,
+                propertyTypeId,
+                upkeepType,
+                images,
+                description,
+                areaTotal,
+                areaLiving,
+                areaLand,
+                volume,
+                areaOutside,
+                areaGarage,
+                streetName,
+                houseNumber,
+                longitude,
+                latitude,
+                rooms,
+                bathrooms,
+                bedrooms,
+                parking,
+                constructedYear,
+                floorNumber,
+                numberOfFloorsProperty,
+                numberOfFloorsCommon,
+                heatingType
+            },
+        })
+
+
+        return NextResponse.json(updatedListing)
+    } catch (error) {
+        console.error(error)
+        if (error instanceof z.ZodError) {
+            return new Response(error.message, {status: 422})
+        }
+
+        if (error instanceof ResponseError) {
+            return new Response(error.message, {status: error.status})
+        }
+
+        if (error.errorInfo && error.errorInfo.code) {
+            return new Response('Firebase ID token is invalid or it has expired. Get a fresh ID token and try again.', {status: 400})
+        }
+
+        return new Response('Something went wrong please try again later', {
+            status: 500,
+        })
+    }
+}
+
+
+/**
+ * DELETE Route to delete a listing.
+ * @param req
+ * @constructor
+ */
+export async function DELETE(req: Request) {
+    try {
+        const applicationUser: ApplicationUser = await getApplicationUserServer();
+        const parsedValues = listingSchemaDeleteRequest.parse(await req.json());
+        const { id } = parsedValues;
+
+        const applicationUserId = applicationUser.id;
+        const listing = await prisma.listing.findUnique({
+            where: { id }
+        })
+
+        if(!listing) throw new ResponseError("Listing with provided id wasn't found.", 404)
+
+        if(applicationUserId !== listing.applicationUserId) throw new ResponseError("You aren't allowed to changed this property", 401)
+
+
+        const deleteListingImages = prisma.listingImage.deleteMany({
+            where: {
+                listingId: id,
+            },
+        })
+
+        const deleteListingPrices = prisma.listingImage.deleteMany({
+            where: {
+                listingId: id,
+            },
+        })
+
+        const deleteListing = prisma.listing.delete({
+            where: { id }
+        })
+
+        const transaction = await prisma.$transaction([deleteListingImages, deleteListingPrices, deleteListing])
+
+        return NextResponse.json(transaction[2])
     } catch (error) {
         console.error(error)
         if (error instanceof z.ZodError) {

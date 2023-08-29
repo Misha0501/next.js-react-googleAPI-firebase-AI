@@ -199,6 +199,7 @@ model Listing {
   activeUntil                 DateTime?
   createdAt                   DateTime                     @default(now())
   updatedAt                   DateTime                     @updatedAt
+  deleted                     DateTime?
   ListingImage                ListingImage[]
   Subscription                Subscription[]
   SavedListing                SavedListing[]
