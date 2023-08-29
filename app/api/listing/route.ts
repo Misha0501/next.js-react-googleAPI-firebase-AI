@@ -28,7 +28,7 @@ export async function GET(req: NextRequest) {
         const parsedValues = listingsSearchParamSchema.parse(values)
         let {
             page,
-            limit,
+            pageSize,
             locality,
             heatingType,
             listingType,
@@ -60,21 +60,21 @@ export async function GET(req: NextRequest) {
             AND: [],
         };
 
-        let localityWhereObj = prismaQueryConditionsFromArray(locality, "locality");
-        let heatingTypeWhereObj = prismaQueryConditionsFromArray(heatingType, "heatingType");
-        let listingTypeWhereObj = prismaQueryConditionsFromArray(listingType, "listingType");
-        let interiorTypeWhereObj = prismaQueryConditionsFromArray(interiorType, "interiorType");
-        let propertyTypeIdWhereObj = prismaQueryConditionsFromArray(propertyTypeId, "propertyTypeId");
-        let upkeepTypeWhereObj = prismaQueryConditionsFromArray(upkeepType, "upkeepType");
-        let areaTotalWhereObj = prismaQueryConditionsFromMinMaxValue(areaTotalMin, areaTotalMax, "areaTotal");
-        let areaLivingWhereObj = prismaQueryConditionsFromMinMaxValue(areaLivingMin, areaLivingMax, "areaLiving");
-        let areaLandWhereObj = prismaQueryConditionsFromMinMaxValue(areaLandMin, areaLandMax, "areaLand");
-        let areaOutsideWhereObj = prismaQueryConditionsFromMinMaxValue(areaOutsideMin, areaOutsideMax, "areaOutside");
-        let roomsWhereObj = prismaQueryConditionsFromMinMaxValue(roomsMin, roomsMax, "rooms");
-        let bathroomsWhereObj = prismaQueryConditionsFromMinMaxValue(bathroomsMin, bathroomsMax, "bathrooms");
-        let bedroomsWhereObj = prismaQueryConditionsFromMinMaxValue(bedroomsMin, bedroomsMax, "bedrooms");
-        let parkingWhereObj = prismaQueryConditionsFromMinMaxValue(parkingMin, parkingMax, "parking");
-        let constructedYearWhereObj = prismaQueryConditionsFromMinMaxValidDateStringValue(constructedYearMin, constructedYearMax, "constructedYear");
+        const localityWhereObj = prismaQueryConditionsFromArray(locality, "locality");
+        const heatingTypeWhereObj = prismaQueryConditionsFromArray(heatingType, "heatingType");
+        const listingTypeWhereObj = prismaQueryConditionsFromArray(listingType, "listingType");
+        const interiorTypeWhereObj = prismaQueryConditionsFromArray(interiorType, "interiorType");
+        const propertyTypeIdWhereObj = prismaQueryConditionsFromArray(propertyTypeId, "propertyTypeId");
+        const upkeepTypeWhereObj = prismaQueryConditionsFromArray(upkeepType, "upkeepType");
+        const areaTotalWhereObj = prismaQueryConditionsFromMinMaxValue(areaTotalMin, areaTotalMax, "areaTotal");
+        const areaLivingWhereObj = prismaQueryConditionsFromMinMaxValue(areaLivingMin, areaLivingMax, "areaLiving");
+        const areaLandWhereObj = prismaQueryConditionsFromMinMaxValue(areaLandMin, areaLandMax, "areaLand");
+        const areaOutsideWhereObj = prismaQueryConditionsFromMinMaxValue(areaOutsideMin, areaOutsideMax, "areaOutside");
+        const roomsWhereObj = prismaQueryConditionsFromMinMaxValue(roomsMin, roomsMax, "rooms");
+        const bathroomsWhereObj = prismaQueryConditionsFromMinMaxValue(bathroomsMin, bathroomsMax, "bathrooms");
+        const bedroomsWhereObj = prismaQueryConditionsFromMinMaxValue(bedroomsMin, bedroomsMax, "bedrooms");
+        const parkingWhereObj = prismaQueryConditionsFromMinMaxValue(parkingMin, parkingMax, "parking");
+        const constructedYearWhereObj = prismaQueryConditionsFromMinMaxValidDateStringValue(constructedYearMin, constructedYearMax, "constructedYear");
 
         prismaQueryConditions.AND.push(
             localityWhereObj,
@@ -93,14 +93,23 @@ export async function GET(req: NextRequest) {
             parkingWhereObj,
             constructedYearWhereObj)
 
+        // If page or pageSize are not define, use standard values
+        page = page ? page : 1;
+        pageSize = pageSize ? pageSize : 25;
+
+        const offsetRecords = (page - 1) * pageSize
+
+        const totalRecordsCount = await prisma.listing.count();
+
         const listings = await prisma.listing.findMany({
-            take: 25,
+            skip: offsetRecords,
+            take: pageSize,
             where: {
                 ...prismaQueryConditions
             }
         });
 
-        return NextResponse.json(listings)
+        return NextResponse.json({page, pageSize, total: totalRecordsCount, results: listings})
     } catch (error) {
         console.error(error)
         if (error instanceof z.ZodError) {
