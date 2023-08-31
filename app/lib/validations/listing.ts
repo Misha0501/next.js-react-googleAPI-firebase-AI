@@ -103,10 +103,6 @@ export const listingSchemaPutRequest = listingSchema.extend({
         .nullable(),
 })
 
-export const listingSchemaDeleteRequest = z.object({
-    id: z.number()
-})
-
 const searchParamSchema = z.string().array()
 
 export const listingsSearchParamSchema = z.object({

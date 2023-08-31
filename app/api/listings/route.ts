@@ -16,10 +16,12 @@ import {
     prismaQueryConditionsFromMinMaxValue
 } from "@/app/lib/db";
 import {prisma} from "@/app/lib/db/client";
+import {getApplicationUserCompanyId} from "@/app/lib/listing/getApplicationUserCompanyId";
+import {userAllowedManipulateListing} from "@/app/lib/listing/userAllowedManipulateListing";
 
 
 /**
- * POST Route to post new listing.
+ * GET Route to retrieve listings.
  * @param req
  * @param route
  * @constructor
@@ -145,7 +147,7 @@ export async function GET(req: NextRequest) {
  */
 export async function POST(req: Request) {
     try {
-        const applicationUser: ApplicationUser = await getApplicationUserServer()
+        const applicationUser: ApplicationUser = await getApplicationUserServer(true);
 
         const parsedValues = listingSchema.parse(await req.json());
         const {
@@ -178,10 +180,13 @@ export async function POST(req: Request) {
             heatingType
         } = parsedValues
 
+        // Get user's company id
+        let companyId = getApplicationUserCompanyId(applicationUser);
 
         const listing = await prisma.listing.create({
             data: {
                 applicationUserId: applicationUser.id,
+                companyId,
                 postalCode,
                 localityId,
                 listingType,
@@ -244,7 +249,7 @@ export async function POST(req: Request) {
  */
 export async function PUT(req: Request) {
     try {
-        const applicationUser: ApplicationUser = await getApplicationUserServer()
+        const applicationUser: ApplicationUser = await getApplicationUserServer(true)
         const parsedValues = listingSchemaPutRequest.parse(await req.json());
         const {
             id,
@@ -280,13 +285,18 @@ export async function PUT(req: Request) {
         const listing = await prisma.listing.findUnique({
             where: {
                 id,
+                deleted: null,
             },
         })
         if(!listing) throw new ResponseError("Listing with provided id wasn't found.", 404)
 
+        // Get user's company id
+        let applicationUserCompanyId = getApplicationUserCompanyId(applicationUser);
+
         const applicationUserId = applicationUser.id;
 
-        if(applicationUserId !== listing.applicationUserId) throw new ResponseError("You aren't allowed to changed this property", 401)
+        // Check if the user can edit the listing
+        if(!userAllowedManipulateListing(applicationUserId, applicationUserCompanyId, listing)) throw new ResponseError("You aren't allowed to changed this property", 401)
 
         const updatedListing = await prisma.listing.update({
             where: {
@@ -325,67 +335,6 @@ export async function PUT(req: Request) {
 
 
         return NextResponse.json(updatedListing)
-    } catch (error) {
-        console.error(error)
-        if (error instanceof z.ZodError) {
-            return new Response(error.message, {status: 422})
-        }
-
-        if (error instanceof ResponseError) {
-            return new Response(error.message, {status: error.status})
-        }
-
-        if (error.errorInfo && error.errorInfo.code) {
-            return new Response('Firebase ID token is invalid or it has expired. Get a fresh ID token and try again.', {status: 400})
-        }
-
-        return new Response('Something went wrong please try again later', {
-            status: 500,
-        })
-    }
-}
-
-
-/**
- * DELETE Route to delete a listing.
- * @param req
- * @constructor
- */
-export async function DELETE(req: Request) {
-    try {
-        const applicationUser: ApplicationUser = await getApplicationUserServer();
-        const parsedValues = listingSchemaDeleteRequest.parse(await req.json());
-        const { id } = parsedValues;
-
-        const applicationUserId = applicationUser.id;
-        const listing = await prisma.listing.findUnique({
-            where: { id }
-        })
-
-        if(!listing) throw new ResponseError("Listing with provided id wasn't found.", 404)
-
-        if(applicationUserId !== listing.applicationUserId) throw new ResponseError("You aren't allowed to changed this property", 401)
-
-
-        const deleteListingImages = prisma.listingImage.deleteMany({
-            where: {
-                listingId: id,
-            },
-        })
-
-        const deleteListingPrices = prisma.listingImage.deleteMany({
-            where: {
-                listingId: id,
-            },
-        })
-
-        const deleteListing = prisma.listing.delete({
-            where: { id }
-        })
-
-        const transaction = await prisma.$transaction([deleteListingImages, deleteListingPrices, deleteListing])
-
-        return NextResponse.json(transaction[2])
     } catch (error) {
         console.error(error)
         if (error instanceof z.ZodError) {
