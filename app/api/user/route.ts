@@ -22,7 +22,7 @@ export async function GET(req: Request) {
         }
 
         if(error.errorInfo && error.errorInfo.code) {
-            return new Response('Firebase ID token is invalid or it has expired. Get a fresh ID token and try again.', {status: 400})
+            return new Response('Your auth token is invalid or it has expired. Get a new auth token and try again.', {status: 400})
         }
 
         return new Response('Something went wrong please try again later', {
