@@ -1,11 +1,6 @@
 import {NextRequest, NextResponse} from 'next/server'
 import {ApplicationUser} from '@prisma/client'
-import {
-    listingSchema,
-    listingSchemaDeleteRequest,
-    listingSchemaPutRequest,
-    listingsSearchParamSchema
-} from "@/app/lib/validations/listing";
+import {listingSchema, listingSchemaPutRequest, listingsSearchParamSchema} from "@/app/lib/validations/listing";
 import {z} from "zod"
 import {ResponseError} from "@/classes/ResponseError";
 import {getApplicationUserServer} from "@/app/lib/getApplicationUserServer";
