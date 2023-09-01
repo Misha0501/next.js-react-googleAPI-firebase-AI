@@ -25,7 +25,7 @@ model ApplicationUser {
 
 model Membership {
   id                  Int             @id @default(autoincrement())
-  applicationUserId   Int
+  applicationUserId   Int             @unique
   applicationUser     ApplicationUser @relation(fields: [applicationUserId], references: [id])
   companyId           Int
   company             Company         @relation(fields: [companyId], references: [id])
@@ -36,15 +36,16 @@ model Membership {
 }
 
 model Company {
-  id          Int          @id @default(autoincrement())
-  memberships Membership[]
-  name        String       @unique
-  address     String
-  phoneNumber String
-  description String
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
-  Listing     Listing[]
+  id           Int            @id @default(autoincrement())
+  memberships  Membership[]
+  name         String         @unique
+  address      String
+  phoneNumber  String
+  description  String
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  Listing      Listing[]
+  Subscription Subscription[]
 }
 
 model AdministratieveArea {
@@ -100,6 +101,8 @@ model Subscription {
   subscriptionPlan      SubscriptionPlan @relation(fields: [subscriptionPlanId], references: [id])
   listingId             Int
   listing               Listing          @relation(fields: [listingId], references: [id])
+  companyId             Int
+  company               Company          @relation(fields: [companyId], references: [id])
   startsAt              DateTime?        @default(now())
   endsAt                DateTime?
   renewedAt             DateTime?
@@ -168,7 +171,7 @@ model Listing {
   company                     Company?                     @relation(fields: [companyId], references: [id])
   localityId                  Int?
   locality                    Locality?                    @relation(fields: [localityId], references: [id])
-  listingType                 ListingType                  @default(SALE)
+  listingType                 ListingType
   interiorType                InteriorType                 @default(FURNISHED)
   upkeepType                  UpkeepType                   @default(EXCELLENT)
   propertyTypeId              Int?
@@ -199,6 +202,7 @@ model Listing {
   activeUntil                 DateTime?
   createdAt                   DateTime                     @default(now())
   updatedAt                   DateTime                     @updatedAt
+  deleted                     DateTime?
   ListingImage                ListingImage[]
   Subscription                Subscription[]
   SavedListing                SavedListing[]
@@ -248,7 +252,7 @@ model SavedSearch {
   applicationUser    ApplicationUser @relation(fields: [applicationUserId], references: [id])
   localityId         Int?
   locality           Locality?       @relation(fields: [localityId], references: [id])
-  listingType        ListingType     @default(SALE)
+  listingType        ListingType
   interiorType       InteriorType    @default(FURNISHED)
   upkeepType         UpkeepType      @default(EXCELLENT)
   propertyTypeId     Int?

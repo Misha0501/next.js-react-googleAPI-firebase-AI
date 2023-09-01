@@ -21,9 +21,13 @@ services:
       POSTGRES_PASSWORD: root
       POSTGRES_DB: real-estate-db
     ports:
-      - "5432:5432"
+      - "5555:5432"
     volumes:
       - real-estate-db:/var/lib/postgresql/data
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
 
   pgadmin:
     container_name: real-estate-pgadmin4_container
