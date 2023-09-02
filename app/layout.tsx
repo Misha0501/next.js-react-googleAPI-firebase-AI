@@ -1,4 +1,4 @@
-import './globals.css'
+import './globals.scss'
 import type {Metadata} from 'next'
 import {AuthContextProvider} from './context/AuthContext'
 
@@ -14,10 +14,12 @@ export const metadata: Metadata = {
 export default function RootLayout({children,}: { children: React.ReactNode }) {
     return (
         <html lang="en">
-        <body className={inter.className}>
-        <AuthContextProvider>
-            {children}
-        </AuthContextProvider>
+        <body className={`${inter.className} min-h-full`}>
+            <main className={'h-screen bg-cyan-800'}>
+                <AuthContextProvider>
+                    {children}
+                </AuthContextProvider>
+            </main>
         </body>
         </html>
     )
