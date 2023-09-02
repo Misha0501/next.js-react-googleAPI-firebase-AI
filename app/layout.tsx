@@ -1,5 +1,6 @@
 import './globals.scss'
 import type {Metadata} from 'next'
+import Head from 'next/head'
 import {AuthContextProvider} from './context/AuthContext'
 
 import {Inter} from 'next/font/google'
@@ -14,6 +15,9 @@ export const metadata: Metadata = {
 export default function RootLayout({children,}: { children: React.ReactNode }) {
     return (
         <html lang="en">
+        <head>
+            <link rel="stylesheet" href="https://rsms.me/inter/inter.css"/>
+        </head>
         <body className={`${inter.className} min-h-full`}>
             <main className={'h-screen bg-cyan-800'}>
                 <AuthContextProvider>
