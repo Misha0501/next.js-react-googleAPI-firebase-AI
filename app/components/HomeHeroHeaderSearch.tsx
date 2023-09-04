@@ -5,11 +5,13 @@ import {useEffect, useRef, useState} from "react";
 import Link from "next/link";
 import {useRouter} from "next/navigation";
 
+import {classNames} from "@/app/lib/classNames";
 
-function classNames(...classes) {
-    return classes.filter(Boolean).join(' ')
+
+window.initMap = function (e) {
+    console.log(e)
+    console.log("in init map")
 }
-import Autocomplete from "@/app/components/Autocomplete";
 
 export function HomeHeroHeaderSearch() {
     const [listingTypeSelectedIndex, setListingTypeSelectedIndex] = useState(0)
@@ -20,8 +22,8 @@ export function HomeHeroHeaderSearch() {
     let [popularSearches] = useState(
         [
             {
-                locality: 'Sophia',
-                href: 'sophia',
+                locality: 'Sofia',
+                href: 'sofia',
             },
             {
                 locality: 'Plovdiv',
@@ -60,8 +62,11 @@ export function HomeHeroHeaderSearch() {
     };
 
     useEffect(() => {
-        autoCompleteRef.current = new window.google.maps.places.Autocomplete(inputRef.current, options);
-    }, []);
+        // if(windw)
+        if(window.google ) {
+            autoCompleteRef.current = new window.google.maps.places.Autocomplete(inputRef.current, options);
+        }
+    }, [window.google]);
 
     useEffect(() => {
         setListingTypeSelected(listingTypeSelectedIndex === 0 ? 'SELL' : 'RENT')
