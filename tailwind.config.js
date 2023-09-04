@@ -9,6 +9,7 @@ module.exports = {
         "./node_modules/@tremor/**/*.{js,ts,jsx,tsx}", // Tremor module
     ],
     darkMode: "class",
+    // important: true,
     theme: {
         transparent: "transparent",
         current: "currentColor",
@@ -100,7 +101,7 @@ module.exports = {
             },
             fontSize: {
                 "tremor-label": ["0.75rem"],
-                "tremor-default": ["0.875rem", {lineHeight: "1.25rem"}],
+                "tremor-default": ["1rem", {lineHeight: "1.5rem"}],
                 "tremor-title": ["1.125rem", {lineHeight: "1.75rem"}],
                 "tremor-metric": ["1.875rem", {lineHeight: "2.25rem"}],
             },
