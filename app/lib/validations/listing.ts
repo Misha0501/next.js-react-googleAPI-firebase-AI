@@ -11,12 +11,23 @@ const INTERIOR_TYPE_VALID_VALUES = ['FURNISHED', 'UNFURNISHED'];
 const UPKEEP_TYPE_VALID_VALUES = ['EXCELLENT', 'GOOD', 'FAIR', 'POOR'];
 
 export const listingSchema = z.object({
-    postalCode: z.string(),
-    localityId: z.number(),
     listingType: z.enum(LISTING_TYPE_VALID_VALUES),
     interiorType: z.enum(INTERIOR_TYPE_VALID_VALUES),
     propertyTypeId: z.number(),
     upkeepType: z.enum(UPKEEP_TYPE_VALID_VALUES),
+    address: z.object(
+        {
+            streetNumber: z.string().optional(),
+            route: z.string().optional(),
+            locality: z.string().optional(),
+            postalCode: z.string().optional(),
+            neighborhood: z.string().optional(),
+            latitude: z.string().optional(),
+            longitude: z.string().optional(),
+            administrativeAreaLevelOne: z.string().optional(),
+            showExactLocation: z.boolean().optional()
+        }
+    ),
     images: z
         .array(
             z.object({
@@ -82,11 +93,23 @@ export const listingSchema = z.object({
 
 export const listingSchemaPutRequest = listingSchema.extend({
     id: z.number(),
-    postalCode: z.string().optional(),
-    localityId: z.number().optional(),
     listingType: z.enum(LISTING_TYPE_VALID_VALUES).optional(),
     interiorType: z.enum(INTERIOR_TYPE_VALID_VALUES).optional(),
     propertyTypeId: z.number().optional(),
+    address: z.object(
+        {
+            id: z.number(),
+            streetNumber: z.string().optional(),
+            route: z.string().optional(),
+            locality: z.string().optional(),
+            postalCode: z.string().optional(),
+            neighborhood: z.string().optional(),
+            latitude: z.string().optional(),
+            longitude: z.string().optional(),
+            showExactLocation: z.boolean().optional(),
+            administrativeAreaLevelOne: z.string().optional(),
+        }
+    ).optional(),
     upkeepType: z.enum(UPKEEP_TYPE_VALID_VALUES).optional(),
     images: z
         .array(

@@ -44,14 +44,9 @@ export const PlacePropertyForm = ({label, checked, onChange, name}) => {
         console.log("Place changed");
         // Get the place details from the autocomplete object.
         const place = autoCompleteRef.current.getPlace();
-        setShowFullAdress(true);
-        console.log(place)
-        console.log(place.geometry)
-        console.log(place.geometry.location)
-        console.log(place.geometry.location.lat())
-        console.log(place.geometry.location.lng())
-        console.log(place.geometry.viewport)
+        if(!place || !place.address_components) return;
 
+        setShowFullAdress(true);
 
         let streetNumber = '';
         let route = '';
@@ -67,17 +62,13 @@ export const PlacePropertyForm = ({label, checked, onChange, name}) => {
         // place.address_components are google.maps.GeocoderAddressComponent objects
         // which are documented at http://goo.gle/3l5i5Mr
         for (const component of place.address_components as google.maps.GeocoderAddressComponent[]) {
-            // @ts-ignore remove once typings fixed
             const componentType = component.types[0];
 
-            // console.log("component")
-            // console.log(component)
             switch (componentType) {
                 case "street_number": {
                     streetNumber = component.long_name;
                     break;
                 }
-
                 case "route": {
                     route = component.long_name;
                     break;
@@ -102,6 +93,7 @@ export const PlacePropertyForm = ({label, checked, onChange, name}) => {
             }
         }
 
+        // set address varibles
         setRoute(route);
         setLocality(locality)
         setAdministrativeAreaLevelOne(administrativeAreaLevelOne)
@@ -109,6 +101,7 @@ export const PlacePropertyForm = ({label, checked, onChange, name}) => {
         setPostalCode(postalCode)
         setNeighborhood(neighborhood)
 
+        // set latitude and longitude
         if(place.geometry && place.geometry.location) {
             setLatitude(place.geometry.location.lat())
             setLongitude(place.geometry.location.lng())
@@ -186,13 +179,13 @@ export const PlacePropertyForm = ({label, checked, onChange, name}) => {
                 <div className="">
                     <div className="mb-7">
                         <p className={"mb-2"}>Type your address</p>
+                        <p>Example: {example}</p>
                         <TextInput ref={inputRef}/>
                     </div>
 
                     {showFullAdress && <div className="">
                         <div className="mb-7">
-                            <p className={"mb-2"}>{example}</p>
-                            {/*<span className={"mb-2"}>House number</span>*/}
+                            <p className={"mb-2"}>House number</p>
                             <TextInput value={streetNumber} onChange={(e) => setStreetNumber(e.target.value)}/>
                         </div>
                         <div className="mb-7">

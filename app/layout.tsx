@@ -1,11 +1,7 @@
 import './globals.scss'
 import type {Metadata} from 'next'
-import Head from 'next/head'
 import {AuthContextProvider} from './context/AuthContext'
-import logo from '@/public/BoraLogo.png'
-import Image from 'next/image'
 import {Inter} from 'next/font/google'
-import Link from "next/link";
 import {Navigation} from "@/app/components/Navigation";
 
 const inter = Inter({subsets: ['latin']})

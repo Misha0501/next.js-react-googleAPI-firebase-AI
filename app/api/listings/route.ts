@@ -183,7 +183,8 @@ export async function POST(req: Request) {
             floorNumber,
             numberOfFloorsProperty,
             numberOfFloorsCommon,
-            heatingType
+            heatingType,
+            address
         } = parsedValues
 
         // Get user's company id
