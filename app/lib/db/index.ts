@@ -22,7 +22,7 @@ export const prismaQueryConditionsFromMinMaxValidDateStringValue = (minValue: st
     return result;
 }
 
-export const prismaQueryConditionsFromArray = (valueArray, singleValueName) => {
+export const prismaQueryConditionsFromArray = (valueArray, singleValueName, isNumber = false) => {
     if (!valueArray) return {};
     let result = {
         OR: [],
@@ -30,14 +30,22 @@ export const prismaQueryConditionsFromArray = (valueArray, singleValueName) => {
     if (valueArray.length === 0) return result;
 
     if (valueArray.length === 1) {
-        result[singleValueName] = valueArray[0];
+        if(isNumber) {
+            result[singleValueName] = Number(valueArray[0]);
+        } else {
+            result[singleValueName] = valueArray[0];
+        }
         return result;
     }
 
     if (valueArray.length > 1) {
         valueArray.forEach(val => {
             const tempObj = {}
-            tempObj[singleValueName] = val;
+            if(isNumber) {
+                tempObj[singleValueName] = Number(val);
+            } else {
+                tempObj[singleValueName] = val;
+            }
             result.OR.push(tempObj);
         })
     }

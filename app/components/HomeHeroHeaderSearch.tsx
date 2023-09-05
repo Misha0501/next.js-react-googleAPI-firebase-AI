@@ -1,13 +1,16 @@
 'use client';
 import {Tab} from '@headlessui/react'
 import {MagnifyingGlassIcon} from "@heroicons/react/24/solid";
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import Link from "next/link";
 import {useRouter} from "next/navigation";
 
+import {classNames} from "@/app/lib/classNames";
 
-function classNames(...classes) {
-    return classes.filter(Boolean).join(' ')
+
+window.initMap = function (e) {
+    console.log(e)
+    console.log("in init map")
 }
 
 export function HomeHeroHeaderSearch() {
@@ -19,8 +22,8 @@ export function HomeHeroHeaderSearch() {
     let [popularSearches] = useState(
         [
             {
-                locality: 'Sophia',
-                href: 'sophia',
+                locality: 'Sofia',
+                href: 'sofia',
             },
             {
                 locality: 'Plovdiv',
@@ -49,6 +52,21 @@ export function HomeHeroHeaderSearch() {
 
         ]
     )
+
+    const autoCompleteRef = useRef();
+    const inputRef = useRef();
+    const options = {
+        componentRestrictions: {country: "bg"},
+        fields: ["address_components", "geometry", "icon", "name"],
+        types: ["(cities)"]
+    };
+
+    useEffect(() => {
+        // if(windw)
+        if(window.google ) {
+            autoCompleteRef.current = new window.google.maps.places.Autocomplete(inputRef.current, options);
+        }
+    }, [window.google]);
 
     useEffect(() => {
         setListingTypeSelected(listingTypeSelectedIndex === 0 ? 'SELL' : 'RENT')
@@ -95,11 +113,24 @@ export function HomeHeroHeaderSearch() {
                 </Tab.Group>
 
                 <div className="relative max-w-2xl w-full flex items-center mb-10">
-                    <input className="hero__search w-full p-3 pl-8 rounded-l-lg outline-0 text-black"
+                    <input className="hero__search w-full p-3 pl-8 rounded-l-lg outline-0 focus:outline-none text-black"
                            type={'text'}
                            placeholder={"E.g: Sophia, Plovdiv, Varna"}
                            onChange={event => setSelectedLocality(event.target.value)}
                     />
+                    <button type={"submit"} className="p-3 bg-gray-200 rounded-r-lg">
+                        <MagnifyingGlassIcon className={"h-6 w-6 text-gray-600"}/>
+                    </button>
+                </div>
+                <div className="relative max-w-2xl w-full flex items-center mb-10">
+                    <input className="hero__search w-full p-3 pl-8 rounded-l-lg outline-0 focus:outline-none text-black"
+                           type={'text'}
+                           placeholder={"E.g: Sophia, Plovdiv, Varna"}
+                           onChange={event => setSelectedLocality(event.target.value)}
+                           ref={inputRef}
+                    />
+
+                    {/*<Autocomplete className="hero__search w-full p-3 pl-8 rounded-l-lg outline-0 focus:outline-none text-black"></Autocomplete>*/}
                     <button type={"submit"} className="p-3 bg-gray-200 rounded-r-lg">
                         <MagnifyingGlassIcon className={"h-6 w-6 text-gray-600"}/>
                     </button>
