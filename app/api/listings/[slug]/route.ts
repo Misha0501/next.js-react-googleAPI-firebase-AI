@@ -24,6 +24,11 @@ export async function GET(request: Request, {params}: { params: { slug: number }
                 id,
                 deleted: null,
             },
+            include: {
+                ListingImage: true,
+                Address: true,
+                ListingPrice: true,
+            },
         });
 
         if (!listing) throw new ResponseError("Listing with provided id wasn't found.", 404)
@@ -84,6 +89,12 @@ export async function DELETE(request: Request, {params}: { params: { slug: numbe
             },
         })
 
+        const deleteListingAddress = prisma.address.deleteMany({
+            where: {
+                listingId: id,
+            },
+        })
+
         const deleteListingPrices = prisma.listingImage.deleteMany({
             where: {
                 listingId: id,
@@ -94,7 +105,7 @@ export async function DELETE(request: Request, {params}: { params: { slug: numbe
             where: {id}
         })
 
-        await prisma.$transaction([deleteListingImages, deleteListingPrices, deleteListing])
+        await prisma.$transaction([deleteListingImages, deleteListingAddress, deleteListingPrices, deleteListing])
 
         return new Response(null, {status: 204})
     } catch (error) {

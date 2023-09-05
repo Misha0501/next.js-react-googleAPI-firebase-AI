@@ -81,7 +81,7 @@ export async function GET(req: NextRequest) {
 
         // set listed since
         const now = new Date();
-        if(listedSince) prismaQueryConditions['createdAt'] = {gte: new Date(now.getFullYear(), now.getMonth(), now.getDate() - listedSince)}
+        if (listedSince) prismaQueryConditions['createdAt'] = {gte: new Date(now.getFullYear(), now.getMonth(), now.getDate() - listedSince)}
 
         prismaQueryConditions.AND.push(
             localityWhereObj,
@@ -121,7 +121,12 @@ export async function GET(req: NextRequest) {
             where: {
                 deleted: null,
                 ...prismaQueryConditions
-            }
+            },
+            include: {
+                ListingImage: true,
+                Address: true,
+                ListingPrice: true,
+            },
         });
 
         return NextResponse.json({page, pageSize, total: totalRecordsCount, results: listings})
@@ -184,7 +189,9 @@ export async function POST(req: Request) {
             numberOfFloorsProperty,
             numberOfFloorsCommon,
             heatingType,
-            address
+            address,
+            price,
+            currency
         } = parsedValues
 
         // Get user's company id
@@ -220,11 +227,26 @@ export async function POST(req: Request) {
                 numberOfFloorsProperty,
                 numberOfFloorsCommon,
                 heatingType,
+                Address: {
+                    create: [
+                        {...address}
+                    ]
+                },
+                ListingPrice: {
+                    create: [
+                        {currency, price}
+                    ]
+                },
                 ListingImage: {
                     create: [
                         ...images
                     ]
-                }
+                },
+            },
+            include: {
+                ListingImage: true,
+                Address: true,
+                ListingPrice: true
             },
         })
 
@@ -286,7 +308,10 @@ export async function PUT(req: Request) {
             floorNumber,
             numberOfFloorsProperty,
             numberOfFloorsCommon,
-            heatingType
+            heatingType,
+            address,
+            currency,
+            price
         } = parsedValues
 
         const listing = await prisma.listing.findUnique({
@@ -295,7 +320,7 @@ export async function PUT(req: Request) {
                 deleted: null,
             },
         })
-        if(!listing) throw new ResponseError("Listing with provided id wasn't found.", 404)
+        if (!listing) throw new ResponseError("Listing with provided id wasn't found.", 404)
 
         // Get user's company id
         let applicationUserCompanyId = getApplicationUserCompanyId(applicationUser);
@@ -303,7 +328,69 @@ export async function PUT(req: Request) {
         const applicationUserId = applicationUser.id;
 
         // Check if the user can edit the listing
-        if(!userAllowedManipulateListing(applicationUserId, applicationUserCompanyId, listing)) throw new ResponseError("You aren't allowed to changed this property", 401)
+        if (!userAllowedManipulateListing(applicationUserId, applicationUserCompanyId, listing)) throw new ResponseError("You aren't allowed to changed this property", 401)
+
+
+        // Update images or create new images if
+        if (images) {
+            for (let i = 0; i < images.length; i++) {
+                let image = images[i];
+
+                // if image position is -1 delete it
+                if (image.positionInListing == -1 && image.id) {
+                    await prisma.listingImage.delete({
+                        where: {
+                            id: image.id,
+                        }
+                    });
+                }
+
+                // if no id then create an image
+                if (!image.id) {
+                    await prisma.listingImage.create({
+                        data: {
+                            ...image,
+                            listingId: id,
+                        }
+                    });
+                } else {
+                    // else update it
+                    await prisma.listingImage.update({
+                        where: {
+                            id: image.id,
+                            listingId: id
+                        },
+                        data: {
+                            ...image
+                        }
+                    });
+                }
+            }
+        }
+
+        // if user is changing the address
+        if (address) {
+            // else update it
+            await prisma.address.update({
+                where: {
+                    id: address.id,
+                    listingId: id
+                },
+                data: {
+                    ...address
+                }
+            })
+        }
+
+        // If there is a price and currency create listing price record
+        if (price && currency) {
+            await prisma.listingPrice.create({
+                data: {
+                    price,
+                    currency
+                }
+            })
+        }
 
         const updatedListing = await prisma.listing.update({
             where: {
@@ -316,7 +403,6 @@ export async function PUT(req: Request) {
                 interiorType,
                 propertyTypeId,
                 upkeepType,
-                images,
                 description,
                 areaTotal,
                 areaLiving,
@@ -336,11 +422,14 @@ export async function PUT(req: Request) {
                 floorNumber,
                 numberOfFloorsProperty,
                 numberOfFloorsCommon,
-                heatingType
+                heatingType,
+            },
+            include: {
+                ListingImage: true,
+                Address: true,
+                ListingPrice: true,
             },
         })
-
-
         return NextResponse.json(updatedListing)
     } catch (error) {
         console.error(error)

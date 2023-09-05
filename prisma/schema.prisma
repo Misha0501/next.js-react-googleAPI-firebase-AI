@@ -39,14 +39,13 @@ model Company {
   id           Int            @id @default(autoincrement())
   memberships  Membership[]
   name         String         @unique
-  addressId    Int?
-  address      Address?       @relation(fields: [addressId], references: [id])
   phoneNumber  String
   description  String
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
   Listing      Listing[]
   Subscription Subscription[]
+  Address      Address[]
 }
 
 model ListingImage {
@@ -60,7 +59,7 @@ model ListingImage {
 }
 
 model Address {
-  id                         Int       @id @default(autoincrement())
+  id                         Int      @id @default(autoincrement())
   streetNumber               String?
   route                      String?
   administrativeAreaLevelOne String?
@@ -70,26 +69,18 @@ model Address {
   latitude                   String?
   longitude                  String?
   showExactLocation          Boolean?
-  createdAt                  DateTime  @default(now())
-  updatedAt                  DateTime  @updatedAt
-  Company                    Company[]
-  Listing                    Listing[]
-}
-
-model Currency {
-  id               Int                @id @default(autoincrement())
-  name             String
-  createdAt        DateTime           @default(now())
-  updatedAt        DateTime           @updatedAt
-  SubscriptionPlan SubscriptionPlan[]
-  ListingPrice     ListingPrice[]
+  createdAt                  DateTime @default(now())
+  updatedAt                  DateTime @updatedAt
+  listingId                  Int?
+  Listing                    Listing? @relation(fields: [listingId], references: [id])
+  companyId                  Int?
+  Company                    Company? @relation(fields: [companyId], references: [id])
 }
 
 model SubscriptionPlan {
   id               Int            @id @default(autoincrement())
   name             String
-  currencyId       Int
-  currency         Currency       @relation(fields: [currencyId], references: [id])
+  currency         Currency
   subscriptions    Subscription[]
   daysPerInterval  Int
   pricePerInterval Float?         @db.DoublePrecision
@@ -139,6 +130,11 @@ enum ListingType {
   SELL
 }
 
+enum Currency {
+  EUR
+  USD
+}
+
 enum InteriorType {
   UNFURNISHED
   FURNISHED
@@ -171,8 +167,6 @@ model Listing {
   applicationUser             ApplicationUser              @relation(fields: [applicationUserId], references: [id])
   companyId                   Int?
   company                     Company?                     @relation(fields: [companyId], references: [id])
-  addressId                   Int?
-  address                     Address?                     @relation(fields: [addressId], references: [id])
   listingType                 ListingType
   interiorType                InteriorType                 @default(FURNISHED)
   upkeepType                  UpkeepType                   @default(EXCELLENT)
@@ -209,6 +203,7 @@ model Listing {
   Subscription                Subscription[]
   SavedListing                SavedListing[]
   ListingPrice                ListingPrice[]
+  Address                     Address[]
 }
 
 model ListingDescriptionKeyPoint {
@@ -222,13 +217,12 @@ model ListingDescriptionKeyPoint {
 }
 
 model ListingPrice {
-  id         Int      @id @default(autoincrement())
-  listingId  Int
-  listing    Listing  @relation(fields: [listingId], references: [id])
-  currencyId Int
-  currency   Currency @relation(fields: [currencyId], references: [id])
-  tax        Float?   @db.DoublePrecision
-  price      Float?   @db.DoublePrecision
+  id        Int      @id @default(autoincrement())
+  listingId Int
+  listing   Listing  @relation(fields: [listingId], references: [id])
+  currency  Currency
+  tax       Float?   @db.DoublePrecision
+  price     Float?   @db.DoublePrecision
 
   updatedListingPriceId Int?           @unique
   updatedListingPrice   ListingPrice?  @relation("UpdatedPrice", fields: [updatedListingPriceId], references: [id])

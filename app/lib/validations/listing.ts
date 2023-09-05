@@ -9,12 +9,15 @@ const HEATING_TYPE_VALID_VALUES = ['BOILER', 'CENTRAL'];
 const LISTING_TYPE_VALID_VALUES = ['RENT', 'SELL'];
 const INTERIOR_TYPE_VALID_VALUES = ['FURNISHED', 'UNFURNISHED'];
 const UPKEEP_TYPE_VALID_VALUES = ['EXCELLENT', 'GOOD', 'FAIR', 'POOR'];
+const CURRENCY = ['EUR', 'USD'];
 
 export const listingSchema = z.object({
     listingType: z.enum(LISTING_TYPE_VALID_VALUES),
     interiorType: z.enum(INTERIOR_TYPE_VALID_VALUES),
     propertyTypeId: z.number(),
     upkeepType: z.enum(UPKEEP_TYPE_VALID_VALUES),
+    price: z.number().min(0),
+    currency: z.enum(CURRENCY),
     address: z.object(
         {
             streetNumber: z.string().optional(),
@@ -96,6 +99,8 @@ export const listingSchemaPutRequest = listingSchema.extend({
     listingType: z.enum(LISTING_TYPE_VALID_VALUES).optional(),
     interiorType: z.enum(INTERIOR_TYPE_VALID_VALUES).optional(),
     propertyTypeId: z.number().optional(),
+    price: z.number().min(0).optional(),
+    currency: z.enum(CURRENCY).optional(),
     address: z.object(
         {
             id: z.number(),
@@ -114,16 +119,11 @@ export const listingSchemaPutRequest = listingSchema.extend({
     images: z
         .array(
             z.object({
-                id: z.number(),
+                id: z.number().optional(),
                 url: z.string(),
                 positionInListing: z.number()
             })
-        ).min(3, {
-            message: "There should be at least 3 images of the property"
-        }).max(30, {
-            message: "There can be max 30 images of the property"
-        })
-        .optional()
+        ).optional()
         .nullable(),
 })
 
