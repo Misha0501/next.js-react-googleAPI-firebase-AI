@@ -15,13 +15,28 @@ export async function GET(req: NextRequest) {
     try {
         const applicationUser: ApplicationUser = await getApplicationUserServer(true);
 
-        let savedListings = await prisma.savedListing.findMany({
+        const savedListingsCount = await prisma.savedListing.count({
             where: {
                 applicationUserId: applicationUser.id,
             },
         })
 
-        return NextResponse.json([...savedListings])
+        let savedListings = await prisma.savedListing.findMany({
+            include: {
+                listing: {
+                    include: {
+                        ListingImage: true,
+                        Address: true,
+                        ListingPrice: true
+                    }
+                }
+            },
+            where: {
+                applicationUserId: applicationUser.id,
+            },
+        })
+
+        return NextResponse.json({total: savedListingsCount, results: savedListings})
     } catch (error) {
         console.error(error)
         if (error instanceof z.ZodError) {

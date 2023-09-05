@@ -13,6 +13,7 @@ export const AuthContextProvider = ({
                                         children,
                                     }) => {
     const [user, setUser] = useState(null);
+    const [authToken, setAuthToken] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -20,9 +21,11 @@ export const AuthContextProvider = ({
             if (user) {
                 setUser(user);
                 const token = await user.getIdToken();
+                setAuthToken(token)
                 setCookie('authToken', token);
             } else {
                 setUser(null);
+                setAuthToken(null)
                 setCookie('authToken', '');
             }
             setLoading(false);
@@ -32,7 +35,7 @@ export const AuthContextProvider = ({
     }, []);
 
     return (
-        <AuthContext.Provider value={{ user }}>
+        <AuthContext.Provider value={{ user, authToken }}>
             {loading ? <div>Loading...</div> : children}
         </AuthContext.Provider>
     );
