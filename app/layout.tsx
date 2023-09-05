@@ -1,8 +1,8 @@
 import './globals.scss'
 import type {Metadata} from 'next'
 import {AuthContextProvider} from './context/AuthContext'
-
 import {Inter} from 'next/font/google'
+import {Navigation} from "@/app/components/Navigation";
 
 const inter = Inter({subsets: ['latin']})
 
@@ -14,8 +14,19 @@ export const metadata: Metadata = {
 export default function RootLayout({children,}: { children: React.ReactNode }) {
     return (
         <html lang="en">
-        <body className={`${inter.className} min-h-full`}>
-            <main className={'h-screen bg-cyan-800'}>
+        <head>
+            <link rel="stylesheet" href="https://rsms.me/inter/inter.css"/>
+            <script async
+                    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAuL3ldHARXcYSsaNhLNRrzLgUDxLtEiAA&libraries=places&callback=initMap">
+            </script>
+            <meta
+                name='viewport'
+                content='minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, user-scalable=no, viewport-fit=cover'
+            />
+        </head>
+        <body>
+            <Navigation/>
+            <main>
                 <AuthContextProvider>
                     {children}
                 </AuthContextProvider>

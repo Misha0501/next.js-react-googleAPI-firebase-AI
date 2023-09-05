@@ -39,28 +39,14 @@ model Company {
   id           Int            @id @default(autoincrement())
   memberships  Membership[]
   name         String         @unique
-  address      String
+  addressId    Int?
+  address      Address?       @relation(fields: [addressId], references: [id])
   phoneNumber  String
   description  String
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
   Listing      Listing[]
   Subscription Subscription[]
-}
-
-model AdministratieveArea {
-  id         Int        @id @default(autoincrement())
-  name       String     @default("")
-  localities Locality[]
-}
-
-model Locality {
-  id                    Int                 @id @default(autoincrement())
-  name                  String              @default("")
-  administratieveAreaId Int
-  administratieveArea   AdministratieveArea @relation(fields: [administratieveAreaId], references: [id])
-  Listing               Listing[]
-  SavedSearch           SavedSearch[]
 }
 
 model ListingImage {
@@ -71,6 +57,23 @@ model ListingImage {
   url               String
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
+}
+
+model Address {
+  id                         Int       @id @default(autoincrement())
+  streetNumber               String?
+  route                      String?
+  administrativeAreaLevelOne String?
+  locality                   String?
+  postalCode                 String?
+  neighborhood               String?
+  latitude                   String?
+  longitude                  String?
+  showExactLocation          Boolean?
+  createdAt                  DateTime  @default(now())
+  updatedAt                  DateTime  @updatedAt
+  Company                    Company[]
+  Listing                    Listing[]
 }
 
 model Currency {
@@ -162,15 +165,14 @@ model PropertyType {
   SavedSearch SavedSearch[]
 }
 
-// TODO: remove ? and default from fields where not needed
 model Listing {
   id                          Int                          @id @default(autoincrement())
   applicationUserId           Int
   applicationUser             ApplicationUser              @relation(fields: [applicationUserId], references: [id])
   companyId                   Int?
   company                     Company?                     @relation(fields: [companyId], references: [id])
-  localityId                  Int?
-  locality                    Locality?                    @relation(fields: [localityId], references: [id])
+  addressId                   Int?
+  address                     Address?                     @relation(fields: [addressId], references: [id])
   listingType                 ListingType
   interiorType                InteriorType                 @default(FURNISHED)
   upkeepType                  UpkeepType                   @default(EXCELLENT)
@@ -250,8 +252,6 @@ model SavedSearch {
   id                 Int             @id @default(autoincrement())
   applicationUserId  Int
   applicationUser    ApplicationUser @relation(fields: [applicationUserId], references: [id])
-  localityId         Int?
-  locality           Locality?       @relation(fields: [localityId], references: [id])
   listingType        ListingType
   interiorType       InteriorType    @default(FURNISHED)
   upkeepType         UpkeepType      @default(EXCELLENT)

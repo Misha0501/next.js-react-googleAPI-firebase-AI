@@ -1,5 +1,6 @@
 import * as z from "zod"
 import {isValidDateFromString} from "@/app/lib/validations/isValidDate";
+import {ZodTypeAny} from "zod";
 
 const tenYearsFromNow = new Date();
 tenYearsFromNow.setFullYear(tenYearsFromNow.getFullYear() + 10);
@@ -10,12 +11,23 @@ const INTERIOR_TYPE_VALID_VALUES = ['FURNISHED', 'UNFURNISHED'];
 const UPKEEP_TYPE_VALID_VALUES = ['EXCELLENT', 'GOOD', 'FAIR', 'POOR'];
 
 export const listingSchema = z.object({
-    postalCode: z.string(),
-    localityId: z.number(),
     listingType: z.enum(LISTING_TYPE_VALID_VALUES),
     interiorType: z.enum(INTERIOR_TYPE_VALID_VALUES),
     propertyTypeId: z.number(),
     upkeepType: z.enum(UPKEEP_TYPE_VALID_VALUES),
+    address: z.object(
+        {
+            streetNumber: z.string().optional(),
+            route: z.string().optional(),
+            locality: z.string().optional(),
+            postalCode: z.string().optional(),
+            neighborhood: z.string().optional(),
+            latitude: z.string().optional(),
+            longitude: z.string().optional(),
+            administrativeAreaLevelOne: z.string().optional(),
+            showExactLocation: z.boolean().optional()
+        }
+    ),
     images: z
         .array(
             z.object({
@@ -81,11 +93,23 @@ export const listingSchema = z.object({
 
 export const listingSchemaPutRequest = listingSchema.extend({
     id: z.number(),
-    postalCode: z.string().optional(),
-    localityId: z.number().optional(),
     listingType: z.enum(LISTING_TYPE_VALID_VALUES).optional(),
     interiorType: z.enum(INTERIOR_TYPE_VALID_VALUES).optional(),
     propertyTypeId: z.number().optional(),
+    address: z.object(
+        {
+            id: z.number(),
+            streetNumber: z.string().optional(),
+            route: z.string().optional(),
+            locality: z.string().optional(),
+            postalCode: z.string().optional(),
+            neighborhood: z.string().optional(),
+            latitude: z.string().optional(),
+            longitude: z.string().optional(),
+            showExactLocation: z.boolean().optional(),
+            administrativeAreaLevelOne: z.string().optional(),
+        }
+    ).optional(),
     upkeepType: z.enum(UPKEEP_TYPE_VALID_VALUES).optional(),
     images: z
         .array(
@@ -119,16 +143,16 @@ export const listingsSearchParamSchema = z.object({
     ).optional(),
     listingType: searchParamSchema.min(1).max(2).refine(
         userInputArray => userInputArray.every(el => LISTING_TYPE_VALID_VALUES.includes(el)),
-        val => ({message: `Invalid heating type input: ${val}. Allowed values: ${LISTING_TYPE_VALID_VALUES}`})
+        val => ({message: `Invalid listing type input: ${val}. Allowed values: ${LISTING_TYPE_VALID_VALUES}`})
     ).optional(),
     interiorType: searchParamSchema.min(1).max(2).refine(
         userInputArray => userInputArray.every(el => INTERIOR_TYPE_VALID_VALUES.includes(el)),
-        val => ({message: `Invalid heating type input: ${val}. Allowed values: ${INTERIOR_TYPE_VALID_VALUES}`})
+        val => ({message: `Invalid interior type input: ${val}. Allowed values: ${INTERIOR_TYPE_VALID_VALUES}`})
     ).optional(),
-    propertyTypeId: searchParamSchema.pipe(z.coerce.string()).optional(),
+    propertyTypeId: searchParamSchema.min(1).max(8).optional(),
     upkeepType: searchParamSchema.min(1).max(2).refine(
         userInputArray => userInputArray.every(el => UPKEEP_TYPE_VALID_VALUES.includes(el)),
-        val => ({message: `Invalid heating type input: ${val}. Allowed values: ${UPKEEP_TYPE_VALID_VALUES}`})
+        val => ({message: `Invalid upkeep type input: ${val}. Allowed values: ${UPKEEP_TYPE_VALID_VALUES}`})
     ).optional(),
     areaTotalMin: searchParamSchema.max(1).pipe(
         z.coerce.number().min(0).max(1000000)
@@ -176,6 +200,9 @@ export const listingsSearchParamSchema = z.object({
         z.coerce.number().min(0).max(1000000)
     ).optional(),
     parkingMax: searchParamSchema.max(1).pipe(
+        z.coerce.number().min(0).max(1000000)
+    ).optional(),
+    listedSince: searchParamSchema.max(1).pipe(
         z.coerce.number().min(0).max(1000000)
     ).optional(),
     constructedYearMin: searchParamSchema.max(1).pipe(

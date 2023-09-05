@@ -54,7 +54,8 @@ export async function GET(req: NextRequest) {
             parkingMin,
             parkingMax,
             constructedYearMin,
-            constructedYearMax
+            constructedYearMax,
+            listedSince
         } = parsedValues;
 
         // Prisma where object that that will be field with conditions
@@ -66,7 +67,7 @@ export async function GET(req: NextRequest) {
         const heatingTypeWhereObj = prismaQueryConditionsFromArray(heatingType, "heatingType");
         const listingTypeWhereObj = prismaQueryConditionsFromArray(listingType, "listingType");
         const interiorTypeWhereObj = prismaQueryConditionsFromArray(interiorType, "interiorType");
-        const propertyTypeIdWhereObj = prismaQueryConditionsFromArray(propertyTypeId, "propertyTypeId");
+        const propertyTypeIdWhereObj = prismaQueryConditionsFromArray(propertyTypeId, "propertyTypeId", true);
         const upkeepTypeWhereObj = prismaQueryConditionsFromArray(upkeepType, "upkeepType");
         const areaTotalWhereObj = prismaQueryConditionsFromMinMaxValue(areaTotalMin, areaTotalMax, "areaTotal");
         const areaLivingWhereObj = prismaQueryConditionsFromMinMaxValue(areaLivingMin, areaLivingMax, "areaLiving");
@@ -77,6 +78,10 @@ export async function GET(req: NextRequest) {
         const bedroomsWhereObj = prismaQueryConditionsFromMinMaxValue(bedroomsMin, bedroomsMax, "bedrooms");
         const parkingWhereObj = prismaQueryConditionsFromMinMaxValue(parkingMin, parkingMax, "parking");
         const constructedYearWhereObj = prismaQueryConditionsFromMinMaxValidDateStringValue(constructedYearMin, constructedYearMax, "constructedYear");
+
+        // set listed since
+        const now = new Date();
+        if(listedSince) prismaQueryConditions['createdAt'] = {gte: new Date(now.getFullYear(), now.getMonth(), now.getDate() - listedSince)}
 
         prismaQueryConditions.AND.push(
             localityWhereObj,
@@ -93,7 +98,8 @@ export async function GET(req: NextRequest) {
             bathroomsWhereObj,
             bedroomsWhereObj,
             parkingWhereObj,
-            constructedYearWhereObj)
+            constructedYearWhereObj,
+        )
 
         // If page or pageSize are not define, use standard values
         page = page ? page : 1;
@@ -101,7 +107,12 @@ export async function GET(req: NextRequest) {
 
         const offsetRecords = (page - 1) * pageSize
 
-        const totalRecordsCount = await prisma.listing.count();
+        const totalRecordsCount = await prisma.listing.count({
+            where: {
+                ...prismaQueryConditions,
+                deleted: null,
+            }
+        });
 
         // Get listing that weren't deleted and that match the search criteria
         const listings = await prisma.listing.findMany({
@@ -172,7 +183,8 @@ export async function POST(req: Request) {
             floorNumber,
             numberOfFloorsProperty,
             numberOfFloorsCommon,
-            heatingType
+            heatingType,
+            address
         } = parsedValues
 
         // Get user's company id
