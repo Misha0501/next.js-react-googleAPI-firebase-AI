@@ -3,11 +3,12 @@ import headerImg from '@/public/header-hero.jpg'
 import Image from 'next/image'
 import {HeartIcon as HeartIconSolid} from "@heroicons/react/24/solid";
 import {HeartIcon as HeartIconOutline} from "@heroicons/react/24/outline";
-import {ListingItem} from "@/types";
+import {Listing} from "@/types";
 import {useRouter} from "next/navigation";
 
 type ListingItemProps = {
-    listingItem: ListingItem
+    listingItem: Listing
+    onSavedIconClick : (listingItem: Listing) => void
 }
 
 export const ListingItem = ({listingItem, onSavedIconClick, isLoadingSavedListings}: ListingItemProps) => {
@@ -21,7 +22,11 @@ export const ListingItem = ({listingItem, onSavedIconClick, isLoadingSavedListin
         return 'New'
     }
 
-    const handleSavedIconClick = () => onSavedIconClick(listingItem);
+    const handleSavedIconClick = () => {
+        if(onSavedIconClick) {
+            onSavedIconClick(listingItem)
+        }
+    };
 
     return (
         <div className={"rounded-lg drop-shadow-2xl bg-white h-fit"}>

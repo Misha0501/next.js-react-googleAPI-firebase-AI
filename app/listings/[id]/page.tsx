@@ -1,6 +1,6 @@
 import {notFound} from "next/navigation";
 import {StarIcon} from "@heroicons/react/24/solid";
-import {HeatingType, InteriorType, ListingItem, ListingType, UpkeepType} from "@/types";
+import {HeatingType, InteriorType, Listing, ListingType, UpkeepType} from "@/types";
 import {getFetchUrl} from "@/app/lib/getFetchUrl";
 
 export const revalidate = 300;
@@ -13,7 +13,7 @@ type Props = {
 
  async function ListingPage({params: {id}}: Props) {
     const response = await fetch(getFetchUrl(`api/listings/${id}`))
-    const item = (await response.json()) as ListingItem;
+    const item = (await response.json()) as Listing;
 
     // if (!productData.content.pricing) {
     //     // redirect to 404 page

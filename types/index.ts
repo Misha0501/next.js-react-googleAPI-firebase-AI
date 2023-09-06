@@ -14,7 +14,7 @@ export type FirebaseAPISignInAuthResponse = {
     expiresIn: string
 }
 
-export type ListingItem = {
+export type Listing = {
     active: boolean
     activeUntil: string
     applicationUserId: number
@@ -56,7 +56,7 @@ export type SavedListing = {
     applicationUserId: number
     createdAt: string
     id: number
-    listing: ListingItem
+    listing: Listing
     listingId: number
     updatedAt: string
 }
