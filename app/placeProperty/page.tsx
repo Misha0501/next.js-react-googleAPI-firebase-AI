@@ -7,7 +7,7 @@ function PlacePropertyPage() {
     <>
       <section className="py-32">
         <div className="container">
-          <PlacePropertyForm></PlacePropertyForm>
+          <PlacePropertyForm />
         </div>
       </section>
     </>

@@ -167,7 +167,7 @@ export const PlacePropertyForm = ({}) => {
           </Tab.List>
         </Tab.Group>
       </div>
-      <Divider></Divider>
+      <Divider />
       <div className="grid grid-cols-2 gap-16">
         <p className={"text-2xl font-bold"}>What is your property type</p>
         <Select onValueChange={setSelectedPropertyType} className={"text-sm"}>
@@ -178,7 +178,7 @@ export const PlacePropertyForm = ({}) => {
           ))}
         </Select>
       </div>
-      <Divider></Divider>
+      <Divider />
       <div className="grid grid-cols-2 gap-16">
         <p className={"text-2xl font-bold"}>
           What is the location of your property
