@@ -49,4 +49,14 @@ export type ListingItem = {
     updatedAt: string
     upkeepType: UpkeepType
     volume: number
+    savedListingId?: number;
+}
+
+export type SavedListing = {
+    applicationUserId: number
+    createdAt: string
+    id: number
+    listing: ListingItem
+    listingId: number
+    updatedAt: string
 }

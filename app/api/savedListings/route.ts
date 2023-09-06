@@ -81,9 +81,10 @@ export async function POST(req: Request) {
 
         if (!savedListing || !savedListing.length) {
             savedListing = await prisma.savedListing.create({data: {...savedListingData}})
+            return NextResponse.json(savedListing)
+        } else {
+            return NextResponse.json(savedListing[0])
         }
-
-        return NextResponse.json(savedListing)
     } catch (error) {
         console.error(error)
         if (error instanceof z.ZodError) {

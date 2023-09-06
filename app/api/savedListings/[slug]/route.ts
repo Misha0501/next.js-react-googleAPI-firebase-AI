@@ -25,7 +25,7 @@ export async function DELETE(request: Request, {params}: { params: { slug: numbe
             },
         })
 
-        if (!savedListing) throw new ResponseError("Listing with provided id wasn't found.", 404)
+        if (!savedListing) throw new ResponseError("Saved listing with provided id wasn't found.", 404)
 
         if (applicationUserId !== savedListing.applicationUserId) throw new ResponseError("You aren't allowed to changed this property", 401)
 

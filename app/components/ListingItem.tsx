@@ -5,22 +5,23 @@ import {HeartIcon as HeartIconSolid} from "@heroicons/react/24/solid";
 import {HeartIcon as HeartIconOutline} from "@heroicons/react/24/outline";
 import {ListingItem} from "@/types";
 import {useRouter} from "next/navigation";
-import Link from "next/link";
 
 type ListingItemProps = {
     listingItem: ListingItem
 }
 
-export const ListingItem = ({listingItem, goTo}: ListingItemProps) => {
+export const ListingItem = ({listingItem, onSavedIconClick, isLoadingSavedListings}: ListingItemProps) => {
     const router = useRouter()
 
     const goToListingPage = () => {
         router.push(`listings/${listingItem.id}`)
     }
+
     const getLabel = () => {
         return 'New'
     }
 
+    const handleSavedIconClick = () => onSavedIconClick(listingItem);
 
     return (
         <div className={"rounded-lg drop-shadow-2xl bg-white h-fit"}>
@@ -53,7 +54,11 @@ export const ListingItem = ({listingItem, goTo}: ListingItemProps) => {
                     </div>
                     <span className={"text-[#0071b3] font-base"}>Agent name</span>
                 </div>
-                <HeartIconOutline className={"h-8 w-8 text-gray-500"}/>
+                {isLoadingSavedListings && "loading"}
+                {!isLoadingSavedListings && <div onClick={handleSavedIconClick} className={"cursor-pointer"}>
+                    {listingItem.savedListingId && <HeartIconSolid className={"h-8 w-8 text-gray-500"}/>}
+                    {!listingItem.savedListingId && <HeartIconOutline className={"h-8 w-8 text-gray-500"}/>}
+                </div>}
             </div>
         </div>
     );

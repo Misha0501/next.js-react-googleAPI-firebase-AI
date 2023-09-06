@@ -2,7 +2,6 @@
 
 import {Select, SelectItem, Tab, TabGroup, TabList, TabPanel, TabPanels} from "@tremor/react";
 import {useEffect, useState} from "react";
-import {ListingType} from "@/types";
 import {ListingItem} from "@/app/components/ListingItem";
 import {getFetchUrl} from "@/app/lib/getFetchUrl";
 import {useAuthContext} from "@/app/context/AuthContext";
