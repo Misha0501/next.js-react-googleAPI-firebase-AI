@@ -3,42 +3,11 @@ import openAI from "@/app/lib/openAI";
 import OpenAI from "openai";
 import { ResponseError } from "@/classes/ResponseError";
 import * as z from "zod";
+import { listingSchema } from "@/app/lib/validations/listing";
 
 export async function POST(request: Request) {
-  // todos in the body of the POST req
-  // const { todos } = await request.json();
-  // console.log(todos);
   try {
-    const propertyDescription = {
-      listingType: "SELL",
-      interiorType: "Furnished",
-      propertyTypeId: "Apartment",
-      upkeepType: "excellent",
-      price: "123.000",
-      currency: "euros",
-      address: {
-        streetNumber: "2",
-        route: 'ulitsa "Sofia"',
-        locality: "Ruse",
-        postalCode: "7001",
-        neighborhood: "",
-        administrativeAreaLevelOne: "Ruse",
-      },
-      areaLiving: "100",
-      areaLand: "250",
-      volume: "500",
-      areaOutside: "64",
-      areaGarage: "12",
-      rooms: "5",
-      bathrooms: "2",
-      bedrooms: "3",
-      parking: true,
-      constructedYear: "",
-      floorNumber: "0",
-      numberOfFloorsProperty: "3",
-      numberOfFloorsCommon: "0",
-      heatingType: "CENTRAL",
-    };
+    const parsedValues = listingSchema.parse(await request.json());
 
     const completion = await openAI.chat.completions.create({
       model: "gpt-3.5-turbo",
@@ -48,12 +17,12 @@ export async function POST(request: Request) {
       messages: [
         {
           role: "system",
-          content: `When responding, ignore fields that are null or unset. Limit the response to 2250 characters`,
+          content: `When responding, ignore fields that are null or unset. Limit the response to 100 characters`,
         },
         {
           role: "user",
           content: `Hi there, provide a description of a property for sale/rent (depending on the listingType). Imagine you are the owner of the property. Doesn't mention Try to include something about the location of the property. The property data: ${JSON.stringify(
-            propertyDescription,
+              parsedValues,
           )})}`,
         },
       ],
@@ -75,7 +44,19 @@ export async function POST(request: Request) {
 
     return NextResponse.json(content);
   } catch (error) {
-    console.error(error);
+    console.error(error)
+    if (error instanceof z.ZodError) {
+      return new Response(error.message, {status: 422})
+    }
+
+    if (error instanceof ResponseError) {
+      return new Response(error.message, {status: error.status})
+    }
+
+    if (error.errorInfo && error.errorInfo.code) {
+      return new Response('Your auth token is invalid or it has expired. Get a new auth token and try again.', {status: 400})
+    }
+
     if (error instanceof OpenAI.APIError) {
       return new Response(error.name, { status: error.status });
     }

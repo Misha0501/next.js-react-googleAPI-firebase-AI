@@ -1,9 +1,28 @@
 "use client";
 
 import { Tab } from "@headlessui/react";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { classNames } from "@/app/lib/classNames";
-import { Divider, Select, SelectItem, TextInput } from "@tremor/react";
+import {
+  Button,
+  Divider,
+  NumberInput,
+  Select,
+  SelectItem,
+  TextInput,
+} from "@tremor/react";
+import {
+  CURRENCIES,
+  HEATING_TYPES,
+  INTERIOR_TYPES,
+  UPKEEP_TYPES,
+} from "@/app/Constants";
+import { CurrencyType, HeatingType, InteriorType, UpkeepType } from "@/types";
+import PropertyPlacementRadioButtons from "@/app/components/PropertyPlacementRadioButtons";
+import { getFetchUrl } from "@/app/lib/getFetchUrl";
+import { useAuthContext } from "@/app/context/AuthContext";
+import { types } from "sass";
+import Number = types.Number;
 
 const propertyTypesInitialState = [
   // {dbId: '-1', label: 'Select',},
@@ -12,8 +31,9 @@ const propertyTypesInitialState = [
 ];
 
 export const PlacePropertyForm = ({}) => {
-  const [listingTypeSelectedIndex, setListingTypeSelectedIndex] = useState(0);
-  const [listingTypeSelected, setListingTypeSelected] = useState("SELL");
+  const { authToken } = useAuthContext();
+
+  const [listingType, setListingType] = useState("SELL");
   const [streetNumber, setStreetNumber] = useState("");
   const [route, setRoute] = useState("");
   const [locality, setLocality] = useState("");
@@ -25,19 +45,110 @@ export const PlacePropertyForm = ({}) => {
   const [longitude, setLongitude] = useState("");
   const [example, setExample] = useState('ul. "Sofia" 2, Ruse, Bulgaria');
   const [showFullAddress, setShowFullAddress] = useState(false);
-
-  // const [listingTypeSelected, setListingTypeSelected] = useState('SELL')
-  // const []
-
-  const [selectedPropertyType, setSelectedPropertyType] = useState();
-
+  const [currency, setCurrency] = useState<CurrencyType>();
+  const [price, setPrice] = useState<null | number>(null);
+  const [selectedPropertyType, setSelectedPropertyType] = useState("");
+  const [rooms, setRooms] = useState("");
+  const [bathrooms, setBathrooms] = useState("");
+  const [bedrooms, setBedrooms] = useState("");
+  const [parking, setParking] = useState("");
+  const [constructedYear, setConstructedYear] = useState("");
+  const [floorNumber, setFloorNumber] = useState("");
+  const [numberOfFloorsProperty, setNumberOfFloorsProperty] = useState("");
+  const [numberOfFloorsCommon, setNumberOfFloorsCommon] = useState("");
+  const [heatingType, setHeatingType] = useState<HeatingType>();
+  const [areaLand, setAreaLand] = useState("");
+  const [areaLiving, setAreaLiving] = useState("");
+  const [areaTotal, setAreaTotal] = useState("");
+  const [description, setDescription] = useState("");
+  const [images, setImages] = useState([]);
+  const [upkeepType, setUpkeepType] = useState<UpkeepType>();
+  const [interiorType, setInteriorType] = useState<InteriorType>();
+  const [yearBuilt, setYearBuilt] = useState("");
+  const [generatingDescription, setGeneratingDescription] = useState(false);
   let autoCompleteRef = useRef();
   const inputRef = useRef();
-  const options = {
+  const googlePlacesAutocompleteOptions = {
     componentRestrictions: { country: "bg" },
     fields: ["address_components", "geometry", "name"],
     types: ["address"],
   };
+
+  const generateDescription = () => {
+    let formData = {
+      listingType,
+      streetNumber: streetNumber,
+      route,
+      locality,
+      address: {
+        streetNumber,
+        route,
+        locality,
+        administrativeAreaLevelOne,
+        postalCode,
+        neighborhood,
+      },
+      currency,
+      price,
+      selectedPropertyType,
+      rooms: rooms ? Number(rooms) : null,
+      bathrooms: bathrooms ? Number(bathrooms) : null,
+      bedrooms: bedrooms ? Number(bedrooms) : null,
+      parking: parking ? Number(parking) : null,
+      floorNumber: floorNumber ? Number(floorNumber) : null,
+      numberOfFloorsProperty: numberOfFloorsProperty? Number(numberOfFloorsProperty) : null,
+      numberOfFloorsCommon : numberOfFloorsCommon ? Number(numberOfFloorsCommon) : null,
+      heatingType,
+      areaLand : areaLand ? Number(areaLand) : null,
+      areaLiving : areaLiving ? Number(areaLiving) : null,
+      areaTotal : areaTotal ? Number(areaTotal) : null,
+      upkeepType,
+      interiorType,
+      yearBuilt,
+    }
+
+    setGeneratingDescription(true);
+    setDescription(
+      "Writing a description for you, please wait... It can take up to 30 seconds.",
+    );
+
+    fetch(getFetchUrl(`api/generateDescription`), {
+      method: "POST",
+      cache: "no-store",
+      headers: {
+        "Content-type": "application/json",
+        Authorization: authToken,
+      },
+      body: JSON.stringify(formData),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setGeneratingDescription(false);
+        setDescription(data);
+      })
+      .catch((error) => {
+        console.error(error);
+        console.error(error.message);
+        setGeneratingDescription(false);
+        setDescription(
+          "Something went wrong, please try again later. Or write your own description.",
+        );
+      });
+
+  };
+  const handleInteriorType = useCallback(
+    (value: InteriorType) => {
+      setInteriorType(value);
+    },
+    [interiorType],
+  );
+
+  const handleHeatingType = useCallback(
+    (value: HeatingType) => {
+      setHeatingType(value);
+    },
+    [heatingType],
+  );
 
   const placeChanged = (e) => {
     console.log(e);
@@ -109,8 +220,7 @@ export const PlacePropertyForm = ({}) => {
   useEffect(() => {
     if (window.google) {
       autoCompleteRef.current = new window.google.maps.places.Autocomplete(
-        inputRef.current,
-        options,
+        inputRef.current, googlePlacesAutocompleteOptions,
       );
 
       // When the user selects an address from the drop-down, populate the
@@ -119,23 +229,34 @@ export const PlacePropertyForm = ({}) => {
     }
   }, [window.google]);
 
-  const handleClick = () => {
-    // console.log("hande")
-    // setStreetNumber('23')
+  const handleClick = () => {};
+
+  const handleListingTypeSelection = (index: number) => {
+    if (index === 0) {
+      setListingType("SELL");
+    } else {
+      setListingType("RENT");
+    }
   };
 
+  const handleFormSubmit = (e: any) => {
+    e.preventDefault();
+    console.log("form submitted");
+  };
+
+  // @ts-ignore
   return (
-    <div className="">
+    <form onSubmit={handleFormSubmit}>
       <h3 className={"text-4xl font-bold max-w-xl mb-12"}>
         Add essential information about your company
       </h3>
-      <div className="grid grid-cols-2 gap-16">
+      <div className="grid md:grid-cols-2 gap-8 md:gap-16">
         <p className={"text-2xl font-bold"}>
           Are you planning to rent or sell your property?
         </p>
         <Tab.Group
-          selectedIndex={listingTypeSelectedIndex}
-          onChange={setListingTypeSelectedIndex}
+          // selectedIndex={listingTypeSelectedIndex}
+          onChange={handleListingTypeSelection}
         >
           <Tab.List className="flex space-x-1 rounded-xl bg-blue-900/20 p-1 mb-5 w-full text-black">
             <Tab
@@ -149,7 +270,7 @@ export const PlacePropertyForm = ({}) => {
                 )
               }
             >
-              Buy
+              Sell
             </Tab>
             <Tab
               className={({ selected }) =>
@@ -167,8 +288,8 @@ export const PlacePropertyForm = ({}) => {
           </Tab.List>
         </Tab.Group>
       </div>
-      <Divider />
-      <div className="grid grid-cols-2 gap-16">
+      <Divider className={"my-8 md:my-14"} />
+      <div className="grid md:grid-cols-2 gap-8 md:gap-16">
         <p className={"text-2xl font-bold"}>What is your property type</p>
         <Select onValueChange={setSelectedPropertyType} className={"text-sm"}>
           {propertyTypesInitialState.map((item, index) => (
@@ -178,8 +299,8 @@ export const PlacePropertyForm = ({}) => {
           ))}
         </Select>
       </div>
-      <Divider />
-      <div className="grid grid-cols-2 gap-16">
+      <Divider className={"my-8 md:my-14"} />
+      <div className="grid md:grid-cols-2 gap-8 md:gap-16">
         <p className={"text-2xl font-bold"}>
           What is the location of your property
         </p>
@@ -247,6 +368,189 @@ export const PlacePropertyForm = ({}) => {
           )}
         </div>
       </div>
-    </div>
+      <Divider className={"my-8 md:my-14"} />
+      <div className="grid md:grid-cols-2 gap-8 md:gap-16">
+        <p className={"text-2xl font-bold"}>What is your asking price</p>
+        <div className="">
+          <div className="mb-7">
+            <p className={"mb-2"}>Select the currency</p>
+            <Select onValueChange={setCurrency} className={"text-sm"}>
+              {CURRENCIES.map((item, index) => (
+                <SelectItem value={item} key={index}>
+                  {item}
+                </SelectItem>
+              ))}
+            </Select>
+          </div>
+          <div className="mb-7">
+            <p className={"mb-2"}>Type your price</p>
+            <NumberInput
+              value={price}
+              onChange={(e) => setPrice(Number(e.target.value))}
+            />
+          </div>
+        </div>
+      </div>
+      <Divider className={"my-8 md:my-14"} />
+      <div className="grid md:grid-cols-2 gap-8 md:gap-16">
+        <p className={"text-2xl font-bold"}>What is the number of rooms</p>
+        <div className="">
+          <div className="pb-8 border-b-2">
+            <div className="flex justify-between items-center">
+              <span>Rooms</span>
+              <NumberInput
+                className={"w-min"}
+                min={0}
+                max={100}
+                value={rooms}
+                onChange={(e) => setRooms(e.target.value)}
+              />
+            </div>
+          </div>
+          <div className="py-6 border-b-2">
+            <div className="flex justify-between items-center">
+              <span>Bedrooms</span>
+              <NumberInput
+                className={"w-min"}
+                min={0}
+                max={100}
+                value={bedrooms}
+                onChange={(e) => setBedrooms(e.target.value)}
+              />
+            </div>
+          </div>
+          <div className="py-6 border-b-2">
+            <div className="flex justify-between items-center">
+              <span>Bathrooms</span>
+              <NumberInput
+                className={"w-min"}
+                min={0}
+                max={100}
+                value={bathrooms}
+                onChange={(e) => setBathrooms(e.target.value)}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <Divider className={"my-8 md:my-14"} />
+      <div className="grid md:grid-cols-2 gap-8 md:gap-16">
+        <p className={"text-2xl font-bold"}>
+          What is the condition of the property
+        </p>
+        <div className="">
+          <PropertyPlacementRadioButtons
+            options={UPKEEP_TYPES}
+            onChange={handleInteriorType}
+          />
+        </div>
+      </div>
+      <Divider className={"my-8 md:my-14"} />
+      <div className="grid md:grid-cols-2 gap-8 md:gap-16">
+        <p className={"text-2xl font-bold"}>What is the interior type</p>
+        <div className="">
+          <PropertyPlacementRadioButtons
+            options={INTERIOR_TYPES}
+            onChange={handleInteriorType}
+          />
+        </div>
+      </div>
+      <Divider className={"my-8 md:my-14"} />
+      <div className="grid md:grid-cols-2 gap-8 md:gap-16">
+        <p className={"text-2xl font-bold"}>
+          What is the heating type of the property
+        </p>
+        <div className="">
+          <PropertyPlacementRadioButtons
+            options={HEATING_TYPES}
+            onChange={handleHeatingType}
+          />
+        </div>
+      </div>
+      <Divider className={"my-8 md:my-14"} />
+      <div className="grid md:grid-cols-2 gap-8 md:gap-16">
+        <p className={"text-2xl font-bold"}>
+          What are the building specification?
+        </p>
+        <div className="">
+          <div className="pb-8 border-b-2">
+            <div className="flex justify-between items-center">
+              <span>Year of built</span>
+              <NumberInput
+                className={"w-min"}
+                min={2010}
+                max={2040}
+                value={yearBuilt}
+                onChange={(e) => setYearBuilt(e.target.value)}
+              />
+            </div>
+          </div>
+          <div className="py-6 border-b-2">
+            <div className="flex justify-between items-center">
+              <span>Floors in the building</span>
+              <NumberInput
+                className={"w-min"}
+                min={0}
+                max={100}
+                value={numberOfFloorsCommon}
+                onChange={(e) => setNumberOfFloorsCommon(e.target.value)}
+              />
+            </div>
+          </div>
+          <div className="py-6 border-b-2">
+            <div className="flex justify-between items-center">
+              <span>Property located at floor number</span>
+              <NumberInput
+                className={"w-min"}
+                min={0}
+                max={100}
+                value={floorNumber}
+                onChange={(e) => setFloorNumber(e.target.value)}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <Divider className={"my-8 md:my-14"} />
+
+      <div className="grid md:grid-cols-2 gap-8 md:gap-16">
+        <p className={"text-2xl font-bold"}>
+          Write description about your property
+        </p>
+        <div className="">
+          <p className={"font-semibold text-sm mb-2"}>Description</p>
+          <p className={"text-sm text-gray-400 mb-3"}>
+            Share what is special about your property
+          </p>
+          <Button
+            variant={"secondary"}
+            onClick={generateDescription}
+            type={"button"}
+          >
+            Generate description
+          </Button>
+          <p className={"text-sm text-gray-400 mb-3"}>
+            Based on previous inputs we will generate a description for your. It
+            takes around 30 seconds.
+          </p>
+          <textarea
+            value={description}
+            disabled={generatingDescription}
+            onChange={(e) => setDescription(e.target.value)}
+            className={
+              "border-2 rounded-xl w-full outline-0 min-h-[250px] p-2 text-gray-500"
+            }
+          />
+        </div>
+      </div>
+      <Divider className={"my-8 md:my-14"} />
+
+      <div className="grid md:grid-cols-2 gap-8 md:gap-16 mt-10">
+        <div className="div"></div>
+        <Button type={"submit"} variant={"primary"} size={"xl"}>
+          Create property
+        </Button>
+      </div>
+    </form>
   );
 };
