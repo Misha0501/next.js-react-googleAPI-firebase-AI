@@ -12,23 +12,25 @@ const tenYearsFromNow = new Date();
 tenYearsFromNow.setFullYear(tenYearsFromNow.getFullYear() + 10);
 
 export const listingSchema = z.object({
-  listingType: z.enum(LISTING_TYPES),
-  interiorType: z.enum(INTERIOR_TYPES),
-  propertyTypeId: z.number(),
-  upkeepType: z.enum(UPKEEP_TYPES),
-  price: z.number().min(0),
-  currency: z.enum(CURRENCIES),
-  address: z.object({
-    streetNumber: z.string().optional(),
-    route: z.string().optional(),
-    locality: z.string().optional(),
-    postalCode: z.string().optional(),
-    neighborhood: z.string().optional(),
-    latitude: z.string().optional(),
-    longitude: z.string().optional(),
-    administrativeAreaLevelOne: z.string().optional(),
-    showExactLocation: z.boolean().optional(),
-  }),
+  listingType: z.enum(LISTING_TYPES).optional(),
+  interiorType: z.enum(INTERIOR_TYPES).optional(),
+  propertyTypeId: z.number().optional(),
+  upkeepType: z.enum(UPKEEP_TYPES).optional(),
+  price: z.number().min(0).optional().nullable(),
+  currency: z.enum(CURRENCIES).optional().nullable(),
+  address: z
+    .object({
+      streetNumber: z.string().optional(),
+      route: z.string().optional(),
+      locality: z.string().optional(),
+      postalCode: z.string().optional(),
+      neighborhood: z.string().optional(),
+      latitude: z.string().optional(),
+      longitude: z.string().optional(),
+      administrativeAreaLevelOne: z.string().optional(),
+      showExactLocation: z.boolean().optional(),
+    })
+    .optional(),
   images: z
     .array(
       z.object({
@@ -64,42 +66,50 @@ export const listingSchema = z.object({
     )
     .optional()
     .nullable(),
-  areaTotal: z.number().max(1000000, {
-    message: "AreaTotal can not exceed 1000000",
-  }),
-  areaLiving: z.number().max(1000000).optional(),
-  areaLand: z.number().max(1000000).optional(),
-  volume: z.number().max(1000000).optional(),
-  areaOutside: z.number().max(1000000).optional(),
-  areaGarage: z.number().max(1000000).optional(),
-  streetName: z.string().optional(),
-  houseNumber: z.string().optional(),
-  longitude: z.string().optional(),
-  latitude: z.string().optional(),
+  areaTotal: z
+    .number()
+    .max(1000000, {
+      message: "AreaTotal can not exceed 1000000",
+    })
+    .optional()
+    .nullable(),
+  areaLiving: z.number().max(1000000).optional().nullable(),
+  areaLand: z.number().max(1000000).optional().nullable(),
+  volume: z.number().max(1000000).optional().nullable(),
+  areaOutside: z.number().max(1000000).optional().nullable(),
+  areaGarage: z.number().max(1000000).optional().nullable(),
+  streetName: z.string().optional().nullable(),
+  houseNumber: z.string().optional().nullable(),
+  longitude: z.string().optional().nullable(),
+  latitude: z.string().optional().nullable(),
   rooms: z
     .number()
     .max(99, {
       message: "Amount of rooms can not exceed 99",
     })
-    .optional(),
+    .optional()
+    .nullable(),
   bathrooms: z
     .number()
     .max(99, {
       message: "Amount of bathrooms can not exceed 99",
     })
-    .optional(),
+    .optional()
+    .nullable(),
   bedrooms: z
     .number()
     .max(99, {
       message: "Amount of bedrooms can not exceed 99",
     })
-    .optional(),
+    .optional()
+    .nullable(),
   parking: z
     .number()
     .max(99, {
       message: "Amount of parkings can not exceed 99",
     })
-    .optional(),
+    .optional()
+    .nullable(),
   constructedYear: z.coerce
     .date()
     .min(new Date("1900-01-01"), {
@@ -108,11 +118,12 @@ export const listingSchema = z.object({
     .max(tenYearsFromNow, {
       message: "Constructed year can't be more than 10 years from now.",
     })
-    .optional(),
-  floorNumber: z.number().optional(),
-  numberOfFloorsProperty: z.number().optional(),
-  numberOfFloorsCommon: z.number().optional(),
-  heatingType: z.enum(HEATING_TYPES).optional(),
+    .optional()
+    .nullable(),
+  floorNumber: z.number().optional().nullable(),
+  numberOfFloorsProperty: z.number().optional().nullable(),
+  numberOfFloorsCommon: z.number().optional().nullable(),
+  heatingType: z.enum(HEATING_TYPES).optional().nullable(),
 });
 
 export const listingSchemaPutRequest = listingSchema.extend({
