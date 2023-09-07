@@ -16,24 +16,24 @@ import {
   HEATING_TYPES,
   INTERIOR_TYPES,
   UPKEEP_TYPES,
+  PROPERTY_TYPES,
+  LISTING_TYPES,
 } from "@/app/Constants";
-import { CurrencyType, HeatingType, InteriorType, UpkeepType } from "@/types";
+import {
+  CurrencyType,
+  HeatingType,
+  InteriorType,
+  ListingType,
+  UpkeepType,
+} from "@/types";
 import PropertyPlacementRadioButtons from "@/app/components/PropertyPlacementRadioButtons";
 import { getFetchUrl } from "@/app/lib/getFetchUrl";
 import { useAuthContext } from "@/app/context/AuthContext";
-import { types } from "sass";
-import Number = types.Number;
-
-const propertyTypesInitialState = [
-  // {dbId: '-1', label: 'Select',},
-  { dbId: "1", label: "Residential building" },
-  { dbId: "2", label: "Apartment" },
-];
 
 export const PlacePropertyForm = ({}) => {
   const { authToken } = useAuthContext();
 
-  const [listingType, setListingType] = useState("SELL");
+  const [listingType, setListingType] = useState(null);
   const [streetNumber, setStreetNumber] = useState("");
   const [route, setRoute] = useState("");
   const [locality, setLocality] = useState("");
@@ -45,14 +45,13 @@ export const PlacePropertyForm = ({}) => {
   const [longitude, setLongitude] = useState("");
   const [example, setExample] = useState('ul. "Sofia" 2, Ruse, Bulgaria');
   const [showFullAddress, setShowFullAddress] = useState(false);
-  const [currency, setCurrency] = useState<CurrencyType>();
-  const [price, setPrice] = useState();
-  const [selectedPropertyType, setSelectedPropertyType] = useState("");
+  const [currency, setCurrency] = useState<CurrencyType | null>(null);
+  const [price, setPrice] = useState("");
+  const [propertyType, setPropertyType] = useState(null);
   const [rooms, setRooms] = useState("");
   const [bathrooms, setBathrooms] = useState("");
   const [bedrooms, setBedrooms] = useState("");
   const [parking, setParking] = useState("");
-  const [constructedYear, setConstructedYear] = useState("");
   const [floorNumber, setFloorNumber] = useState("");
   const [numberOfFloorsProperty, setNumberOfFloorsProperty] = useState("");
   const [numberOfFloorsCommon, setNumberOfFloorsCommon] = useState("");
@@ -62,9 +61,9 @@ export const PlacePropertyForm = ({}) => {
   const [areaTotal, setAreaTotal] = useState("");
   const [description, setDescription] = useState("");
   const [images, setImages] = useState([]);
-  const [upkeepType, setUpkeepType] = useState<UpkeepType>();
-  const [interiorType, setInteriorType] = useState<InteriorType>();
-  const [yearBuilt, setYearBuilt] = useState("");
+  const [upkeepType, setUpkeepType] = useState<UpkeepType | null>(null);
+  const [interiorType, setInteriorType] = useState<InteriorType | null>(null);
+  const [yearBuilt, setYearBuilt] = useState(null);
   const [generatingDescription, setGeneratingDescription] = useState(false);
   let autoCompleteRef = useRef();
   const inputRef = useRef();
@@ -89,8 +88,8 @@ export const PlacePropertyForm = ({}) => {
         neighborhood,
       },
       currency,
-      price,
-      selectedPropertyType,
+      price: price ? Number(price) : null,
+      propertyType,
       rooms: rooms ? Number(rooms) : null,
       bathrooms: bathrooms ? Number(bathrooms) : null,
       bedrooms: bedrooms ? Number(bedrooms) : null,
@@ -127,6 +126,7 @@ export const PlacePropertyForm = ({}) => {
     })
       .then((response) => response.json())
       .then((data) => {
+        console.log("Success:", data)
         setGeneratingDescription(false);
         setDescription(data);
       })
@@ -140,26 +140,33 @@ export const PlacePropertyForm = ({}) => {
       });
   };
 
-  const handleInteriorType = useCallback(
-    (value: InteriorType) => {
-      setInteriorType(value);
-    },
-    [interiorType],
-  );
-
-  const handleUpkeepType = useCallback(
-    (value: InteriorType) => {
-      setUpkeepType(value);
-    },
-    [upkeepType],
-  );
-
-  const handleHeatingType = useCallback(
-    (value: HeatingType) => {
-      setHeatingType(value);
-    },
-    [heatingType],
-  );
+  // const handleInteriorType = useCallback(
+  //   (value: InteriorType) => {
+  //     setInteriorType(value);
+  //   },
+  //   [interiorType],
+  // );
+  //
+  // const handleUpkeepType = useCallback(
+  //   (value: InteriorType) => {
+  //     setUpkeepType(value);
+  //   },
+  //   [upkeepType],
+  // );
+  //
+  // const handleHeatingType = useCallback(
+  //   (value: HeatingType) => {
+  //     setHeatingType(value);
+  //   },
+  //   [heatingType],
+  // );
+  //
+  // const handleListingTypeSelection = useCallback(
+  //   (value: ListingType) => {
+  //     setListingType(value);
+  //   },
+  //   [],
+  // );
 
   const placeChanged = (e) => {
     console.log(e);
@@ -243,14 +250,6 @@ export const PlacePropertyForm = ({}) => {
 
   const handleClick = () => {};
 
-  const handleListingTypeSelection = (index: number) => {
-    if (index === 0) {
-      setListingType("SELL");
-    } else {
-      setListingType("RENT");
-    }
-  };
-
   const handleFormSubmit = (e: any) => {
     e.preventDefault();
 
@@ -268,7 +267,7 @@ export const PlacePropertyForm = ({}) => {
       images: [],
       currency,
       price: price ? Number(price) : null,
-      selectedPropertyType,
+      propertyType,
       rooms: rooms ? Number(rooms) : null,
       bathrooms: bathrooms ? Number(bathrooms) : null,
       bedrooms: bedrooms ? Number(bedrooms) : null,
@@ -289,8 +288,8 @@ export const PlacePropertyForm = ({}) => {
       yearBuilt,
     };
 
-    console.log("formData")
-    console.log(formData)
+    console.log("formData");
+    console.log(formData);
 
     fetch(getFetchUrl(`api/listings`), {
       method: "POST",
@@ -313,7 +312,12 @@ export const PlacePropertyForm = ({}) => {
 
   // @ts-ignore
   return (
-    <form onSubmit={handleFormSubmit}>
+    <form
+      onSubmit={handleFormSubmit}
+      onKeyDown={(e) => {
+        e.key === "Enter" && e.preventDefault();
+      }}
+    >
       <h3 className={"text-4xl font-bold max-w-xl mb-12"}>
         Add essential information about your company
       </h3>
@@ -321,47 +325,20 @@ export const PlacePropertyForm = ({}) => {
         <p className={"text-2xl font-bold"}>
           Are you planning to rent or sell your property?
         </p>
-        <Tab.Group
-          // selectedIndex={listingTypeSelectedIndex}
-          onChange={handleListingTypeSelection}
-        >
-          <Tab.List className="flex space-x-1 rounded-xl bg-blue-900/20 p-1 mb-5 w-full text-black">
-            <Tab
-              className={({ selected }) =>
-                classNames(
-                  "w-full rounded-lg py-2.5 text-sm font-medium leading-5",
-                  "ring-white ring-opacity-60 focus:outline-none ",
-                  selected
-                    ? "bg-white shadow"
-                    : "text-gray-100 bg-white/[0.12] text-white",
-                )
-              }
-            >
-              Sell
-            </Tab>
-            <Tab
-              className={({ selected }) =>
-                classNames(
-                  "w-full rounded-lg py-2.5 text-sm font-medium leading-5",
-                  "ring-white ring-opacity-60 focus:outline-none ",
-                  selected
-                    ? "bg-white shadow"
-                    : "text-gray-100 bg-white/[0.12] text-white",
-                )
-              }
-            >
-              Rent
-            </Tab>
-          </Tab.List>
-        </Tab.Group>
+        <div className="">
+          <PropertyPlacementRadioButtons
+            options={LISTING_TYPES}
+            onChange={setListingType}
+          />
+        </div>
       </div>
       <Divider className={"my-8 md:my-14"} />
       <div className="grid md:grid-cols-2 gap-8 md:gap-16">
         <p className={"text-2xl font-bold"}>What is your property type</p>
-        <Select onValueChange={setSelectedPropertyType} className={"text-sm"}>
-          {propertyTypesInitialState.map((item, index) => (
-            <SelectItem value={item.label} key={index}>
-              {item.label}
+        <Select onValueChange={setPropertyType} className={"text-sm"}>
+          {PROPERTY_TYPES.map((item, index) => (
+            <SelectItem value={item} key={index}>
+              {item}
             </SelectItem>
           ))}
         </Select>
@@ -470,7 +447,7 @@ export const PlacePropertyForm = ({}) => {
                 min={0}
                 max={100}
                 value={rooms}
-                onChange={(e) => setRooms(e.target.value)}
+                onChange={(e) => setRooms(Number(e.target.value))}
               />
             </div>
           </div>
@@ -508,7 +485,7 @@ export const PlacePropertyForm = ({}) => {
         <div className="">
           <PropertyPlacementRadioButtons
             options={UPKEEP_TYPES}
-            onChange={handleUpkeepType}
+            onChange={setUpkeepType}
           />
         </div>
       </div>
@@ -518,7 +495,7 @@ export const PlacePropertyForm = ({}) => {
         <div className="">
           <PropertyPlacementRadioButtons
             options={INTERIOR_TYPES}
-            onChange={handleInteriorType}
+            onChange={setInteriorType}
           />
         </div>
       </div>
@@ -530,7 +507,7 @@ export const PlacePropertyForm = ({}) => {
         <div className="">
           <PropertyPlacementRadioButtons
             options={HEATING_TYPES}
-            onChange={handleHeatingType}
+            onChange={setHeatingType}
           />
         </div>
       </div>

@@ -35,7 +35,8 @@ export async function GET(req: NextRequest) {
             heatingType,
             listingType,
             interiorType,
-            propertyTypeId,
+            propertyType,
+            currencyType,
             upkeepType,
             areaTotalMin,
             areaTotalMax,
@@ -55,7 +56,9 @@ export async function GET(req: NextRequest) {
             parkingMax,
             constructedYearMin,
             constructedYearMax,
-            listedSince
+            listedSince,
+            priceMin,
+            priceMax
         } = parsedValues;
 
         // Prisma where object that that will be field with conditions
@@ -67,8 +70,9 @@ export async function GET(req: NextRequest) {
         const heatingTypeWhereObj = prismaQueryConditionsFromArray(heatingType, "heatingType");
         const listingTypeWhereObj = prismaQueryConditionsFromArray(listingType, "listingType");
         const interiorTypeWhereObj = prismaQueryConditionsFromArray(interiorType, "interiorType");
-        const propertyTypeIdWhereObj = prismaQueryConditionsFromArray(propertyTypeId, "propertyTypeId", true);
+        const propertyTypeWhereObj = prismaQueryConditionsFromArray(propertyType, "propertyType", true);
         const upkeepTypeWhereObj = prismaQueryConditionsFromArray(upkeepType, "upkeepType");
+        const currencyTypeWhereObj = prismaQueryConditionsFromArray(currencyType, "currencyType");
         const areaTotalWhereObj = prismaQueryConditionsFromMinMaxValue(areaTotalMin, areaTotalMax, "areaTotal");
         const areaLivingWhereObj = prismaQueryConditionsFromMinMaxValue(areaLivingMin, areaLivingMax, "areaLiving");
         const areaLandWhereObj = prismaQueryConditionsFromMinMaxValue(areaLandMin, areaLandMax, "areaLand");
@@ -77,6 +81,7 @@ export async function GET(req: NextRequest) {
         const bathroomsWhereObj = prismaQueryConditionsFromMinMaxValue(bathroomsMin, bathroomsMax, "bathrooms");
         const bedroomsWhereObj = prismaQueryConditionsFromMinMaxValue(bedroomsMin, bedroomsMax, "bedrooms");
         const parkingWhereObj = prismaQueryConditionsFromMinMaxValue(parkingMin, parkingMax, "parking");
+        const priceWhereObj = prismaQueryConditionsFromMinMaxValue(priceMin, priceMax, "price");
         const constructedYearWhereObj = prismaQueryConditionsFromMinMaxValidDateStringValue(constructedYearMin, constructedYearMax, "constructedYear");
 
         // set listed since
@@ -88,7 +93,7 @@ export async function GET(req: NextRequest) {
             heatingTypeWhereObj,
             listingTypeWhereObj,
             interiorTypeWhereObj,
-            propertyTypeIdWhereObj,
+            propertyTypeWhereObj,
             upkeepTypeWhereObj,
             areaTotalWhereObj,
             areaLivingWhereObj,
@@ -99,6 +104,8 @@ export async function GET(req: NextRequest) {
             bedroomsWhereObj,
             parkingWhereObj,
             constructedYearWhereObj,
+            priceWhereObj,
+            currencyTypeWhereObj,
         )
 
         // If page or pageSize are not define, use standard values
@@ -164,7 +171,7 @@ export async function POST(req: Request) {
         const {
             listingType,
             interiorType,
-            propertyTypeId,
+            propertyType,
             upkeepType,
             images,
             description,
@@ -201,7 +208,7 @@ export async function POST(req: Request) {
                 companyId,
                 listingType,
                 interiorType,
-                propertyTypeId,
+                propertyType,
                 upkeepType,
                 description,
                 areaTotal,
@@ -222,6 +229,8 @@ export async function POST(req: Request) {
                 floorNumber,
                 numberOfFloorsProperty,
                 numberOfFloorsCommon,
+                price,
+                currency,
                 heatingType,
                 Address: {
                     create: [
@@ -278,11 +287,9 @@ export async function PUT(req: Request) {
         const parsedValues = listingSchemaPutRequest.parse(await req.json());
         const {
             id,
-            postalCode,
-            localityId,
             listingType,
             interiorType,
-            propertyTypeId,
+            propertyType,
             upkeepType,
             images,
             description,
@@ -307,7 +314,7 @@ export async function PUT(req: Request) {
             heatingType,
             address,
             currency,
-            price
+            price,
         } = parsedValues
 
         const listing = await prisma.listing.findUnique({
@@ -382,6 +389,7 @@ export async function PUT(req: Request) {
         if (price && currency) {
             await prisma.listingPrice.create({
                 data: {
+                    listingId: id,
                     price,
                     currency
                 }
@@ -393,11 +401,9 @@ export async function PUT(req: Request) {
                 id
             },
             data: {
-                postalCode,
-                localityId,
                 listingType,
                 interiorType,
-                propertyTypeId,
+                propertyType,
                 upkeepType,
                 description,
                 areaTotal,
@@ -413,6 +419,8 @@ export async function PUT(req: Request) {
                 rooms,
                 bathrooms,
                 bedrooms,
+                price,
+                currency,
                 parking,
                 constructedYear,
                 floorNumber,

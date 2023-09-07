@@ -6,17 +6,18 @@ import {
   INTERIOR_TYPES,
   LISTING_TYPES,
   UPKEEP_TYPES,
+    PROPERTY_TYPES
 } from "@/app/Constants";
 
 const tenYearsFromNow = new Date();
 tenYearsFromNow.setFullYear(tenYearsFromNow.getFullYear() + 10);
 
 export const listingSchema = z.object({
-  listingType: z.enum(LISTING_TYPES).optional(),
-  interiorType: z.enum(INTERIOR_TYPES).optional(),
-  propertyTypeId: z.number().optional(),
-  upkeepType: z.enum(UPKEEP_TYPES).optional(),
-  price: z.number().min(0).optional().nullable(),
+  listingType: z.enum(LISTING_TYPES),
+  interiorType: z.enum(INTERIOR_TYPES),
+  propertyType: z.enum(PROPERTY_TYPES),
+  upkeepType: z.enum(UPKEEP_TYPES),
+  price: z.number().min(0),
   currency: z.enum(CURRENCIES).optional().nullable(),
   address: z
     .object({
@@ -123,14 +124,14 @@ export const listingSchema = z.object({
   floorNumber: z.number().optional().nullable(),
   numberOfFloorsProperty: z.number().optional().nullable(),
   numberOfFloorsCommon: z.number().optional().nullable(),
-  heatingType: z.enum(HEATING_TYPES).optional().nullable(),
+  heatingType: z.enum(HEATING_TYPES).optional(),
 });
 
 export const listingSchemaPutRequest = listingSchema.extend({
   id: z.number(),
   listingType: z.enum(LISTING_TYPES).optional(),
   interiorType: z.enum(INTERIOR_TYPES).optional(),
-  propertyTypeId: z.number().optional(),
+  propertyType: z.enum(PROPERTY_TYPES).optional(),
   price: z.number().min(0).optional(),
   currency: z.enum(CURRENCIES).optional(),
   address: z
@@ -174,7 +175,7 @@ export const listingsSearchParamSchema = z.object({
   locality: searchParamSchema.pipe(z.coerce.string()).optional(),
   heatingType: searchParamSchema
     .min(1)
-    .max(2)
+    .max(HEATING_TYPES.length)
     .refine(
       (userInputArray) =>
         userInputArray.every((el) => HEATING_TYPES.includes(el)),
@@ -183,9 +184,20 @@ export const listingsSearchParamSchema = z.object({
       }),
     )
     .optional(),
+    currencyType: searchParamSchema
+        .min(1)
+        .max(CURRENCIES.length)
+        .refine(
+            (userInputArray) =>
+                userInputArray.every((el) => CURRENCIES.includes(el)),
+            (val) => ({
+                message: `Invalid listing type input: ${val}. Allowed values: ${CURRENCIES}`,
+            }),
+        )
+        .optional(),
   listingType: searchParamSchema
     .min(1)
-    .max(2)
+    .max(LISTING_TYPES.length)
     .refine(
       (userInputArray) =>
         userInputArray.every((el) => LISTING_TYPES.includes(el)),
@@ -196,7 +208,7 @@ export const listingsSearchParamSchema = z.object({
     .optional(),
   interiorType: searchParamSchema
     .min(1)
-    .max(2)
+    .max(INTERIOR_TYPES.length)
     .refine(
       (userInputArray) =>
         userInputArray.every((el) => INTERIOR_TYPES.includes(el)),
@@ -205,7 +217,17 @@ export const listingsSearchParamSchema = z.object({
       }),
     )
     .optional(),
-  propertyTypeId: searchParamSchema.min(1).max(8).optional(),
+  propertyType: searchParamSchema
+      .min(1)
+      .max(PROPERTY_TYPES.length)
+      .refine(
+          (userInputArray) =>
+              userInputArray.every((el) => PROPERTY_TYPES.includes(el)),
+          (val) => ({
+              message: `Invalid interior type input: ${val}. Allowed values: ${PROPERTY_TYPES}`,
+          }),
+      )
+      .optional(),
   upkeepType: searchParamSchema
     .min(1)
     .max(2)
@@ -217,6 +239,14 @@ export const listingsSearchParamSchema = z.object({
       }),
     )
     .optional(),
+    priceMin: searchParamSchema
+        .max(1)
+        .pipe(z.coerce.number().min(0).max(1000000000))
+        .optional(),
+    priceMax: searchParamSchema
+        .max(1)
+        .pipe(z.coerce.number().min(0).max(1000000000))
+        .optional(),
   areaTotalMin: searchParamSchema
     .max(1)
     .pipe(z.coerce.number().min(0).max(1000000))

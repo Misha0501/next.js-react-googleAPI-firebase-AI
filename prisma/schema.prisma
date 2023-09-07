@@ -133,6 +133,7 @@ enum ListingType {
 enum Currency {
   EUR
   USD
+  BGN
 }
 
 enum InteriorType {
@@ -152,13 +153,11 @@ enum HeatingType {
   CENTRAL
 }
 
-model PropertyType {
-  id          Int           @id @default(autoincrement())
-  name        String
-  listings    Listing[]
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
-  SavedSearch SavedSearch[]
+enum PropertyType {
+  HOUSE
+  APARTMENT
+  PARKING
+  LAND
 }
 
 model Listing {
@@ -168,11 +167,12 @@ model Listing {
   companyId                   Int?
   company                     Company?                     @relation(fields: [companyId], references: [id])
   listingType                 ListingType
-  interiorType                InteriorType                 @default(FURNISHED)
-  upkeepType                  UpkeepType                   @default(EXCELLENT)
-  propertyTypeId              Int?
-  propertyType                PropertyType?                @relation(fields: [propertyTypeId], references: [id])
+  interiorType                InteriorType
+  upkeepType                  UpkeepType
+  propertyType                PropertyType
   description                 String?
+  price                       Int
+  currency                    Currency
   listingDescriptionKeyPoints ListingDescriptionKeyPoint[]
   areaTotal                   Float?                       @db.DoublePrecision
   areaLiving                  Float?                       @db.DoublePrecision
@@ -246,11 +246,11 @@ model SavedSearch {
   id                 Int             @id @default(autoincrement())
   applicationUserId  Int
   applicationUser    ApplicationUser @relation(fields: [applicationUserId], references: [id])
-  listingType        ListingType
-  interiorType       InteriorType    @default(FURNISHED)
-  upkeepType         UpkeepType      @default(EXCELLENT)
-  propertyTypeId     Int?
-  propertyType       PropertyType?   @relation(fields: [propertyTypeId], references: [id])
+  listingType        ListingType?
+  interiorType       InteriorType?
+  upkeepType         UpkeepType?
+  propertyType       PropertyType?
+  heatingType        HeatingType?
   areaLivingMin      Float?          @db.DoublePrecision
   areaLivingMax      Float?          @db.DoublePrecision
   areaTotalMin       Float?          @db.DoublePrecision
@@ -263,7 +263,6 @@ model SavedSearch {
   bedroomsMax        Int?
   constructedYearMin DateTime?
   constructedYearMax DateTime?
-  heatingType        HeatingType?
   createdAt          DateTime        @default(now())
   updatedAt          DateTime        @updatedAt
 }

@@ -3,11 +3,11 @@ import openAI from "@/app/lib/openAI";
 import OpenAI from "openai";
 import { ResponseError } from "@/classes/ResponseError";
 import * as z from "zod";
-import { listingSchema } from "@/app/lib/validations/listing";
+import {openAISchema} from "@/app/lib/validations/openAI";
 
 export async function POST(request: Request) {
   try {
-    const parsedValues = listingSchema.parse(await request.json());
+    const parsedValues = openAISchema.parse(await request.json());
 
     const completion = await openAI.chat.completions.create({
       model: "gpt-3.5-turbo",
@@ -22,7 +22,7 @@ export async function POST(request: Request) {
         {
           role: "user",
           content: `Hi there, provide a description of a property for sale/rent (depending on the listingType). Imagine you are the owner of the property. Try to include something about the location of the property. The property data: ${JSON.stringify(
-              parsedValues,
+            parsedValues,
           )})}`,
         },
       ],
@@ -44,17 +44,20 @@ export async function POST(request: Request) {
 
     return NextResponse.json(content);
   } catch (error) {
-    console.error(error)
+    console.error(error);
     if (error instanceof z.ZodError) {
-      return new Response(error.message, {status: 422})
+      return new Response(error.message, { status: 422 });
     }
 
     if (error instanceof ResponseError) {
-      return new Response(error.message, {status: error.status})
+      return new Response(error.message, { status: error.status });
     }
 
     if (error.errorInfo && error.errorInfo.code) {
-      return new Response('Your auth token is invalid or it has expired. Get a new auth token and try again.', {status: 400})
+      return new Response(
+        "Your auth token is invalid or it has expired. Get a new auth token and try again.",
+        { status: 400 },
+      );
     }
 
     if (error instanceof OpenAI.APIError) {
