@@ -17,11 +17,11 @@ export async function POST(request: Request) {
       messages: [
         {
           role: "system",
-          content: `When responding, ignore fields that are null or unset. Limit the response to 100 characters`,
+          content: `When responding, ignore fields that are null or unset. Limit the response to 300 characters`,
         },
         {
           role: "user",
-          content: `Hi there, provide a description of a property for sale/rent (depending on the listingType). Imagine you are the owner of the property. Doesn't mention Try to include something about the location of the property. The property data: ${JSON.stringify(
+          content: `Hi there, provide a description of a property for sale/rent (depending on the listingType). Imagine you are the owner of the property. Try to include something about the location of the property. The property data: ${JSON.stringify(
               parsedValues,
           )})}`,
         },

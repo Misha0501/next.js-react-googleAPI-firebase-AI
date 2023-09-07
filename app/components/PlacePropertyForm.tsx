@@ -46,7 +46,7 @@ export const PlacePropertyForm = ({}) => {
   const [example, setExample] = useState('ul. "Sofia" 2, Ruse, Bulgaria');
   const [showFullAddress, setShowFullAddress] = useState(false);
   const [currency, setCurrency] = useState<CurrencyType>();
-  const [price, setPrice] = useState<null | number>(null);
+  const [price, setPrice] = useState();
   const [selectedPropertyType, setSelectedPropertyType] = useState("");
   const [rooms, setRooms] = useState("");
   const [bathrooms, setBathrooms] = useState("");
@@ -96,16 +96,20 @@ export const PlacePropertyForm = ({}) => {
       bedrooms: bedrooms ? Number(bedrooms) : null,
       parking: parking ? Number(parking) : null,
       floorNumber: floorNumber ? Number(floorNumber) : null,
-      numberOfFloorsProperty: numberOfFloorsProperty? Number(numberOfFloorsProperty) : null,
-      numberOfFloorsCommon : numberOfFloorsCommon ? Number(numberOfFloorsCommon) : null,
+      numberOfFloorsProperty: numberOfFloorsProperty
+        ? Number(numberOfFloorsProperty)
+        : null,
+      numberOfFloorsCommon: numberOfFloorsCommon
+        ? Number(numberOfFloorsCommon)
+        : null,
       heatingType,
-      areaLand : areaLand ? Number(areaLand) : null,
-      areaLiving : areaLiving ? Number(areaLiving) : null,
-      areaTotal : areaTotal ? Number(areaTotal) : null,
+      areaLand: areaLand ? Number(areaLand) : null,
+      areaLiving: areaLiving ? Number(areaLiving) : null,
+      areaTotal: areaTotal ? Number(areaTotal) : null,
       upkeepType,
       interiorType,
       yearBuilt,
-    }
+    };
 
     setGeneratingDescription(true);
     setDescription(
@@ -134,13 +138,20 @@ export const PlacePropertyForm = ({}) => {
           "Something went wrong, please try again later. Or write your own description.",
         );
       });
-
   };
+
   const handleInteriorType = useCallback(
     (value: InteriorType) => {
       setInteriorType(value);
     },
     [interiorType],
+  );
+
+  const handleUpkeepType = useCallback(
+    (value: InteriorType) => {
+      setUpkeepType(value);
+    },
+    [upkeepType],
   );
 
   const handleHeatingType = useCallback(
@@ -220,7 +231,8 @@ export const PlacePropertyForm = ({}) => {
   useEffect(() => {
     if (window.google) {
       autoCompleteRef.current = new window.google.maps.places.Autocomplete(
-        inputRef.current, googlePlacesAutocompleteOptions,
+        inputRef.current,
+        googlePlacesAutocompleteOptions,
       );
 
       // When the user selects an address from the drop-down, populate the
@@ -241,7 +253,62 @@ export const PlacePropertyForm = ({}) => {
 
   const handleFormSubmit = (e: any) => {
     e.preventDefault();
-    console.log("form submitted");
+
+    let formData = {
+      listingType,
+      streetNumber: streetNumber,
+      address: {
+        streetNumber,
+        route,
+        locality,
+        administrativeAreaLevelOne,
+        postalCode,
+        neighborhood,
+      },
+      images: [],
+      currency,
+      price: price ? Number(price) : null,
+      selectedPropertyType,
+      rooms: rooms ? Number(rooms) : null,
+      bathrooms: bathrooms ? Number(bathrooms) : null,
+      bedrooms: bedrooms ? Number(bedrooms) : null,
+      parking: parking ? Number(parking) : null,
+      floorNumber: floorNumber ? Number(floorNumber) : null,
+      numberOfFloorsProperty: numberOfFloorsProperty
+        ? Number(numberOfFloorsProperty)
+        : null,
+      numberOfFloorsCommon: numberOfFloorsCommon
+        ? Number(numberOfFloorsCommon)
+        : null,
+      heatingType,
+      areaLand: areaLand ? Number(areaLand) : null,
+      areaLiving: areaLiving ? Number(areaLiving) : null,
+      areaTotal: areaTotal ? Number(areaTotal) : null,
+      upkeepType,
+      interiorType,
+      yearBuilt,
+    };
+
+    console.log("formData")
+    console.log(formData)
+
+    fetch(getFetchUrl(`api/listings`), {
+      method: "POST",
+      cache: "no-store",
+      headers: {
+        "Content-type": "application/json",
+        Authorization: authToken,
+      },
+      body: JSON.stringify(formData),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Success:", data);
+      })
+      .catch((error) => {
+        console.error(error);
+        console.error(error.message);
+      });
   };
 
   // @ts-ignore
@@ -441,7 +508,7 @@ export const PlacePropertyForm = ({}) => {
         <div className="">
           <PropertyPlacementRadioButtons
             options={UPKEEP_TYPES}
-            onChange={handleInteriorType}
+            onChange={handleUpkeepType}
           />
         </div>
       </div>

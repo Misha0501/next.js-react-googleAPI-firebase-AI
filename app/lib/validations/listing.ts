@@ -38,7 +38,7 @@ export const listingSchema = z.object({
         positionInListing: z.number(),
       }),
     )
-    .min(3, {
+    .min(0, {
       message: "There should be at least 3 images of the property",
     })
     .max(30, {

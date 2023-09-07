@@ -162,8 +162,6 @@ export async function POST(req: Request) {
 
         const parsedValues = listingSchema.parse(await req.json());
         const {
-            postalCode,
-            localityId,
             listingType,
             interiorType,
             propertyTypeId,
@@ -201,8 +199,6 @@ export async function POST(req: Request) {
             data: {
                 applicationUserId: applicationUser.id,
                 companyId,
-                postalCode,
-                localityId,
                 listingType,
                 interiorType,
                 propertyTypeId,
