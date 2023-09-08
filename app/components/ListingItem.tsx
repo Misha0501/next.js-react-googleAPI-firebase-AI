@@ -9,6 +9,7 @@ import {useRouter} from "next/navigation";
 type ListingItemProps = {
     listingItem: Listing
     onSavedIconClick : (listingItem: Listing) => void
+    isLoadingSavedListings: boolean
 }
 
 export const ListingItem = ({listingItem, onSavedIconClick, isLoadingSavedListings}: ListingItemProps) => {

@@ -1,25 +1,33 @@
-'use client';
+"use client";
 import {useEffect, useState} from "react";
-import {useFiltersStore} from "@/store/Filters";
 import {ListingItem} from "@/app/components/ListingItem";
-import {useRouter} from "next/navigation";
-import {getFetchUrl} from "@/app/lib/getFetchUrl";
+import {usePropertyListing} from "@/providers/Listing";
 import {useAuthContext} from "@/app/context/AuthContext";
-import {SavedListing} from "@/types";
+import {Listing, SavedListing} from "@/types";
+import {getFetchUrl} from "@/app/lib/getFetchUrl";
 
-export const ListingsMain = ({label, checked, onChange, name}) => {
+export const ListingsMain = ({searchParams}) => {
     const {authToken} = useAuthContext()
-    const propertyTypesSearchQuery = useFiltersStore((state) => state.propertyTypesSearchQuery)
-    const [listings, setListings] = useState<ListingItem[]>([]);
-    const [isLoadingListings, setIsLoadingListings] = useState(true);
+    const [populatedListings, setPopulatedListings] = useState<Listing[]>([]);
+    // const [isLoadingListings, setIsLoadingListings] = useState(true);
     const [isLoadingSavedListings, setIsLoadingSavedListings] = useState(true);
-    const [error, setError] = useState('');
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(25);
     const [totalListings, setTotalListings] = useState(0);
-    const router = useRouter()
 
-    const handleSavedIconClick = (listing: ListingItem) => {
+    const propertyListing = usePropertyListing({
+        listedSince: searchParams?.listedSince,
+        areaLivingMin: searchParams?.livingAreaRange.min,
+        areaLivingMax: searchParams?.livingAreaRange.max,
+        areaLandMin: searchParams?.livingLandRange.min,
+        areaLandMax: searchParams?.livingLandRange.max,
+        roomsMin: searchParams?.roomRange.min,
+        roomsMax: searchParams?.roomRange.max,
+        bedroomsMin: searchParams?.bedroomRange.min,
+        bedroomsMax: searchParams?.bedroomRange.max,
+    })
+
+    const handleSavedIconClick = (listing: Listing) => {
         // if listings isn't saved we do a post request to save it
         if (!listing.savedListingId) {
             fetch(getFetchUrl(`api/savedListings`), {
@@ -30,15 +38,15 @@ export const ListingsMain = ({label, checked, onChange, name}) => {
                     'Authorization': authToken,
                 },
                 body: JSON.stringify({listingId: listing.id}),
-            }).then(response => response.json()).then((savedListing:SavedListing) => {
+            }).then(response => response.json()).then((savedListing: SavedListing) => {
                 // populate current listings with updated data
-                const updatedListings = listings.map(item => {
+                const updatedListings = populatedListings.map(item => {
                     if (item.id === listing.id) {
                         item.savedListingId = savedListing.id;
                     }
                     return item;
                 });
-                setListings([...updatedListings])
+                setPopulatedListings([...updatedListings])
 
             }).catch(error => {
                 console.error(error);
@@ -56,19 +64,20 @@ export const ListingsMain = ({label, checked, onChange, name}) => {
                     'Authorization': authToken,
                 },
             }).then(() => {
-                const updatedListings = listings.map(item => {
+                const updatedListings = populatedListings.map(item => {
                     if (item.savedListingId === listing.savedListingId) {
                         item.savedListingId = null;
                     }
                     return item;
                 });
-                setListings([...updatedListings])
+                setPopulatedListings([...updatedListings])
 
-            }).catch(error => {console.error(error.message)})
+            }).catch(error => {
+                console.error(error.message)
+            })
         }
     };
-
-    const updateListingsWithSavedFeature = async (listings: ListingItem[]) => {
+    const updateListingsWithSavedFeature = async (listings: Listing[]) => {
         // get the data from the api
         const response = await fetch(getFetchUrl(`api/savedListings`), {
             method: 'GET',
@@ -82,11 +91,11 @@ export const ListingsMain = ({label, checked, onChange, name}) => {
         const data = await response.json();
 
         let savedListings: SavedListing[] = data.results;
-        let savedListingsListingIds = []
+        let savedListingsListingIds: number[] = []
 
         // Store all savedListing's listingIds
         if (savedListings) {
-            savedListingsListingIds = data.results.map(el => el.listingId);
+            savedListingsListingIds = savedListings.map(el => el.listingId);
         }
 
         // populate listings with saved listings data
@@ -95,59 +104,52 @@ export const ListingsMain = ({label, checked, onChange, name}) => {
             const savedListingListingId = savedListingsListingIds.find((savedListingId) => savedListingId === listing.id);
             const savedListing = savedListings.find((savedListing: SavedListing) => savedListing.listingId === savedListingListingId);
 
-            if (savedListingListingId && savedListingListingId) {
+            if (savedListingListingId && savedListingListingId && savedListing) {
                 listing.savedListingId = savedListing.id;
             } else {
-                listing.savedListingId = null;
+                listing.savedListingId = undefined;
             }
             return listing;
         })
 
-        setListings([...populatedListingsWithSavedListingData])
+        setPopulatedListings([...populatedListingsWithSavedListingData])
+        setIsLoadingSavedListings(false);
     }
 
-
     useEffect(() => {
-        const url = `api/listings?${propertyTypesSearchQuery.toString()}`;
-        const fetchListings = async () => {
-            const response = await fetch(url, {cache: "no-store"});
-            return await response.json();
-        }
-        fetchListings().then(data => {
-
-            // Set listings data
-            setListings(data.results)
-            setPage(data.page)
-            setPageSize(data.pageSize)
-            setTotalListings(data.total)
-            setIsLoadingListings(false);
-
+        if (propertyListing.isSuccess) {
             // Fetch saved icons
-            return updateListingsWithSavedFeature(data.results)
-        })
-            .then(() => setIsLoadingSavedListings(false))
-            .catch(e => {
-                console.error(e)
-                setError("Something went wrong please try again later")
-                setIsLoadingListings(false);
-            })
+            setTotalListings(propertyListing.data.total)
 
-    }, [propertyTypesSearchQuery, router])
+            updateListingsWithSavedFeature(propertyListing.data.results).catch((e) => {
+                console.error(e);
+            })
+        }
+    }, [propertyListing.isSuccess]);
 
     return (
         <div className={""}>
-            {isLoadingListings && <p>Loading...</p>}
-            {error && <p>{error}</p>}
-            {!error && !isLoadingListings &&
-                <div className={"text-xl mb-12"}>
-                    <span className={"font-bold"}>Results: </span> <span>{totalListings} houses found.</span>
-                </div>}
+            {propertyListing?.isFetching && <p>Loading...</p>}
+            {propertyListing?.isError && <p>{propertyListing?.error?.message}</p>}
+            {!propertyListing?.error && !propertyListing?.isFetching && (
+                <div>
+                    <div className={"text-xl mb-12"}>
+                        <span className={"font-bold"}>Results: </span>{" "}
+                        <span>{totalListings} houses found.</span>
+                    </div>
+                </div>
+
+            )}
             <div className={"grid grid-cols-2 gap-16"}>
-                {listings && listings.map((item: ListingItem, index: number) => (
-                    <ListingItem listingItem={item} key={index} onSavedIconClick={handleSavedIconClick}
-                                 isLoadingSavedListings={isLoadingSavedListings}/>
-                ))}
+
+                {populatedListings &&
+                    populatedListings.map((item, index) => (
+                        <ListingItem listingItem={item} key={index}
+                                     onSavedIconClick={handleSavedIconClick}
+                                     isLoadingSavedListings={isLoadingSavedListings}/>
+                    ))}
             </div>
         </div>
     );
-}
+};
+
