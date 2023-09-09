@@ -56,3 +56,19 @@ button {
   span{  font-size: 16px;
   }
 }
+
+
+.pac-container {
+  border-radius: 8px;
+}
+.pac-item {
+  padding: 8px 12px;
+}
+
+
+.pac-container:after {
+  /* Disclaimer: not needed to show 'powered by Google' if also a Google Map is shown */
+
+  background-image: none !important;
+  height: 0px;
+}
