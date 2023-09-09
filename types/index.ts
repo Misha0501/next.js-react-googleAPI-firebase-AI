@@ -62,6 +62,8 @@ export type Listing = {
   upkeepType: UpkeepType;
   volume: number;
   savedListingId?: number;
+  price?: number;
+  currency?: CurrencyType;
 };
 
 export type SavedListing = {
@@ -72,3 +74,16 @@ export type SavedListing = {
   listingId: number;
   updatedAt: string;
 };
+
+export type ApplicationUser = {
+Listing: Listing[];
+SavedListing: SavedListing[];
+SavedSearch: any[];
+createdAt: string;
+displayName: string;
+email: string;
+firebaseUID: string;
+id: number;
+providerId: string;
+updatedAt: string;
+}
