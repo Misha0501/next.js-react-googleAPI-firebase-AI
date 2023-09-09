@@ -22,10 +22,10 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
-        {/*<script*/}
-        {/*  async*/}
-        {/*  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAuL3ldHARXcYSsaNhLNRrzLgUDxLtEiAA&libraries=places&callback=initMap"*/}
-        {/*></script>*/}
+        <script
+          async
+          src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAuL3ldHARXcYSsaNhLNRrzLgUDxLtEiAA&libraries=places&callback=initMap"
+        ></script>
         <meta
           name="viewport"
           content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, user-scalable=no, viewport-fit=cover"

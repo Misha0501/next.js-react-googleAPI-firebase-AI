@@ -34,7 +34,7 @@ export default function PropertyPlacementRadioButtons({
                   ${
                     checked ? "bg-sky-900 bg-opacity-75 text-white" : "bg-white"
                   }
-                    relative flex cursor-pointer rounded-lg px-5 py-4 border-2 focus:outline-none`
+                    relative flex cursor-pointer rounded-lg px-5 py-4 border focus:outline-none`
                 }
               >
                 {({ active, checked }) => (

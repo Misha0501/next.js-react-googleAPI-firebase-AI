@@ -1,7 +1,7 @@
 "use client";
 
 import { Tab } from "@headlessui/react";
-import { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { classNames } from "@/app/lib/classNames";
 import {
   Button,
@@ -22,13 +22,14 @@ import {
 import {
   CurrencyType,
   HeatingType,
-  InteriorType,
+  InteriorType, ListingImage,
   ListingType,
   UpkeepType,
 } from "@/types";
 import PropertyPlacementRadioButtons from "@/app/components/PropertyPlacementRadioButtons";
 import { getFetchUrl } from "@/app/lib/getFetchUrl";
 import { useAuthContext } from "@/app/context/AuthContext";
+import { PlacingPropertyImagesHandler } from "@/app/components/PlacingPropertyImagesHandler";
 
 export const PlacePropertyForm = ({}) => {
   const { authToken } = useAuthContext();
@@ -60,11 +61,21 @@ export const PlacePropertyForm = ({}) => {
   const [areaLiving, setAreaLiving] = useState("");
   const [areaTotal, setAreaTotal] = useState("");
   const [description, setDescription] = useState("");
-  const [images, setImages] = useState([]);
+  const [images, setImages] = useState<ListingImage[]>([]);
   const [upkeepType, setUpkeepType] = useState<UpkeepType | null>(null);
   const [interiorType, setInteriorType] = useState<InteriorType | null>(null);
   const [yearBuilt, setYearBuilt] = useState(null);
   const [generatingDescription, setGeneratingDescription] = useState(false);
+
+  // const handleImages = useCallback(() => {
+  //         setFilterValues((prevFilterValues) => ({
+  //           ...prevFilterValues,
+  //
+  //         }));
+  //         // You can also call onParamsChange or perform any other actions here
+  //     },
+  //     [filterValues.bedroomRange]
+  // );
   let autoCompleteRef = useRef();
   const inputRef = useRef();
   const googlePlacesAutocompleteOptions = {
@@ -139,34 +150,6 @@ export const PlacePropertyForm = ({}) => {
         );
       });
   };
-
-  // const handleInteriorType = useCallback(
-  //   (value: InteriorType) => {
-  //     setInteriorType(value);
-  //   },
-  //   [interiorType],
-  // );
-  //
-  // const handleUpkeepType = useCallback(
-  //   (value: InteriorType) => {
-  //     setUpkeepType(value);
-  //   },
-  //   [upkeepType],
-  // );
-  //
-  // const handleHeatingType = useCallback(
-  //   (value: HeatingType) => {
-  //     setHeatingType(value);
-  //   },
-  //   [heatingType],
-  // );
-  //
-  // const handleListingTypeSelection = useCallback(
-  //   (value: ListingType) => {
-  //     setListingType(value);
-  //   },
-  //   [],
-  // );
 
   const placeChanged = (e) => {
     console.log(e);
@@ -264,7 +247,7 @@ export const PlacePropertyForm = ({}) => {
         postalCode,
         neighborhood,
       },
-      images: [],
+      images,
       currency,
       price: price ? Number(price) : null,
       propertyType,
@@ -439,7 +422,7 @@ export const PlacePropertyForm = ({}) => {
       <div className="grid md:grid-cols-2 gap-8 md:gap-16">
         <p className={"text-2xl font-bold"}>What is the number of rooms</p>
         <div className="">
-          <div className="pb-8 border-b-2">
+          <div className="pb-8 border-b">
             <div className="flex justify-between items-center">
               <span>Rooms</span>
               <NumberInput
@@ -451,7 +434,7 @@ export const PlacePropertyForm = ({}) => {
               />
             </div>
           </div>
-          <div className="py-6 border-b-2">
+          <div className="py-6 border-b">
             <div className="flex justify-between items-center">
               <span>Bedrooms</span>
               <NumberInput
@@ -463,7 +446,7 @@ export const PlacePropertyForm = ({}) => {
               />
             </div>
           </div>
-          <div className="py-6 border-b-2">
+          <div className="py-6 border-b">
             <div className="flex justify-between items-center">
               <span>Bathrooms</span>
               <NumberInput
@@ -517,7 +500,7 @@ export const PlacePropertyForm = ({}) => {
           What are the building specification?
         </p>
         <div className="">
-          <div className="pb-8 border-b-2">
+          <div className="pb-8 border-b">
             <div className="flex justify-between items-center">
               <span>Year of built</span>
               <NumberInput
@@ -529,7 +512,7 @@ export const PlacePropertyForm = ({}) => {
               />
             </div>
           </div>
-          <div className="py-6 border-b-2">
+          <div className="py-6 border-b">
             <div className="flex justify-between items-center">
               <span>Floors in the building</span>
               <NumberInput
@@ -541,7 +524,7 @@ export const PlacePropertyForm = ({}) => {
               />
             </div>
           </div>
-          <div className="py-6 border-b-2">
+          <div className="py-6 border-b">
             <div className="flex justify-between items-center">
               <span>Property located at floor number</span>
               <NumberInput
@@ -585,6 +568,16 @@ export const PlacePropertyForm = ({}) => {
               "border-2 rounded-xl w-full outline-0 min-h-[250px] p-2 text-gray-500"
             }
           />
+        </div>
+      </div>
+      <Divider className={"my-8 md:my-14"} />
+
+      <div className="grid md:grid-cols-2 gap-8 md:gap-16">
+        <p className={"text-2xl font-bold"}>
+          Upload your property images
+        </p>
+        <div className="">
+          <PlacingPropertyImagesHandler onChange={setImages}/>
         </div>
       </div>
       <Divider className={"my-8 md:my-14"} />

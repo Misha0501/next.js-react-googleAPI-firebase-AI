@@ -16,6 +16,16 @@ export type FirebaseAPISignInAuthResponse = {
   expiresIn: string;
 };
 
+export type ListingImage = {
+  id?: number;
+  listingId?: number;
+  positionInListing?: number;
+  url: string
+  imagePath?: string;
+  createdAt?: string;
+  updatedAt?: string;
+};
+
 export type Listing = {
   active: boolean;
   activeUntil: string;

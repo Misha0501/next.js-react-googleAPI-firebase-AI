@@ -115,14 +115,24 @@ export const ListingsMain = ({searchParams}) => {
         setPopulatedListings([...populatedListingsWithSavedListingData])
         setIsLoadingSavedListings(false);
     }
+    useEffect(() => {
+        console.log(populatedListings)
+
+    }, [populatedListings]);
+
 
     useEffect(() => {
         if (propertyListing.isSuccess) {
             // Fetch saved icons
+            const listings = propertyListing.data.results;
+
             setTotalListings(propertyListing.data.total)
 
-            updateListingsWithSavedFeature(propertyListing.data.results).catch((e) => {
-                console.error(e);
+            updateListingsWithSavedFeature(listings).catch((e) => {
+                console.error("Error fetching saved listings: ", e);
+                // if saved listings aren't fetched we still want to display the listings
+                setPopulatedListings(listings)
+                setIsLoadingSavedListings(false);
             })
         }
     }, [propertyListing.isSuccess]);
@@ -141,7 +151,6 @@ export const ListingsMain = ({searchParams}) => {
 
             )}
             <div className={"grid grid-cols-2 gap-16"}>
-
                 {populatedListings &&
                     populatedListings.map((item, index) => (
                         <ListingItem listingItem={item} key={index}
