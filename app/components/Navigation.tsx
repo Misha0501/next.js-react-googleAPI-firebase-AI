@@ -6,20 +6,27 @@ import {Button} from "@tremor/react";
 import {useAuthContext} from "@/app/context/AuthContext";
 import {firebaseClientAuth} from "@/app/lib/firebase/configClient";
 import {signOut} from "@firebase/auth";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
+import {onAuthStateChanged} from "firebase/auth";
+import {setCookie} from "cookies-next";
 
 export const Navigation = () => {
-    const {user, loading} = useAuthContext()
+    const [user, setUser] = useState()
     const handleSingOut = async () => {
         console.log("handle sign out")
         await signOut(firebaseClientAuth);
     };
 
     useEffect(() => {
-        // console.log("user")
-        // console.log(user)
-
-    }, [useAuthContext, user, loading]);
+        const unsubscribe = onAuthStateChanged(firebaseClientAuth, async (user) => {
+            if (user) {
+                setUser(user);
+            } else {
+                setUser(null);
+            }
+        });
+        return () => unsubscribe();
+    }, []);
 
     return (
         <nav className={"py-4 border-2"}>
@@ -35,6 +42,7 @@ export const Navigation = () => {
                     />
                 </Link>
                 <div className={"flex gap-x-3"}>
+                    <Button onClick={handleSingOut}>Sign out</Button>
                     <Link href="/savedItems"><Button variant="secondary">Saved properties</Button></Link>
                     <Link href="/placeProperty"><Button variant="secondary">Place your property</Button></Link>
                     {user && <Button onClick={handleSingOut}>Sign out</Button>}
