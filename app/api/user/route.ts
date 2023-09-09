@@ -20,7 +20,11 @@ export async function GET(req: Request) {
             include: {
                 Membership: true,
                 Invoice: true,
-                Listing: true,
+                Listing: {
+                    where: {
+                        deleted: null,
+                    }
+                },
                 SavedListing: true,
                 SavedSearch: true,
             },

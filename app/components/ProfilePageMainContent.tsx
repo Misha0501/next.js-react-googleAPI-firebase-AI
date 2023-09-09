@@ -81,9 +81,10 @@ export default function ProfilePageMainContent({ tab } : Props) {
         </TabList>
         <TabPanels className={"pt-12 pl-20"}>
           <TabPanel>
-            <ProfilePageOwnListings listings={applicationUser?.Listing}></ProfilePageOwnListings>
+            <ProfilePageOwnListings initialListings={applicationUser?.Listing}></ProfilePageOwnListings>
           </TabPanel>
           <TabPanel>
+            <p className={"font-bold text-4xl"}>Saved</p>
             <SavedItemsPageTabs></SavedItemsPageTabs>
           </TabPanel>
         </TabPanels>
