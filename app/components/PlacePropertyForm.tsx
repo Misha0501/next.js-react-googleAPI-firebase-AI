@@ -22,7 +22,8 @@ import {
 import {
   CurrencyType,
   HeatingType,
-  InteriorType, ListingImage,
+  InteriorType,
+  ListingImage,
   ListingType,
   UpkeepType,
 } from "@/types";
@@ -30,6 +31,7 @@ import PropertyPlacementRadioButtons from "@/app/components/PropertyPlacementRad
 import { getFetchUrl } from "@/app/lib/getFetchUrl";
 import { useAuthContext } from "@/app/context/AuthContext";
 import { PlacingPropertyImagesHandler } from "@/app/components/PlacingPropertyImagesHandler";
+import {useRouter} from "next/navigation";
 
 export const PlacePropertyForm = ({}) => {
   const { authToken } = useAuthContext();
@@ -66,16 +68,11 @@ export const PlacePropertyForm = ({}) => {
   const [interiorType, setInteriorType] = useState<InteriorType | null>(null);
   const [yearBuilt, setYearBuilt] = useState(null);
   const [generatingDescription, setGeneratingDescription] = useState(false);
+  const [globalError, setGlobalError] = useState("");
 
-  // const handleImages = useCallback(() => {
-  //         setFilterValues((prevFilterValues) => ({
-  //           ...prevFilterValues,
-  //
-  //         }));
-  //         // You can also call onParamsChange or perform any other actions here
-  //     },
-  //     [filterValues.bedroomRange]
-  // );
+  const router = useRouter();
+
+
   let autoCompleteRef = useRef();
   const inputRef = useRef();
   const googlePlacesAutocompleteOptions = {
@@ -137,7 +134,7 @@ export const PlacePropertyForm = ({}) => {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log("Success:", data)
+        console.log("Success:", data);
         setGeneratingDescription(false);
         setDescription(data);
       })
@@ -233,7 +230,7 @@ export const PlacePropertyForm = ({}) => {
 
   const handleClick = () => {};
 
-  const handleFormSubmit = (e: any) => {
+  const handleFormSubmit = async (e: any) => {
     e.preventDefault();
 
     let formData = {
@@ -273,24 +270,34 @@ export const PlacePropertyForm = ({}) => {
 
     console.log("formData");
     console.log(formData);
-
-    fetch(getFetchUrl(`api/listings`), {
-      method: "POST",
-      cache: "no-store",
-      headers: {
-        "Content-type": "application/json",
-        Authorization: authToken,
-      },
-      body: JSON.stringify(formData),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("Success:", data);
-      })
-      .catch((error) => {
-        console.error(error);
-        console.error(error.message);
+    try {
+      const response = await fetch(getFetchUrl(`api/listings`), {
+        method: "POST",
+        cache: "no-store",
+        headers: {
+          "Content-type": "application/json",
+          Authorization: authToken,
+        },
+        body: JSON.stringify(formData),
       });
+      const data = await response.json();
+
+      if (response.status !== 200) {
+        console.log("Error response:", response);
+        console.log("Error data:", data);
+        setGlobalError("Something went wrong, please try again later.");
+        return;
+      }
+
+      const createdListingId = data.id;
+      // Go to success page
+      router.push(`placePropertySuccess/${createdListingId}`);
+
+    } catch (e) {
+      console.error("error");
+      console.error(e);
+      setGlobalError("Something went wrong, please try again later.");
+    }
   };
 
   // @ts-ignore
@@ -573,20 +580,22 @@ export const PlacePropertyForm = ({}) => {
       <Divider className={"my-8 md:my-14"} />
 
       <div className="grid md:grid-cols-2 gap-8 md:gap-16">
-        <p className={"text-2xl font-bold"}>
-          Upload your property images
-        </p>
+        <p className={"text-2xl font-bold"}>Upload your property images</p>
         <div className="">
-          <PlacingPropertyImagesHandler onChange={setImages}/>
+          <PlacingPropertyImagesHandler onChange={setImages} />
         </div>
       </div>
       <Divider className={"my-8 md:my-14"} />
 
       <div className="grid md:grid-cols-2 gap-8 md:gap-16 mt-10">
         <div className="div"></div>
-        <Button type={"submit"} variant={"primary"} size={"xl"}>
-          Create property
-        </Button>
+        <div className="w-full">
+          {globalError && <div className="text-red-500">{globalError}</div>}
+
+          <Button type={"submit"} variant={"primary"} size={"xl"} className={"w-full"}>
+            Create property
+          </Button>
+        </div>
       </div>
     </form>
   );

@@ -217,7 +217,7 @@ export const PlacingPropertyImagesHandler = ({ onChange, initialImages }: Placin
           ))}
         {uploading && <p>Uploading...</p>}
       </div>
-      <Button onClick={handleFileInputClick} variant={"secondary"} className={"w-full"}>Add picture</Button>
+      <Button onClick={handleFileInputClick} variant={"secondary"} className={"w-full"} type={'button'}>Add picture</Button>
     </div>
   );
 };
