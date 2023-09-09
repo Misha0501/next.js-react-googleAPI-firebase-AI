@@ -3,12 +3,10 @@ import logo from "@/public/BoraLogo.png";
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@tremor/react";
-import { useAuthContext } from "@/app/context/AuthContext";
 import { firebaseClientAuth } from "@/app/lib/firebase/configClient";
 import { signOut } from "@firebase/auth";
 import { useEffect, useState } from "react";
 import { onAuthStateChanged } from "firebase/auth";
-import { setCookie } from "cookies-next";
 
 export const Navigation = () => {
   const [user, setUser] = useState();
@@ -42,9 +40,9 @@ export const Navigation = () => {
           />
         </Link>
         <div className={"flex gap-x-3"}>
-          <Link href="/savedItems"><Button variant="secondary">Saved properties</Button></Link>
+          <Link href="/profile/saved"><Button variant="secondary">Saved properties</Button></Link>
           <Link href="/placeProperty"><Button variant="secondary">Place your property</Button></Link>
-          {user && <Button onClick={handleSingOut}>Sign out</Button>}
+          {user && <Link href="/profile/myProperties"><Button>Profile</Button></Link>}
           {!user && <Link href="/signin"><Button>Sign in</Button></Link>}
         </div>
       </div>
