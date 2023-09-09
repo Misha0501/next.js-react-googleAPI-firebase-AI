@@ -1,7 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp, getApps } from "firebase/app";
 import {connectAuthEmulator, getAuth} from "firebase/auth";
-import * as firebaseui from 'firebaseui';
+// import * as firebaseui from 'firebaseui';
 
 const firebaseConfig = {
     apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -27,5 +27,5 @@ if (process.env.NODE_ENV === 'development') {
     connectAuthEmulator(firebaseClientAuth, getFirebaseEmulatorURL());
 }
 
-// UI instance for login / signup
-export const ui = firebaseui.auth.AuthUI.getInstance() || new firebaseui.auth.AuthUI(firebaseClientAuth);
+// // UI instance for login / signup
+// export const ui = firebaseui.auth.AuthUI.getInstance() || new firebaseui.auth.AuthUI(firebaseClientAuth);
