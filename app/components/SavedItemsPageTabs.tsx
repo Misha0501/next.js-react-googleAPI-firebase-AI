@@ -95,22 +95,22 @@ export const SavedItemsPageTabs = () => {
                                     <div className="text-xl"><span
                                         className={"font-bold"}>Results: </span> {savedListingsTotal} {savedListingsTotal === 0 || savedListingsTotal > 1 ? 'properties' : 'property'} saved
                                     </div>
-                                    <div className="flex gap-7">
-                                        <div className="flex gap-3">
-                                            <ListBulletIcon className={"h-11 w-11 text-gray-500"}></ListBulletIcon>
-                                            <ListBulletIconOutline className={"h-11 w-11"}></ListBulletIconOutline>
-                                        </div>
-                                        <div>
-                                            <Select defaultValue={sortingBySelected}
-                                                    onValueChange={setSortingBySelected}
-                                                    className={"text-sm min-w-[300px]"}>
-                                                {sortingByValues.map((item, index) => (
-                                                    <SelectItem value={item} key={index}><span className={"font-bold"}>Sort by:</span> {item}
-                                                    </SelectItem>
-                                                ))}
-                                            </Select>
-                                        </div>
-                                    </div>
+                                    {/*<div className="flex gap-7">*/}
+                                    {/*    <div className="flex gap-3">*/}
+                                    {/*        <ListBulletIcon className={"h-11 w-11 text-gray-500"}></ListBulletIcon>*/}
+                                    {/*        <ListBulletIconOutline className={"h-11 w-11"}></ListBulletIconOutline>*/}
+                                    {/*    </div>*/}
+                                    {/*    <div>*/}
+                                    {/*        <Select defaultValue={sortingBySelected}*/}
+                                    {/*                onValueChange={setSortingBySelected}*/}
+                                    {/*                className={"text-sm min-w-[300px]"}>*/}
+                                    {/*            {sortingByValues.map((item, index) => (*/}
+                                    {/*                <SelectItem value={item} key={index}><span className={"font-bold"}>Sort by:</span> {item}*/}
+                                    {/*                </SelectItem>*/}
+                                    {/*            ))}*/}
+                                    {/*        </Select>*/}
+                                    {/*    </div>*/}
+                                    {/*</div>*/}
 
                                 </div>
 
