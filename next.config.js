@@ -1,5 +1,14 @@
 /** @type {import('next').NextConfig} */
 module.exports = {
+    async redirects() {
+        return [
+            {
+                source: '/profile',
+                destination: '/profile/myProperties',
+                permanent: true,
+            },
+        ]
+    },
     typescript: {
         // !! WARN !!
         // Dangerously allow production builds to successfully complete even if
