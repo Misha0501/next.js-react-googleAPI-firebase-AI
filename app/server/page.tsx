@@ -1,10 +1,18 @@
 import {redirectToSignInIfNotLoggedInSSR} from "@/app/lib/redirectToSignInIfNotLoggedInSSR";
-import {auth} from "firebase-admin";
-import DecodedIdToken = auth.DecodedIdToken;
 import Link from "next/link";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
+import { firebaseAdmin } from "@/app/lib/firebase/configAdmin";
 
 export default async function ServerPage() {
-    const user: DecodedIdToken = await redirectToSignInIfNotLoggedInSSR();
+  const userToken = cookies().get('authToken');
+  if (!userToken || !userToken.value) redirect('/signin')
+
+  const decodedIdToken = await firebaseAdmin.auth().verifyIdToken(userToken.value).catch(error => {
+    // user is not authenticated
+    redirect('/signin');
+  });
+  // the user is authenticated!
 
     return (
         <>
@@ -16,7 +24,7 @@ export default async function ServerPage() {
             <section className="flex flex-col gap-6">
                 This is an example of server side auth check
                 Logged in
-                {JSON.stringify(user)}
+                {JSON.stringify(decodedIdToken)}
             </section>
         </>
 

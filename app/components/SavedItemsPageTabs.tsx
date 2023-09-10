@@ -40,7 +40,7 @@ export const SavedItemsPageTabs = () => {
 
     const fetchSavedListings = async () => {
         // get the data from the api
-        const response = await fetch(getFetchUrl(`api/savedListings`), {
+        const response = await fetch(getFetchUrl(`/api/savedListings`), {
             method: 'GET',
             cache: 'no-store',
             headers: {
