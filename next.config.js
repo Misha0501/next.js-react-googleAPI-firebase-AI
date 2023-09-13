@@ -17,7 +17,7 @@ module.exports = {
         ignoreBuildErrors: true,
     },
     images: {
-     domains: ["firebasestorage.googleapis.com"]
+        domains: ["firebasestorage.googleapis.com", "yt3.googleusercontent.com"]
     },
     "compilerOptions": {
         "baseUrl": ".",

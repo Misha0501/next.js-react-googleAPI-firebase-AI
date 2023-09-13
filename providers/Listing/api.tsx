@@ -8,3 +8,12 @@ export async function listing(props?: Poperty.ListingAPIPayload): Promise<any> {
     queryParams: props,
   });
 }
+
+export async function listingDetailPage(
+  props?: Poperty.listingDetailPageAPIPayload
+): Promise<Poperty.listingDetailPageResponse> {
+  return service({
+    method: "GET",
+    url: `/api/listings/${props?.id}`,
+  });
+}

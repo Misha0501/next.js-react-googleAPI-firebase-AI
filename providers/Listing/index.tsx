@@ -21,3 +21,16 @@ export function usePropertyListing(
     retry: 0,
   });
 }
+
+//ListingDetailPage
+export function useListingDetailPage(
+  props: Poperty.listingDetailPageProps
+): UseQueryResult<Poperty.listingDetailPageResponse> {
+  return useQuery(
+    getKeyFromProps(props, "DETAIL"),
+    () => api.listingDetailPage(props),
+    {
+      retry: 0,
+    }
+  );
+}
