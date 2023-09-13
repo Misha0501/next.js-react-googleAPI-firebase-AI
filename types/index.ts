@@ -50,6 +50,8 @@ export type Listing = {
   latitude: string;
   listingType: ListingType;
   localityId: number;
+  Address: Address[];
+  ListingImage: ListingImage[];
   longitude: string;
   numberOfFloorsCommon: number;
   numberOfFloorsProperty: number;
@@ -65,6 +67,21 @@ export type Listing = {
   price?: number;
   currency?: CurrencyType;
 };
+
+export type Address = {
+  createdAt: string;
+  id: number;
+  latitude: string;
+  locality: string;
+  longitude: string;
+  neighborhood: string;
+  postalCode: string;
+  showExactLocation: boolean;
+  streetName: string;
+  updatedAt: string;
+  listingId: number;
+  companyId: number | null;
+}
 
 export type SavedListing = {
   applicationUserId: number;
