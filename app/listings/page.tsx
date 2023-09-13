@@ -42,7 +42,7 @@ export default function Listings({ searchParams, params }: ListingsPageProps) {
           <ListingsMain
             listingType={listingType}
             searchParams={search}
-            localty={locality}
+            locality={locality}
             className="w-full"
           ></ListingsMain>
         </div>

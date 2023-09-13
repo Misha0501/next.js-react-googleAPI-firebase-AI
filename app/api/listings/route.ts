@@ -69,10 +69,6 @@ export async function GET(req: NextRequest) {
       AND: [],
     };
 
-    const localityWhereObj = prismaQueryConditionsFromArray(
-      locality,
-      "locality",
-    );
     const heatingTypeWhereObj = prismaQueryConditionsFromArray(
       heatingType,
       "heatingType",
@@ -161,8 +157,16 @@ export async function GET(req: NextRequest) {
         ),
       };
 
+    // set locality
+    if (locality) {
+      prismaQueryConditions["Address"] = {
+        some: {
+          locality: locality,
+        },
+      };
+    }
+
     prismaQueryConditions.AND.push(
-      localityWhereObj,
       heatingTypeWhereObj,
       listingTypeWhereObj,
       interiorTypeWhereObj,

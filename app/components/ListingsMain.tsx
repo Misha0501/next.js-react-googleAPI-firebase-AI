@@ -9,7 +9,7 @@ import { Select, SelectItem } from "@tremor/react";
 import { NO_MAX, sortOption } from "../Constants/filters";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
-export const ListingsMain = ({ searchParams, listingType, localty }) => {
+export const ListingsMain = ({ searchParams, listingType, locality }) => {
   const { authToken } = useAuthContext();
   const [populatedListings, setPopulatedListings] = useState<Listing[]>([]);
   // const [isLoadingListings, setIsLoadingListings] = useState(true);
@@ -33,7 +33,7 @@ export const ListingsMain = ({ searchParams, listingType, localty }) => {
     bedroomsMax: searchParams?.bedroomRange.max === NO_MAX ? undefined : searchParams?.bedroomRange.max,
     propertyTypeId: searchParams?.propertyType,
     listingType: listingType,
-    localty: localty,
+    locality: locality,
     sortBy: sortBy
   });
 

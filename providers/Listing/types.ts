@@ -17,7 +17,7 @@ export namespace Poperty {
     priceMin?: string | number | null;
     priceMax?: string | number | null;
     listingType?: string | null;
-    localty?: string | null;
+    locality?: string | null;
     sortBy?: string | null;
   };
   export interface ListingAPIPayload extends ListingProps {}
