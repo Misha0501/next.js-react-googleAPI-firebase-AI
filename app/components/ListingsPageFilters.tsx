@@ -1,6 +1,5 @@
 "use client";
 
-import { Filters } from "@/app/components/Filters";
 import {
   Divider,
   Tab,
@@ -11,16 +10,21 @@ import {
 } from "@tremor/react";
 import { useState } from "react";
 import { ListingType } from "@/types";
-import NewFilters from "./newFilters";
+import Filters from "@/app/components/Filters";
+import { useSearchParams } from "next/navigation";
 
-export const ListingsPageFilters = ({ onParamsChange }: any) => {
-  const [listingType, setListingType] = useState<ListingType>("SELL");
+export const ListingsPageFilters = ({ onParamsChange, listing }: any) => {
+  const params = useSearchParams();
+  const [listingType, setListingType] = useState<ListingType | any>(
+    params.get("listingType")
+  );
   const handleTabChange = (tabIndex: number) => {
     tabIndex == 0 ? setListingType("SELL") : setListingType("RENT");
   };
 
   const onChange = (data: any) => {
     onParamsChange(data);
+    listing(listingType);
   };
   return (
     <div className="filters w-full md:max-w-[400px]">
@@ -32,7 +36,10 @@ export const ListingsPageFilters = ({ onParamsChange }: any) => {
         </button>
       </div>
       <Divider />
-      <TabGroup onIndexChange={handleTabChange}>
+      <TabGroup
+        defaultIndex={listingType === "SELL" ? 0 : 1}
+        onIndexChange={handleTabChange}
+      >
         <TabList className="mt-8 space-x-0">
           <Tab
             className={
@@ -51,14 +58,16 @@ export const ListingsPageFilters = ({ onParamsChange }: any) => {
         </TabList>
         <TabPanels>
           <TabPanel>
-            {listingType == "SELL" && (
+            {listingType === "SELL" && (
               <>
-                <NewFilters onParamsChange={onChange} />
+                <Filters listingType={listingType} onParamsChange={onChange} />
               </>
             )}
           </TabPanel>
           <TabPanel>
-            {listingType == "RENT" && <Filters listingType={"RENT"} />}
+            {listingType === "RENT" && (
+              <Filters listingType={listingType} onParamsChange={onChange} />
+            )}
           </TabPanel>
         </TabPanels>
       </TabGroup>

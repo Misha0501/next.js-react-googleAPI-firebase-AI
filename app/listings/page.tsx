@@ -2,28 +2,39 @@
 import { ListingsMain } from "@/app/components/ListingsMain";
 import { ListingsPageHeader } from "@/app/components/ListingsPageHeader";
 import { ListingsPageFilters } from "@/app/components/ListingsPageFilters";
-import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
+import { useParams, useSearchParams } from "next/navigation";
 
 type ListingsPageProps = {
   params?: { slug: string };
   searchParams?: { [key: string]: string | string[] | undefined };
 };
 
-export default function Listings({}: ListingsPageProps) {
-  const [searchParams, setSearchParams] = useState(null);
+export default function Listings({ searchParams, params }: ListingsPageProps) {
+  const param = useSearchParams();
+  const [search, setSearch] = useState(null);
+  const [listingType, setListingType] = useState(undefined);
+  const [localty, setLocalty] = useState(param.get("locality") || "");
+
   const onParamsChange = useCallback((data) => {
-    setSearchParams(data);
+    setSearch(data);
   }, []);
 
   return (
     <>
-      <ListingsPageHeader></ListingsPageHeader>
+      <ListingsPageHeader
+        onLocaltyChange={(e) => setLocalty(e)}
+      ></ListingsPageHeader>
       <section className={"text-black pb-16"}>
         <div className="container flex gap-x-24">
-          <ListingsPageFilters onParamsChange={onParamsChange} />
+          <ListingsPageFilters
+            listing={(e) => setListingType(e)}
+            onParamsChange={onParamsChange}
+          />
           <ListingsMain
-            searchParams={searchParams}
+            listingType={listingType}
+            searchParams={search}
+            localty={localty}
             className="w-full"
           ></ListingsMain>
         </div>

@@ -24,6 +24,7 @@ export const areaLivingMaxOptions = [
   "175",
   "200",
   "250",
+  NO_MAX
 ];
 
 export const areaLandMinOptions = [
@@ -74,7 +75,7 @@ export const listedSinceOptions = [
   {
     label: "No preference",
     checked: true,
-    value: "noPref",
+    value: "0",
   },
   {
     label: "Last 24 hours",
@@ -102,3 +103,6 @@ export const listedSinceOptions = [
     value: "30",
   },
 ];
+
+export const sortOption = [
+  "Default",'Accending','Descending','Newest','Oldest']
