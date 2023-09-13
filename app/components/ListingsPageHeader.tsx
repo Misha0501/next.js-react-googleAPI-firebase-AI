@@ -1,8 +1,18 @@
 'use client'
 import {MagnifyingGlassIcon} from "@heroicons/react/24/solid";
 import {Button} from "@tremor/react";
+import { SetStateAction, useState } from "react";
 
-export const ListingsPageHeader = () => {
+export const ListingsPageHeader = ({onLocaltyChange}:any) => {
+    const [inputValue, setInputValue] = useState('');
+    const handleInputChange = (e: { target: { value: SetStateAction<string>; }; }) => {
+        setInputValue(e.target.value);
+      };
+    
+      const handleButtonClick = () => {
+        onLocaltyChange(inputValue)
+      
+      };
     return (
         <header className="pb-10 pt-16">
             <div className="container flex items-center space-x-3 ">
@@ -11,10 +21,11 @@ export const ListingsPageHeader = () => {
                     <input className="hero__search w-full h-full pl-3 focus:outline-none rounded-r-lg text-black"
                            type={'text'}
                            placeholder={"E.g: Sophia, Plovdiv, Varna"}
-                        // onChange={event => setSelectedLocality(event.target.value)}
+                           value={inputValue} // Set the input value from state
+                           onChange={handleInputChange} 
                     />
                 </div>
-                <Button icon={MagnifyingGlassIcon} size="lg" className={"w-[225px] space-x-3"}>Search</Button>
+                <Button onClick={handleButtonClick} icon={MagnifyingGlassIcon} size="lg" className={"w-[225px] space-x-3"}>Search</Button>
             </div>
         </header>
     );
