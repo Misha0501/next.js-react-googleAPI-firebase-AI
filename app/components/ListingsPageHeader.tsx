@@ -8,7 +8,7 @@ export const ListingsPageHeader = ({onLocalityChange, initialLocality}:any) => {
     return (
         <header className="pb-10 pt-16">
             <div className="container flex items-center space-x-3 ">
-                <div className="w-full flex items-center bg-white border-2 rounded-lg pl-3 h-[46px]">
+                <div className="w-full flex items-center bg-white border-2 rounded-lg ">
                   <Autocomplete onLocalityChange={onLocalityChange} initialValue={initialLocality}/>
                 </div>
             </div>

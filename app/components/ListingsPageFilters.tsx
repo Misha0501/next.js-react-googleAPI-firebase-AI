@@ -60,13 +60,13 @@ export const ListingsPageFilters = ({ onParamsChange, listing }: any) => {
           <TabPanel>
             {listingType === "SELL" && (
               <>
-                <Filters listingType={listingType} onParamsChange={onChange} />
+                <Filters listingType={listingType} onParamsChange={onChange} listintType={"SELL"}/>
               </>
             )}
           </TabPanel>
           <TabPanel>
             {listingType === "RENT" && (
-              <Filters listingType={listingType} onParamsChange={onChange} />
+              <Filters listingType={listingType} onParamsChange={onChange} listintType={"RENT"}/>
             )}
           </TabPanel>
         </TabPanels>

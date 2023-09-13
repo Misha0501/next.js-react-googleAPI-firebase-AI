@@ -14,6 +14,11 @@ export namespace Poperty {
     listedSince?: string | number | null;
     constructedYearMin?: string | number | null;
     constructedYearMax?: string | number | null;
+    priceMin?: string | number | null;
+    priceMax?: string | number | null;
+    listingType?: string | null;
+    localty?: string | null;
+    sortBy?: string | null;
   };
   export interface ListingAPIPayload extends ListingProps {}
 

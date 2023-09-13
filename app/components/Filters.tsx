@@ -1,10 +1,9 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { PropertyTypeFilter } from "@/app/components/PropertyTypeFilter";
 import { Divider } from "@tremor/react";
 import {
-  NO_MAX,
   areaLandMaxOptions,
   areaLandMinOptions,
   areaLivingMaxOptions,
@@ -14,28 +13,55 @@ import {
   maxRoomsOptions,
   minBedroomsOptions,
   minRoomsOptions,
+  NO_MAX,
+  priceRentMaxOptions,
+  priceRentMinOptions,
+  priceSellMaxOptions,
+  priceSellMinOptions
 } from "../Constants/filters";
 
 import { FromToFilter } from "./FromToFilter";
 import { RadioGroupCustom } from "./RadioGroupCustom";
-import { useParams, usePathname, useSearchParams } from "next/navigation";
+import { usePathname } from "next/navigation";
 
-export function Filters({ onParamsChange, localty }: any) {
+export function Filters({ onParamsChange, listingType }: any) {
   const pathname = usePathname();
-  const params = useSearchParams();
-
-  const [listingType, setListingType] = useState(
-    params.get("listingType") || ""
-  );
 
   const [filterValues, setFilterValues] = useState({
     propertyType: undefined, // Property type filter
+    priceRange: { min: undefined, max: undefined }, // Property price filter
     livingAreaRange: { min: undefined, max: undefined }, // Square meters living area filter
     livingLandRange: { min: undefined, max: undefined }, // Square meters property filter
     roomRange: { min: undefined, max: undefined }, // Rooms filter
     bedroomRange: { min: undefined, max: undefined }, // Bedrooms filter
     listedSince: undefined, // Listed since filter
   });
+
+  const removeUndefinedAndNoMaxValues = (filters: any) => {
+    // set max value in all filterValues properties to undefined if it's set to NO_MAX
+    const result: any = {};
+    Object.keys(filters).forEach((key) => {
+      if (filters[key] !== undefined) {
+        result[key] = filters[key];
+      }
+
+      // remove undefined children from params[key]
+      if (typeof result[key] === "object") {
+
+        Object.keys(result[key]).forEach((childKey) => {
+          const child = result[key][childKey];
+
+          if (child === NO_MAX) {
+
+            result[key][childKey] = undefined;
+          }
+        });
+      }
+    });
+
+    return result;
+  }
+
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const setQueryParams = (queryParams: any) => {
     window.history.replaceState(null, "", `${pathname}?${queryParams}`);
@@ -109,6 +135,20 @@ export function Filters({ onParamsChange, localty }: any) {
       queryParams += `&bedroomsMax=${filters.bedroomRange?.max}`;
     }
 
+    if(
+      filters.priceRange?.min !== undefined &&
+      filters.priceRange?.min !== "0"
+    ) {
+      queryParams += `&priceMin=${filters.priceRange?.min}`;
+    }
+
+    if(
+      filters.priceRange?.max !== undefined &&
+      filters.priceRange?.max != NO_MAX
+    ) {
+      queryParams += `&priceMax=${filters.priceRange?.max}`;
+    }
+
     if (filters?.listedSince !== undefined && filters?.listedSince !== "0") {
       queryParams += `&listedSince=${filters?.listedSince}`;
     }
@@ -118,6 +158,7 @@ export function Filters({ onParamsChange, localty }: any) {
 
     return queryParams;
   };
+
   const handlePropertyTypeChange = useCallback(
     (values: any) => {
       setFilterValues((prevFilterValues) => ({
@@ -157,6 +198,21 @@ export function Filters({ onParamsChange, localty }: any) {
       const queryParams = generateQueryParams({
         ...filterValues,
         livingLandRange: { min, max },
+      });
+      setQueryParams(queryParams);
+    },
+    [filterValues, setFilterValues, generateQueryParams, setQueryParams]
+  );
+
+  const handlePriceChange = useCallback(
+    (min: any, max: any) => {
+      setFilterValues((prevFilterValues) => ({
+        ...prevFilterValues,
+        priceRange: { min, max },
+      }));
+      const queryParams = generateQueryParams({
+        ...filterValues,
+        priceRange: { min, max },
       });
       setQueryParams(queryParams);
     },
@@ -212,16 +268,38 @@ export function Filters({ onParamsChange, localty }: any) {
     onParamsChange(filterValues);
   }, [filterValues, onParamsChange]);
 
-  //   useEffect(() => {
-  //     const queryParams = generateQueryParams({
-  //       ...filterValues,
-  //       listingType: listingType,
-  //     });
-  //     setQueryParams(queryParams);
-  //   }, [listingType]);
-
   return (
     <>
+      <p className={"font-bold mb-4"}>Price</p>
+      {listingType === "SELL" &&
+        <FromToFilter
+          valuesTo={priceSellMaxOptions}
+          valuesFrom={priceSellMinOptions}
+          initialFrom={filterValues.priceRange.min || "0"}
+          initialTo={filterValues.priceRange.max || NO_MAX}
+          onChangeFrom={(value) =>
+            handlePriceChange(value, filterValues.priceRange.max)
+          }
+          onChangeTo={(value) =>
+            handlePriceChange(filterValues.priceRange.min, value)
+          }
+        ></FromToFilter>
+      }
+      {listingType === "RENT" &&
+        <FromToFilter
+          valuesTo={priceRentMaxOptions}
+          valuesFrom={priceRentMinOptions}
+          initialFrom={filterValues.priceRange.min || "0"}
+          initialTo={filterValues.priceRange.max || NO_MAX}
+          onChangeFrom={(value) =>
+            handlePriceChange(value, filterValues.priceRange.max)
+          }
+          onChangeTo={(value) =>
+            handlePriceChange(filterValues.priceRange.min, value)
+          }
+        ></FromToFilter>
+      }
+      <Divider />
       <p className={"font-bold mb-4"}>Property type</p>
       <PropertyTypeFilter
         selectedValues={filterValues.propertyType}
