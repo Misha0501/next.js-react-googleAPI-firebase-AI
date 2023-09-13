@@ -14,17 +14,25 @@ export default function Listings({ searchParams, params }: ListingsPageProps) {
   const param = useSearchParams();
   const [search, setSearch] = useState(null);
   const [listingType, setListingType] = useState(undefined);
-  const [localty, setLocalty] = useState(param.get("locality") || "");
+  const [locality, setLocality] = useState(param.get("locality") || "");
 
   const onParamsChange = useCallback((data) => {
     setSearch(data);
   }, []);
 
+  const handleSelectedLocalityChange = (locality: string) => {
+    console.log("locality");
+    console.log(locality);
+
+    setLocality(locality);
+  }
+
   return (
     <>
       <ListingsPageHeader
-        onLocaltyChange={(e) => setLocalty(e)}
-      ></ListingsPageHeader>
+        onLocalityChange={handleSelectedLocalityChange}
+        initialLocality={locality}
+      />
       <section className={"text-black pb-16"}>
         <div className="container flex gap-x-24">
           <ListingsPageFilters
@@ -34,7 +42,7 @@ export default function Listings({ searchParams, params }: ListingsPageProps) {
           <ListingsMain
             listingType={listingType}
             searchParams={search}
-            localty={localty}
+            localty={locality}
             className="w-full"
           ></ListingsMain>
         </div>
