@@ -1,0 +1,40 @@
+import * as z from "zod";
+import {
+    CURRENCIES,
+    HEATING_TYPES,
+    INTERIOR_TYPES,
+    LISTING_TYPES,
+    PROPERTY_TYPES,
+    UPKEEP_TYPES
+} from "@/app/Constants";
+
+export const savedFiltersSchema = z.object({
+    locality: z.coerce.string().optional(),
+    heatingType: z.enum(HEATING_TYPES).optional(),
+    currencyType: z.enum(CURRENCIES).optional(),
+    listingType: z.enum(LISTING_TYPES).optional(),
+    interiorType: z.enum(INTERIOR_TYPES).optional(),
+    propertyType: z.enum(PROPERTY_TYPES).optional(),
+    upkeepType: z.enum(UPKEEP_TYPES).optional(),
+    priceMin: z.number().min(0).max(1000000000).optional(),
+    priceMax: z.number().min(0).max(1000000000).optional(),
+    areaTotalMin: z.number().min(0).max(1000000).optional(),
+    areaTotalMax: z.number().min(0).max(1000000).optional(),
+    areaLivingMin: z.number().min(0).max(1000000).optional(),
+    areaLivingMax: z.number().min(0).max(1000000).optional(),
+    areaLandMin: z.number().min(0).max(1000000).optional(),
+    areaLandMax: z.number().min(0).max(1000000).optional(),
+    areaOutsideMin: z.number().min(0).max(1000000).optional(),
+    areaOutsideMax: z.number().min(0).max(1000000).optional(),
+    roomsMin: z.number().min(0).max(1000000).optional(),
+    roomsMax: z.number().min(0).max(1000000).optional(),
+    bathroomsMin: z.number().min(0).max(1000000).optional(),
+    bathroomsMax: z.number().min(0).max(1000000).optional(),
+    bedroomsMin: z.number().min(0).max(1000000).optional(),
+    bedroomsMax: z.number().min(0).max(1000000).optional(),
+    parkingMin: z.number().min(0).max(1000000).optional(),
+    parkingMax: z.number().min(0).max(1000000).optional(),
+    listedSince: z.number().min(0).max(1000000).optional(),
+    constructedYearMin: z.coerce.string().optional(),
+    constructedYearMax: z.coerce.string().optional(),
+});

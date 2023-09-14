@@ -5,7 +5,7 @@ import {getApplicationUserServer} from "@/app/lib/getApplicationUserServer";
 import {ApplicationUser} from '@prisma/client'
 
 /**
- * DELETE Route to delete a saved listing.
+ * DELETE Route to delete a saved search.
  * @param req
  * @constructor
  * @param request
@@ -19,17 +19,17 @@ export async function DELETE(request: Request, {params}: { params: { slug: numbe
         const applicationUser: ApplicationUser = await getApplicationUserServer();
 
         const applicationUserId = applicationUser.id;
-        const savedListing = await prisma.savedListing.findUnique({
+        const savedSearch = await prisma.savedSearch.findUnique({
             where: {
                 id,
             },
         })
 
-        if (!savedListing) throw new ResponseError("Saved listing with provided id wasn't found.", 404)
+        if (!savedSearch) throw new ResponseError("Saved search with provided id wasn't found.", 404)
 
-        if (applicationUserId !== savedListing.applicationUserId) throw new ResponseError("You aren't allowed to changed this property", 401)
+        if (applicationUserId !== savedSearch.applicationUserId) throw new ResponseError("You aren't allowed to changed this property", 401)
 
-        await prisma.savedListing.delete({
+        await prisma.savedSearch.delete({
             where: {id}
         })
 
