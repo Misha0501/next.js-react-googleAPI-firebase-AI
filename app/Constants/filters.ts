@@ -108,6 +108,7 @@ export const sortOption = [
   "Default",'Accending','Descending','Newest','Oldest']
 
 export const priceSellMinOptions = [
+  "0",
   "50000",
   "75000",
   "100000",
@@ -153,6 +154,7 @@ export const priceSellMaxOptions = [
 ];
 
 export const priceRentMinOptions = [
+"0",
 "100",
 "200",
 "300",
