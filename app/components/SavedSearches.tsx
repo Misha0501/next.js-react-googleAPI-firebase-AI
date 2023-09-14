@@ -3,12 +3,12 @@
 import { useEffect, useState } from "react";
 import { getFetchUrl } from "@/app/lib/getFetchUrl";
 import { useAuthContext } from "@/app/context/AuthContext";
-import { SavedSearches } from "@/types";
+import { SavedSearch } from "@/types";
 import { XMarkIcon } from "@heroicons/react/24/solid";
 export const SavedSearches = () => {
   const { authToken } = useAuthContext();
 
-  const [savedSearches, setSavedSearches] = useState<SavedSearches[]>([]);
+  const [savedSearches, setSavedSearches] = useState<SavedSearch[]>([]);
   const [savedSearchesTotal, setSavedSearchesTotal] = useState();
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");

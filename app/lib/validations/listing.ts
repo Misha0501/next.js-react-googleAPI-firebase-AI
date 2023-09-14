@@ -40,7 +40,7 @@ export const listingSchema = z.object({
       }),
     )
     .min(0, {
-      message: "There should be at least 3 images of the property",
+      message: "There should be at least 0 images of the property",
     })
     .max(30, {
       message: "There can be max 30 images of the property",

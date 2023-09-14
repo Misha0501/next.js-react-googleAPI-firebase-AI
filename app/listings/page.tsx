@@ -36,7 +36,8 @@ export default function Listings({ searchParams, params }: ListingsPageProps) {
       <section className={"text-black pb-16"}>
         <div className="container flex gap-x-24">
           <ListingsPageFilters
-            listing={(e) => setListingType(e)}
+            onListingTypeChange={(e) => setListingType(e)}
+            locality={locality}
             onParamsChange={onParamsChange}
           />
           <ListingsMain

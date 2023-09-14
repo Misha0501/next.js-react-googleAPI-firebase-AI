@@ -9,8 +9,9 @@ import { useAuthContext } from "@/app/context/AuthContext";
 import { getFetchUrl } from "@/app/lib/getFetchUrl";
 import { Dialog, Transition } from "@headlessui/react";
 import Link from "next/link";
+import { NO_MAX } from "@/app/Constants/filters";
 
-export const ListingsPageFilters = ({ onParamsChange, listing }: any) => {
+export const ListingsPageFilters = ({ onParamsChange, onListingTypeChange, locality }: any) => {
   const { authToken } = useAuthContext();
 
   const params = useSearchParams();
@@ -32,13 +33,33 @@ export const ListingsPageFilters = ({ onParamsChange, listing }: any) => {
   const onChange = (data: any) => {
     onParamsChange(data);
     setFilterValues(data);
-    listing(listingType);
+    onListingTypeChange(listingType);
   };
 
   const handleResetFilters = () => {
     console.log("reset filters");
     console.log(filterValues);
   };
+
+  // Create a proper saved search object from the filter values
+  const getSavedSearchesBodyObjectFromFilters = (filterValues) => {
+    return {
+      priceMin: filterValues?.priceRange.min,
+      priceMax: filterValues?.priceRange.max === NO_MAX ? undefined : filterValues?.priceRange.max,
+      listedSince: filterValues?.listedSince,
+      areaLivingMin: filterValues?.livingAreaRange.min,
+      areaLivingMax: filterValues?.livingAreaRange.max === NO_MAX ? undefined : filterValues?.livingAreaRange.max,
+      areaTotalMin: filterValues?.areaTotal.min,
+      areaTotalMax: filterValues?.areaTotal.max === NO_MAX ? undefined : filterValues?.areaTotal.max,
+      roomsMin: filterValues?.roomRange.min,
+      roomsMax: filterValues?.roomRange.max === NO_MAX ? undefined : filterValues?.roomRange.max,
+      bedroomsMin: filterValues?.bedroomRange.min,
+      bedroomsMax: filterValues?.bedroomRange.max === NO_MAX ? undefined : filterValues?.bedroomRange.max,
+      propertyType: filterValues?.propertyType,
+      listingType: filterValues?.listingType,
+      locality: locality || undefined
+    }
+  }
 
   const handleSaveSearch = async () => {
     try {
@@ -49,7 +70,7 @@ export const ListingsPageFilters = ({ onParamsChange, listing }: any) => {
           "Content-type": "application/json",
           Authorization: authToken
         },
-        body: JSON.stringify(filterValues)
+        body: JSON.stringify(getSavedSearchesBodyObjectFromFilters(filterValues))
       });
       const data = await response.json();
 
@@ -103,13 +124,13 @@ export const ListingsPageFilters = ({ onParamsChange, listing }: any) => {
           <TabPanel>
             {listingType === "SELL" && (
               <>
-                <Filters listingType={listingType} onParamsChange={onChange} listintType={"SELL"} />
+                <Filters listingType={listingType} onParamsChange={onChange} />
               </>
             )}
           </TabPanel>
           <TabPanel>
             {listingType === "RENT" && (
-              <Filters listingType={listingType} onParamsChange={onChange} listintType={"RENT"} />
+              <Filters listingType={listingType} onParamsChange={onChange} />
             )}
           </TabPanel>
         </TabPanels>

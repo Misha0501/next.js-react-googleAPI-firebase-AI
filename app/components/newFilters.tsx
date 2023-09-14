@@ -57,7 +57,7 @@ export function NewFilters({ onParamsChange }: any) {
       if (min <= max) {
         setFilterValues((prevFilterValues) => ({
           ...prevFilterValues,
-          livingLandRange: { min, max },
+          areaTotal: { min, max },
         }));
         // You can also call onParamsChange or perform any other actions here
       } else {

@@ -28,16 +28,16 @@ export function Filters({ onParamsChange, listingType }: any) {
   const pathname = usePathname();
 
   const [filterValues, setFilterValues] = useState({
-    listingType: listingType || undefined, // Property type filter
-    propertyType: undefined, // Property type filter
+    listingType: listingType || undefined, // Listing type filter
+    propertyType: [], // Property type filter
     priceRange: { min: undefined, max: undefined }, // Property price filter
     livingAreaRange: { min: undefined, max: undefined }, // Square meters living area filter
-    livingLandRange: { min: undefined, max: undefined }, // Square meters property filter
+    // livingLandRange: { min: undefined, max: undefined }, // Square meters property filter
+    areaTotal: { min: undefined, max: undefined }, // Square meters total filter
     roomRange: { min: undefined, max: undefined }, // Rooms filter
     bedroomRange: { min: undefined, max: undefined }, // Bedrooms filter
-    listedSince: undefined, // Listed since filter
+    listedSince: undefined // Listed since filter
   });
-
   const removeUndefinedAndNoMaxValues = (filters: any) => {
     // set max value in all filterValues properties to undefined if it's set to NO_MAX
     const result: any = {};
@@ -61,7 +61,7 @@ export function Filters({ onParamsChange, listingType }: any) {
     });
 
     return result;
-  }
+  };
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const setQueryParams = (queryParams: any) => {
@@ -95,17 +95,17 @@ export function Filters({ onParamsChange, listingType }: any) {
     }
 
     if (
-      filters.livingLandRange?.min !== undefined &&
-      filters.livingLandRange?.min !== "0"
+      filters.areaTotal?.min !== undefined &&
+      filters.areaTotal?.min !== "0"
     ) {
-      queryParams += `&areaLandMin=${filters.livingLandRange?.min}`;
+      queryParams += `&areaTotalMin=${filters.areaTotal?.min}`;
     }
 
     if (
-      filters.livingLandRange?.max !== undefined &&
-      filters.livingLandRange?.max !== NO_MAX
+      filters.areaTotal?.max !== undefined &&
+      filters.areaTotal?.max !== NO_MAX
     ) {
-      queryParams += `&areaLandMax=${filters.livingLandRange?.max}`;
+      queryParams += `&areaTotalMax=${filters.areaTotal?.max}`;
     }
 
     if (
@@ -136,14 +136,14 @@ export function Filters({ onParamsChange, listingType }: any) {
       queryParams += `&bedroomsMax=${filters.bedroomRange?.max}`;
     }
 
-    if(
+    if (
       filters.priceRange?.min !== undefined &&
       filters.priceRange?.min !== "0"
     ) {
       queryParams += `&priceMin=${filters.priceRange?.min}`;
     }
 
-    if(
+    if (
       filters.priceRange?.max !== undefined &&
       filters.priceRange?.max != NO_MAX
     ) {
@@ -164,11 +164,11 @@ export function Filters({ onParamsChange, listingType }: any) {
     (values: any) => {
       setFilterValues((prevFilterValues) => ({
         ...prevFilterValues,
-        propertyType: values,
+        propertyType: values
       }));
       const queryParams = generateQueryParams({
         ...filterValues,
-        propertyType: values,
+        propertyType: values
       });
       setQueryParams(queryParams);
     },
@@ -179,11 +179,11 @@ export function Filters({ onParamsChange, listingType }: any) {
     (min: any, max: any) => {
       setFilterValues((prevFilterValues) => ({
         ...prevFilterValues,
-        livingAreaRange: { min, max },
+        livingAreaRange: { min, max }
       }));
       const queryParams = generateQueryParams({
         ...filterValues,
-        livingAreaRange: { min, max },
+        livingAreaRange: { min, max }
       });
       setQueryParams(queryParams);
     },
@@ -194,11 +194,11 @@ export function Filters({ onParamsChange, listingType }: any) {
     (min: any, max: any) => {
       setFilterValues((prevFilterValues) => ({
         ...prevFilterValues,
-        livingLandRange: { min, max },
+        areaTotal: { min, max }
       }));
       const queryParams = generateQueryParams({
         ...filterValues,
-        livingLandRange: { min, max },
+        areaTotal: { min, max }
       });
       setQueryParams(queryParams);
     },
@@ -209,11 +209,11 @@ export function Filters({ onParamsChange, listingType }: any) {
     (min: any, max: any) => {
       setFilterValues((prevFilterValues) => ({
         ...prevFilterValues,
-        priceRange: { min, max },
+        priceRange: { min, max }
       }));
       const queryParams = generateQueryParams({
         ...filterValues,
-        priceRange: { min, max },
+        priceRange: { min, max }
       });
       setQueryParams(queryParams);
     },
@@ -224,11 +224,11 @@ export function Filters({ onParamsChange, listingType }: any) {
     (min: any, max: any) => {
       setFilterValues((prevFilterValues) => ({
         ...prevFilterValues,
-        roomRange: { min, max },
+        roomRange: { min, max }
       }));
       const queryParams = generateQueryParams({
         ...filterValues,
-        roomRange: { min, max },
+        roomRange: { min, max }
       });
       setQueryParams(queryParams);
     },
@@ -239,11 +239,11 @@ export function Filters({ onParamsChange, listingType }: any) {
     (min: any, max: any) => {
       setFilterValues((prevFilterValues) => ({
         ...prevFilterValues,
-        bedroomRange: { min, max },
+        bedroomRange: { min, max }
       }));
       const queryParams = generateQueryParams({
         ...filterValues,
-        bedroomRange: { min, max },
+        bedroomRange: { min, max }
       });
       setQueryParams(queryParams);
     },
@@ -254,11 +254,11 @@ export function Filters({ onParamsChange, listingType }: any) {
     (values: any) => {
       setFilterValues((prevFilterValues) => ({
         ...prevFilterValues,
-        listedSince: values,
+        listedSince: values
       }));
       const queryParams = generateQueryParams({
         ...filterValues,
-        listedSince: values,
+        listedSince: values
       });
       setQueryParams(queryParams);
     },
@@ -266,8 +266,9 @@ export function Filters({ onParamsChange, listingType }: any) {
   );
 
   useEffect(() => {
+    generateQueryParams(filterValues);
     onParamsChange(filterValues);
-  }, [filterValues, onParamsChange]);
+  }, [filterValues, generateQueryParams, onParamsChange]);
 
   return (
     <>
@@ -301,12 +302,12 @@ export function Filters({ onParamsChange, listingType }: any) {
         ></FromToFilter>
       }
       <Divider />
-      {/*<p className={"font-bold mb-4"}>Property type</p>*/}
-      {/*<PropertyTypeFilter*/}
-      {/*  selectedValues={filterValues.propertyType}*/}
-      {/*  onChange={handlePropertyTypeChange}*/}
-      {/*/>*/}
-      {/*<Divider />*/}
+      <p className={"font-bold mb-4"}>Property type</p>
+      <PropertyTypeFilter
+        selectedValues={filterValues.propertyType}
+        onChange={handlePropertyTypeChange}
+      />
+      <Divider />
       <p className={"font-bold mb-4"}>Square meters living area</p>
       <FromToFilter
         valuesTo={areaLivingMaxOptions}
@@ -323,15 +324,15 @@ export function Filters({ onParamsChange, listingType }: any) {
       <Divider />
       <p className={"font-bold mb-4"}>Square meters property</p>
       <FromToFilter
-        initialFrom={filterValues.livingLandRange.min || "0"}
-        initialTo={filterValues.livingLandRange.max || NO_MAX}
+        initialFrom={filterValues.areaTotal.min || "0"}
+        initialTo={filterValues.areaTotal.max || NO_MAX}
         valuesFrom={areaLandMinOptions}
         valuesTo={areaLandMaxOptions}
         onChangeFrom={(value) =>
-          handleLivingLandChange(value, filterValues.livingLandRange.max)
+          handleLivingLandChange(value, filterValues.areaTotal.max)
         }
         onChangeTo={(value) =>
-          handleLivingLandChange(filterValues.livingLandRange.min, value)
+          handleLivingLandChange(filterValues.areaTotal.min, value)
         }
       ></FromToFilter>
       <Divider />

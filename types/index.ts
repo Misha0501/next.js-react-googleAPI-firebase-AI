@@ -52,6 +52,7 @@ export type Listing = {
   localityId: number;
   Address: Address[];
   ListingImage: ListingImage[];
+  propertyType: PropertyType;
   longitude: string;
   numberOfFloorsCommon: number;
   numberOfFloorsProperty: number;
@@ -92,7 +93,7 @@ export type SavedListing = {
   updatedAt: string;
 };
 
-export type SavedSearches = {
+export type SavedSearch = {
   areaTotalMin?: string | number | null;
   areaTotalMax?: string | number | null;
   areaLivingMin?: string | number | null;
@@ -108,7 +109,17 @@ export type SavedSearches = {
   constructedYearMax?: string | number | null;
   priceMin?: string | number | null;
   priceMax?: string | number | null;
-  listingType?: string | null;
+  propertyType?: PropertyType[] | null;
+  listingType?: ListingType[] | null;
+  upkeepType?: UpkeepType[] | null;
+  interiorType?: InteriorType[] | null;
+  heatingType?: HeatingType[] | null;
+  bathroomsMin?: string | number | null;
+  bathroomsMax?: string | number | null;
+  areaOutsideMin?: string | number | null;
+  areaOutsideMax?: string | number | null;
+  applicationUserId?: number;
+  applicationUser?: ApplicationUser;
   locality?: string | null;
   createdAt?: string;
   updatedAt?: string;

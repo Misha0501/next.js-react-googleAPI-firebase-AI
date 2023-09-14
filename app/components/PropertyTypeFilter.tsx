@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { Checkbox } from "@/app/components/Checkbox";
 import { propertyTypesInitialState } from "../Constants/filters";
+import { PROPERTY_TYPES } from "../Constants";
 
 export function PropertyTypeFilter({ onChange, selectedValues }: any) {
   const handleCheckboxChange = (value: any) => {
@@ -16,14 +17,14 @@ export function PropertyTypeFilter({ onChange, selectedValues }: any) {
 
   return (
     <>
-      {propertyTypesInitialState &&
-        propertyTypesInitialState.map((item, index) => (
-          <div className="flex items-center gap-3" key={item.value}>
+      {PROPERTY_TYPES &&
+        PROPERTY_TYPES.map((item, index) => (
+          <div className="flex items-center gap-3" key={index}>
             <Checkbox
-              checked={selectedValues?.includes(item.value)}
-              label={item.label}
-              onChange={() => handleCheckboxChange(item.value)}
-              value={item.value}
+              checked={selectedValues?.includes(item)}
+              label={item}
+              onChange={() => handleCheckboxChange(item)}
+              value={item}
             />
           </div>
         ))}

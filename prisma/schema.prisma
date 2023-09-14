@@ -93,10 +93,10 @@ model Subscription {
   name                  String
   subscriptionPlanId    Int
   subscriptionPlan      SubscriptionPlan @relation(fields: [subscriptionPlanId], references: [id])
-  listingId             Int
-  listing               Listing          @relation(fields: [listingId], references: [id])
-  companyId             Int
-  company               Company          @relation(fields: [companyId], references: [id])
+  listingId             Int?
+  listing               Listing?          @relation(fields: [listingId], references: [id])
+  companyId             Int?
+  company               Company?          @relation(fields: [companyId], references: [id])
   startsAt              DateTime?        @default(now())
   endsAt                DateTime?
   renewedAt             DateTime?
@@ -166,13 +166,14 @@ model Listing {
   applicationUser             ApplicationUser              @relation(fields: [applicationUserId], references: [id])
   companyId                   Int?
   company                     Company?                     @relation(fields: [companyId], references: [id])
-  listingType                 ListingType
-  interiorType                InteriorType
-  upkeepType                  UpkeepType
-  propertyType                PropertyType
+  listingType                 ListingType?
+  interiorType                InteriorType?
+  upkeepType                  UpkeepType?
+  propertyType                PropertyType?
   description                 String?
-  price                       Int
-  currency                    Currency
+  price                       Int?
+  currency                    Currency?
+  locality                    String?
   listingDescriptionKeyPoints ListingDescriptionKeyPoint[]
   areaTotal                   Float?                       @db.DoublePrecision
   areaLiving                  Float?                       @db.DoublePrecision
@@ -247,20 +248,24 @@ model SavedSearch {
   applicationUserId  Int
   applicationUser    ApplicationUser @relation(fields: [applicationUserId], references: [id])
   listingType        ListingType?
-  interiorType       InteriorType?
-  upkeepType         UpkeepType?
-  propertyType       PropertyType?
-  heatingType        HeatingType?
+  interiorType       InteriorType[]
+  upkeepType         UpkeepType[]
+  propertyType       PropertyType[]
+  heatingType        HeatingType[]
   areaLivingMin      Float?          @db.DoublePrecision
   areaLivingMax      Float?          @db.DoublePrecision
   areaTotalMin       Float?          @db.DoublePrecision
   areaTotalMax       Float?          @db.DoublePrecision
+  currency         Currency?
   roomsMin           Int?
   roomsMax           Int?
   bathroomsMin       Int?
   bathroomsMax       Int?
+  locality       String?
   bedroomsMin        Int?
   bedroomsMax        Int?
+  priceMin        Int?
+  priceMax        Int?
   constructedYearMin DateTime?
   constructedYearMax DateTime?
   createdAt          DateTime        @default(now())
