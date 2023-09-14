@@ -28,6 +28,7 @@ export function Filters({ onParamsChange, listingType }: any) {
   const pathname = usePathname();
 
   const [filterValues, setFilterValues] = useState({
+    listingType: listingType || undefined, // Property type filter
     propertyType: undefined, // Property type filter
     priceRange: { min: undefined, max: undefined }, // Property price filter
     livingAreaRange: { min: undefined, max: undefined }, // Square meters living area filter
@@ -300,12 +301,12 @@ export function Filters({ onParamsChange, listingType }: any) {
         ></FromToFilter>
       }
       <Divider />
-      <p className={"font-bold mb-4"}>Property type</p>
-      <PropertyTypeFilter
-        selectedValues={filterValues.propertyType}
-        onChange={handlePropertyTypeChange}
-      />
-      <Divider />
+      {/*<p className={"font-bold mb-4"}>Property type</p>*/}
+      {/*<PropertyTypeFilter*/}
+      {/*  selectedValues={filterValues.propertyType}*/}
+      {/*  onChange={handlePropertyTypeChange}*/}
+      {/*/>*/}
+      {/*<Divider />*/}
       <p className={"font-bold mb-4"}>Square meters living area</p>
       <FromToFilter
         valuesTo={areaLivingMaxOptions}
