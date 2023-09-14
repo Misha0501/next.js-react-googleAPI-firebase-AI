@@ -3,7 +3,17 @@ import {PrismaClient} from '@prisma/client'
 import {createPrismaRedisCache} from "prisma-redis-middleware";
 import {Prisma} from "@prisma/client/extension";
 
-const prismaClient = new PrismaClient();
+let prismaClient;
+
+// Using below construction to avoid creating multiple instances of PrismaClient in development mode
+if (process.env.NODE_ENV === "production") {
+    prismaClient = new PrismaClient()
+} else {
+    if (!global.prismaClient) {
+        global.prismaClient = new PrismaClient()
+    }
+    prismaClient = global.prismaClient
+}
 
 const cacheMiddleware: Prisma.Middleware = createPrismaRedisCache({
     models: [
