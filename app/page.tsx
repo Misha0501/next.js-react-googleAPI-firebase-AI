@@ -1,3 +1,4 @@
+// import headerImg from '@/public/header-hero.jpg'
 import headerImg from '@/public/header-hero.jpg'
 import Image from 'next/image'
 import {HomeHeroHeaderSearch} from "@/app/components/HomeHeroHeaderSearch";
@@ -32,5 +33,3 @@ export default async function Home() {
         </>
     );
 }
-
-

@@ -7,14 +7,14 @@ import DecodedIdToken = auth.DecodedIdToken;
 /**
  * Checks if the user is logged in if no redirects him to the login page
  */
-export const redirectToSignInIfNotLoggedInSSR = async (): Promise<DecodedIdToken> => {
+export const redirectToSignInIfNotLoggedInSSR = async () => {
     try {
         const userToken = cookies().get('authToken');
         if (!userToken) redirect('/signin')
 
         const decodedIdToken: DecodedIdToken = await firebaseAdmin.auth().verifyIdToken(userToken.value);
         // the user is authenticated!
-        return decodedIdToken;
+        return {decodedIdToken, authToken: userToken.value};
     } catch (err) {
         // either the `token` cookie didn't exist
         // or token verification failed

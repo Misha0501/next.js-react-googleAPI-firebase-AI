@@ -1,0 +1,1 @@
+export const isOwner = (applicationUserId, recordId) => { return applicationUserId === recordId }

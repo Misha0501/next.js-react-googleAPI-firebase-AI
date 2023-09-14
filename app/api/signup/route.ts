@@ -27,6 +27,7 @@ export async function POST(req: Request) {
         })
         return NextResponse.json({applicationUser})
     } catch (e) {
+        console.error(e)
         return new Response('Something went wrong please try again later', {
             status: 500,
         })

@@ -1,0 +1,12 @@
+[debug] [2023-08-15T14:23:00.653Z] ----------------------------------------------------------------------
+[debug] [2023-08-15T14:23:00.654Z] Command:       /Users/mykhailogalenda/.nvm/versions/node/v18.14.1/bin/node /Users/mykhailogalenda/.nvm/versions/node/v18.14.1/bin/firebase emulators:start
+[debug] [2023-08-15T14:23:00.654Z] CLI Version:   12.4.7
+[debug] [2023-08-15T14:23:00.655Z] Platform:      darwin
+[debug] [2023-08-15T14:23:00.655Z] Node Version:  v18.14.1
+[debug] [2023-08-15T14:23:00.656Z] Time:          Tue Aug 15 2023 16:23:00 GMT+0200 (Central European Summer Time)
+[debug] [2023-08-15T14:23:00.656Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2023-08-15T14:23:00.659Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2023-08-15T14:23:00.659Z] > authorizing via signed-in user (misha.galenda@gmail.com)
+[error] 
+[error] Error: Not in a Firebase app directory (could not locate firebase.json)

@@ -1,56 +1,194 @@
-'use client';
-import {useEffect, useState} from "react";
-import {useFiltersStore} from "@/store/Filters";
-import {ListingItem} from "@/app/components/ListingItem";
-import {useRouter} from "next/navigation";
+"use client";
+import { useCallback, useEffect, useState } from "react";
+import { ListingItem } from "@/app/components/ListingItem";
+import { usePropertyListing } from "@/providers/Listing";
+import { useAuthContext } from "@/app/context/AuthContext";
+import { Listing, SavedListing } from "@/types";
+import { getFetchUrl } from "@/app/lib/getFetchUrl";
+import { Select, SelectItem } from "@tremor/react";
+import { NO_MAX, sortOption } from "../Constants/filters";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
-export const ListingsMain = ({label, checked, onChange, name}) => {
-    const propertyTypesSearchQuery = useFiltersStore((state) => state.propertyTypesSearchQuery)
-    const [listings, setListings] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState('');
-    const [page, setPage] = useState(1);
-    const [pageSize, setPageSize] = useState(25);
-    const [totalListings, setTotalListings] = useState(0);
-    const router = useRouter()
+export const ListingsMain = ({ searchParams, listingType, locality }) => {
+  const { authToken } = useAuthContext();
+  const [populatedListings, setPopulatedListings] = useState<Listing[]>([]);
+  // const [isLoadingListings, setIsLoadingListings] = useState(true);
+  const [isLoadingSavedListings, setIsLoadingSavedListings] = useState(true);
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(25);
+  const [totalListings, setTotalListings] = useState(0);
+  const [sortBy, setSortBy] = useState(undefined);
 
+  const propertyListing = usePropertyListing({
+    priceMin: searchParams?.priceRange.min,
+    priceMax: searchParams?.priceRange.max === NO_MAX ? undefined : searchParams?.priceRange.max,
+    listedSince: searchParams?.listedSince,
+    areaLivingMin: searchParams?.livingAreaRange.min,
+    areaLivingMax: searchParams?.livingAreaRange.max === NO_MAX ? undefined : searchParams?.livingAreaRange.max,
+    areaLandMin: searchParams?.livingLandRange.min,
+    areaLandMax: searchParams?.livingLandRange.max === NO_MAX ? undefined : searchParams?.livingLandRange.max,
+    roomsMin: searchParams?.roomRange.min,
+    roomsMax: searchParams?.roomRange.max === NO_MAX ? undefined : searchParams?.roomRange.max,
+    bedroomsMin: searchParams?.bedroomRange.min,
+    bedroomsMax: searchParams?.bedroomRange.max === NO_MAX ? undefined : searchParams?.bedroomRange.max,
+    propertyTypeId: searchParams?.propertyType,
+    listingType: listingType,
+    locality: locality,
+    sortBy: sortBy
+  });
 
-    useEffect(() => {
-        const url = `api/listings?${propertyTypesSearchQuery.toString()}`;
-        console.log("url")
-        console.log(url)
-        const fetchListings = async () => {
-            const response = await fetch(url, {cache: "no-store"});
-            return await response.json();
-        }
-        fetchListings().then(data => {
-            console.log("data")
-            console.log(data)
-            setListings(data.results)
-            setPage(data.page)
-            setPageSize(data.pageSize)
-            setTotalListings(data.total)
-            setIsLoading(false);
-        }).catch(e => {
-            console.log("ERROR")
-            console.log(e)
-            setError("Something went wrong please try again later")
-            setIsLoading(false);
+  const handleSavedIconClick = (listing: Listing) => {
+    // if listings isn't saved we do a post request to save it
+    if (!listing.savedListingId) {
+      fetch(getFetchUrl(`api/savedListings`), {
+        method: "POST",
+        cache: "no-store",
+        headers: {
+          "Content-type": "application/json",
+          Authorization: authToken
+        },
+        body: JSON.stringify({ listingId: listing.id })
+      })
+        .then((response) => response.json())
+        .then((savedListing: SavedListing) => {
+          // populate current listings with updated data
+          const updatedListings = populatedListings.map((item) => {
+            if (item.id === listing.id) {
+              item.savedListingId = savedListing.id;
+            }
+            return item;
+          });
+          setPopulatedListings([...updatedListings]);
         })
-    }, [propertyTypesSearchQuery, router])
-    return (
-        <div className={""}>
-            {isLoading && <p>Loading...</p>}
-            {error && <p>{error}</p>}
-            {!error && !isLoading &&
-                <div className={"text-xl mb-12"}>
-                    <span className={"font-bold"}>Results: </span> <span>{totalListings} houses found.</span>
-                </div>}
-            <div className={"grid grid-cols-2 gap-16"}>
-                {listings && listings.map((item, index) => (
-                    <ListingItem listingItem={item} key={index}/>
-                ))}
+        .catch((error) => {
+          console.error(error);
+          console.error(error.message);
+        });
+    } else {
+      // if it's saved we do a delete request
+      if (!listing.savedListingId) return;
+
+      fetch(getFetchUrl(`api/savedListings/${listing.savedListingId}`), {
+        method: "DELETE",
+        cache: "no-store",
+        headers: {
+          "Content-type": "application/json",
+          Authorization: authToken
+        }
+      })
+        .then(() => {
+          const updatedListings = populatedListings.map((item) => {
+            if (item.savedListingId === listing.savedListingId) {
+              item.savedListingId = null;
+            }
+            return item;
+          });
+          setPopulatedListings([...updatedListings]);
+        })
+        .catch((error) => {
+          console.error(error.message);
+        });
+    }
+  };
+  const updateListingsWithSavedFeature = async (listings: Listing[]) => {
+    // get the data from the api
+    const response = await fetch(getFetchUrl(`api/savedListings`), {
+      method: "GET",
+      cache: "no-store",
+      headers: {
+        "Content-type": "application/json",
+        Authorization: authToken
+      }
+    });
+    // convert the data to json
+    const data = await response.json();
+
+    let savedListings: SavedListing[] = data.results;
+    let savedListingsListingIds: number[] = [];
+
+    // Store all savedListing's listingIds
+    if (savedListings) {
+      savedListingsListingIds = savedListings.map((el) => el.listingId);
+    }
+
+    // populate listings with saved listings data
+    const populatedListingsWithSavedListingData = listings.map((listing) => {
+      const savedListingListingId = savedListingsListingIds.find(
+        (savedListingId) => savedListingId === listing.id
+      );
+      const savedListing = savedListings.find(
+        (savedListing: SavedListing) =>
+          savedListing.listingId === savedListingListingId
+      );
+
+      if (savedListingListingId && savedListingListingId && savedListing) {
+        listing.savedListingId = savedListing.id;
+      } else {
+        listing.savedListingId = undefined;
+      }
+      return listing;
+    });
+
+    setPopulatedListings([...populatedListingsWithSavedListingData]);
+    setIsLoadingSavedListings(false);
+  };
+
+  useEffect(() => {
+    if (propertyListing.isSuccess) {
+      // Fetch saved icons
+      const listings = propertyListing.data.results;
+
+      setTotalListings(propertyListing.data.total);
+
+      updateListingsWithSavedFeature(listings).catch((e) => {
+        console.error("Error fetching saved listings: ", e);
+        // if saved listings aren't fetched we still want to display the listings
+        setPopulatedListings(listings);
+        setIsLoadingSavedListings(false);
+      });
+    }
+  }, [propertyListing?.data?.results]);
+
+  if (propertyListing.isFetching) {
+    return <p>Loading...</p>;
+  }
+  if (propertyListing?.isError) {
+    return <p>{propertyListing?.error?.message}</p>;
+  }
+
+  return (
+    <div className="w-full">
+      <div className="flex flex-row justify-between">
+        {!propertyListing?.error && !propertyListing?.isFetching && (
+          <>
+            <div>
+              <div className={"text-xl mb-12"}>
+                <span className={"font-bold"}>Results: </span>{" "}
+                <span>{totalListings} houses found.</span>
+              </div>
             </div>
-        </div>
-    );
-}
+            <Select
+              style={{ width: "300px" }}
+              onValueChange={(e) => setSortBy(e)}
+            >
+              {sortOption.map((el, index) => (
+                <SelectItem value={el} key={index}></SelectItem>
+              ))}
+            </Select>
+          </>
+        )}
+      </div>
+      <div className={"grid grid-cols-2 gap-16"}>
+        {populatedListings &&
+          populatedListings.map((item, index) => (
+            <ListingItem
+              listingItem={item}
+              key={index}
+              onSavedIconClick={handleSavedIconClick}
+              isLoadingSavedListings={isLoadingSavedListings}
+            />
+          ))}
+      </div>
+    </div>
+  );
+};
