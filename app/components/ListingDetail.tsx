@@ -33,6 +33,7 @@ const ListingDetail = () => {
   const [showContactWithAgent, setShowContactWithAgent] = useState(false);
   const listingDetail = useListingDetailPage({ id: Number(params?.id) });
   const [openLightBox, setOpenLightBox] = useState(false);
+  const [lightBoxImageIndex, setLightBoxImageIndex] = useState(0);
 
   let stats = useMemo(
     () => [
@@ -137,6 +138,11 @@ const ListingDetail = () => {
     },
   ];
 
+  const handleOpenLightBox = (index: number) => {
+    setLightBoxImageIndex(index);
+    setOpenLightBox(true);
+  }
+
   const slides = listingDetail?.data?.ListingImage.map((item) => ({
     src: item.url,
   }));
@@ -148,6 +154,7 @@ const ListingDetail = () => {
                 close={() => setOpenLightBox(false)}
                 plugins={[Thumbnails]}
                 slides={slides}
+                index={lightBoxImageIndex}
             />
 
             <div className="container">
@@ -189,7 +196,7 @@ const ListingDetail = () => {
                             <div className="grid grid-cols-3 gap-4">
                                 {listingDetail?.data?.ListingImage?.[0]?.url && (
                                     <div
-                                        onClick={() => setOpenLightBox(true)}
+                                        onClick={() => handleOpenLightBox(0)}
                                         className="col-span-2"
                                     >
                                         <Image
@@ -207,7 +214,7 @@ const ListingDetail = () => {
                                 )}
                                 <div>
                                     {listingDetail?.data?.ListingImage?.[1]?.url && (
-                                        <div onClick={() => setOpenLightBox(true)}>
+                                        <div onClick={() =>handleOpenLightBox(1)}>
                                             <Image
                                                 className={
                                                     "cursor-pointer object-cover h-[230px] w-full rounded-lg mb-[20px]"
@@ -220,7 +227,7 @@ const ListingDetail = () => {
                                         </div>
                                     )}
                                     {listingDetail?.data?.ListingImage?.[2]?.url && (
-                                        <div onClick={() => setOpenLightBox(true)}>
+                                        <div onClick={() => handleOpenLightBox(2)}>
                                             <Image
                                                 className={
                                                     "cursor-pointer object-cover h-[230px] w-full rounded-lg"
