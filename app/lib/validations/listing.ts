@@ -230,7 +230,7 @@ export const listingsSearchParamSchema = z.object({
       .optional(),
   upkeepType: searchParamSchema
     .min(1)
-    .max(2)
+    .max(UPKEEP_TYPES.length)
     .refine(
       (userInputArray) =>
         userInputArray.every((el) => UPKEEP_TYPES.includes(el)),

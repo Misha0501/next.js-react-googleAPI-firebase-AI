@@ -137,3 +137,8 @@ id: number;
 providerId: string;
 updatedAt: string;
 }
+
+export type MatchedListingsAndSearches = {
+  listing: Listing;
+  matchedSearches: SavedSearch[];
+}

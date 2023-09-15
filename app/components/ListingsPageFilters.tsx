@@ -31,6 +31,8 @@ export const ListingsPageFilters = ({ onParamsChange, onListingTypeChange, local
   };
 
   const onChange = (data: any) => {
+    // console.log("filters changed");
+    // console.log(data);
     onParamsChange(data);
     setFilterValues(data);
     onListingTypeChange(listingType);

@@ -1,6 +1,6 @@
 export namespace Poperty {
   export type ListingProps = {
-    propertyTypeId?: string | null;
+    propertyType?: string[] | null;
     areaTotalMin?: string | number | null;
     areaTotalMax?: string | number | null;
     areaLivingMin?: string | number | null;

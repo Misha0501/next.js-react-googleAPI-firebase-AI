@@ -84,7 +84,6 @@ export async function GET(req: NextRequest) {
     const propertyTypeWhereObj = prismaQueryConditionsFromArray(
       propertyType,
       "propertyType",
-      true,
     );
     const upkeepTypeWhereObj = prismaQueryConditionsFromArray(
       upkeepType,

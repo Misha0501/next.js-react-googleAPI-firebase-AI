@@ -94,9 +94,9 @@ model Subscription {
   subscriptionPlanId    Int
   subscriptionPlan      SubscriptionPlan @relation(fields: [subscriptionPlanId], references: [id])
   listingId             Int?
-  listing               Listing?          @relation(fields: [listingId], references: [id])
+  listing               Listing?         @relation(fields: [listingId], references: [id])
   companyId             Int?
-  company               Company?          @relation(fields: [companyId], references: [id])
+  company               Company?         @relation(fields: [companyId], references: [id])
   startsAt              DateTime?        @default(now())
   endsAt                DateTime?
   renewedAt             DateTime?
@@ -161,11 +161,11 @@ enum PropertyType {
 }
 
 model Listing {
-  id                          Int                          @id @default(autoincrement())
+  id                          Int                           @id @default(autoincrement())
   applicationUserId           Int
-  applicationUser             ApplicationUser              @relation(fields: [applicationUserId], references: [id])
+  applicationUser             ApplicationUser               @relation(fields: [applicationUserId], references: [id])
   companyId                   Int?
-  company                     Company?                     @relation(fields: [companyId], references: [id])
+  company                     Company?                      @relation(fields: [companyId], references: [id])
   listingType                 ListingType?
   interiorType                InteriorType?
   upkeepType                  UpkeepType?
@@ -175,12 +175,12 @@ model Listing {
   currency                    Currency?
   locality                    String?
   listingDescriptionKeyPoints ListingDescriptionKeyPoint[]
-  areaTotal                   Float?                       @db.DoublePrecision
-  areaLiving                  Float?                       @db.DoublePrecision
-  areaLand                    Float?                       @db.DoublePrecision
-  volume                      Float?                       @db.DoublePrecision
-  areaOutside                 Float?                       @db.DoublePrecision
-  areaGarage                  Float?                       @db.DoublePrecision
+  areaTotal                   Float?                        @db.DoublePrecision
+  areaLiving                  Float?                        @db.DoublePrecision
+  areaLand                    Float?                        @db.DoublePrecision
+  volume                      Float?                        @db.DoublePrecision
+  areaOutside                 Float?                        @db.DoublePrecision
+  areaGarage                  Float?                        @db.DoublePrecision
   streetName                  String?
   houseNumber                 String?
   postalCode                  String?
@@ -194,17 +194,18 @@ model Listing {
   floorNumber                 Int?
   numberOfFloorsProperty      Int?
   numberOfFloorsCommon        Int?
-  heatingType                 HeatingType?                 @default(BOILER)
-  active                      Boolean?                     @db.Boolean
+  heatingType                 HeatingType?                  @default(BOILER)
+  active                      Boolean?                      @db.Boolean
   activeUntil                 DateTime?
-  createdAt                   DateTime                     @default(now())
-  updatedAt                   DateTime                     @updatedAt
+  createdAt                   DateTime                      @default(now())
+  updatedAt                   DateTime                      @updatedAt
   deleted                     DateTime?
   ListingImage                ListingImage[]
   Subscription                Subscription[]
   SavedListing                SavedListing[]
   ListingPrice                ListingPrice[]
   Address                     Address[]
+  SentNotificationSavedSearch SentNotificationSavedSearch[]
 }
 
 model ListingDescriptionKeyPoint {
@@ -244,30 +245,40 @@ model SavedListing {
 }
 
 model SavedSearch {
-  id                 Int             @id @default(autoincrement())
-  applicationUserId  Int
-  applicationUser    ApplicationUser @relation(fields: [applicationUserId], references: [id])
-  listingType        ListingType?
-  interiorType       InteriorType[]
-  upkeepType         UpkeepType[]
-  propertyType       PropertyType[]
-  heatingType        HeatingType[]
-  areaLivingMin      Float?          @db.DoublePrecision
-  areaLivingMax      Float?          @db.DoublePrecision
-  areaTotalMin       Float?          @db.DoublePrecision
-  areaTotalMax       Float?          @db.DoublePrecision
-  currency         Currency?
-  roomsMin           Int?
-  roomsMax           Int?
-  bathroomsMin       Int?
-  bathroomsMax       Int?
-  locality       String?
-  bedroomsMin        Int?
-  bedroomsMax        Int?
-  priceMin        Int?
-  priceMax        Int?
-  constructedYearMin DateTime?
-  constructedYearMax DateTime?
-  createdAt          DateTime        @default(now())
-  updatedAt          DateTime        @updatedAt
+  id                          Int                           @id @default(autoincrement())
+  applicationUserId           Int
+  applicationUser             ApplicationUser               @relation(fields: [applicationUserId], references: [id])
+  listingType                 ListingType?
+  interiorType                InteriorType[]
+  upkeepType                  UpkeepType[]
+  propertyType                PropertyType[]
+  heatingType                 HeatingType[]
+  areaLivingMin               Float?                        @db.DoublePrecision
+  areaLivingMax               Float?                        @db.DoublePrecision
+  areaTotalMin                Float?                        @db.DoublePrecision
+  areaTotalMax                Float?                        @db.DoublePrecision
+  currency                    Currency?
+  roomsMin                    Int?
+  roomsMax                    Int?
+  bathroomsMin                Int?
+  bathroomsMax                Int?
+  locality                    String?
+  bedroomsMin                 Int?
+  bedroomsMax                 Int?
+  priceMin                    Int?
+  priceMax                    Int?
+  constructedYearMin          DateTime?
+  constructedYearMax          DateTime?
+  createdAt                   DateTime                      @default(now())
+  updatedAt                   DateTime                      @updatedAt
+  SentNotificationSavedSearch SentNotificationSavedSearch[]
+}
+
+model SentNotificationSavedSearch {
+  id            Int         @id @default(autoincrement())
+  savedSearchId Int
+  SavedSearch   SavedSearch @relation(fields: [savedSearchId], references: [id])
+  listingId     Int
+  listing       Listing     @relation(fields: [listingId], references: [id])
+  createdAt     DateTime    @default(now())
 }
