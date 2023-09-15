@@ -9,10 +9,6 @@ import {
   Square3Stack3DIcon,
   PhotoIcon,
 } from "@heroicons/react/24/outline";
-import headerImg from "@/public/header-hero.jpg";
-import property1 from "@/public/property1.png";
-import property2 from "@/public/property2.png";
-import property3 from "@/public/property3.png";
 import { Button, Icon, Metric, Text } from "@tremor/react";
 import { GoBackBtn } from "./GoBackBtn";
 import { Divider } from "@tremor/react";
@@ -34,7 +30,6 @@ import ListingDetailContent from "./ListingDetailContent";
 
 const ListingDetail = () => {
   const params = useParams();
-  const [showMore, setShowMore] = useState(false);
   const [showContactWithAgent, setShowContactWithAgent] = useState(false);
   const listingDetail = useListingDetailPage({ id: Number(params?.id) });
   const [openLightBox, setOpenLightBox] = useState(false);
@@ -142,25 +137,17 @@ const ListingDetail = () => {
     },
   ];
 
+  const slides = listingDetail?.data?.ListingImage.map((item) => ({
+    src: item.url,
+  }));
+
     return (
         <div className="mb-16">
             <Lightbox
                 open={openLightBox}
                 close={() => setOpenLightBox(false)}
                 plugins={[Thumbnails]}
-                slides={
-                    [
-                        // {
-                        //   src: "https://yt3.googleusercontent.com/hsfOp4nwI9-0zCWiKOyWRzBe-a57gUU0qp1unVOd_HvGZLLt2WtIrez7yXThyme0ztawwByLtg=s176-c-k-c0x00ffffff-no-rj",
-                        // },
-                        // {
-                        //   src: "https://yt3.googleusercontent.com/hsfOp4nwI9-0zCWiKOyWRzBe-a57gUU0qp1unVOd_HvGZLLt2WtIrez7yXThyme0ztawwByLtg=s176-c-k-c0x00ffffff-no-rj",
-                        // },
-                        // {
-                        //   src: "https://yt3.googleusercontent.com/hsfOp4nwI9-0zCWiKOyWRzBe-a57gUU0qp1unVOd_HvGZLLt2WtIrez7yXThyme0ztawwByLtg=s176-c-k-c0x00ffffff-no-rj",
-                        // },
-                    ]
-                }
+                slides={slides}
             />
 
             <div className="container">
