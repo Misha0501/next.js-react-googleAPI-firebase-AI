@@ -94,6 +94,7 @@ export type SavedListing = {
 };
 
 export type SavedSearch = {
+  id?: number;
   areaTotalMin?: string | number | null;
   areaTotalMax?: string | number | null;
   areaLivingMin?: string | number | null;
