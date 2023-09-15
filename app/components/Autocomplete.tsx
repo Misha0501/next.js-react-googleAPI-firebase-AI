@@ -121,6 +121,7 @@ const AutoComplete = ({ onLocalityChange, initialValue }) => {
              type={"text"}
              placeholder={"E.g: Sophia, Plovdiv, Varna"}
              ref={inputRef}
+             name={"locality"}
              value={inputValue}
              onChange={(e) => setInputValue(e.target.value)}
       />

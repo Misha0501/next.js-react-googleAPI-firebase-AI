@@ -110,7 +110,7 @@ export type SavedSearch = {
   priceMin?: string | number | null;
   priceMax?: string | number | null;
   propertyType?: PropertyType[] | null;
-  listingType?: ListingType[] | null;
+  listingType?: ListingType | null;
   upkeepType?: UpkeepType[] | null;
   interiorType?: InteriorType[] | null;
   heatingType?: HeatingType[] | null;
