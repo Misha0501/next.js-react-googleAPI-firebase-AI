@@ -4,6 +4,8 @@ export type UpkeepType = "EXCELLENT" | "GOOD" | "FAIR" | "POOR";
 export type ListingType = "RENT" | "SELL";
 export type CurrencyType = "EUR" | "USD" | "BGN";
 export type PropertyType = "HOUSE" | "APARTMENT" | "PARKING" | "LAND";
+export type BuildingType = "New building" | "Old building" ;
+export type Characteristics = "Balcony" | "Garden" | "Renewable energy" | "Lying / sitting bath" | "Swimming pool"
 
 export type FirebaseAPISignInAuthResponse = {
   kind: string;

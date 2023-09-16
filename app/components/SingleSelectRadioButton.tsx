@@ -1,30 +1,23 @@
-"use client"
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { RadioGroup } from "@headlessui/react";
-import { CheckIcon } from "@heroicons/react/24/solid";
+import { CheckCircleIcon } from "@heroicons/react/24/solid";
+import { Icon } from "@tremor/react";
 
 type PropertyPlacementRadioButtonsProps = {
   options: string[];
   onChange?: (item: any) => void;
   id: string;
   value?: any;
-  defaultValue?: string;
+  onBlur?: any;
 };
-export default function PropertyPlacementRadioButtons({
+export default function SingleSelectRadioButton({
   options,
   onChange,
   id,
   value,
+  onBlur,
 }: PropertyPlacementRadioButtonsProps) {
   const [selectedValue, setSelectedValue] = useState<string | null>(null);
-
-
-  // useEffect(() => {
-  //   // Set the default value when the defaultValue prop changes
-  //   if (defaultValue) {
-  //     setSelectedValue(defaultValue);
-  //   }
-  // }, [defaultValue]);
 
   const handleOnChange = (value: string) => {
     setSelectedValue(value);
@@ -36,9 +29,9 @@ export default function PropertyPlacementRadioButtons({
   return (
     <div className="w-full">
       <div className="w-full ">
-        <RadioGroup value={value} onChange={handleOnChange}>
+        <RadioGroup onBlur={onBlur} value={value} onChange={handleOnChange}>
           <RadioGroup.Label className="sr-only">Server size</RadioGroup.Label>
-          <div className="grid grid-cols-2 gap-y-6 rounded-lg px-2 py-2 border-2">
+          <div className="">
             {options.map((item, index) => (
               <RadioGroup.Option
                 id={id}
@@ -47,22 +40,33 @@ export default function PropertyPlacementRadioButtons({
                 defaultValue={value}
                 className={({ active, checked }) =>
                   `
-                  ${checked ? "bg-[#4785FD]  text-white" : "bg-white"}
-                    relative flex cursor-pointer rounded-lg px-5 py-4 justify-center  focus:outline-none`
+                  ${checked ? "bg-transperent " : "bg-white"}
+                     cursor-pointer rounded-lg    focus:outline-none`
                 }
               >
                 {({ active, checked }) => (
                   <>
                     <div className="">
-                      <div className="flex items-center">
+                      <div className="">
                         <div className="text-sm">
                           <RadioGroup.Label
                             as="p"
-                            className={`font-medium  ${
-                              checked ? "text-white" : "text-gray-900"
+                            className={`font-medium border-2 w-full p-5 rounded-xl mb-5 ${
+                              checked
+                                ? "border-[#2C72F6] font-bold border-2"
+                                : "text-[#222] border-[#ADADAD] "
                             }`}
                           >
-                            {item}
+                            <div className="flex items-center justify-between">
+                              <p>{item}</p>
+                              {checked ? (
+                                <Icon
+                                  size="sm"
+                                  className="font-bold"
+                                  icon={CheckCircleIcon}
+                                />
+                              ) : null}
+                            </div>
                           </RadioGroup.Label>
                         </div>
                       </div>

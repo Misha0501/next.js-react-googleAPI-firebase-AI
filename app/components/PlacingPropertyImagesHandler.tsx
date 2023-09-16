@@ -1,28 +1,41 @@
-import {deleteObject, getDownloadURL, getStorage, ref, uploadBytes} from "firebase/storage";
-import { Button } from "@tremor/react";
+import {
+  deleteObject,
+  getDownloadURL,
+  getStorage,
+  ref,
+  uploadBytes,
+} from "firebase/storage";
+import { Button, Icon } from "@tremor/react";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { useAuthContext } from "@/app/context/AuthContext";
 import Image from "next/image";
-import { EllipsisHorizontalIcon } from "@heroicons/react/24/solid";
+import { EllipsisHorizontalIcon, PlusIcon } from "@heroicons/react/24/solid";
 import { ListingImage } from "@/types";
 import { Popover } from "@headlessui/react";
 
-
 type PlacingPropertyImagesHandlerProps = {
-    onChange: (images: ListingImage[]) => void;
+  onChange: (images: ListingImage[]) => void;
   initialImages?: ListingImage[];
 };
-export const PlacingPropertyImagesHandler = ({ onChange, initialImages }: PlacingPropertyImagesHandlerProps) => {
+export const PlacingPropertyImagesHandler = ({
+  onChange,
+  initialImages,
+}: PlacingPropertyImagesHandlerProps) => {
   const { user, authToken } = useAuthContext();
 
   const [images, setImages] = useState<ListingImage[]>(initialImages || []);
+
+  console.log(images, "imagesInner");
 
   const [error, setError] = useState("");
 
   const hiddenFileInput = useRef(null);
 
   // Programatically click the hidden file input element
-  const handleFileInputClick = () => hiddenFileInput.current?.click();
+  const handleFileInputClick = (event: any) => {
+    event.preventDefault();
+    hiddenFileInput.current?.click();
+  };
 
   const [firebaseUID, setFirebaseUID] = useState();
   const [uploading, setUploading] = useState(false);
@@ -205,7 +218,7 @@ export const PlacingPropertyImagesHandler = ({ onChange, initialImages }: Placin
                 alt="Property image"
                 src={item.url}
                 width={676}
-                height={410}
+                height={210}
                 layout="responsive"
                 placeholder={"blur"}
                 blurDataURL={
@@ -217,7 +230,17 @@ export const PlacingPropertyImagesHandler = ({ onChange, initialImages }: Placin
           ))}
         {uploading && <p>Uploading...</p>}
       </div>
-      <Button onClick={handleFileInputClick} variant={"secondary"} className={"w-full"} type={'button'}>Add picture</Button>
+      <button
+        className={
+          "w-[676px] max-w-[676px] bg-transparent border-2 text-[#4785FD] border-[#4785FD]  font-semibold py-3 px-4  rounded-md"
+        }
+        onClick={handleFileInputClick}
+        // variant={"secondary"}
+        // type={"button"}
+      >
+        Add pictures
+        <Icon className="text-[#4785FD]" icon={PlusIcon} />
+      </button>
     </div>
   );
 };

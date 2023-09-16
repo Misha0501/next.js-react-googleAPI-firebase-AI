@@ -1,3 +1,4 @@
+import { useAuthContext } from "@/app/context/AuthContext";
 import service from "../../services";
 import { Poperty } from "./types";
 
@@ -15,5 +16,20 @@ export async function listingDetailPage(
   return service({
     method: "GET",
     url: `/api/listings/${props?.id}`,
+  });
+}
+
+export async function create(
+  props: Poperty.CreateAPIPayload,
+  authToken?: string
+): Promise<Poperty.CreateResponse> {
+  return service({
+    method: "POST",
+    url: `/api/listings`,
+    body: props.data,
+    headers: {
+      //@ts-ignore
+      Authorization: props.authToken,
+    },
   });
 }

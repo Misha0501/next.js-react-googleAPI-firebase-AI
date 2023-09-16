@@ -1,4 +1,10 @@
-import { UseQueryResult, useQuery } from "react-query";
+import {
+  UseMutationResult,
+  UseQueryResult,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "react-query";
 import * as api from "./api";
 import { Poperty } from "./types";
 
@@ -33,4 +39,21 @@ export function useListingDetailPage(
       retry: 0,
     }
   );
+}
+
+// Create
+export function useCreateProperty(
+  props: Poperty.CreateProps
+): UseMutationResult<
+  Poperty.CreateResponse,
+  {
+    message?: string;
+  },
+  Poperty.CreateMutationPayload
+> {
+  const queryClient = useQueryClient();
+  return useMutation((payload) => api.create({ ...props, data: payload }), {
+    mutationKey: `${KEY} | Create`,
+    retry: 0,
+  });
 }

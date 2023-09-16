@@ -31,7 +31,7 @@ import PropertyPlacementRadioButtons from "@/app/components/PropertyPlacementRad
 import { getFetchUrl } from "@/app/lib/getFetchUrl";
 import { useAuthContext } from "@/app/context/AuthContext";
 import { PlacingPropertyImagesHandler } from "@/app/components/PlacingPropertyImagesHandler";
-import {useRouter} from "next/navigation";
+import { useRouter } from "next/navigation";
 
 export const PlacePropertyForm = ({}) => {
   const { authToken } = useAuthContext();
@@ -71,7 +71,6 @@ export const PlacePropertyForm = ({}) => {
   const [globalError, setGlobalError] = useState("");
 
   const router = useRouter();
-
 
   let autoCompleteRef = useRef();
   const inputRef = useRef();
@@ -120,7 +119,7 @@ export const PlacePropertyForm = ({}) => {
 
     setGeneratingDescription(true);
     setDescription(
-      "Writing a description for you, please wait... It can take up to 30 seconds.",
+      "Writing a description for you, please wait... It can take up to 30 seconds."
     );
 
     fetch(getFetchUrl(`api/generateDescription`), {
@@ -143,7 +142,7 @@ export const PlacePropertyForm = ({}) => {
         console.error(error.message);
         setGeneratingDescription(false);
         setDescription(
-          "Something went wrong, please try again later. Or write your own description.",
+          "Something went wrong, please try again later. Or write your own description."
         );
       });
   };
@@ -219,7 +218,7 @@ export const PlacePropertyForm = ({}) => {
     if (window.google) {
       autoCompleteRef.current = new window.google.maps.places.Autocomplete(
         inputRef.current,
-        googlePlacesAutocompleteOptions,
+        googlePlacesAutocompleteOptions
       );
 
       // When the user selects an address from the drop-down, populate the
@@ -292,7 +291,6 @@ export const PlacePropertyForm = ({}) => {
       const createdListingId = data.id;
       // Go to success page
       router.push(`placePropertySuccess/${createdListingId}`);
-
     } catch (e) {
       console.error("error");
       console.error(e);
@@ -592,7 +590,12 @@ export const PlacePropertyForm = ({}) => {
         <div className="w-full">
           {globalError && <div className="text-red-500">{globalError}</div>}
 
-          <Button type={"submit"} variant={"primary"} size={"xl"} className={"w-full"}>
+          <Button
+            type={"submit"}
+            variant={"primary"}
+            size={"xl"}
+            className={"w-full"}
+          >
             Create property
           </Button>
         </div>
