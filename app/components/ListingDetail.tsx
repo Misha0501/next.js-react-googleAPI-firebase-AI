@@ -171,23 +171,23 @@ const ListingDetail = () => {
                                     ? ` FOR ${listingDetail?.data?.listingType}`
                                     : null}
                             </h4>
-                            <div>
-                                <Button
-                                    className="bg-[#f2f2f2]	text-black  border-0 mr-2"
-                                    icon={ShareIcon}
-                                >
-                                    Share
-                                </Button>
-                                <Button
-                                    className="bg-[#f2f2f2]	text-black  border-0 mr-2"
-                                    icon={HeartIcon}
-                                >
-                                    Favourite
-                                </Button>
-                                <Button className="px-16" icon={PrinterIcon}>
-                                    Print
-                                </Button>
-                            </div>
+                            {/*<div>*/}
+                            {/*    <Button*/}
+                            {/*        className="bg-[#f2f2f2]	text-black  border-0 mr-2"*/}
+                            {/*        icon={ShareIcon}*/}
+                            {/*    >*/}
+                            {/*        Share*/}
+                            {/*    </Button>*/}
+                            {/*    <Button*/}
+                            {/*        className="bg-[#f2f2f2]	text-black  border-0 mr-2"*/}
+                            {/*        icon={HeartIcon}*/}
+                            {/*    >*/}
+                            {/*        Favourite*/}
+                            {/*    </Button>*/}
+                            {/*    <Button className="px-16" icon={PrinterIcon}>*/}
+                            {/*        Print*/}
+                            {/*    </Button>*/}
+                            {/*</div>*/}
                         </div>
                         <p className="pt-2 text-[18px] text-[#848484]">
                             {listingDetail?.data?.Address?.[0]?.route}
