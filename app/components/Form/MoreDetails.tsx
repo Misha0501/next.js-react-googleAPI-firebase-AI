@@ -7,11 +7,12 @@ import {
   NumberInput,
   Select,
   SelectItem,
-  TextInput,
 } from "@tremor/react";
 import { useState } from "react";
-import { ArrowSmallRightIcon } from "@heroicons/react/24/solid";
-import PropertyPlacementRadioButtons from "../PropertyPlacementRadioButtons";
+import {
+  ArrowSmallRightIcon,
+  ArrowSmallLeftIcon,
+} from "@heroicons/react/24/solid";
 import {
   BUILDING_TYPE,
   CHARACTERISTICS,
@@ -28,9 +29,7 @@ const MoreDetails = (props: any) => {
   const [show, setShow] = useState(true);
   const [showError, setShowErros] = useState(false);
   const title = "Tell Us More About Your Property";
-  console.log(formik.errors.rooms, "errossss");
   const stepNumber = "Step 2";
-  console.log(showError, "showError");
 
   const check = (e) => {
     event?.preventDefault();
@@ -86,7 +85,6 @@ const MoreDetails = (props: any) => {
     if (!formik.values.volume && formik.values.propertyType !== "LAND") {
       errors.volume = "Required";
     }
-    console.log(errors, "errcncncncn");
     return errors;
   };
 
@@ -101,7 +99,7 @@ const MoreDetails = (props: any) => {
             imageSrc={property1}
             step={step}
             handleBack={() => {
-              handleBack(), setShow(false);
+              handleBack();
             }}
             onClick={() => setShow(false)}
           />
@@ -245,11 +243,6 @@ const MoreDetails = (props: any) => {
                       m2
                     </div>
                   </div>
-                  {showError && formik.errors.totalarea && (
-                    <FormHelperText className="flex justify-end" error>
-                      {formik.errors.totalarea}
-                    </FormHelperText>
-                  )}
                 </div>
                 <Divider />
                 <div className="py-6">
@@ -271,11 +264,11 @@ const MoreDetails = (props: any) => {
                       m2
                     </div>
                   </div>
-                  {showError && formik.errors.livingarea && (
+                  {/* {showError && formik.errors.livingarea && (
                     <FormHelperText className="flex justify-end" error>
                       {formik.errors.livingarea}
                     </FormHelperText>
-                  )}
+                  )} */}
                 </div>
                 <Divider />
                 <div className="py-6">
@@ -297,11 +290,11 @@ const MoreDetails = (props: any) => {
                       m2
                     </div>
                   </div>
-                  {showError && formik.errors.outsidearea && (
+                  {/* {showError && formik.errors.outsidearea && (
                     <FormHelperText className="flex justify-end" error>
                       {formik.errors.outsidearea}
                     </FormHelperText>
-                  )}
+                  )} */}
                 </div>
                 <Divider />
                 <div className="py-6">
@@ -322,11 +315,11 @@ const MoreDetails = (props: any) => {
                       m2
                     </div>
                   </div>
-                  {showError && formik.errors.garden && (
+                  {/* {showError && formik.errors.garden && (
                     <FormHelperText className="flex justify-end" error>
                       {formik.errors.garden}
                     </FormHelperText>
-                  )}
+                  )} */}
                 </div>
                 <Divider />
                 <div className="py-6">
@@ -347,11 +340,11 @@ const MoreDetails = (props: any) => {
                       m2
                     </div>
                   </div>
-                  {showError && formik.errors.garage && (
+                  {/* {showError && formik.errors.garage && (
                     <FormHelperText className="flex justify-end" error>
                       {formik.errors.garage}
                     </FormHelperText>
-                  )}
+                  )} */}
                 </div>
                 <Divider />
                 <div className="py-6">
@@ -372,11 +365,11 @@ const MoreDetails = (props: any) => {
                       m3
                     </div>
                   </div>
-                  {showError && formik.errors.volume && (
+                  {/* {showError && formik.errors.volume && (
                     <FormHelperText className="flex justify-end" error>
                       {formik.errors.volume}
                     </FormHelperText>
-                  )}
+                  )} */}
                 </div>
                 <Divider />
               </div>
@@ -565,45 +558,38 @@ const MoreDetails = (props: any) => {
                 </div>
               </>
             )}
-            <Button
-              className="w-[247px] h-[56px] mt-20 border border-[#2C72F6]"
-              // onClick={check}
-              onClick={async () => {
-                const errors = check(formik.values);
-                formik.setErrors(errors);
-                if (Object.keys(errors).length === 0) {
-                  handleNext();
-                } else {
-                  setShowErros(true);
-                }
-              }}
-              // disabled={
-              //   !formik.values.rooms ||
-              //   !formik.values.bedrooms ||
-              //   !formik.values.bathrooms ||
-              //   !formik.values.bedrooms ||
-              //   !formik.values.characteristics ||
-              //   !formik.values.totalarea ||
-              //   !formik.values.livingarea ||
-              //   !formik.values.outsidearea ||
-              //   !formik.values.garden ||
-              //   !formik.values.garage ||
-              //   !formik.values.volume ||
-              //   !formik.values.interiortype ||
-              //   !formik.values.upkeeptype ||
-              //   !formik.values.heatingtype ||
-              //   !formik.values.yearBuilt ||
-              //   !formik.values.numberOfFloorsCommon ||
-              //   !formik.values.floorNumber ||
-              //   !formik.values.buildingtype
-              // }
-            >
-              Next{" "}
-              <Icon
-                className="text-white align-middle"
-                icon={ArrowSmallRightIcon}
-              />
-            </Button>
+            <div className="flex items-center justify-between">
+              <Button
+                onClick={handleBack}
+                variant="secondary"
+                className="w-[247px] h-[56px] mt-20 border  border-[#2C72F6]"
+              >
+                <Icon
+                  className="text-[#2C72F6] align-middle"
+                  icon={ArrowSmallLeftIcon}
+                />
+                Back
+              </Button>
+              <Button
+                className="w-[247px] h-[56px] mt-20 border border-[#2C72F6]"
+                // onClick={check}
+                onClick={async () => {
+                  const errors = check(formik.values);
+                  formik.setErrors(errors);
+                  if (Object.keys(errors).length === 0) {
+                    handleNext();
+                  } else {
+                    setShowErros(true);
+                  }
+                }}
+              >
+                Next{" "}
+                <Icon
+                  className="text-white align-middle"
+                  icon={ArrowSmallRightIcon}
+                />
+              </Button>
+            </div>
           </div>
         )}
       </div>

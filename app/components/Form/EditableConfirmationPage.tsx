@@ -1,4 +1,3 @@
-import { PencilSquareIcon } from "@heroicons/react/24/solid";
 import {
   Divider,
   //   Icon,
@@ -8,7 +7,6 @@ import {
   TextInput,
 } from "@tremor/react";
 import Image from "next/image";
-import property1 from "@/public/property1.png";
 import PropertyPlacementRadioButtons from "../PropertyPlacementRadioButtons";
 import {
   BUILDING_TYPE,

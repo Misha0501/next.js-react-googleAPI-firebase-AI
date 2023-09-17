@@ -1,9 +1,7 @@
-import { Button, Divider, Icon, TextInput } from "@tremor/react";
+import { Button, Divider, Icon } from "@tremor/react";
 import { PencilSquareIcon } from "@heroicons/react/24/outline";
 import React, { useEffect, useState } from "react";
-import property1 from "@/public/property1.png";
 import Image from "next/image";
-import { ArrowSmallRightIcon } from "@heroicons/react/24/solid";
 import NextToConfirmationPage from "./NextToConfirmationPage";
 import EditableConfirmationPage from "./EditableConfirmationPage";
 import { useCreateProperty } from "@/providers/Listing";
@@ -11,7 +9,6 @@ import { useAuthContext } from "@/app/context/AuthContext";
 
 function Confirmation({ formik, handleBack, step }: any) {
   const { authToken } = useAuthContext();
-  console.log(formik.values, "authToken");
   const title = "Confirm your advertisment";
   const stepNumber = "Step 4";
   const [openAdvertisementSection, setOpenAdvertisementSection] =
@@ -94,7 +91,7 @@ function Confirmation({ formik, handleBack, step }: any) {
               >
                 Edit
                 <Icon
-                  className="text-[#4785FD] pl-4 font-bold align-middle "
+                  className="text-white  pl-4 font-bold align-middle "
                   icon={PencilSquareIcon}
                 />
               </Button>
@@ -332,19 +329,23 @@ function Confirmation({ formik, handleBack, step }: any) {
                   <p className={"font-bold text-[18px]  mb-2"}>Images</p>
                   {/* <Icon icon={PencilSquareIcon} /> */}
                 </div>
-                <p className={"font-bold text-[14px] mb-2"}>Main images</p>
-                <Image
-                  width={100}
-                  style={{
-                    width: "100%",
-                    height: "300px",
-                    objectFit: "fill",
-                    marginBottom: "10px",
-                  }}
-                  height={100}
-                  src={formik.values.images?.[0]?.url}
-                  alt={"propert"}
-                />
+                {formik.values.images?.[0]?.url && (
+                  <>
+                    <p className={"font-bold text-[14px] mb-2"}>Main images</p>
+                    <Image
+                      width={100}
+                      style={{
+                        width: "100%",
+                        height: "300px",
+                        objectFit: "fill",
+                        marginBottom: "10px",
+                      }}
+                      height={100}
+                      src={formik.values.images?.[0]?.url}
+                      alt={"propert"}
+                    />
+                  </>
+                )}
                 {formik.values?.images.length > 1 && (
                   <p className={"font-bold text-[14px] mb-2 mt-2"}>
                     Other images

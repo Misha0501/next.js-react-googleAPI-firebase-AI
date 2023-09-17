@@ -2,18 +2,18 @@
 import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import Step from "@mui/material/Step";
-import { FormHelperText, Grid } from "@mui/material";
+import { Grid, Typography } from "@mui/material";
 import StepLabel from "@mui/material/StepLabel";
+import LinearProgress from "@mui/material/LinearProgress";
 
 import { GoBackBtn } from "../GoBackBtn";
 import GeneralInfo from "./GeneralInfo";
 import MoreDetails from "./MoreDetails";
 import DescriptionAndImages from "./DescriptionAndImages";
 import Confirmation from "./Confirmation";
-import { Formik, Field, ErrorMessage, FieldArray } from "formik"; // Import Formik components
+import { Formik, FieldArray } from "formik"; // Import Formik components
 import * as Yup from "yup";
 import { MuiStepper } from "./Styled";
-import { Button } from "@tremor/react";
 
 const steps = [
   "General information",
@@ -26,14 +26,24 @@ const InitalImages: any = [];
 
 export default function MultiForm() {
   const [activeStep, setActiveStep] = useState(0);
-  const [show, setShow] = useState(true);
+  const [showForm1, setShowForm1] = useState(true);
+  const [showForm2, setShowForm2] = useState(true);
+  const [showForm3, setShowForm3] = useState(true);
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
 
-  const handleBack = () => {
-    setShow(false);
+  const handleBackStep1 = () => {
+    setShowForm1(false);
+    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+  };
+  const handleBackStep2 = () => {
+    setShowForm2(false);
+    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+  };
+  const handleBackStep3 = () => {
+    setShowForm3(false);
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
@@ -46,7 +56,7 @@ export default function MultiForm() {
       case 0:
         return (
           <GeneralInfo
-            isShow={show}
+            isShow={showForm1}
             formik={formik}
             handleNext={handleNext}
             step={step}
@@ -55,8 +65,8 @@ export default function MultiForm() {
       case 1:
         return (
           <MoreDetails
-            isShow={show}
-            handleBack={handleBack}
+            isShow={showForm2}
+            handleBack={handleBackStep1}
             formik={formik}
             handleNext={handleNext}
             step={step}
@@ -65,7 +75,8 @@ export default function MultiForm() {
       case 2:
         return (
           <DescriptionAndImages
-            handleBack={handleBack}
+            isShow={showForm3}
+            handleBack={handleBackStep2}
             formik={formik}
             handleNext={handleNext}
             step={step}
@@ -75,9 +86,10 @@ export default function MultiForm() {
       case 3:
         return (
           <Confirmation
+            isShow={showForm3}
             formik={formik}
             handleSubmit={formik.handleSubmit}
-            handleBack={handleBack}
+            handleBack={handleBackStep3}
             step={step}
           />
         );
@@ -85,6 +97,7 @@ export default function MultiForm() {
         return <div>404: Not Found</div>;
     }
   };
+
   return (
     <div className="py-11">
       <div className="max-w-screen-xl m-auto">
@@ -197,6 +210,26 @@ export default function MultiForm() {
                     {formContent(activeStep, formik)}
                   </Grid>
                 </Grid>
+
+                <LinearProgress
+                  sx={{
+                    height: "30px",
+                    marginTop: "30px",
+                    backgroundColor: "#F2F2F2",
+                    color: "#97B6FF",
+                  }}
+                  variant="determinate"
+                  value={(activeStep / 4) * 100}
+                  aria-label="hell"
+                />
+                <Typography
+                  fontWeight="semi-bold"
+                  fontSize="16px"
+                  textAlign="center"
+                  sx={{ mt: "5px" }}
+                >
+                  {(activeStep / 4) * 100}%
+                </Typography>
               </Box>
             </div>
           </form>

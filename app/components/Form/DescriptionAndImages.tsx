@@ -2,15 +2,17 @@ import React, { useEffect, useState } from "react";
 import StepsTopInfo from "./StepsTopInfo";
 import property1 from "@/public/property1.png";
 import { Button, Divider, Icon, TextInput } from "@tremor/react";
-import { ArrowSmallRightIcon, PlusIcon } from "@heroicons/react/24/solid";
-import Image from "next/image";
-import AddHighlightComponent from "./AddHighlightComponent";
+import {
+  ArrowSmallRightIcon,
+  ArrowSmallLeftIcon,
+} from "@heroicons/react/24/solid";
+
 import { ListingImage } from "@/types";
 import { PlacingPropertyImagesHandler } from "@/app/components/PlacingPropertyImagesHandler";
 import { useGenerateDescription } from "@/providers/GenerateDescription";
 
 function DescriptionAndImages(props: any) {
-  const { formik, handleBack, step, handleNext, FieldArray } = props;
+  const { formik, handleBack, step, handleNext, FieldArray, isShow } = props;
   const [show, setShow] = useState(true);
   const [textAreaWordCount, setTextAreaWordCount] = useState(0);
   const [noOfHighlights, setNoOfHighlights] = useState(0);
@@ -19,11 +21,8 @@ function DescriptionAndImages(props: any) {
 
   const onImageClick = (img: any) => {
     setImages(img);
-
     formik.setFieldValue("images", images);
   };
-
-  console.log(formik.values, "for images");
 
   const handleTextAreaChange = (event: any) => {
     const text = event.target.value;
@@ -73,7 +72,7 @@ function DescriptionAndImages(props: any) {
   return (
     <>
       <div className="max-w-screen-xl m-auto">
-        {show ? (
+        {isShow && show ? (
           <StepsTopInfo
             stepNumber={stepNumber}
             title={title}
@@ -183,8 +182,9 @@ function DescriptionAndImages(props: any) {
             <Divider className={"my-8 md:my-14"} />
             <div className="grid md:grid-cols-2 gap-8 md:gap-16 mb-6">
               {/* <p className={"text-2xl font-bold"}>Highlights</p> */}
-              <div className="flex flex-col gap-8">
-                {/* <div className="flex flex-col gap-5">
+            </div>
+            <div className="flex items-center justify-between ">
+              {/* <div className="flex flex-col gap-5">
                   <p className={"text-md font-light text-[#616161]"}>
                     Share max two points that should be highlighted in your
                     property.
@@ -207,17 +207,27 @@ function DescriptionAndImages(props: any) {
                     <Icon className="text-[#4785FD]" icon={PlusIcon} />
                   </Button>
                 </div> */}
-                <Button
-                  className="w-[247px] h-[56px] mt-8 border border-[#2C72F6]"
-                  onClick={handleNext}
-                >
-                  Next
-                  <Icon
-                    className="text-white align-middle"
-                    icon={ArrowSmallRightIcon}
-                  />
-                </Button>
-              </div>
+              <Button
+                className="w-[247px] h-[56px] mt-8 border border-[#2C72F6]"
+                onClick={handleBack}
+                variant="secondary"
+              >
+                <Icon
+                  className="text-[#2C72F6] align-middle"
+                  icon={ArrowSmallLeftIcon}
+                />
+                Back
+              </Button>
+              <Button
+                className="w-[247px] h-[56px] mt-8 border border-[#2C72F6]"
+                onClick={handleNext}
+              >
+                Next
+                <Icon
+                  className="text-white align-middle"
+                  icon={ArrowSmallRightIcon}
+                />
+              </Button>
             </div>
           </div>
         )}

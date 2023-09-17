@@ -8,6 +8,7 @@ import { getFetchUrl } from "@/app/lib/getFetchUrl";
 import { Select, SelectItem } from "@tremor/react";
 import { NO_MAX, sortOption } from "../Constants/filters";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { CircularProgress } from "@mui/material";
 
 export const ListingsMain = ({ searchParams, listingType, locality }) => {
   const { authToken } = useAuthContext();
@@ -21,20 +22,35 @@ export const ListingsMain = ({ searchParams, listingType, locality }) => {
 
   const propertyListing = usePropertyListing({
     priceMin: searchParams?.priceRange.min,
-    priceMax: searchParams?.priceRange.max === NO_MAX ? undefined : searchParams?.priceRange.max,
+    priceMax:
+      searchParams?.priceRange.max === NO_MAX
+        ? undefined
+        : searchParams?.priceRange.max,
     listedSince: searchParams?.listedSince,
     areaLivingMin: searchParams?.livingAreaRange.min,
-    areaLivingMax: searchParams?.livingAreaRange.max === NO_MAX ? undefined : searchParams?.livingAreaRange.max,
+    areaLivingMax:
+      searchParams?.livingAreaRange.max === NO_MAX
+        ? undefined
+        : searchParams?.livingAreaRange.max,
     areaTotalMin: searchParams?.areaTotal.min,
-    areaTotalMax: searchParams?.areaTotal.max === NO_MAX ? undefined : searchParams?.areaTotal.max,
+    areaTotalMax:
+      searchParams?.areaTotal.max === NO_MAX
+        ? undefined
+        : searchParams?.areaTotal.max,
     roomsMin: searchParams?.roomRange.min,
-    roomsMax: searchParams?.roomRange.max === NO_MAX ? undefined : searchParams?.roomRange.max,
+    roomsMax:
+      searchParams?.roomRange.max === NO_MAX
+        ? undefined
+        : searchParams?.roomRange.max,
     bedroomsMin: searchParams?.bedroomRange.min,
-    bedroomsMax: searchParams?.bedroomRange.max === NO_MAX ? undefined : searchParams?.bedroomRange.max,
+    bedroomsMax:
+      searchParams?.bedroomRange.max === NO_MAX
+        ? undefined
+        : searchParams?.bedroomRange.max,
     propertyType: searchParams?.propertyType,
     listingType: listingType,
     locality: locality,
-    sortBy: sortBy
+    sortBy: sortBy,
   });
 
   const handleSavedIconClick = (listing: Listing) => {
@@ -45,9 +61,9 @@ export const ListingsMain = ({ searchParams, listingType, locality }) => {
         cache: "no-store",
         headers: {
           "Content-type": "application/json",
-          Authorization: authToken
+          Authorization: authToken,
         },
-        body: JSON.stringify({ listingId: listing.id })
+        body: JSON.stringify({ listingId: listing.id }),
       })
         .then((response) => response.json())
         .then((savedListing: SavedListing) => {
@@ -73,8 +89,8 @@ export const ListingsMain = ({ searchParams, listingType, locality }) => {
         cache: "no-store",
         headers: {
           "Content-type": "application/json",
-          Authorization: authToken
-        }
+          Authorization: authToken,
+        },
       })
         .then(() => {
           const updatedListings = populatedListings.map((item) => {
@@ -97,8 +113,8 @@ export const ListingsMain = ({ searchParams, listingType, locality }) => {
       cache: "no-store",
       headers: {
         "Content-type": "application/json",
-        Authorization: authToken
-      }
+        Authorization: authToken,
+      },
     });
     // convert the data to json
     const data = await response.json();
@@ -150,7 +166,7 @@ export const ListingsMain = ({ searchParams, listingType, locality }) => {
   }, [propertyListing?.data?.results]);
 
   if (propertyListing.isFetching) {
-    return <p>Loading...</p>;
+    return <CircularProgress />;
   }
   if (propertyListing?.isError) {
     return <p>{propertyListing?.error?.message}</p>;

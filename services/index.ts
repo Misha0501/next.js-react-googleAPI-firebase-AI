@@ -76,8 +76,6 @@ async function service(args: IAPArgs): Promise<any> {
 
   let fetchUrl = `${baseDomain || API_URL}${url}`;
   if (queryParams) {
-    console.log("queryParams", queryParams);
-    console.log("qs.stringify(queryParams)", qs.stringify(queryParams ));
     fetchUrl = `${fetchUrl}?${qs.stringify(queryParams)}`;
   }
 

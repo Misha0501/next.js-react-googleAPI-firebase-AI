@@ -9,7 +9,6 @@ import {
   SelectItem,
   TextInput,
 } from "@tremor/react";
-import Image from "next/image";
 import property1 from "@/public/property1.png";
 import StepsTopInfo from "./StepsTopInfo";
 import { CURRENCIES, LISTING_TYPES, PROPERTY_TYPES } from "@/app/Constants";
@@ -20,7 +19,7 @@ import { FormHelperText } from "@mui/material";
 
 const GeneralInfo = (props: any) => {
   const { formik, handleNext, step, isShow } = props;
-  console.log(formik, "formik");
+
   const [show, setShow] = useState(true);
   const [showError, setShowErros] = useState(false);
   const [showAddress, setShowAddress] = useState(false);
@@ -35,8 +34,6 @@ const GeneralInfo = (props: any) => {
     types: ["address"],
   };
   const placeChanged = (e) => {
-    console.log(e);
-
     // Get the place details from the autocomplete object.
     const place = autoCompleteRef.current.getPlace();
     if (!place || !place.address_components) return;
