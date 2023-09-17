@@ -17,7 +17,7 @@ export async function POST(request: Request) {
       messages: [
         {
           role: "system",
-          content: `When responding, ignore fields that are null or unset. Limit the response to 300 characters`,
+          content: `When responding, ignore fields that are null or unset. Limit the response to 2200 characters`,
         },
         {
           role: "user",
