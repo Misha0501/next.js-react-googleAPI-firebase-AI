@@ -97,9 +97,9 @@ export const ListingsPageFilters = ({ onParamsChange, onListingTypeChange, local
       <div className={"flex items-center justify-between"}>
         <Button className={"font-bold"} variant={"secondary"} onClick={handleSaveSearch}>Save search</Button>
 
-        <button className={"text-base text-gray-500 underline"} onClick={handleResetFilters}>
-          Reset filters
-        </button>
+        {/*<button className={"text-base text-gray-500 underline"} onClick={handleResetFilters}>*/}
+        {/*  Reset filters*/}
+        {/*</button>*/}
       </div>
       <Divider />
       <TabGroup

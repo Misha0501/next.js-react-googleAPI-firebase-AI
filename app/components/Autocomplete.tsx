@@ -45,8 +45,10 @@ const AutoComplete = ({ onLocalityChange, onAddressChange, initialValue, autocom
     }
 
     if (address.locality && onLocalityChange) {
+      setInputValue(address.locality);
       onLocalityChange(address.locality);
     }
+
   }, [address]);
 
   const placeChanged = (e) => {

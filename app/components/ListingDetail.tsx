@@ -316,36 +316,38 @@ const ListingDetail = () => {
                     <p className="text-[14] pt-8">See more results</p>
                 </div>
             )}
-            <div className="py-8 mt-16 bg-[#F2F2F2]">
-                <div className="container">
-                    <p className="font-medium text-[24px]">Similar in this area</p>
-                    <div className="flex justify-normal gap-10 py-8 ">
-                        {similarAreaInfo.map((item, index) => (
-                            <div key={index} className="basis-1/3">
-                                <ListingItem
-                                    listingItem={item.listingItem}
-                                    onSavedIconClick={item.onSavedIconClick}
-                                    isLoadingSavedListings={item.isLoadingSavedListings}
-                                />
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </div>
+            {/*<div className="py-8 mt-16 bg-[#F2F2F2]">*/}
+            {/*    <div className="container">*/}
+            {/*        <p className="font-medium text-[24px]">Similar in this area</p>*/}
+            {/*        <div className="flex justify-normal gap-10 py-8 ">*/}
+            {/*            {similarAreaInfo.map((item, index) => (*/}
+            {/*                <div key={index} className="basis-1/3">*/}
+            {/*                    <ListingItem*/}
+            {/*                        listingItem={item.listingItem}*/}
+            {/*                        onSavedIconClick={item.onSavedIconClick}*/}
+            {/*                        isLoadingSavedListings={item.isLoadingSavedListings}*/}
+            {/*                    />*/}
+            {/*                </div>*/}
+            {/*            ))}*/}
+            {/*        </div>*/}
+            {/*    </div>*/}
+            {/*</div>*/}
 
+          {listingDetail?.data?.ListingPrice?.length > 1 &&
             <div className=" container">
-                <p className="font-medium text-[24px] pt-14">Price graph</p>
-                <Title className="pt-8">
-                    Compare this price with other housing in this area
-                </Title>
-                <LineChart
-                    className="mt-6"
-                    data={listingDetail?.data?.ListingPrice || []}
-                    index="updatedAt"
-                    categories={["price"]}
-                    colors={["emerald"]}
-                />
+              <p className="font-medium text-[24px] pt-14">Price graph</p>
+              <Title className="pt-8">
+                Compare this price with other housing in this area
+              </Title>
+              <LineChart
+                className="mt-6"
+                data={listingDetail?.data?.ListingPrice || []}
+                index="updatedAt"
+                categories={["price"]}
+                colors={["emerald"]}
+              />
             </div>
+          }
         </div>
     );
 };

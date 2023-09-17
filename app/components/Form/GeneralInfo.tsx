@@ -1,22 +1,12 @@
 "use client";
 import { ArrowSmallRightIcon } from "@heroicons/react/24/solid";
-import {
-  Button,
-  Divider,
-  Icon,
-  NumberInput,
-  Select,
-  SelectItem,
-  TextInput
-} from "@tremor/react";
+import { Button, Divider, Icon, NumberInput, Select, SelectItem, TextInput } from "@tremor/react";
 import property1 from "@/public/property1.png";
 import StepsTopInfo from "./StepsTopInfo";
 import { CURRENCIES, LISTING_TYPES, PROPERTY_TYPES } from "@/app/Constants";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import PropertyPlacementRadioButtons from "../PropertyPlacementRadioButtons";
-import { AntSwitch } from "./Styled";
 import { FormHelperText } from "@mui/material";
-import Autocomplete from "@/app/components/Autocomplete";
 import { AutocompleteAddress } from "@/types";
 import { AddressAutocomplete } from "@/app/components/Form/AddressAutocomplete";
 

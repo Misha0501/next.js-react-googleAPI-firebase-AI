@@ -180,17 +180,17 @@ export const ListingsMain = ({ searchParams, listingType, locality }) => {
             <div>
               <div className={"text-xl mb-12"}>
                 <span className={"font-bold"}>Results: </span>{" "}
-                <span>{totalListings} houses found.</span>
+                <span>{totalListings} properties found.</span>
               </div>
             </div>
-            <Select
-              style={{ width: "300px" }}
-              onValueChange={(e) => setSortBy(e)}
-            >
-              {sortOption.map((el, index) => (
-                <SelectItem value={el} key={index}></SelectItem>
-              ))}
-            </Select>
+            {/*<Select*/}
+            {/*  style={{ width: "300px" }}*/}
+            {/*  onValueChange={(e) => setSortBy(e)}*/}
+            {/*>*/}
+            {/*  {sortOption.map((el, index) => (*/}
+            {/*    <SelectItem value={el} key={index}></SelectItem>*/}
+            {/*  ))}*/}
+            {/*</Select>*/}
           </>
         )}
       </div>
