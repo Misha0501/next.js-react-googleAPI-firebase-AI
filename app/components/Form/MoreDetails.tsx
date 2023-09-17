@@ -34,15 +34,15 @@ const MoreDetails = (props: any) => {
   const check = (e) => {
     event?.preventDefault();
     let errors: any = {};
-    if (!formik.values.rooms && formik.values.propertyType !== "LAND") {
-      errors.rooms = "Required";
-    }
-    if (!formik.values.bedrooms && formik.values.propertyType !== "LAND") {
-      errors.bedrooms = "Required";
-    }
-    if (!formik.values.bathrooms && formik.values.propertyType !== "LAND") {
-      errors.bathrooms = "Required";
-    }
+    // if (!formik.values.rooms && formik.values.propertyType !== "LAND") {
+    //   errors.rooms = "Required";
+    // }
+    // if (!formik.values.bedrooms && formik.values.propertyType !== "LAND") {
+    //   errors.bedrooms = "Required";
+    // }
+    // if (!formik.values.bathrooms && formik.values.propertyType !== "LAND") {
+    //   errors.bathrooms = "Required";
+    // }
     if (!formik.values.interiortype && formik.values.propertyType !== "LAND") {
       errors.interiortype = "Required";
     }
@@ -52,39 +52,39 @@ const MoreDetails = (props: any) => {
     if (!formik.values.heatingtype && formik.values.propertyType !== "LAND") {
       errors.heatingtype = "Required";
     }
-    if (!formik.values.yearBuilt && formik.values.propertyType !== "LAND") {
-      errors.yearBuilt = "Required";
-    }
-    if (
-      !formik.values.numberOfFloorsCommon &&
-      formik.values.propertyType !== "LAND"
-    ) {
-      errors.numberOfFloorsCommon = "Required";
-    }
-    if (!formik.values.floorNumber && formik.values.propertyType !== "LAND") {
-      errors.floorNumber = "Required";
-    }
-    if (!formik.values.buildingtype && formik.values.propertyType !== "LAND") {
-      errors.buildingtype = "Required";
-    }
+    // if (!formik.values.yearBuilt && formik.values.propertyType !== "LAND") {
+    //   errors.yearBuilt = "Required";
+    // }
+    // if (
+    //   !formik.values.numberOfFloorsCommon &&
+    //   formik.values.propertyType !== "LAND"
+    // ) {
+    //   errors.numberOfFloorsCommon = "Required";
+    // }
+    // if (!formik.values.floorNumber && formik.values.propertyType !== "LAND") {
+    //   errors.floorNumber = "Required";
+    // }
+    // if (!formik.values.buildingtype && formik.values.propertyType !== "LAND") {
+    //   errors.buildingtype = "Required";
+    // }
     if (!formik.values.totalarea) {
       errors.totalarea = "Required";
     }
-    if (!formik.values.livingarea && formik.values.propertyType !== "LAND") {
-      errors.livingarea = "Required";
-    }
-    if (!formik.values.outsidearea && formik.values.propertyType !== "LAND") {
-      errors.outsidearea = "Required";
-    }
-    if (!formik.values.garden && formik.values.propertyType !== "LAND") {
-      errors.garden = "Required";
-    }
-    if (!formik.values.garage && formik.values.propertyType !== "LAND") {
-      errors.garage = "Required";
-    }
-    if (!formik.values.volume && formik.values.propertyType !== "LAND") {
-      errors.volume = "Required";
-    }
+    // if (!formik.values.livingarea && formik.values.propertyType !== "LAND") {
+    //   errors.livingarea = "Required";
+    // }
+    // if (!formik.values.outsidearea && formik.values.propertyType !== "LAND") {
+    //   errors.outsidearea = "Required";
+    // }
+    // if (!formik.values.garden && formik.values.propertyType !== "LAND") {
+    //   errors.garden = "Required";
+    // }
+    // if (!formik.values.garage && formik.values.propertyType !== "LAND") {
+    //   errors.garage = "Required";
+    // }
+    // if (!formik.values.volume && formik.values.propertyType !== "LAND") {
+    //   errors.volume = "Required";
+    // }
     return errors;
   };
 

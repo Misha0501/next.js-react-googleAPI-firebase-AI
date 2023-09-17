@@ -147,36 +147,26 @@ export default function MultiForm() {
           propertyType: Yup.string(),
           address: Yup.string().required("Address is required"),
           streetNumber: Yup.string(),
-          administrativeArea: Yup.string().required(
-            "Administrative area is required"
-          ),
+          administrativeArea: Yup.string(),
           currency: Yup.string().required("Currency is required"),
           price: Yup.number().required("Price is required"),
-          rooms: Yup.number()
-            .required("rooms is required")
-            .min(0, "rooms must be greater than or equal to 0"),
-          bedrooms: Yup.number().required("bedrooms is required"),
-          bathrooms: Yup.number().required("bathrooms is required"),
-          totalarea: Yup.number().required("totalarea is required"),
-          livingarea: Yup.number().required("livingarea is required"),
-          outsidearea: Yup.number().required("outsidearea is required"),
-          garden: Yup.number().required("garden is required"),
-          garage: Yup.number().required("garage is required"),
-          volume: Yup.number().required("volume is required"),
+          rooms: Yup.number(),
+          bedrooms: Yup.number(),
+          bathrooms: Yup.number(),
+          totalarea: Yup.number(),
+          livingarea: Yup.number(),
+          outsidearea: Yup.number(),
+          garden: Yup.number(),
+          garage: Yup.number(),
+          volume: Yup.number(),
           interiortype: Yup.string().required("interior type is required"),
           upkeeptype: Yup.string().required("upkeep type is required"),
           heatingtype: Yup.string().required("heating type is required"),
-          yearBuilt: Yup.number().required("Year of Built is required"),
-          numberOfFloorsCommon: Yup.number().required(
-            "Floors in the building is required"
-          ),
-          floorNumber: Yup.number().required(
-            "Apartment located at floor number is required"
-          ),
-          buildingtype: Yup.string().required("Building type is required"),
-          characteristics: Yup.string().required(
-            "characteristics type is required"
-          ),
+          yearBuilt: Yup.number(),
+          numberOfFloorsCommon: Yup.number(),
+          floorNumber: Yup.number(),
+          buildingtype: Yup.string(),
+          characteristics: Yup.string(),
           discription: Yup.string().required("discription is required"),
         })}
         onSubmit={(values) => {
