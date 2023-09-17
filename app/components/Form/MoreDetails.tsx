@@ -196,29 +196,29 @@ const MoreDetails = (props: any) => {
                 </div>
               </>
             )}
-            {formik.values.propertyType === "LAND" ? null : (
-              <>
-                <Divider className={"my-8 md:my-14"} />
-                <div className="grid md:grid-cols-2 gap-8 md:gap-16">
-                  <p className={"text-2xl font-bold"}>
-                    Does your property has one or more of the below
-                    characteristics?
-                  </p>
-                  <div className="">
-                    <p className="mb-2">You can select multiple items</p>
-                    <MultiSelectRadioButton
-                      value={formik.values.characteristics}
-                      options={CHARACTERISTICS}
-                      onChange={(e) =>
-                        formik.setFieldValue("characteristics", e, true)
-                      }
-                      id="characteristics"
-                    />
-                  </div>
-                </div>
-              </>
-            )}
-            <Divider />
+            {/*{formik.values.propertyType === "LAND" ? null : (*/}
+            {/*  <>*/}
+            {/*    <Divider className={"my-8 md:my-14"} />*/}
+            {/*    <div className="grid md:grid-cols-2 gap-8 md:gap-16">*/}
+            {/*      <p className={"text-2xl font-bold"}>*/}
+            {/*        Does your property has one or more of the below*/}
+            {/*        characteristics?*/}
+            {/*      </p>*/}
+            {/*      <div className="">*/}
+            {/*        <p className="mb-2">You can select multiple items</p>*/}
+            {/*        <MultiSelectRadioButton*/}
+            {/*          value={formik.values.characteristics}*/}
+            {/*          options={CHARACTERISTICS}*/}
+            {/*          onChange={(e) =>*/}
+            {/*            formik.setFieldValue("characteristics", e, true)*/}
+            {/*          }*/}
+            {/*          id="characteristics"*/}
+            {/*        />*/}
+            {/*      </div>*/}
+            {/*    </div>*/}
+            {/*  </>*/}
+            {/*)}*/}
+            <Divider className={"my-8 md:my-14"} />
             <div className="grid md:grid-cols-2 gap-8 md:gap-16">
               <p className={"text-2xl font-bold"}>
                 Specify property dimensions

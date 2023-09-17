@@ -25,8 +25,6 @@ export const PlacingPropertyImagesHandler = ({
 
   const [images, setImages] = useState<ListingImage[]>(initialImages || []);
 
-  console.log(images, "imagesInner");
-
   const [error, setError] = useState("");
 
   const hiddenFileInput = useRef(null);
@@ -218,7 +216,7 @@ export const PlacingPropertyImagesHandler = ({
                 alt="Property image"
                 src={item.url}
                 width={676}
-                height={210}
+                height={410}
                 layout="responsive"
                 placeholder={"blur"}
                 blurDataURL={
@@ -230,17 +228,7 @@ export const PlacingPropertyImagesHandler = ({
           ))}
         {uploading && <p>Uploading...</p>}
       </div>
-      <button
-        className={
-          "w-[676px] max-w-[676px] bg-transparent border-2 text-[#4785FD] border-[#4785FD]  font-semibold py-3 px-4  rounded-md"
-        }
-        onClick={handleFileInputClick}
-        // variant={"secondary"}
-        // type={"button"}
-      >
-        Add pictures
-        <Icon className="text-[#4785FD]" icon={PlusIcon} />
-      </button>
+      <Button onClick={handleFileInputClick} variant={"secondary"} className={"w-full"} type={'button'}>Add picture</Button>
     </div>
   );
 };

@@ -14,9 +14,9 @@ tenYearsFromNow.setFullYear(tenYearsFromNow.getFullYear() + 10);
 
 export const listingSchema = z.object({
   listingType: z.enum(LISTING_TYPES),
-  interiorType: z.enum(INTERIOR_TYPES),
-  propertyType: z.enum(PROPERTY_TYPES),
-  upkeepType: z.enum(UPKEEP_TYPES),
+  interiorType: z.enum(INTERIOR_TYPES).optional().nullable(),
+  propertyType: z.enum(PROPERTY_TYPES).optional().nullable(),
+  upkeepType: z.enum(UPKEEP_TYPES).optional().nullable(),
   price: z.number().min(0),
   currency: z.enum(CURRENCIES).optional().nullable(),
   address: z
@@ -124,7 +124,7 @@ export const listingSchema = z.object({
   floorNumber: z.number().optional().nullable(),
   numberOfFloorsProperty: z.number().optional().nullable(),
   numberOfFloorsCommon: z.number().optional().nullable(),
-  heatingType: z.enum(HEATING_TYPES).optional(),
+  heatingType: z.enum(HEATING_TYPES).optional().nullable(),
 });
 
 export const listingSchemaPutRequest = listingSchema.extend({

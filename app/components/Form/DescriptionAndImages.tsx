@@ -16,13 +16,7 @@ function DescriptionAndImages(props: any) {
   const [show, setShow] = useState(true);
   const [textAreaWordCount, setTextAreaWordCount] = useState(0);
   const [noOfHighlights, setNoOfHighlights] = useState(0);
-  const [images, setImages] = useState<ListingImage[]>([]);
   const generate = useGenerateDescription();
-
-  const onImageClick = (img: any) => {
-    setImages(img);
-    formik.setFieldValue("images", images);
-  };
 
   const handleTextAreaChange = (event: any) => {
     const text = event.target.value;
@@ -31,6 +25,10 @@ function DescriptionAndImages(props: any) {
     // Update the word count in the state
     setTextAreaWordCount(words.length);
   };
+
+  const handleImagesChange = (images: ListingImage[]) => {
+    formik.setFieldValue("images", images, true);
+  }
 
   const generateDescription = () => {
     generate.mutate({
@@ -102,31 +100,11 @@ function DescriptionAndImages(props: any) {
                 </p>
               </div>
               <div className="grid gap-6">
-                <p>You can drag and drop images to change the order</p>
-                {/* <Image src={property1} alt="" /> */}
-                <FieldArray name="images">
-                  {({ push }) => (
-                    <PlacingPropertyImagesHandler
-                      onChange={(e: any) => {
-                        e.forEach((imageObj: any) => {
-                          push({
-                            url: imageObj.url,
-                            positionInListing: imageObj.positionInListing,
-                            imagePath: imageObj.imagePath,
-                          });
-                        });
-                      }}
-                    />
-                  )}
-                </FieldArray>
-                {/* <button
-                className={
-                  "max-w-[676px] bg-transparent border-2 text-[#4785FD] border-[#4785FD]  font-semibold py-3 px-4  rounded-md"
-                }
-              >
-                Add more pictures
-                <Icon className="text-[#4785FD]" icon={PlusIcon} />
-              </button> */}
+                {/*<p>You can drag and drop images to change the order</p>*/}
+                <PlacingPropertyImagesHandler
+                  initialImages={formik.values.images || []}
+                  onChange={handleImagesChange}
+                />
               </div>
             </div>
             <Divider className={"my-8 md:my-14"} />
@@ -153,7 +131,7 @@ function DescriptionAndImages(props: any) {
                     setTextAreaWordCount(e.target.value.length);
                     formik.setFieldValue("discription", e.target.value);
                   }}
-                  maxLength={4000}
+                  // maxLength={4000}
                   value={formik.values.discription}
                   name="discription"
                   id="discription"
@@ -176,9 +154,9 @@ function DescriptionAndImages(props: any) {
                   )}
                   value={formik.values.discription}
                 /> */}
-                <p className={"text-xs font-normal text-[#222222]"}>
-                  {textAreaWordCount}/4000
-                </p>
+                {/*<p className={"text-xs font-normal text-[#222222]"}>*/}
+                {/*  {textAreaWordCount}/4000*/}
+                {/*</p>*/}
               </div>
             </div>
 

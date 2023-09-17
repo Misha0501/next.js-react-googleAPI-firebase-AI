@@ -20,6 +20,8 @@ import {
 } from "@/app/Constants";
 import MultiSelectRadioButton from "../MultiSelectRadioButton";
 import SingleSelectRadioButton from "../SingleSelectRadioButton";
+import { PlacingPropertyImagesHandler } from "@/app/components/PlacingPropertyImagesHandler";
+import React from "react";
 
 function EditableConfirmationPage({ formik }: any) {
   return (
@@ -217,21 +219,21 @@ function EditableConfirmationPage({ formik }: any) {
         </div>
       </div>
       <Divider />
-      <div className="detail_single_box flex gap-2 flex-col">
-        <div className="flex justify-between">
-          <p className={"font-bold text-lg mb-2"}>Property characteristics</p>
-          {/* <Icon icon={PencilSquareIcon} /> */}
-        </div>
-        <div className="max-w-3xl">
-          <MultiSelectRadioButton
-            value={formik.values.characteristics}
-            options={CHARACTERISTICS}
-            onChange={(e) => formik.setFieldValue("characteristics", e, true)}
-            id="characteristics"
-          />
-        </div>
-      </div>
-      <Divider />
+      {/*<div className="detail_single_box flex gap-2 flex-col">*/}
+      {/*  <div className="flex justify-between">*/}
+      {/*    <p className={"font-bold text-lg mb-2"}>Property characteristics</p>*/}
+      {/*    /!* <Icon icon={PencilSquareIcon} /> *!/*/}
+      {/*  </div>*/}
+      {/*  <div className="max-w-3xl">*/}
+      {/*    <MultiSelectRadioButton*/}
+      {/*      value={formik.values.characteristics}*/}
+      {/*      options={CHARACTERISTICS}*/}
+      {/*      onChange={(e) => formik.setFieldValue("characteristics", e, true)}*/}
+      {/*      id="characteristics"*/}
+      {/*    />*/}
+      {/*  </div>*/}
+      {/*</div>*/}
+      {/*<Divider />*/}
       {/* <Icon icon={PencilSquareIcon} /> */}
       <div className="detail_single_box flex gap-4 flex-col">
         <div className="flex justify-between">
@@ -525,32 +527,13 @@ function EditableConfirmationPage({ formik }: any) {
       <div className="detail_single_box">
         <div className="flex justify-between">
           <p className={"font-bold text-[18px]  mb-2"}>Images</p>
-          {/* <Icon icon={PencilSquareIcon} /> */}
         </div>
-        <p className={"font-bold text-[14px] mb-2"}>Main images</p>
-        <Image
-          width={100}
-          style={{ width: "100%", height: "300px", objectFit: "fill" }}
-          height={100}
-          src={formik.values.images?.[0]?.url}
-          alt={"propert"}
-        />
-        {formik.values?.images.length > 1 && (
-          <p className={"font-bold text-[14px] mb-2 mt-2"}>Other images</p>
-        )}
-        {formik.values?.images?.slice(2)?.map((el) => (
-          <Image
-            width={100}
-            style={{
-              width: "100%",
-              height: "300px",
-              objectFit: "fill",
-            }}
-            height={100}
-            src={el.url}
-            alt={"propert"}
+        <div className={"max-w-[500px]"}>
+          <PlacingPropertyImagesHandler
+            initialImages={formik.values.images || []}
+            onChange={(images) => formik.setFieldValue("images", images, true)}
           />
-        ))}
+        </div>
       </div>
       <Divider />
       <div className="detail_single_box flex flex-col gap-6">
