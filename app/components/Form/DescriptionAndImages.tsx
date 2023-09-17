@@ -34,9 +34,9 @@ function DescriptionAndImages(props: any) {
 
   const generateDescription = () => {
     generate.mutate({
-      listingType: formik.values.listingType,
-      propertyType: formik.values.propertyType,
-      interiorType: formik.values.interiortype,
+      listingType: formik.values.listingType || null,
+      propertyType: formik.values.propertyType || null,
+      interiorType: formik.values.interiortype || null,
       currency: formik.values.currency,
       price: formik.values.price,
       rooms: formik.values.rooms,
@@ -46,13 +46,13 @@ function DescriptionAndImages(props: any) {
       floorNumber: formik.values.floorNumber,
       numberOfFloorsProperty: formik.values.numberOfFloorsProperty,
       numberOfFloorsCommon: formik.values.numberOfFloorsCommon,
-      heatingType: formik.values.heatingtype,
+      heatingType: formik.values.heatingtype || null,
       areaLand: formik.values.areaLand,
       areaLiving: formik.values.livingarea,
       areaTotal: formik.values.totalarea,
-      upkeepType: formik.values.upkeeptype,
+      upkeepType: formik.values.upkeeptype || null,
       yearBuilt: formik.values.yearBuilt,
-      buildingType: formik.values.buildingtype,
+      buildingType: formik.values.buildingtype || null,
       outsideArea: formik.values.outsidearea,
       garage: formik.values.garage,
       garden: formik.values.garden,
@@ -61,7 +61,7 @@ function DescriptionAndImages(props: any) {
 
   useEffect(() => {
     if (generate.isSuccess) {
-      formik.setFieldValues("discription", generate?.data, true);
+      formik.setFieldValue("discription", generate?.data, true);
     }
   }, [generate.isSuccess]);
 
@@ -149,8 +149,11 @@ function DescriptionAndImages(props: any) {
                 </Button>
                 <textarea
                   disabled={generate.isLoading}
-                  onChange={(e) => setTextAreaWordCount(e.target.value.length)}
-                  maxLength={1000}
+                  onChange={(e) => {
+                    setTextAreaWordCount(e.target.value.length);
+                    formik.setFieldValue("discription", e.target.value);
+                  }}
+                  maxLength={4000}
                   value={formik.values.discription}
                   name="discription"
                   id="discription"
@@ -174,7 +177,7 @@ function DescriptionAndImages(props: any) {
                   value={formik.values.discription}
                 /> */}
                 <p className={"text-xs font-normal text-[#222222]"}>
-                  {textAreaWordCount}/1000
+                  {textAreaWordCount}/4000
                 </p>
               </div>
             </div>
