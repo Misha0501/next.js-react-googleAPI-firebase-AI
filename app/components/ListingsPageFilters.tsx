@@ -65,7 +65,7 @@ export const ListingsPageFilters = ({ onParamsChange, onListingTypeChange, local
 
   const handleSaveSearch = async () => {
     try {
-      const response = await fetch(getFetchUrl(`api/savedSearches`), {
+      const response = await fetch(getFetchUrl(`/api/savedSearches`), {
         method: "POST",
         cache: "no-store",
         headers: {

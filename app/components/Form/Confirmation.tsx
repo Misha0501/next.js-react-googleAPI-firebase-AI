@@ -6,6 +6,7 @@ import NextToConfirmationPage from "./NextToConfirmationPage";
 import EditableConfirmationPage from "./EditableConfirmationPage";
 import { useCreateProperty } from "@/providers/Listing";
 import { useAuthContext } from "@/app/context/AuthContext";
+import { ListingImage } from "@/types";
 
 function Confirmation({ formik, handleBack, step }: any) {
   const { authToken } = useAuthContext();
@@ -374,8 +375,10 @@ function Confirmation({ formik, handleBack, step }: any) {
                     Other images
                   </p>
                 )}
-                {formik.values?.images?.slice(2)?.map((el) => (
-                  <div className={"max-w-[500px]"}>
+                {formik.values?.images?.slice(2)?.map((el: ListingImage, index: number) => (
+                  <div className={"max-w-[500px]"}
+                       key={index}
+                  >
                     <Image
                       alt="Property image"
                       // src={item.url}

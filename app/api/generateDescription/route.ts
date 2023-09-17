@@ -28,7 +28,6 @@ export async function POST(request: Request) {
       ],
     });
 
-    console.log(completion);
     if (
       !completion ||
       !completion.choices ||

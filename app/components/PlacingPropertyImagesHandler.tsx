@@ -207,8 +207,6 @@ export const PlacingPropertyImagesHandler = ({
                       Delete
                     </Popover.Button>
                   </div>
-
-                  <img src="/solutions.jpg" alt="" />
                 </Popover.Panel>
               </Popover>
 

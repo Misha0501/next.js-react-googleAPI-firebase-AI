@@ -56,7 +56,7 @@ export const ListingsMain = ({ searchParams, listingType, locality }) => {
   const handleSavedIconClick = (listing: Listing) => {
     // if listings isn't saved we do a post request to save it
     if (!listing.savedListingId) {
-      fetch(getFetchUrl(`api/savedListings`), {
+      fetch(getFetchUrl(`/api/savedListings`), {
         method: "POST",
         cache: "no-store",
         headers: {
@@ -84,7 +84,7 @@ export const ListingsMain = ({ searchParams, listingType, locality }) => {
       // if it's saved we do a delete request
       if (!listing.savedListingId) return;
 
-      fetch(getFetchUrl(`api/savedListings/${listing.savedListingId}`), {
+      fetch(getFetchUrl(`/api/savedListings/${listing.savedListingId}`), {
         method: "DELETE",
         cache: "no-store",
         headers: {
@@ -108,7 +108,7 @@ export const ListingsMain = ({ searchParams, listingType, locality }) => {
   };
   const updateListingsWithSavedFeature = async (listings: Listing[]) => {
     // get the data from the api
-    const response = await fetch(getFetchUrl(`api/savedListings`), {
+    const response = await fetch(getFetchUrl(`/api/savedListings`), {
       method: "GET",
       cache: "no-store",
       headers: {

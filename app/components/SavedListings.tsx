@@ -22,7 +22,7 @@ export const SavedListings = () => {
   const handleSavedIconClick = (listing: ListingItem) => {
     if (!listing.savedListingId) return;
 
-    fetch(getFetchUrl(`api/savedListings/${listing.savedListingId}`), {
+    fetch(getFetchUrl(`/api/savedListings/${listing.savedListingId}`), {
       method: "DELETE",
       cache: "no-store",
       headers: {

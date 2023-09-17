@@ -22,10 +22,10 @@ const getFirebaseEmulatorURL = () => {
     throw new Error("provide FIREBASE_AUTH_EMULATOR_HOST variable in the development env")
 }
 
-if (process.env.NODE_ENV === 'development') {
+// if (process.env.NODE_ENV === 'development') {
     // Use emulator if developing
     connectAuthEmulator(firebaseClientAuth, getFirebaseEmulatorURL());
-}
+// }
 
 // // UI instance for login / signup
 // export const ui = firebaseui.auth.AuthUI.getInstance() || new firebaseui.auth.AuthUI(firebaseClientAuth);
