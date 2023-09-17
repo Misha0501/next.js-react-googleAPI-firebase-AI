@@ -1,6 +1,7 @@
 "use client";
 
 import GoogleMapReact from "google-map-react";
+import { MapPinIcon } from "@heroicons/react/24/solid";
 
 interface GoogleMapProps {
   location: {
@@ -9,7 +10,7 @@ interface GoogleMapProps {
     lng: string | number;
   };
 }
-
+const PointOnMap = () => <MapPinIcon className={'h-12 w-12 text-blue-700'}/>;
 const GoogleMap = ({ location }: GoogleMapProps) => {
   return (
     <div className="h-[300px] rounded-lg">
@@ -19,7 +20,12 @@ const GoogleMap = ({ location }: GoogleMapProps) => {
         }}
         defaultCenter={location}
         defaultZoom={14}
-      ></GoogleMapReact>
+      >
+        <PointOnMap
+          lat={location.lat}
+          lng={location.lng}
+        />
+      </GoogleMapReact>
     </div>
   );
 };

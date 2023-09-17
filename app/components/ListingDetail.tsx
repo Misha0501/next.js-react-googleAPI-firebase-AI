@@ -302,18 +302,18 @@ const ListingDetail = () => {
                 </div>
             </div>
 
-            {listingDetail?.data?.Address?.[0].latitude && (
+            {listingDetail?.data?.Address[0].latitude && (
                 <div className="container">
                     <Divider/>
                     <p className="text-[24px] pb-8">View on map</p>
                     <GoogleMap
                         location={{
-                            lat: parseFloat(listingDetail?.data?.Address?.[0]?.latitude),
-                            lng: parseFloat(listingDetail?.data?.Address?.[0]?.longitude),
-                            address: listingDetail?.data?.Address?.[0]?.locality,
+                            lat: parseFloat(listingDetail?.data?.Address[0]?.latitude),
+                            lng: parseFloat(listingDetail?.data?.Address[0]?.longitude),
+                            address: listingDetail?.data?.Address[0]?.locality,
                         }}
                     />
-                    <p className="text-[14] pt-8">See more results</p>
+                    {/*<p className="text-[14] pt-8">See more results</p>*/}
                 </div>
             )}
             {/*<div className="py-8 mt-16 bg-[#F2F2F2]">*/}
@@ -335,9 +335,9 @@ const ListingDetail = () => {
 
           {listingDetail?.data?.ListingPrice?.length > 1 &&
             <div className=" container">
-              <p className="font-medium text-[24px] pt-14">Price graph</p>
+              <p className="font-medium text-[24px] pt-14">Price change graph</p>
               <Title className="pt-8">
-                Compare this price with other housing in this area
+                This listing has changed its price {listingDetail?.data?.ListingPrice?.length} times
               </Title>
               <LineChart
                 className="mt-6"

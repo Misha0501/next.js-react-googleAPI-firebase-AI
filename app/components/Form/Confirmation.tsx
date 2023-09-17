@@ -375,8 +375,8 @@ function Confirmation({ formik, handleBack, step }: any) {
                     Other images
                   </p>
                 )}
-                {formik.values?.images?.slice(2)?.map((el: ListingImage, index: number) => (
-                  <div className={"max-w-[500px]"}
+                {formik.values?.images?.slice(1)?.map((el: ListingImage, index: number) => (
+                  <div className={"max-w-[500px] mb-3"}
                        key={index}
                   >
                     <Image
