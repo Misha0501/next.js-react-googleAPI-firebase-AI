@@ -113,9 +113,9 @@ export default function MultiForm() {
           listingType: "RENT",
           propertyType: undefined,
           address: "",
-          housenumber: "",
-          street: "",
-          city: "",
+          streetNumber: "",
+          route: "",
+          locality: "",
           administrativeArea: "",
           postalCode: "",
           latitude: "",
@@ -146,7 +146,7 @@ export default function MultiForm() {
           listingType: Yup.string().required("Listing type is required"),
           propertyType: Yup.string(),
           address: Yup.string().required("Address is required"),
-          housenumber: Yup.string().required("House number is required"),
+          streetNumber: Yup.string(),
           administrativeArea: Yup.string().required(
             "Administrative area is required"
           ),

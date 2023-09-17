@@ -112,8 +112,8 @@ export const AddressAutocomplete = ({ onLocalityChange, onAddressChange, initial
       administrativeAreaLevelOne,
       postalCode,
       neighborhood,
-      latitude: place?.geometry?.location?.lat(),
-      longitude: place?.geometry?.location?.lng()
+      latitude: place?.geometry?.location?.lat()?.toString(),
+      longitude: place?.geometry?.location?.lng()?.toString()
     });
   };
 

@@ -25,21 +25,20 @@ const GeneralInfo = (props: any) => {
 
   const [show, setShow] = useState(true);
   const [showError, setShowErros] = useState(false);
-  const [showAddress, setShowAddress] = useState(false);
+  const [showAddress, setShowAddress] = useState(formik.values.route || formik.values.administrativeArea || formik.values.locality || formik.values.streetNumber || formik.values.postalCode || formik.values.latitude || formik.values.longitude);
   const title = "Add essential information about your property";
   const stepNumber = "Step 1";
 
   const handleAddressChange = (address: AutocompleteAddress) => {
     if (address) {
-      formik.setFieldValue("street", address.route);
-      formik.setFieldValue("housenumber", address.streetNumber);
-      formik.setFieldValue("city", address.locality);
+      formik.setFieldValue("route", address.route);
+      formik.setFieldValue("streetNumber", address.streetNumber);
+      formik.setFieldValue("locality", address.locality);
       formik.setFieldValue("administrativeArea", address.administrativeAreaLevelOne);
       formik.setFieldValue("postalCode", address.postalCode);
       formik.setFieldValue("latitude", address.latitude);
       formik.setFieldValue("longitude", address.longitude);
       setShowAddress(true);
-
     }
   };
 
@@ -162,16 +161,16 @@ const GeneralInfo = (props: any) => {
                   <div className="">
                     <div className="mb-7">
                       <p className={"mb-2"}>House number</p>
-                      <TextInput value={formik.values.housenumber}
-                                 onChange={(e) => formik.setFieldValue("housenumber", e.target.value, true)} />
+                      <TextInput value={formik.values.streetNumber}
+                                 onChange={(e) => formik.setFieldValue("streetNumber", e.target.value, true)} />
                     </div>
                     <div className="mb-7">
                       <p className={"mb-2"}>Street</p>
-                      <TextInput value={formik.values.street} disabled />
+                      <TextInput value={formik.values.route} disabled />
                     </div>
                     <div className="mb-7">
                       <p className={"mb-2"}>City</p>
-                      <TextInput value={formik.values.city} disabled />
+                      <TextInput value={formik.values.locality} disabled />
                     </div>
                     <div className="mb-7">
                       <p className={"mb-2"}>Administrative area</p>

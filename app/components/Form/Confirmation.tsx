@@ -15,11 +15,12 @@ function Confirmation({ formik, handleBack, step }: any) {
     useState(false);
   const [disableState, setDisableState] = useState(true);
   const createProperty = useCreateProperty({ authToken: authToken });
+  const [createError, setCreateError] = useState('');
   function confirmBtnHandler() {
     // formik.handleSubmit;
     createProperty.mutate({
-      listingType: formik?.values?.listingType,
-      propertyType: formik?.values?.propertyType,
+      listingType: formik?.values?.listingType || null,
+      propertyType: formik?.values?.propertyType || null,
       currency: formik?.values?.currency,
       price: formik?.values?.price,
       rooms: formik?.values?.rooms,
@@ -27,28 +28,29 @@ function Confirmation({ formik, handleBack, step }: any) {
       bathrooms: formik?.values?.bathrooms,
       areaTotal: formik?.values?.totalarea,
       areaLiving: formik?.values?.livingarea,
-      outsideArea: formik.valus?.outsidearea,
+      outsideArea: formik.values?.outsidearea,
       garden: formik?.values?.garden,
       garage: formik?.values?.garage,
       volume: formik?.values?.volume,
-      interiorType: formik?.values?.interiortype,
-      upkeepType: formik?.values?.upkeeptype,
-      heatingType: formik?.values?.heatingtype,
+      interiorType: formik?.values?.interiortype || null,
+      upkeepType: formik?.values?.upkeeptype || null,
+      heatingType: formik?.values?.heatingtype || null,
       yearBuilt: formik?.values?.yearBuilt,
       numberOfFloorsCommon: formik?.values?.numberOfFloorsCommon,
       floorNumber: formik?.values?.floorNumber,
-      buildingtype: formik?.values?.buildingtype,
+      buildingtype: formik?.values?.buildingtype || null,
       characteristics: formik?.values?.characteristics,
       description: formik?.values?.discription,
       address: {
-        streetNumber: formik.values.street,
+        route: formik.values.route,
         administrativeAreaLevelOne: formik.values.administrativeArea,
-        locality: formik.values.housenumber,
+        locality: formik.values.locality,
+        streetNumber: formik.values.streetNumber,
         postalCode: formik.values.postalCode,
         latitude: formik.values.latitude,
-        longitude: formik.values.longitude,
+        longitude: formik.values.longitude
       },
-      images: formik.values.images,
+      images: formik.values.images
     });
   }
 
@@ -56,7 +58,12 @@ function Confirmation({ formik, handleBack, step }: any) {
     if (createProperty.isSuccess) {
       setOpenAdvertisementSection(true);
     }
-  }, [createProperty.isSuccess]);
+
+    if(createProperty.isError){
+      setCreateError("Oops, something went wrong! Please try again later");
+    }
+
+  }, [createProperty]);
 
   const handleButtonClick = (event: any) => {
     event.preventDefault();
@@ -134,20 +141,20 @@ function Confirmation({ formik, handleBack, step }: any) {
                 </div>
                 <p className="font-semibold text-[14px] ">Address line</p>
                 <p className="py-2 text-[16px]">
-                  {formik.values.housenumber || "-"}
+                  {formik.values.streetNumber || "-"}
                 </p>
 
                 <p className="font-semibold text-[14px] ">House Number</p>
                 <p className="py-2 text-[16px]">
-                  {formik.values.housenumber || "-"}
+                  {formik.values.streetNumber || "-"}
                 </p>
                 <p className=" font-semibold text-[14px] ">Street</p>
 
                 <p className="py-2 text-[16px]">
-                  {formik.values.street || "-"}
+                  {formik.values.route || "-"}
                 </p>
                 <p className=" font-semibold text-[14px] ">City</p>
-                <p className="py-2 text-[16px]">{formik.values.city || "-"}</p>
+                <p className="py-2 text-[16px]">{formik.values.locality || "-"}</p>
                 <p className=" font-semibold text-[14px] ">
                   Administrative area
                 </p>
@@ -338,7 +345,7 @@ function Confirmation({ formik, handleBack, step }: any) {
                         width: "100%",
                         height: "300px",
                         objectFit: "fill",
-                        marginBottom: "10px",
+                        marginBottom: "10px"
                       }}
                       height={100}
                       src={formik.values.images?.[0]?.url}
@@ -358,7 +365,7 @@ function Confirmation({ formik, handleBack, step }: any) {
                       width: "100%",
                       height: "300px",
                       objectFit: "fill",
-                      marginBottom: "10px",
+                      marginBottom: "10px"
                     }}
                     height={100}
                     src={el?.url}
@@ -400,6 +407,7 @@ function Confirmation({ formik, handleBack, step }: any) {
                   Confirm
                 </Button>
               </div>
+              {createError && <p className="text-red-500 mt-10">{createError}</p>}
             </div>
           ) : (
             <EditableConfirmationPage formik={formik} />

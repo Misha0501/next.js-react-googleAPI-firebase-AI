@@ -70,33 +70,33 @@ function EditableConfirmationPage({ formik }: any) {
         {/* <span className="font-bold text-sm mb-2">Address line</span>
         <TextInput
           className="bg-transparent border-0 shadow-none max-w-lg"
-          id="housenumber"
-          name="housenumber"
-          value={formik.values.housenumber}
-          onChange={(e) => formik.setFieldValue("housenumber", e, true)}
+          id="streetNumber"
+          name="streetNumber"
+          value={formik.values.streetNumber}
+          onChange={(e) => formik.setFieldValue("streetNumber", e, true)}
         /> */}
         <p className="font-bold text-sm mt-4 mb-2 ">House Number</p>
         <TextInput
           className="bg-transparent  shadow-none max-w-lg"
-          id="housenumber"
-          name="housenumber"
-          value={formik.values.housenumber}
+          id="streetNumber"
+          name="streetNumber"
+          value={formik.values.streetNumber}
           onChange={formik.handleChange}
         />
         <p className="mt-4 mb-2  font-bold text-sm">Street</p>
         <TextInput
           className="bg-transparent  shadow-none max-w-lg"
-          id="street"
-          name="street"
-          value={formik.values.street}
+          id="route"
+          name="route"
+          value={formik.values.route}
           onChange={formik.handleChange}
         />
         <p className="mt-4 mb-2 font-bold text-sm">City</p>
         <TextInput
           className="bg-transparent  shadow-none max-w-lg"
-          id="city"
-          name="city"
-          value={formik.values.city}
+          id="locality"
+          name="locality"
+          value={formik.values.locality}
           onChange={formik.handleChange}
         />
         <p className="mt-4 mb-2 font-bold text-sm">Administrative area</p>
