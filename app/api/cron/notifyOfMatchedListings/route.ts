@@ -25,6 +25,9 @@ export async function GET(request: Request) {
         createdAt: {
           gte: new Date(Date.now() - 240 * 60 * 60 * 1000)
         }
+      },
+      include: {
+        Address: true,
       }
     });
 
