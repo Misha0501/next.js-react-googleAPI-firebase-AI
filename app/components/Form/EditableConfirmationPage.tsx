@@ -512,24 +512,24 @@ function EditableConfirmationPage({ formik }: any) {
             </div>
           </div>
           <Divider />
-          <div className="flex flex-col gap-2">
-            <span className="mb-2 font-bold text-lg">Building type</span>
-            <div className="max-w-sm">
-              <Select
-                onBlur={formik.handleBlur}
-                value={formik.values.buildingtype}
-                id="buildingtype"
-                onChange={(e) => formik.setFieldValue("buildingtype", e, true)}
-                className={"text-sm"}
-              >
-                {BUILDING_TYPE.map((item, index) => (
-                  <SelectItem value={item} key={index}>
-                    {item}
-                  </SelectItem>
-                ))}
-              </Select>
-            </div>
-          </div>
+          {/*<div className="flex flex-col gap-2">*/}
+          {/*  <span className="mb-2 font-bold text-lg">Building type</span>*/}
+          {/*  <div className="max-w-sm">*/}
+          {/*    <Select*/}
+          {/*      onBlur={formik.handleBlur}*/}
+          {/*      value={formik.values.buildingtype}*/}
+          {/*      id="buildingtype"*/}
+          {/*      onChange={(e) => formik.setFieldValue("buildingtype", e, true)}*/}
+          {/*      className={"text-sm"}*/}
+          {/*    >*/}
+          {/*      {BUILDING_TYPE.map((item, index) => (*/}
+          {/*        <SelectItem value={item} key={index}>*/}
+          {/*          {item}*/}
+          {/*        </SelectItem>*/}
+          {/*      ))}*/}
+          {/*    </Select>*/}
+          {/*  </div>*/}
+          {/*</div>*/}
         </>
       }
       <Divider />

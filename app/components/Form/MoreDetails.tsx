@@ -531,31 +531,31 @@ const MoreDetails = (props: any) => {
                         </FormHelperText>
                       )}
                     </div>
-                    <div className="py-6">
-                      <p className={"font-bold mb-2"}>Building type</p>
-                      <div>
-                        <Select
-                          onBlur={formik.handleBlur}
-                          id="buildingtype"
-                          onChange={(e) =>
-                            formik.setFieldValue("buildingtype", e, true)
-                          }
-                          className={"text-sm"}
-                          value={formik.values.buildingtype}
-                        >
-                          {BUILDING_TYPE.map((item, index) => (
-                            <SelectItem value={item} key={index}>
-                              {item}
-                            </SelectItem>
-                          ))}
-                        </Select>
-                        {showError && formik.errors.buildingtype && (
-                          <FormHelperText error>
-                            {formik.errors.buildingtype}
-                          </FormHelperText>
-                        )}
-                      </div>
-                    </div>
+                    {/*<div className="py-6">*/}
+                    {/*  <p className={"font-bold mb-2"}>Building type</p>*/}
+                    {/*  <div>*/}
+                    {/*    <Select*/}
+                    {/*      onBlur={formik.handleBlur}*/}
+                    {/*      id="buildingtype"*/}
+                    {/*      onChange={(e) =>*/}
+                    {/*        formik.setFieldValue("buildingtype", e, true)*/}
+                    {/*      }*/}
+                    {/*      className={"text-sm"}*/}
+                    {/*      value={formik.values.buildingtype}*/}
+                    {/*    >*/}
+                    {/*      {BUILDING_TYPE.map((item, index) => (*/}
+                    {/*        <SelectItem value={item} key={index}>*/}
+                    {/*          {item}*/}
+                    {/*        </SelectItem>*/}
+                    {/*      ))}*/}
+                    {/*    </Select>*/}
+                    {/*    {showError && formik.errors.buildingtype && (*/}
+                    {/*      <FormHelperText error>*/}
+                    {/*        {formik.errors.buildingtype}*/}
+                    {/*      </FormHelperText>*/}
+                    {/*    )}*/}
+                    {/*  </div>*/}
+                    {/*</div>*/}
                   </div>
                 </div>
               </>

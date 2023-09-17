@@ -331,13 +331,13 @@ function Confirmation({ formik, handleBack, step }: any) {
                       {formik?.values?.floorNumber}
                     </p>
 
-                    <span className="mb-2 font-semibold text-[14px] ">
-                  Building type
-                </span>
+                {/*    <span className="mb-2 font-semibold text-[14px] ">*/}
+                {/*  Building type*/}
+                {/*</span>*/}
 
-                    <p className="py-2 text-[16px]">
-                      {formik?.values?.buildingtype}
-                    </p>
+                {/*    <p className="py-2 text-[16px]">*/}
+                {/*      {formik?.values?.buildingtype}*/}
+                {/*    </p>*/}
                   </div>
 
                 </>}
