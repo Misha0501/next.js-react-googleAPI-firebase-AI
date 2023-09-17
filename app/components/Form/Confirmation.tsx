@@ -6,7 +6,7 @@ import NextToConfirmationPage from "./NextToConfirmationPage";
 import EditableConfirmationPage from "./EditableConfirmationPage";
 import { useCreateProperty } from "@/providers/Listing";
 import { useAuthContext } from "@/app/context/AuthContext";
-import { ListingImage } from "@/types";
+import { Listing, ListingImage } from "@/types";
 
 function Confirmation({ formik, handleBack, step }: any) {
   const { authToken } = useAuthContext();
@@ -17,6 +17,7 @@ function Confirmation({ formik, handleBack, step }: any) {
   const [disableState, setDisableState] = useState(true);
   const createProperty = useCreateProperty({ authToken: authToken });
   const [createError, setCreateError] = useState("");
+  const [createdProperty, setCreatedProperty] = useState<Listing | null>(null);
 
   function confirmBtnHandler() {
     // formik.handleSubmit;
@@ -58,6 +59,7 @@ function Confirmation({ formik, handleBack, step }: any) {
 
   useEffect(() => {
     if (createProperty.isSuccess) {
+      setCreatedProperty(createProperty.data);
       setOpenAdvertisementSection(true);
     }
 
@@ -75,7 +77,7 @@ function Confirmation({ formik, handleBack, step }: any) {
   return (
     <>
       {openAdvertisementSection ? (
-        <NextToConfirmationPage />
+        <NextToConfirmationPage listingItem={createdProperty}/>
       ) : (
         <div className="max-w-screen-xl m-auto">
           <div className="flex items-center justify-center">
@@ -331,13 +333,13 @@ function Confirmation({ formik, handleBack, step }: any) {
                       {formik?.values?.floorNumber}
                     </p>
 
-                {/*    <span className="mb-2 font-semibold text-[14px] ">*/}
-                {/*  Building type*/}
-                {/*</span>*/}
+                    {/*    <span className="mb-2 font-semibold text-[14px] ">*/}
+                    {/*  Building type*/}
+                    {/*</span>*/}
 
-                {/*    <p className="py-2 text-[16px]">*/}
-                {/*      {formik?.values?.buildingtype}*/}
-                {/*    </p>*/}
+                    {/*    <p className="py-2 text-[16px]">*/}
+                    {/*      {formik?.values?.buildingtype}*/}
+                    {/*    </p>*/}
                   </div>
 
                 </>}

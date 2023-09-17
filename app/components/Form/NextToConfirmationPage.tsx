@@ -5,8 +5,13 @@ import {
 import { Button, Icon } from "@tremor/react";
 import React from "react";
 import ConfirmationAdvertisementCard from "./ConfirmationAdvertisementCard";
+import { Listing } from "@/types";
+import Link from "next/link";
 
-function NextToConfirmationPage() {
+type Props = {
+  listingItem: Listing | null;
+};
+function NextToConfirmationPage({listingItem}: Props) {
   return (
     <div className="container ">
       <div className="mt-10">
@@ -21,17 +26,19 @@ function NextToConfirmationPage() {
         </h4>
       </div>
       <div className="flex flex-col gap-8">
-        <button
-          className={
-            " text-lg  w-[258px] bg-transparent border-2 text-[#4785FD] border-[#4785FD]  font-bold py-4 px-6  rounded-lg"
-          }
-        >
-          View listing
-          <Icon
-            className="text-[#4785FD] pl-4 font-bold align-middle text-lg"
-            icon={ArrowSmallRightIcon}
-          />
-        </button>
+        <Link href={`/listings/${listingItem?.id}`}><Button variant="secondary">View listing</Button></Link>
+
+        {/*<button*/}
+        {/*  className={*/}
+        {/*    " text-lg  w-[258px] bg-transparent border-2 text-[#4785FD] border-[#4785FD]  font-bold py-4 px-6  rounded-lg"*/}
+        {/*  }*/}
+        {/*>*/}
+        {/*  View listing*/}
+        {/*  <Icon*/}
+        {/*    className="text-[#4785FD] pl-4 font-bold align-middle text-lg"*/}
+        {/*    icon={ArrowSmallRightIcon}*/}
+        {/*  />*/}
+        {/*</button>*/}
         <p className="text-lg font-normal">OR promote your listing</p>
         <p className="text-lg font-bold">
           Promoted listings get more views thus they get sold / rented sooner!

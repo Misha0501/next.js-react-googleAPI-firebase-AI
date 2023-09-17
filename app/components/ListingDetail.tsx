@@ -167,9 +167,13 @@ const ListingDetail = () => {
                                 {listingDetail?.data?.rooms
                                     ? ` ${listingDetail?.data?.rooms} ROOMS`
                                     : ""}
+                              {listingDetail?.data?.Address?.[0]?.locality
+                                ? ` IN ${(listingDetail?.data?.Address?.[0]?.locality)?.toUpperCase()}`
+                                : null}
                                 {listingDetail?.data?.listingType
                                     ? ` FOR ${listingDetail?.data?.listingType}`
                                     : null}
+
                             </h4>
                             {/*<div>*/}
                             {/*    <Button*/}
