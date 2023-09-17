@@ -1,6 +1,7 @@
 import { useRef, useEffect, useState, useCallback } from "react";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 import { AutocompleteAddress, CurrencyType, HeatingType, InteriorType, ListingImage, UpkeepType } from "@/types";
+import { TextInput } from "@tremor/react";
 
 window.initMap = function(e) {
   console.log(e);
@@ -13,10 +14,9 @@ type AutocompleteProps = {
   onAddressChange?: (address: AutocompleteAddress) => void;
   initialValue?: string;
   submitBtnType?: string;
-  autocompleteType?: string;
 }
 
-const AutoComplete = ({ onLocalityChange, onAddressChange, initialValue, autocompleteType }: AutocompleteProps) => {
+export const AddressAutocomplete = ({ onLocalityChange, onAddressChange, initialValue }: AutocompleteProps) => {
 
   const [address, setAddress] = useState({
     streetNumber: "",
@@ -29,17 +29,23 @@ const AutoComplete = ({ onLocalityChange, onAddressChange, initialValue, autocom
     longitude: ""
   });
   const [inputValue, setInputValue] = useState(initialValue || "");
+  const firstUpdate = useRef(true);
 
   const autoCompleteRef = useRef();
   const inputRef = useRef();
-  let options = {
+  const options = {
     componentRestrictions: { country: "bg" },
     fields: ["address_components", "geometry", "name"],
-    types: ["(cities)"]
+    types: ["address"],
   };
 
   // Tracking address changes
   useEffect(() => {
+    if (firstUpdate.current) {
+      firstUpdate.current = false;
+      return;
+    }
+
     if (address && onAddressChange) {
       onAddressChange(address);
     }
@@ -126,18 +132,7 @@ const AutoComplete = ({ onLocalityChange, onAddressChange, initialValue, autocom
 
   return (
     <>
-      <input className="hero__search w-full p-3 pl-8 rounded-l-lg outline-0 focus:outline-none text-black"
-             type={"text"}
-             placeholder={"E.g: Sophia, Plovdiv, Varna"}
-             ref={inputRef}
-             name={"locality"}
-             value={inputValue}
-             onChange={(e) => setInputValue(e.target.value)}
-      />
-      <button type={"submit"} className="p-3 bg-gray-200 rounded-r-lg">
-        <MagnifyingGlassIcon className={"h-6 w-6 text-gray-600"} />
-      </button>
+      <TextInput name="address" id="address" ref={inputRef} />
     </>
   );
 };
-export default AutoComplete;

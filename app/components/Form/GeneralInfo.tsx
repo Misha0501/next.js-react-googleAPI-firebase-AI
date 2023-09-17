@@ -7,15 +7,18 @@ import {
   NumberInput,
   Select,
   SelectItem,
-  TextInput,
+  TextInput
 } from "@tremor/react";
 import property1 from "@/public/property1.png";
 import StepsTopInfo from "./StepsTopInfo";
 import { CURRENCIES, LISTING_TYPES, PROPERTY_TYPES } from "@/app/Constants";
-import { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import PropertyPlacementRadioButtons from "../PropertyPlacementRadioButtons";
 import { AntSwitch } from "./Styled";
 import { FormHelperText } from "@mui/material";
+import Autocomplete from "@/app/components/Autocomplete";
+import { AutocompleteAddress } from "@/types";
+import { AddressAutocomplete } from "@/app/components/Form/AddressAutocomplete";
 
 const GeneralInfo = (props: any) => {
   const { formik, handleNext, step, isShow } = props;
@@ -26,86 +29,19 @@ const GeneralInfo = (props: any) => {
   const title = "Add essential information about your property";
   const stepNumber = "Step 1";
 
-  let autoCompleteRef = useRef();
-  const inputRef = useRef();
-  const googlePlacesAutocompleteOptions = {
-    componentRestrictions: { country: "bg" },
-    fields: ["address_components", "geometry", "name"],
-    types: ["address"],
-  };
-  const placeChanged = (e) => {
-    // Get the place details from the autocomplete object.
-    const place = autoCompleteRef.current.getPlace();
-    if (!place || !place.address_components) return;
-    setShowAddress(true);
-    let streetNumber = "";
-    let route = "";
-    let locality = "";
-    let administrativeAreaLevelOne = "";
-    let postalCode = "";
-    let neighborhood = "";
+  const handleAddressChange = (address: AutocompleteAddress) => {
+    if (address) {
+      formik.setFieldValue("street", address.route);
+      formik.setFieldValue("housenumber", address.streetNumber);
+      formik.setFieldValue("city", address.locality);
+      formik.setFieldValue("administrativeArea", address.administrativeAreaLevelOne);
+      formik.setFieldValue("postalCode", address.postalCode);
+      formik.setFieldValue("latitude", address.latitude);
+      formik.setFieldValue("longitude", address.longitude);
+      setShowAddress(true);
 
-    // Get each component of the address from the place details,
-    // and then fill-in the corresponding field on the form.
-    // place.address_components are google.maps.GeocoderAddressComponent objects
-    // which are documented at http://goo.gle/3l5i5Mr
-    for (const component of place.address_components as google.maps.GeocoderAddressComponent[]) {
-      const componentType = component.types[0];
-
-      switch (componentType) {
-        case "street_number": {
-          streetNumber = component.long_name;
-          break;
-        }
-        case "route": {
-          route = component.long_name;
-          break;
-        }
-        case "neighborhood": {
-          neighborhood = component.long_name;
-          break;
-        }
-
-        case "postal_code": {
-          postalCode = component.long_name;
-          break;
-        }
-        case "locality":
-          locality = component.long_name;
-          break;
-
-        case "administrative_area_level_1": {
-          administrativeAreaLevelOne = component.long_name;
-          break;
-        }
-      }
-    }
-
-    if (place) {
-      formik.setFieldValue("street", route);
-      formik.setFieldValue("housenumber", streetNumber);
-      formik.setFieldValue("city", locality);
-      formik.setFieldValue("administrativeArea", administrativeAreaLevelOne);
-      formik.setFieldValue("postalCode", postalCode);
-    }
-
-    if (place.geometry && place.geometry.location) {
-      formik.setFieldValue("latitude", place.geometry.location.lat());
-      formik.setFieldValue("longitude", place.geometry.location.lng());
     }
   };
-  useEffect(() => {
-    if (window.google) {
-      autoCompleteRef.current = new window.google.maps.places.Autocomplete(
-        inputRef.current,
-        googlePlacesAutocompleteOptions
-      );
-
-      // When the user selects an address from the drop-down, populate the
-      // address fields in the form.
-      autoCompleteRef.current.addListener("place_changed", placeChanged);
-    }
-  }, [window.google]);
 
   const validateStep1 = (e) => {
     event?.preventDefault();
@@ -204,37 +140,30 @@ const GeneralInfo = (props: any) => {
               <div className="">
                 <div className="mb-7">
                   <p className={"mb-2"}>Type your address</p>
-                  {/* <TextInput
-                    name="address"
-                    id="address"
-                    onChange={formik.handleChange}
-                    error={!!formik.errors.address && !!formik.touched.address}
-                    value={formik.values.address}
-                    onBlur={formik.handleBlur}
-                  /> */}
-                  <TextInput name="address" id="address" ref={inputRef} />
+                  <AddressAutocomplete onAddressChange={handleAddressChange} />
                 </div>
-                <div className="mb-7">
-                  <div className="flex items-center gap-2 mb-7">
-                    <AntSwitch
-                      defaultChecked
-                      inputProps={{ "aria-label": "ant design" }}
-                    />
-                    <h4 className="text-[16px] font-bold">
-                      Show your exact property location on the map
-                    </h4>
-                  </div>
-                  <p className="text-[#616161] text-[12px]">
-                    Make it clear to potential customers where your location is.
-                    We won’t show your exact property location unless you give
-                    us permission to do so.
-                  </p>
-                </div>
+                {/*<div className="mb-7">*/}
+                {/*  <div className="flex items-center gap-2 mb-7">*/}
+                {/*    <AntSwitch*/}
+                {/*      defaultChecked*/}
+                {/*      inputProps={{ "aria-label": "ant design" }}*/}
+                {/*    />*/}
+                {/*    <h4 className="text-[16px] font-bold">*/}
+                {/*      Show your exact property location on the map*/}
+                {/*    </h4>*/}
+                {/*  </div>*/}
+                {/*  <p className="text-[#616161] text-[12px]">*/}
+                {/*    Make it clear to potential customers where your location is.*/}
+                {/*    We won’t show your exact property location unless you give*/}
+                {/*    us permission to do so.*/}
+                {/*  </p>*/}
+                {/*</div>*/}
                 {showAddress && (
                   <div className="">
                     <div className="mb-7">
                       <p className={"mb-2"}>House number</p>
-                      <TextInput value={formik.values.housenumber} disabled />
+                      <TextInput value={formik.values.housenumber}
+                                 onChange={(e) => formik.setFieldValue("housenumber", e.target.value, true)} />
                     </div>
                     <div className="mb-7">
                       <p className={"mb-2"}>Street</p>

@@ -145,3 +145,15 @@ export type MatchedListingsAndSearches = {
   listing: Listing;
   matchedSearches: SavedSearch[];
 }
+
+
+export type AutocompleteAddress = {
+  streetNumber: string;
+  route: string;
+  locality: string;
+  administrativeAreaLevelOne: string;
+  postalCode: string;
+  neighborhood: string;
+  latitude: string;
+  longitude: string;
+};

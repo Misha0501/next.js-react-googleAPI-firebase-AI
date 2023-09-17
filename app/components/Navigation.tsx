@@ -41,7 +41,7 @@ export const Navigation = () => {
         </Link>
         <div className={"flex gap-x-3"}>
           <Link href="/profile/saved"><Button variant="secondary">Saved properties</Button></Link>
-          <Link href="/placeProperty"><Button variant="secondary">Place your property</Button></Link>
+          <Link href="/placeproperties"><Button variant="secondary">Place your property</Button></Link>
           {user && <Link href="/profile/myProperties"><Button>Profile</Button></Link>}
           {!user && <Link href="/signin"><Button>Sign in</Button></Link>}
         </div>
