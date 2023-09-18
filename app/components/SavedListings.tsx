@@ -19,21 +19,6 @@ export const SavedListings = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
 
-  const handleSavedIconClick = (listing: ListingItem) => {
-    if (!listing.savedListingId) return;
-
-    fetch(getFetchUrl(`/api/savedListings/${listing.savedListingId}`), {
-      method: "DELETE",
-      cache: "no-store",
-      headers: {
-        "Content-type": "application/json",
-        "Authorization": authToken
-      }
-    }).then(() => fetchSavedListings()).catch(error => {
-      console.error(error.message);
-    });
-  };
-
   const fetchSavedListings = async () => {
     // get the data from the api
     const response = await fetch(getFetchUrl(`/api/savedListings`), {
@@ -85,7 +70,7 @@ export const SavedListings = () => {
 
         <div className={"grid grid-cols-3 gap-16 mt-10"}>
           {savedListings && savedListings.map((item, index) => (
-            <ListingItem listingItem={item.listing} key={index} onSavedIconClick={handleSavedIconClick} />
+            <ListingItem listingItemInitial={item.listing} key={index} onStateChanged={() => fetchSavedListings()}  />
           ))}
         </div>
       </div>}

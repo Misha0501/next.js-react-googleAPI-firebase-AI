@@ -1,25 +1,15 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import {
-  ShareIcon,
-  HeartIcon,
-  PrinterIcon,
-  CheckCircleIcon,
-  Square3Stack3DIcon,
-  PhotoIcon,
-} from "@heroicons/react/24/outline";
-import { Button, Icon, Metric, Text } from "@tremor/react";
+import { CheckCircleIcon, PhotoIcon, Square3Stack3DIcon } from "@heroicons/react/24/outline";
+import { Button, Divider, Icon, LineChart, Title } from "@tremor/react";
 import { GoBackBtn } from "./GoBackBtn";
-import { Divider } from "@tremor/react";
-import { Card, Title, LineChart } from "@tremor/react";
 import Image from "next/image";
 import { useListingDetailPage } from "@/providers/Listing";
 import { useParams } from "next/navigation";
 
 import ListingAgentContactCard from "./ListingAgentContactCard";
 import ListingContactAgentForm from "./ListingContactAgentForm";
-import { ListingItem } from "./ListingItem";
 import GoogleMap from "./GoogleMap";
 
 import Lightbox from "yet-another-react-lightbox";
@@ -27,13 +17,19 @@ import "yet-another-react-lightbox/styles.css";
 import "yet-another-react-lightbox/plugins/thumbnails.css";
 import Thumbnails from "yet-another-react-lightbox/plugins/thumbnails";
 import ListingDetailContent from "./ListingDetailContent";
+import { useCreateRecentlyViewedListing } from "@/providers/RecentlyViewedListings";
+import { useAuthContext } from "@/app/context/AuthContext";
 
 const ListingDetail = () => {
+  const { authToken } = useAuthContext();
+
   const params = useParams();
+  const listingId = Number(params?.id);
   const [showContactWithAgent, setShowContactWithAgent] = useState(false);
-  const listingDetail = useListingDetailPage({ id: Number(params?.id) });
+  const listingDetail = useListingDetailPage({ id: listingId });
   const [openLightBox, setOpenLightBox] = useState(false);
   const [lightBoxImageIndex, setLightBoxImageIndex] = useState(0);
+  const createRecentlyViewedListing = useCreateRecentlyViewedListing({ authToken });
 
   let stats = useMemo(
     () => [
@@ -137,6 +133,15 @@ const ListingDetail = () => {
       onSavedIconClick: generalInfoFunc,
     },
   ];
+
+  useEffect(() => {
+    // Create recently viewed listing if user is logged in
+    if (listingDetail.isSuccess && authToken) {
+      createRecentlyViewedListing.mutate({
+        listingId: listingId,
+      });
+    }
+  }, [authToken, listingDetail.isSuccess, listingId]);
 
   const handleOpenLightBox = (index: number) => {
     setLightBoxImageIndex(index);

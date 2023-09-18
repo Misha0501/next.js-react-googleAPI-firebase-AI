@@ -9,18 +9,19 @@ generator client {
 }
 
 model ApplicationUser {
-  id           Int            @id @default(autoincrement())
-  firebaseUID  String         @default("")
-  email        String         @unique
-  displayName  String         @default("")
-  providerId   String         @default("")
-  createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @updatedAt
-  Membership   Membership[]
-  Invoice      Invoice[]
-  Listing      Listing[]
-  SavedListing SavedListing[]
-  SavedSearch  SavedSearch[]
+  id                    Int                     @id @default(autoincrement())
+  firebaseUID           String                  @default("")
+  email                 String                  @unique
+  displayName           String                  @default("")
+  providerId            String                  @default("")
+  createdAt             DateTime                @default(now())
+  updatedAt             DateTime                @updatedAt
+  Membership            Membership[]
+  Invoice               Invoice[]
+  Listing               Listing[]
+  SavedListing          SavedListing[]
+  SavedSearch           SavedSearch[]
+  RecentlyViewedListing RecentlyViewedListing[]
 }
 
 model Membership {
@@ -206,6 +207,7 @@ model Listing {
   ListingPrice                ListingPrice[]
   Address                     Address[]
   SentNotificationSavedSearch SentNotificationSavedSearch[]
+  RecentlyViewedListing       RecentlyViewedListing[]
 }
 
 model ListingDescriptionKeyPoint {
@@ -281,4 +283,13 @@ model SentNotificationSavedSearch {
   listingId     Int
   listing       Listing     @relation(fields: [listingId], references: [id])
   createdAt     DateTime    @default(now())
+}
+
+model RecentlyViewedListing {
+  id                Int             @id @default(autoincrement())
+  applicationUserId Int
+  applicationUser   ApplicationUser @relation(fields: [applicationUserId], references: [id])
+  listingId         Int
+  listing           Listing         @relation(fields: [listingId], references: [id])
+  createdAt         DateTime        @default(now())
 }

@@ -8,6 +8,7 @@ import { SavedItemsPageTabs } from "@/app/components/SavedItemsPageTabs";
 import { useEffect, useState } from "react";
 import { useAuthContext } from "@/app/context/AuthContext";
 import { ProfilePageOwnListings } from "@/app/components/ProfilePageOwnListings";
+import { RecentlyViewedListings } from "@/app/components/RecentlyViewedListings";
 
 type Props = {
     tab: string;
@@ -75,7 +76,8 @@ export default function ProfilePageMainContent({ tab } : Props) {
           <div className="h-full w-fit mx-auto">
             <Tab className={"w-fit"}>My properties</Tab>
             <Tab className={"w-fit"}>Saved</Tab>
-            <Tab className={"w-fit"}>My account</Tab>
+            <Tab className={"w-fit"}>Personal details</Tab>
+            <Tab className={"w-fit"}>Recently viewed</Tab>
             <Tab className={"w-fit"} onClick={handleLogOut}>Log out</Tab>
           </div>
         </TabList>
@@ -90,6 +92,10 @@ export default function ProfilePageMainContent({ tab } : Props) {
           </TabPanel>
           <TabPanel>
             <p className={"font-bold text-4xl mb-8"}>Personal details</p>
+          </TabPanel>
+          <TabPanel>
+            <p className={"font-bold text-4xl mb-8"}>Recently viewed</p>
+            <RecentlyViewedListings></RecentlyViewedListings>
           </TabPanel>
         </TabPanels>
       </TabGroup>

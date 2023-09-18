@@ -3,25 +3,35 @@ import imagePlaceholder from "@/public/imagePlaceholder.png";
 import Image from "next/image";
 import { HeartIcon as HeartIconSolid, PencilSquareIcon, TrashIcon } from "@heroicons/react/24/solid";
 import { HeartIcon as HeartIconOutline } from "@heroicons/react/24/outline";
-import { CurrencyType, Listing } from "@/types";
+import { CurrencyType, Listing, SavedListing } from "@/types";
 import { useRouter } from "next/navigation";
 import { GridIcon } from "@/public/GridIcon";
 import { BedIcon } from "@/public/BedIcon";
+import { getFetchUrl } from "@/app/lib/getFetchUrl";
+import { useAuthContext } from "@/app/context/AuthContext";
+import { useEffect, useState } from "react";
 
 type ListingItemProps = {
-  listingItem: Listing
+  listingItemInitial: Listing
   onSavedIconClick: (listingItem: Listing) => void
   isLoadingSavedListings: boolean
   ownerView: boolean
   onEditIconClick: (listingItem: Listing) => void
   onDeleteIconClick: (listingItem: Listing) => void
+  onStateChanged: (listingItem: Listing) => void
 }
 
-export const ListingItem = ({ listingItem, onSavedIconClick, isLoadingSavedListings = false, ownerView, onDeleteIconClick }: ListingItemProps) => {
+export const ListingItem = ({ listingItemInitial, onSavedIconClick, isLoadingSavedListings = false, ownerView, onDeleteIconClick, onStateChanged }: ListingItemProps) => {
+  const [listingItem, setListingItem] = useState(listingItemInitial);
+  console.log("listingItem");
+  console.log(listingItem);
+  console.log("listingItemInitial");
+  console.log(listingItemInitial);
+
+  const { authToken } = useAuthContext();
 
   const router = useRouter();
   var moneyFormatter = new Intl.NumberFormat();
-
 
   const goToListingPage = () => {
     router.push(`/listings/${listingItem.id}`);
@@ -31,17 +41,57 @@ export const ListingItem = ({ listingItem, onSavedIconClick, isLoadingSavedListi
     return "New";
   };
 
-  const handleSavedIconClick = () => {
-    if (onSavedIconClick) {
-      onSavedIconClick(listingItem);
-    }
-  };
   const onEditIconClick = () => {
     if (ownerView) {
       router.push(`/editListing/${listingItem.id}`);
     }
   };
 
+  useEffect(() => {
+    setListingItem(listingItemInitial);
+  }, [listingItemInitial]);
+
+  const handleSavedIconClick = async () => {
+    // if listings isn't saved we do a post request to save it
+    if (!listingItem.savedListingId) {
+      await fetch(getFetchUrl(`/api/savedListings`), {
+        method: "POST",
+        cache: "no-store",
+        headers: {
+          "Content-type": "application/json",
+          Authorization: authToken,
+        },
+        body: JSON.stringify({ listingId: listingItem.id }),
+      })
+        .then((response) => response.json())
+        .then((savedListing: SavedListing) => {
+          setListingItem({ ...listingItem, savedListingId: savedListing.id })
+          console.log("state change did post");
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    } else {
+      // if it's saved we do a delete request
+      if (!listingItem.savedListingId) return;
+
+      await fetch(getFetchUrl(`/api/savedListings/${listingItem.savedListingId}`), {
+        method: "DELETE",
+        cache: "no-store",
+        headers: {
+          "Content-type": "application/json",
+          Authorization: authToken,
+        },
+      }).catch((error) => {
+        console.error(error);
+      });
+
+      setListingItem({ ...listingItem, savedListingId: null });
+    }
+    if (onStateChanged) {
+      onStateChanged(listingItem);
+    }
+  };
   const handleDeletedIconClick = () => {
     if (onDeleteIconClick) {
       onDeleteIconClick(listingItem);

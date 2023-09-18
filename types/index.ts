@@ -157,3 +157,10 @@ export type AutocompleteAddress = {
   latitude: string;
   longitude: string;
 };
+
+export type RecentlyViewedListing = {
+  id: number;
+  applicationUserId: number;
+  listingId: number;
+  listing: Listing;
+}

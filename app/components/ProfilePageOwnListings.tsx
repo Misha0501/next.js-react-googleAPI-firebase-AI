@@ -54,7 +54,7 @@ export const ProfilePageOwnListings = ({ initialListings }: Props) => {
       <div className="container mx-auto">
         <div className="grid grid-cols-3 gap-4">
           {listings && listings.map((listing, index) => (
-            <ListingItem key={index} listingItem={listing} onDeleteIconClick={onDeletedIconClick}
+            <ListingItem key={index} listingItemInitial={listing} onDeleteIconClick={onDeletedIconClick}
                          ownerView={true}></ListingItem>
           ))}
         </div>

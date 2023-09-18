@@ -56,61 +56,8 @@ export const ListingsMain = ({ searchParams, listingType, locality }) => {
 
   const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
-  }
-
-  const handleSavedIconClick = (listing: Listing) => {
-    // if listings isn't saved we do a post request to save it
-    if (!listing.savedListingId) {
-      fetch(getFetchUrl(`/api/savedListings`), {
-        method: "POST",
-        cache: "no-store",
-        headers: {
-          "Content-type": "application/json",
-          Authorization: authToken,
-        },
-        body: JSON.stringify({ listingId: listing.id }),
-      })
-        .then((response) => response.json())
-        .then((savedListing: SavedListing) => {
-          // populate current listings with updated data
-          const updatedListings = populatedListings.map((item) => {
-            if (item.id === listing.id) {
-              item.savedListingId = savedListing.id;
-            }
-            return item;
-          });
-          setPopulatedListings([...updatedListings]);
-        })
-        .catch((error) => {
-          console.error(error);
-          console.error(error.message);
-        });
-    } else {
-      // if it's saved we do a delete request
-      if (!listing.savedListingId) return;
-
-      fetch(getFetchUrl(`/api/savedListings/${listing.savedListingId}`), {
-        method: "DELETE",
-        cache: "no-store",
-        headers: {
-          "Content-type": "application/json",
-          Authorization: authToken,
-        },
-      })
-        .then(() => {
-          const updatedListings = populatedListings.map((item) => {
-            if (item.savedListingId === listing.savedListingId) {
-              item.savedListingId = null;
-            }
-            return item;
-          });
-          setPopulatedListings([...updatedListings]);
-        })
-        .catch((error) => {
-          console.error(error.message);
-        });
-    }
   };
+
   const updateListingsWithSavedFeature = async (listings: Listing[]) => {
     // get the data from the api
     const response = await fetch(getFetchUrl(`/api/savedListings`), {
@@ -154,6 +101,8 @@ export const ListingsMain = ({ searchParams, listingType, locality }) => {
     setIsLoadingSavedListings(false);
   };
 
+  console.log("propertyListing.data");
+  console.log(propertyListing.data);
   useEffect(() => {
     if (propertyListing.isSuccess) {
       // Fetch saved icons
@@ -163,6 +112,8 @@ export const ListingsMain = ({ searchParams, listingType, locality }) => {
       setPage(propertyListing.data.page);
       // Calculate and set number of pages
       setNumberOfPages(Math.ceil(propertyListing.data.total / pageSize));
+      console.log("In use effect main listings");
+      setPopulatedListings(listings);
 
       updateListingsWithSavedFeature(listings).catch((e) => {
         console.error("Error fetching saved listings: ", e);
@@ -206,9 +157,8 @@ export const ListingsMain = ({ searchParams, listingType, locality }) => {
         {populatedListings &&
           populatedListings.map((item, index) => (
             <ListingItem
-              listingItem={item}
+              listingItemInitial={item}
               key={index}
-              onSavedIconClick={handleSavedIconClick}
               isLoadingSavedListings={isLoadingSavedListings}
             />
           ))}
