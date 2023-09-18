@@ -1,14 +1,12 @@
 "use client";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { ListingItem } from "@/app/components/ListingItem";
 import { usePropertyListing } from "@/providers/Listing";
 import { useAuthContext } from "@/app/context/AuthContext";
 import { Listing, SavedListing } from "@/types";
 import { getFetchUrl } from "@/app/lib/getFetchUrl";
-import { Select, SelectItem } from "@tremor/react";
-import { NO_MAX, sortOption } from "../Constants/filters";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { CircularProgress } from "@mui/material";
+import { NO_MAX } from "../Constants/filters";
+import { CircularProgress, Pagination } from "@mui/material";
 
 export const ListingsMain = ({ searchParams, listingType, locality }) => {
   const { authToken } = useAuthContext();
@@ -16,7 +14,8 @@ export const ListingsMain = ({ searchParams, listingType, locality }) => {
   // const [isLoadingListings, setIsLoadingListings] = useState(true);
   const [isLoadingSavedListings, setIsLoadingSavedListings] = useState(true);
   const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(25);
+  const [pageSize, setPageSize] = useState(15);
+  const [numberOfPages, setNumberOfPages] = useState(0);
   const [totalListings, setTotalListings] = useState(0);
   const [sortBy, setSortBy] = useState(undefined);
 
@@ -51,7 +50,13 @@ export const ListingsMain = ({ searchParams, listingType, locality }) => {
     listingType: listingType,
     locality: locality,
     sortBy: sortBy,
+    pageSize,
+    page: page,
   });
+
+  const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
+    setPage(value);
+  }
 
   const handleSavedIconClick = (listing: Listing) => {
     // if listings isn't saved we do a post request to save it
@@ -155,6 +160,9 @@ export const ListingsMain = ({ searchParams, listingType, locality }) => {
       const listings = propertyListing.data.results;
 
       setTotalListings(propertyListing.data.total);
+      setPage(propertyListing.data.page);
+      // Calculate and set number of pages
+      setNumberOfPages(Math.ceil(propertyListing.data.total / pageSize));
 
       updateListingsWithSavedFeature(listings).catch((e) => {
         console.error("Error fetching saved listings: ", e);
@@ -163,7 +171,7 @@ export const ListingsMain = ({ searchParams, listingType, locality }) => {
         setIsLoadingSavedListings(false);
       });
     }
-  }, [propertyListing?.data?.results]);
+  }, [propertyListing?.data?.results, page]);
 
   if (propertyListing.isFetching) {
     return <CircularProgress />;
@@ -194,7 +202,7 @@ export const ListingsMain = ({ searchParams, listingType, locality }) => {
           </>
         )}
       </div>
-      <div className={"grid grid-cols-2 gap-16"}>
+      <div className={"grid grid-cols-2 gap-16 mb-12"}>
         {populatedListings &&
           populatedListings.map((item, index) => (
             <ListingItem
@@ -205,6 +213,7 @@ export const ListingsMain = ({ searchParams, listingType, locality }) => {
             />
           ))}
       </div>
+      <Pagination shape="rounded" count={numberOfPages} page={page} onChange={handlePageChange} variant="outlined" color="primary" className={"mx-auto w-fit"} />
     </div>
   );
 };
