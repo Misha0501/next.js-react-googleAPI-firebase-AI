@@ -1,6 +1,14 @@
 "use client";
 
-import { Button, Divider, Tab, TabGroup, TabList, TabPanel, TabPanels } from "@tremor/react";
+import {
+  Button,
+  Divider,
+  Tab,
+  TabGroup,
+  TabList,
+  TabPanel,
+  TabPanels,
+} from "@tremor/react";
 import { Fragment, useState } from "react";
 import { ListingType } from "@/types";
 import Filters from "@/app/components/Filters";
@@ -11,7 +19,11 @@ import { Dialog, Transition } from "@headlessui/react";
 import Link from "next/link";
 import { NO_MAX } from "@/app/Constants/filters";
 
-export const ListingsPageFilters = ({ onParamsChange, onListingTypeChange, locality }: any) => {
+export const ListingsPageFilters = ({
+  onParamsChange,
+  onListingTypeChange,
+  locality,
+}: any) => {
   const { authToken } = useAuthContext();
 
   const params = useSearchParams();
@@ -19,7 +31,8 @@ export const ListingsPageFilters = ({ onParamsChange, onListingTypeChange, local
     params.get("listingType")
   );
   const [filterValues, setFilterValues] = useState({});
-  let [savedSearchConfirmationModal, setSavedSearchConfirmationModal] = useState(false);
+  let [savedSearchConfirmationModal, setSavedSearchConfirmationModal] =
+    useState(false);
   let [savedSearchError, setSavedSearchError] = useState("");
 
   function closeModal() {
@@ -31,8 +44,6 @@ export const ListingsPageFilters = ({ onParamsChange, onListingTypeChange, local
   };
 
   const onChange = (data: any) => {
-    // console.log("filters changed");
-    // console.log(data);
     onParamsChange(data);
     setFilterValues(data);
     onListingTypeChange(listingType);
@@ -47,21 +58,36 @@ export const ListingsPageFilters = ({ onParamsChange, onListingTypeChange, local
   const getSavedSearchesBodyObjectFromFilters = (filterValues) => {
     return {
       priceMin: filterValues?.priceRange.min,
-      priceMax: filterValues?.priceRange.max === NO_MAX ? undefined : filterValues?.priceRange.max,
+      priceMax:
+        filterValues?.priceRange.max === NO_MAX
+          ? undefined
+          : filterValues?.priceRange.max,
       listedSince: filterValues?.listedSince,
       areaLivingMin: filterValues?.livingAreaRange.min,
-      areaLivingMax: filterValues?.livingAreaRange.max === NO_MAX ? undefined : filterValues?.livingAreaRange.max,
+      areaLivingMax:
+        filterValues?.livingAreaRange.max === NO_MAX
+          ? undefined
+          : filterValues?.livingAreaRange.max,
       areaTotalMin: filterValues?.areaTotal.min,
-      areaTotalMax: filterValues?.areaTotal.max === NO_MAX ? undefined : filterValues?.areaTotal.max,
+      areaTotalMax:
+        filterValues?.areaTotal.max === NO_MAX
+          ? undefined
+          : filterValues?.areaTotal.max,
       roomsMin: filterValues?.roomRange.min,
-      roomsMax: filterValues?.roomRange.max === NO_MAX ? undefined : filterValues?.roomRange.max,
+      roomsMax:
+        filterValues?.roomRange.max === NO_MAX
+          ? undefined
+          : filterValues?.roomRange.max,
       bedroomsMin: filterValues?.bedroomRange.min,
-      bedroomsMax: filterValues?.bedroomRange.max === NO_MAX ? undefined : filterValues?.bedroomRange.max,
+      bedroomsMax:
+        filterValues?.bedroomRange.max === NO_MAX
+          ? undefined
+          : filterValues?.bedroomRange.max,
       propertyType: filterValues?.propertyType,
       listingType: filterValues?.listingType,
-      locality: locality || undefined
-    }
-  }
+      locality: locality || undefined,
+    };
+  };
 
   const handleSaveSearch = async () => {
     try {
@@ -70,9 +96,11 @@ export const ListingsPageFilters = ({ onParamsChange, onListingTypeChange, local
         cache: "no-store",
         headers: {
           "Content-type": "application/json",
-          Authorization: authToken
+          Authorization: authToken,
         },
-        body: JSON.stringify(getSavedSearchesBodyObjectFromFilters(filterValues))
+        body: JSON.stringify(
+          getSavedSearchesBodyObjectFromFilters(filterValues)
+        ),
       });
       const data = await response.json();
 
@@ -84,7 +112,6 @@ export const ListingsPageFilters = ({ onParamsChange, onListingTypeChange, local
         return;
       }
       setSavedSearchConfirmationModal(true);
-
     } catch (e) {
       console.error("error");
       console.error(e);
@@ -95,7 +122,13 @@ export const ListingsPageFilters = ({ onParamsChange, onListingTypeChange, local
   return (
     <div className="filters w-full md:max-w-[400px]">
       <div className={"flex items-center justify-between"}>
-        <Button className={"font-bold"} variant={"secondary"} onClick={handleSaveSearch}>Save search</Button>
+        <Button
+          className={"font-bold"}
+          variant={"secondary"}
+          onClick={handleSaveSearch}
+        >
+          Save search
+        </Button>
 
         {/*<button className={"text-base text-gray-500 underline"} onClick={handleResetFilters}>*/}
         {/*  Reset filters*/}
@@ -164,34 +197,41 @@ export const ListingsPageFilters = ({ onParamsChange, onListingTypeChange, local
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel
-                  className="w-full max-w-md transform overflow-hidden rounded-xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-
-                  {savedSearchError && <Dialog.Title
-                    as="h3"
-                    className="text-lg font-medium leading-6 text-gray-900"
-                  >
-                    Oops! Something went wrong. Please try again later.
-                  </Dialog.Title>
-                  }
-                  {!savedSearchError && <div>
+                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                  {savedSearchError && (
                     <Dialog.Title
                       as="h3"
                       className="text-lg font-medium leading-6 text-gray-900"
                     >
-
-                      Your search has been saved! 🎉
+                      Oops! Something went wrong. Please try again later.
                     </Dialog.Title>
-                    <div className="mt-2">
-                      <p className="text-sm text-gray-500">
-                        You will be notified via email when new listings match your search criteria.
-                      </p>
-                      <p className="text-sm text-gray-500">
-                        You can manage your saved searches in your&nbsp;<Link href={"/profile"}
-                                                                              className={"text-blue-500 underline"}>profile</Link>.
-                      </p>
+                  )}
+                  {!savedSearchError && (
+                    <div>
+                      <Dialog.Title
+                        as="h3"
+                        className="text-lg font-medium leading-6 text-gray-900"
+                      >
+                        Your search has been saved! 🎉
+                      </Dialog.Title>
+                      <div className="mt-2">
+                        <p className="text-sm text-gray-500">
+                          You will be notified via email when new listings match
+                          your search criteria.
+                        </p>
+                        <p className="text-sm text-gray-500">
+                          You can manage your saved searches in your&nbsp;
+                          <Link
+                            href={"/profile"}
+                            className={"text-blue-500 underline"}
+                          >
+                            profile
+                          </Link>
+                          .
+                        </p>
+                      </div>
                     </div>
-                  </div>}
+                  )}
 
                   <div className="flex justify-between mt-4">
                     <button

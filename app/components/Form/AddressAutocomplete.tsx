@@ -1,23 +1,32 @@
 import { useRef, useEffect, useState, useCallback } from "react";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
-import { AutocompleteAddress, CurrencyType, HeatingType, InteriorType, ListingImage, UpkeepType } from "@/types";
+import {
+  AutocompleteAddress,
+  CurrencyType,
+  HeatingType,
+  InteriorType,
+  ListingImage,
+  UpkeepType,
+} from "@/types";
 import { TextInput } from "@tremor/react";
 
-window.initMap = function(e) {
+window.initMap = function (e) {
   console.log(e);
   console.log("in init map");
 };
-
 
 type AutocompleteProps = {
   onLocalityChange?: (locality: string) => void;
   onAddressChange?: (address: AutocompleteAddress) => void;
   initialValue?: string;
   submitBtnType?: string;
-}
+};
 
-export const AddressAutocomplete = ({ onLocalityChange, onAddressChange, initialValue }: AutocompleteProps) => {
-
+export const AddressAutocomplete = ({
+  onLocalityChange,
+  onAddressChange,
+  initialValue,
+}: AutocompleteProps) => {
   const [address, setAddress] = useState({
     streetNumber: "",
     route: "",
@@ -26,7 +35,7 @@ export const AddressAutocomplete = ({ onLocalityChange, onAddressChange, initial
     postalCode: "",
     neighborhood: "",
     latitude: "",
-    longitude: ""
+    longitude: "",
   });
   const [inputValue, setInputValue] = useState(initialValue || "");
   const firstUpdate = useRef(true);
@@ -73,8 +82,7 @@ export const AddressAutocomplete = ({ onLocalityChange, onAddressChange, initial
     // which are documented at http://goo.gle/3l5i5Mr
     for (const component of place.address_components as google.maps.GeocoderAddressComponent[]) {
       const componentType = component.types[0];
-      // console.log(component);
-      // console.log(componentType);
+
       switch (componentType) {
         case "street_number": {
           streetNumber = component.long_name;
@@ -113,7 +121,7 @@ export const AddressAutocomplete = ({ onLocalityChange, onAddressChange, initial
       postalCode,
       neighborhood,
       latitude: place?.geometry?.location?.lat()?.toString(),
-      longitude: place?.geometry?.location?.lng()?.toString()
+      longitude: place?.geometry?.location?.lng()?.toString(),
     });
   };
 

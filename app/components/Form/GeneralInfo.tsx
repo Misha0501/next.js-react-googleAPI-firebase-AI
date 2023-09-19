@@ -1,6 +1,14 @@
 "use client";
 import { ArrowSmallRightIcon } from "@heroicons/react/24/solid";
-import { Button, Divider, Icon, NumberInput, Select, SelectItem, TextInput } from "@tremor/react";
+import {
+  Button,
+  Divider,
+  Icon,
+  NumberInput,
+  Select,
+  SelectItem,
+  TextInput,
+} from "@tremor/react";
 import property1 from "@/public/property1.png";
 import StepsTopInfo from "./StepsTopInfo";
 import { CURRENCIES, LISTING_TYPES, PROPERTY_TYPES } from "@/app/Constants";
@@ -15,7 +23,15 @@ const GeneralInfo = (props: any) => {
 
   const [show, setShow] = useState(true);
   const [showError, setShowErros] = useState(false);
-  const [showAddress, setShowAddress] = useState(formik.values.route || formik.values.administrativeArea || formik.values.locality || formik.values.streetNumber || formik.values.postalCode || formik.values.latitude || formik.values.longitude);
+  const [showAddress, setShowAddress] = useState(
+    formik.values.route ||
+      formik.values.administrativeArea ||
+      formik.values.locality ||
+      formik.values.streetNumber ||
+      formik.values.postalCode ||
+      formik.values.latitude ||
+      formik.values.longitude
+  );
   const title = "Add essential information about your property";
   const stepNumber = "Step 1";
 
@@ -24,7 +40,10 @@ const GeneralInfo = (props: any) => {
       formik.setFieldValue("route", address.route);
       formik.setFieldValue("streetNumber", address.streetNumber);
       formik.setFieldValue("locality", address.locality);
-      formik.setFieldValue("administrativeArea", address.administrativeAreaLevelOne);
+      formik.setFieldValue(
+        "administrativeArea",
+        address.administrativeAreaLevelOne
+      );
       formik.setFieldValue("postalCode", address.postalCode);
       formik.setFieldValue("latitude", address.latitude);
       formik.setFieldValue("longitude", address.longitude);
@@ -151,8 +170,16 @@ const GeneralInfo = (props: any) => {
                   <div className="">
                     <div className="mb-7">
                       <p className={"mb-2"}>House number</p>
-                      <TextInput value={formik.values.streetNumber}
-                                 onChange={(e) => formik.setFieldValue("streetNumber", e.target.value, true)} />
+                      <TextInput
+                        value={formik.values.streetNumber}
+                        onChange={(e) =>
+                          formik.setFieldValue(
+                            "streetNumber",
+                            e.target.value,
+                            true
+                          )
+                        }
+                      />
                     </div>
                     <div className="mb-7">
                       <p className={"mb-2"}>Street</p>

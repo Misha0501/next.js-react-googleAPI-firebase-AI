@@ -15,11 +15,8 @@ export const ListingsPageContent = () => {
   }, []);
 
   const handleSelectedLocalityChange = (locality: string) => {
-    console.log("locality");
-    console.log(locality);
-
     setLocality(locality);
-  }
+  };
 
   return (
     <>

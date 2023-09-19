@@ -4,6 +4,8 @@ import { AuthContextProvider } from "./context/AuthContext";
 import { Inter } from "next/font/google";
 import { Navigation } from "@/app/components/Navigation";
 import Providers from "@/utils/provider";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -35,6 +37,7 @@ export default function RootLayout({
         <Navigation />
         <main>
           <AuthContextProvider>
+            <ToastContainer autoClose={8000} />
             <Providers>{children}</Providers>
           </AuthContextProvider>
         </main>

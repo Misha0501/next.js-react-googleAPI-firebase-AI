@@ -133,7 +133,6 @@ export const PlacePropertyForm = ({}) => {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log("Success:", data);
         setGeneratingDescription(false);
         setDescription(data);
       })
@@ -148,8 +147,6 @@ export const PlacePropertyForm = ({}) => {
   };
 
   const placeChanged = (e) => {
-    console.log(e);
-    console.log("Place changed");
     // Get the place details from the autocomplete object.
     const place = autoCompleteRef.current.getPlace();
     if (!place || !place.address_components) return;
@@ -267,8 +264,6 @@ export const PlacePropertyForm = ({}) => {
       yearBuilt,
     };
 
-    console.log("formData");
-    console.log(formData);
     try {
       const response = await fetch(getFetchUrl(`api/listings`), {
         method: "POST",
@@ -282,8 +277,6 @@ export const PlacePropertyForm = ({}) => {
       const data = await response.json();
 
       if (response.status !== 200) {
-        console.log("Error response:", response);
-        console.log("Error data:", data);
         setGlobalError("Something went wrong, please try again later.");
         return;
       }

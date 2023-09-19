@@ -57,3 +57,30 @@ export function useCreateProperty(
     retry: 0,
   });
 }
+
+// Update
+export function useUpdateProperty(
+  props: Poperty.UpdatePropertyProp
+): UseMutationResult<
+  Poperty.UpdatePropertyResponse,
+  {
+    message?: string;
+  },
+  Poperty.UpdatePropertyMutationPayload
+> {
+  const queryClient = useQueryClient();
+  return useMutation(
+    (payload) => api.updateProperty({ ...props, data: payload }),
+    {
+      mutationKey: `${KEY} | Update`,
+      retry: 0,
+      onSuccess: () => {
+        queryClient.invalidateQueries({
+          queryKey: getKeyFromProps(props, "DETAIL"),
+        });
+        queryClient.invalidateQueries(KEY)
+          ;
+      },
+    }
+  );
+}
