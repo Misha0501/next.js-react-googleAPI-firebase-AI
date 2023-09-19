@@ -52,9 +52,9 @@ function Confirmation({ formik, handleBack, step }: any) {
         streetNumber: formik.values.streetNumber,
         postalCode: formik.values.postalCode,
         latitude: formik.values.latitude,
-        longitude: formik.values.longitude,
+        longitude: formik.values.longitude
       },
-      images: formik.values.images,
+      images: formik.values.images
     });
   }
 
@@ -67,12 +67,12 @@ function Confirmation({ formik, handleBack, step }: any) {
 
   }, [createProperty?.isSuccess]);
 
-    useEffect(() => {
-        if (createProperty.isError) {
-            setCreateError("Oops, something went wrong! Please try again later");
-            toast.error("Oops, something went wrong! Please try again later");
-        }
-    }, [createProperty?.isError]);
+  useEffect(() => {
+    if (createProperty.isError) {
+      setCreateError("Oops, something went wrong! Please try again later");
+      toast.error("Oops, something went wrong! Please try again later");
+    }
+  }, [createProperty?.isError]);
 
   const handleButtonClick = (event: any) => {
     event.preventDefault();
@@ -82,7 +82,7 @@ function Confirmation({ formik, handleBack, step }: any) {
   return (
     <>
       {openAdvertisementSection ? (
-        <NextToConfirmationPage listingItem={createdProperty}/>
+        <NextToConfirmationPage listingItem={createdProperty} />
       ) : (
         <div className="max-w-screen-xl m-auto">
           <div className="flex items-center justify-center">
@@ -375,7 +375,7 @@ function Confirmation({ formik, handleBack, step }: any) {
                     {/*    </p>*/}
                   </div>
 
-                </>}
+                </>)}
               </div>
 
               <Divider />
