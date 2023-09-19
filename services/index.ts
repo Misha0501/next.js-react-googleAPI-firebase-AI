@@ -77,7 +77,12 @@ async function service(args: IAPArgs): Promise<any> {
   }
 
   // let fetchUrl = `${baseDomain || API_URL || process.env.VERCEL_URL || }${url}`;
-  let fetchUrl = getFetchUrl(url);
+  console.log("baseDomain", baseDomain);
+  console.log("process.env.API_URL", process.env.API_URL);
+  console.log("process.env.VERCEL_URL", process.env.VERCEL_URL);
+  console.log("process.env.NEXT_PUBLIC_VERCEL_URL", process.env.NEXT_PUBLIC_VERCEL_URL);
+  console.log("url", url);
+  let fetchUrl = baseDomain || getFetchUrl(url);
     // `https://${baseDomain || process.env.API_URL || process.env.VERCEL_URL || process.env.NEXT_PUBLIC_VERCEL_URL}${url}`;
 
   if (queryParams) {
