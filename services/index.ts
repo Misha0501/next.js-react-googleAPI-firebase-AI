@@ -3,7 +3,7 @@ import omit from "lodash/omit";
 import qs from "query-string";
 
 // const API_URL = PUBLIC_API_URL;
-const API_URL = "http://localhost:3000";
+// const API_URL = "http://localhost:3000";
 
 interface IDefaultHeadersProps {
   medium: string;
@@ -13,7 +13,7 @@ interface IDefaultHeadersProps {
 
 const defaultHeaders: IDefaultHeadersProps = {
   medium: "platform-web",
-  "Content-Type": "application/json",
+  "Content-Type": "application/json"
 };
 
 export function setAuthenticationHeader(token: string): void {
@@ -27,6 +27,7 @@ export function getAuthenticationToken(): string | undefined {
 export function removeAuthenticationHeader(): void {
   delete defaultHeaders.Authorization;
 }
+
 interface IAPArgs {
   url: string;
   method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT";
@@ -56,7 +57,7 @@ async function service(args: IAPArgs): Promise<any> {
     body,
     method,
     headers: { ...defaultHeaders, ...headers },
-    ...extraProps,
+    ...extraProps
   };
 
   if (method === "GET") {
@@ -74,7 +75,8 @@ async function service(args: IAPArgs): Promise<any> {
     props.headers = omit(props.headers, ["Content-Type"]);
   }
 
-  let fetchUrl = `${baseDomain || API_URL}${url}`;
+  // let fetchUrl = `${baseDomain || API_URL || process.env.VERCEL_URL || }${url}`;
+  let fetchUrl = `${baseDomain || process.env.API_URL || process.env.VERCEL_URL || process.env.NEXT_PUBLIC_VERCEL_URL}${url}`;
   if (queryParams) {
     fetchUrl = `${fetchUrl}?${qs.stringify(queryParams)}`;
   }
