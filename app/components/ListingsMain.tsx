@@ -124,9 +124,6 @@ export const ListingsMain = ({ searchParams, listingType, locality }) => {
     }
   }, [propertyListing?.data?.results, page]);
 
-  if (propertyListing.isFetching) {
-    return <CircularProgress />;
-  }
   if (propertyListing?.isError) {
     return <p>{propertyListing?.error?.message}</p>;
   }
@@ -134,24 +131,22 @@ export const ListingsMain = ({ searchParams, listingType, locality }) => {
   return (
     <div className="w-full">
       <div className="flex flex-row justify-between">
-        {!propertyListing?.error && !propertyListing?.isFetching && (
-          <>
-            <div>
-              <div className={"text-xl mb-12"}>
-                <span className={"font-bold"}>Results: </span>{" "}
-                <span>{totalListings} properties found.</span>
-              </div>
+        <>
+          <div>
+            <div className={"text-xl mb-12"}>
+              <span className={"font-bold"}>Results: </span>{" "}
+              <span>{totalListings} properties found.</span>
             </div>
-            {/*<Select*/}
-            {/*  style={{ width: "300px" }}*/}
-            {/*  onValueChange={(e) => setSortBy(e)}*/}
-            {/*>*/}
-            {/*  {sortOption.map((el, index) => (*/}
-            {/*    <SelectItem value={el} key={index}></SelectItem>*/}
-            {/*  ))}*/}
-            {/*</Select>*/}
-          </>
-        )}
+          </div>
+          {/*<Select*/}
+          {/*  style={{ width: "300px" }}*/}
+          {/*  onValueChange={(e) => setSortBy(e)}*/}
+          {/*>*/}
+          {/*  {sortOption.map((el, index) => (*/}
+          {/*    <SelectItem value={el} key={index}></SelectItem>*/}
+          {/*  ))}*/}
+          {/*</Select>*/}
+        </>
       </div>
       <div className={"grid grid-cols-2 gap-16 mb-12"}>
         {populatedListings &&
@@ -160,6 +155,7 @@ export const ListingsMain = ({ searchParams, listingType, locality }) => {
               listingItemInitial={item}
               key={index}
               isLoadingSavedListings={isLoadingSavedListings}
+              isLoading={propertyListing?.isFetching}
             />
           ))}
       </div>

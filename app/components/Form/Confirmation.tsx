@@ -7,6 +7,7 @@ import EditableConfirmationPage from "./EditableConfirmationPage";
 import { useCreateProperty } from "@/providers/Listing";
 import { useAuthContext } from "@/app/context/AuthContext";
 import { Listing, ListingImage } from "@/types";
+import { toast } from "react-toastify";
 
 function Confirmation({ formik, handleBack, step }: any) {
   const { authToken } = useAuthContext();
@@ -51,9 +52,9 @@ function Confirmation({ formik, handleBack, step }: any) {
         streetNumber: formik.values.streetNumber,
         postalCode: formik.values.postalCode,
         latitude: formik.values.latitude,
-        longitude: formik.values.longitude
+        longitude: formik.values.longitude,
       },
-      images: formik.values.images
+      images: formik.values.images,
     });
   }
 
@@ -61,13 +62,17 @@ function Confirmation({ formik, handleBack, step }: any) {
     if (createProperty.isSuccess) {
       setCreatedProperty(createProperty.data);
       setOpenAdvertisementSection(true);
+      toast.success("Property Created Successfully");
     }
 
-    if (createProperty.isError) {
-      setCreateError("Oops, something went wrong! Please try again later");
-    }
+  }, [createProperty?.isSuccess]);
 
-  }, [createProperty]);
+    useEffect(() => {
+        if (createProperty.isError) {
+            setCreateError("Oops, something went wrong! Please try again later");
+            toast.error("Oops, something went wrong! Please try again later");
+        }
+    }, [createProperty?.isError]);
 
   const handleButtonClick = (event: any) => {
     event.preventDefault();
@@ -188,34 +193,43 @@ function Confirmation({ formik, handleBack, step }: any) {
                   {/* <Icon icon={PencilSquareIcon} /> */}
                 </div>
 
-                <p className="pt-2 text-[16px]">{formik.values.price} {formik.values.currency}</p>
+                <p className="pt-2 text-[16px]">
+                  {formik.values.price} {formik.values.currency}
+                </p>
               </div>
               <Divider />
-              {formik.values.propertyType !== "LAND" && <>
-                <div className="detail_single_box">
-                  <div className="flex justify-between">
-                    <p className={"font-bold text-[18px] mb-2 "}>
-                      General information about the property
+              {formik.values.propertyType !== "LAND" && (
+                <>
+                  <div className="detail_single_box">
+                    <div className="flex justify-between">
+                      <p className={"font-bold text-[18px] mb-2 "}>
+                        General information about the property
+                      </p>
+                      {/* <Icon icon={PencilSquareIcon} /> */}
+                    </div>
+                    <span className="mb-2 font-semibold text-[14px] ">
+                      Rooms
+                    </span>
+                    <p className="py-2 text-[16px]">{formik?.values?.rooms}</p>
+
+                    <span className="mb-2 font-semibold text-[14px] ">
+                      Bedrooms
+                    </span>
+
+                    <p className="py-2 text-[16px]">
+                      {formik?.values?.bedrooms}
                     </p>
-                    {/* <Icon icon={PencilSquareIcon} /> */}
+
+                    <span className="mb-2 font-semibold text-[14px] ">
+                      Bathrooms
+                    </span>
+                    <p className="py-2 text-[16px]">
+                      {formik?.values?.bathrooms}
+                    </p>
                   </div>
-                  <span className="mb-2 font-semibold text-[14px] ">Rooms</span>
-                  <p className="py-2 text-[16px]">{formik?.values?.rooms}</p>
-
-                  <span className="mb-2 font-semibold text-[14px] ">
-                  Bedrooms
-                </span>
-
-                  <p className="py-2 text-[16px]">{formik?.values?.bedrooms}</p>
-
-                  <span className="mb-2 font-semibold text-[14px] ">
-                  Bathrooms
-                </span>
-                  <p className="py-2 text-[16px]">{formik?.values?.bathrooms}</p>
-                </div>
-                <Divider />
-              </>
-              }
+                  <Divider />
+                </>
+              )}
 
               {/*<div className="detail_single_box">*/}
               {/*  <div className="flex justify-between">*/}
@@ -240,98 +254,117 @@ function Confirmation({ formik, handleBack, step }: any) {
                 <span className="mb-2 font-semibold text-[14px] ">
                   Total area
                 </span>
-                <p className="py-2 text-[16px]">{formik?.values?.totalarea} m2</p>
+                <p className="py-2 text-[16px]">
+                  {formik?.values?.totalarea} m2
+                </p>
 
-                {formik.values.propertyType !== "LAND" && <>
+                {formik.values.propertyType !== "LAND" && (
+                  <>
+                    <span className="mb-2 font-semibold text-[14px] ">
+                      Living area
+                    </span>
 
-                  <span className="mb-2 font-semibold text-[14px] ">
-                  Living area
-                </span>
+                    <p className="py-2 text-[16px]">
+                      {formik?.values?.livingarea}
+                    </p>
 
-                  <p className="py-2 text-[16px]">{formik?.values?.livingarea}</p>
+                    <span className="mb-2 font-semibold text-[14px] ">
+                      Outside area
+                    </span>
 
-                  <span className="mb-2 font-semibold text-[14px] ">
-                  Outside area
-                </span>
+                    <p className="py-2 text-[16px]">
+                      {formik?.values?.outsidearea}
+                    </p>
 
-                  <p className="py-2 text-[16px]">
-                    {formik?.values?.outsidearea}
-                  </p>
+                    <span className="mb-2 font-semibold text-[14px] ">
+                      Garden
+                    </span>
 
-                  <span className="mb-2 font-semibold text-[14px] ">Garden</span>
+                    <p className="py-2 text-[16px]">{formik?.values?.garden}</p>
 
-                  <p className="py-2 text-[16px]">{formik?.values?.garden}</p>
+                    <span className="mb-2 font-semibold text-[14px] ">
+                      Garage
+                    </span>
 
-                  <span className="mb-2 font-semibold text-[14px] ">Garage</span>
+                    <p className="py-2 text-[16px]">{formik?.values?.garage}</p>
 
-                  <p className="py-2 text-[16px]">{formik?.values?.garage}</p>
-
-                  <span className="mb-2 font-semibold text-[14px] ">Volume</span>
-                  <p className="py-2 text-[16px]">{formik?.values?.volume}</p>
-                </>}
-
+                    <span className="mb-2 font-semibold text-[14px] ">
+                      Volume
+                    </span>
+                    <p className="py-2 text-[16px]">{formik?.values?.volume}</p>
+                  </>
+                )}
               </div>
               <Divider />
               <div className="detail_single_box">
-                {formik.values.propertyType !== "LAND" && <>
-                  <div className="flex justify-between">
-                    <p className={"font-bold text-[18px] mb-2"}>Interior type</p>
-                    {/* <Icon icon={PencilSquareIcon} /> */}
-                  </div>
-
-                  <p className="py-2 text-[16px]">
-                    {formik?.values?.interiortype}
-                  </p>
-                  <Divider />
-                  <div className="detail_single_box">
+                {formik.values.propertyType !== "LAND" && (
+                  <>
                     <div className="flex justify-between">
                       <p className={"font-bold text-[18px] mb-2"}>
-                        Property condition
+                        Interior type
                       </p>
                       {/* <Icon icon={PencilSquareIcon} /> */}
                     </div>
 
-                    <p className="py-2 text-[16px]">{formik?.values?.upkeeptype}</p>
-                  </div>
-                  <Divider />
-                  <div className="detail_single_box">
-                    <div className="flex justify-between">
-                      <p className={"font-bold text-[18px]  mb-2"}>Heating type</p>
-                      {/* <Icon icon={PencilSquareIcon} /> */}
-                    </div>
-
                     <p className="py-2 text-[16px]">
-                      {formik?.values?.heatingtype}
+                      {formik?.values?.interiortype}
                     </p>
-                  </div>
-                  <Divider />
-                  <div className="detail_single_box">
-                    <div className="flex justify-between">
-                      <p className={"font-bold text-[18px]  mb-2"}>
-                        Building specifications
+                    <Divider />
+                    <div className="detail_single_box">
+                      <div className="flex justify-between">
+                        <p className={"font-bold text-[18px] mb-2"}>
+                          Property condition
+                        </p>
+                        {/* <Icon icon={PencilSquareIcon} /> */}
+                      </div>
+
+                      <p className="py-2 text-[16px]">
+                        {formik?.values?.upkeeptype}
                       </p>
-                      {/* <Icon icon={PencilSquareIcon} /> */}
                     </div>
-                    <span className="mb-2 font-semibold text-[14px] ">
-                  Year of built
-                </span>
+                    <Divider />
+                    <div className="detail_single_box">
+                      <div className="flex justify-between">
+                        <p className={"font-bold text-[18px]  mb-2"}>
+                          Heating type
+                        </p>
+                        {/* <Icon icon={PencilSquareIcon} /> */}
+                      </div>
 
-                    <p className="py-2 text-[16px]">{formik?.values?.yearBuilt}</p>
-                    <span className="mb-2 font-semibold text-[14px] ">
-                  Floors in the building
-                </span>
+                      <p className="py-2 text-[16px]">
+                        {formik?.values?.heatingtype}
+                      </p>
+                    </div>
+                    <Divider />
+                    <div className="detail_single_box">
+                      <div className="flex justify-between">
+                        <p className={"font-bold text-[18px]  mb-2"}>
+                          Building specifications
+                        </p>
+                        {/* <Icon icon={PencilSquareIcon} /> */}
+                      </div>
+                      <span className="mb-2 font-semibold text-[14px] ">
+                        Year of built
+                      </span>
 
-                    <p className="py-2 text-[16px]">
-                      {formik?.values?.numberOfFloorsCommon}
-                    </p>
+                      <p className="py-2 text-[16px]">
+                        {formik?.values?.yearBuilt}
+                      </p>
+                      <span className="mb-2 font-semibold text-[14px] ">
+                        Floors in the building
+                      </span>
 
-                    <span className="mb-2 font-semibold text-[14px] ">
-                  Apartment located at floor number
-                </span>
+                      <p className="py-2 text-[16px]">
+                        {formik?.values?.numberOfFloorsCommon}
+                      </p>
 
-                    <p className="py-2 text-[16px]">
-                      {formik?.values?.floorNumber}
-                    </p>
+                      <span className="mb-2 font-semibold text-[14px] ">
+                        Apartment located at floor number
+                      </span>
+
+                      <p className="py-2 text-[16px]">
+                        {formik?.values?.floorNumber}
+                      </p>
 
                     {/*    <span className="mb-2 font-semibold text-[14px] ">*/}
                     {/*  Building type*/}
@@ -344,7 +377,6 @@ function Confirmation({ formik, handleBack, step }: any) {
 
                 </>}
               </div>
-
 
               <Divider />
               <div className="detail_single_box">

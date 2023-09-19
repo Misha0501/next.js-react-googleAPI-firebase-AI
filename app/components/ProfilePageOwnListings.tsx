@@ -9,12 +9,13 @@ import { useAuthContext } from "@/app/context/AuthContext";
 
 type Props = {
   initialListings: Listing[];
-}
+};
 export const ProfilePageOwnListings = ({ initialListings }: Props) => {
-  const {authToken} = useAuthContext()
+  const { authToken } = useAuthContext();
 
   const [listings, setListings] = useState(initialListings);
-  let [deleteConfirmationModalOpen, setDeleteConfirmationModalOpen] = useState(false);
+  let [deleteConfirmationModalOpen, setDeleteConfirmationModalOpen] =
+    useState(false);
   const [listingToDelete, setListingToDelete] = useState<Listing | null>(null);
   function closeModal() {
     setDeleteConfirmationModalOpen(false);
@@ -29,26 +30,31 @@ export const ProfilePageOwnListings = ({ initialListings }: Props) => {
 
     console.log(listingToDelete);
 
-    if(!listingToDelete) return;
+    if (!listingToDelete) return;
 
     fetch(getFetchUrl(`api/listings/${listingToDelete.id}`), {
-      method: 'DELETE',
-      cache: 'no-store',
+      method: "DELETE",
+      cache: "no-store",
       headers: {
-        'Content-type': 'application/json',
-        'Authorization': authToken,
+        "Content-type": "application/json",
+        Authorization: authToken,
       },
-    }).then(() => {
-      const filteredListings = listings.filter(listing => listing.id !== listingToDelete.id);
-      setListings(filteredListings);
-      setListingToDelete(null)
-      closeModal();
-    } ).catch(error => {
-      console.error(error.message)
-      closeModal();
-      setListingToDelete(null)
     })
-  }
+      .then(() => {
+        const filteredListings = listings.filter(
+          (listing) => listing.id !== listingToDelete.id
+        );
+        setListings(filteredListings);
+        setListingToDelete(null);
+        closeModal();
+      })
+      .catch((error) => {
+        console.error(error.message);
+        closeModal();
+        setListingToDelete(null);
+      });
+  };
+
   return (
     <>
       <div className="container mx-auto">
@@ -84,8 +90,7 @@ export const ProfilePageOwnListings = ({ initialListings }: Props) => {
                   leaveFrom="opacity-100 scale-100"
                   leaveTo="opacity-0 scale-95"
                 >
-                  <Dialog.Panel
-                    className="w-full max-w-md transform overflow-hidden rounded-xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                  <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-xl bg-white p-6 text-left align-middle shadow-xl transition-all">
                     <Dialog.Title
                       as="h3"
                       className="text-lg font-medium leading-6 text-gray-900"
@@ -116,6 +121,5 @@ export const ProfilePageOwnListings = ({ initialListings }: Props) => {
         </Transition>
       </div>
     </>
-
   );
 };

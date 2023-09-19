@@ -33,3 +33,18 @@ export async function create(
     },
   });
 }
+
+export async function updateProperty(
+  props: Poperty.PutAPIPayload,
+  authToken?: string
+): Promise<Poperty.UpdatePropertyResponse> {
+  return service({
+    method: "PUT",
+    url: `/api/listings`,
+    body: props.data,
+    headers: {
+      //@ts-ignore
+      Authorization: props.authToken,
+    },
+  });
+}

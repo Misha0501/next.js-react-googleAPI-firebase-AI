@@ -11,9 +11,9 @@ import { ProfilePageOwnListings } from "@/app/components/ProfilePageOwnListings"
 import { RecentlyViewedListings } from "@/app/components/RecentlyViewedListings";
 
 type Props = {
-    tab: string;
+  tab: string;
 };
-export default function ProfilePageMainContent({ tab } : Props) {
+export default function ProfilePageMainContent({ tab }: Props) {
   const tabList = ["myProperties", "saved", "myAccount", "logOut"];
   const activeTab = tabList.indexOf(tab);
   const router = useRouter();
@@ -35,16 +35,15 @@ export default function ProfilePageMainContent({ tab } : Props) {
       cache: "no-store",
       headers: {
         "Content-type": "application/json",
-        Authorization: authToken
-      }
-    })
+        Authorization: authToken,
+      },
+    });
 
     const data = await response.json();
     console.log("datadatadatadata");
     console.log(data);
     setApplicationUser(data);
     setIsLoading(false);
-
   };
 
   useEffect(() => {
@@ -56,20 +55,21 @@ export default function ProfilePageMainContent({ tab } : Props) {
     console.log("use effect");
     setIsLoading(true);
 
-    fetchUserData().catch(error => {
+    fetchUserData().catch((error) => {
       console.error(error.message);
       setIsLoading(false);
       setError("Something went wrong. Please try again later.");
     });
-
   }, []);
-  if(isLoading) return <div>Loading...</div>;
-  if(error) return <div>{error} </div>;
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>{error} </div>;
   return (
     <div className={"container"}>
       <TabGroup className={"flex min-h-screen"} defaultIndex={activeTab}>
         <TabList className="flex flex-col min-w-[300px] border-r pt-12">
-          <div className={"flex flex-col gap-2 w-fit mx-auto items-center mb-8"}>
+          <div
+            className={"flex flex-col gap-2 w-fit mx-auto items-center mb-8"}
+          >
             <div className={"font-bold"}>{applicationUser?.displayName}</div>
             <div className={"text-gray-400"}>Visitor/Seller</div>
           </div>

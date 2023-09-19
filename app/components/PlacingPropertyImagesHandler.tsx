@@ -23,6 +23,8 @@ export const PlacingPropertyImagesHandler = ({
 }: PlacingPropertyImagesHandlerProps) => {
   const { user, authToken } = useAuthContext();
 
+  console.log(initialImages, "initialImages");
+
   const [images, setImages] = useState<ListingImage[]>(initialImages || []);
 
   const [error, setError] = useState("");
@@ -226,7 +228,14 @@ export const PlacingPropertyImagesHandler = ({
           ))}
         {uploading && <p>Uploading...</p>}
       </div>
-      <Button onClick={handleFileInputClick} variant={"secondary"} className={"w-full"} type={'button'}>Add picture</Button>
+      <Button
+        onClick={handleFileInputClick}
+        variant={"secondary"}
+        className={"w-full"}
+        type={"button"}
+      >
+        Add picture
+      </Button>
     </div>
   );
 };
