@@ -4,6 +4,7 @@ export const getFetchUrl = (route: string) => {
 
     console.log("process.env.VERCEL_URL", process.env.VERCEL_URL);
     console.log("process.env.API_URL", process.env.API_URL);
+    console.log("process.env.API_URL", process.env.NEXT_PUBLIC_API_URL);
     console.log("process.env.NEXT_PUBLIC_VERCEL_URL", process.env.NEXT_PUBLIC_VERCEL_URL);
     console.log("process.env.NODE_ENV", process.env.NODE_ENV);
     console.log("route", route);
