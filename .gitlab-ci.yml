@@ -1,30 +1,22 @@
-image: node:latest
+default:
+  image: node:18.14.1
 
-stages:
-  - build
-  - run
-
-# Job's name
-first-job:
-  # Define stage
-  stage: build
-  # What to run on the job.
+deploy_preview:
+  stage: deploy
+  except:
+    - main
   script:
-    - npm install
-  artifacts:
-    paths:
-      - node_modules
+    - npm install --global vercel
+    - vercel pull --yes --environment=preview --token=$VERCEL_TOKEN
+    - vercel build --token=$VERCEL_TOKEN
+    - vercel deploy --prebuilt  --token=$VERCEL_TOKEN
 
-second-job:
-  stage: run
+deploy_production:
+  stage: deploy
+  only:
+    - main
   script:
-    - npm run start
-    - node test.js
-  artifacts:
-    paths:
-      - node_modules/
-
-second-job-parallel:
-  stage: run
-  script:
-    - echo "I'm running at the same time as second-job!!!"
+    - npm install --global vercel
+    - vercel pull --yes --environment=production --token=$VERCEL_TOKEN
+    - vercel build --prod --token=$VERCEL_TOKEN
+    - vercel deploy --prebuilt --prod --token=$VERCEL_TOKEN
