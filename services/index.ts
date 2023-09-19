@@ -1,6 +1,7 @@
 import { useAuthContext } from "@/app/context/AuthContext";
 import omit from "lodash/omit";
 import qs from "query-string";
+import { getFetchUrl } from "@/app/lib/getFetchUrl";
 
 // const API_URL = PUBLIC_API_URL;
 // const API_URL = "http://localhost:3000";
@@ -76,7 +77,9 @@ async function service(args: IAPArgs): Promise<any> {
   }
 
   // let fetchUrl = `${baseDomain || API_URL || process.env.VERCEL_URL || }${url}`;
-  let fetchUrl = `${baseDomain || process.env.API_URL || process.env.VERCEL_URL || process.env.NEXT_PUBLIC_VERCEL_URL}${url}`;
+  let fetchUrl = getFetchUrl(url);
+    // `https://${baseDomain || process.env.API_URL || process.env.VERCEL_URL || process.env.NEXT_PUBLIC_VERCEL_URL}${url}`;
+
   if (queryParams) {
     fetchUrl = `${fetchUrl}?${qs.stringify(queryParams)}`;
   }
