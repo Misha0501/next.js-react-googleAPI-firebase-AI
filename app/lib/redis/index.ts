@@ -7,4 +7,13 @@ const getRedisUrl = () => {
     throw new Error("Provide Redis url")
 }
 
-export const redis = new Redis();
+let redisClient;
+
+// Using below construction to avoid creating multiple instances of PrismaClient in development mode
+if (process.env.NODE_ENV === "production") {
+    redisClient = new Redis(getRedisUrl())
+} else {
+    redisClient = new Redis();
+}
+
+export const redis = redisClient;
