@@ -18,7 +18,7 @@ export default function SignInPageContent() {
         firebase.auth.EmailAuthProvider.PROVIDER_ID,
         firebase.auth.GoogleAuthProvider.PROVIDER_ID
       ],
-      signInSuccessUrl: `${process.env.VERSEL_URL || process.env.NEXT_PUBLIC_VERSEL_URL || process.env.NEXT_PUBLIC_SITE_URL}/profile/myProperties`,
+      signInSuccessUrl: `/profile/myProperties`,
       // Other config options...
       callbacks: {
         signInSuccessWithAuthResult: function(authResult, redirectUrl) {
