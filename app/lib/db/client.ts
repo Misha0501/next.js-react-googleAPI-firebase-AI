@@ -15,23 +15,23 @@ if (process.env.NODE_ENV === "production") {
     prismaClient = global.prismaClient
 }
 
-const cacheMiddleware: Prisma.Middleware = createPrismaRedisCache({
-    models: [
-        {model: "Listing"},
-    ],
-    // storage: {type: "redis", options: {client: redis, invalidation: {referencesTTL: 300}, log: console}},
-    storage: {type: "redis", options: {client: redis, invalidation: {referencesTTL: 300}}},
-    cacheTime: 1,
-    // onHit: (key) => {
-    //     console.log("hit", key);
-    // },
-    // onMiss: (key) => {
-    //     console.log("miss", key);
-    // },
-    // onError: (key) => {
-    //     console.log("error", key);
-    // },
-});
+// const cacheMiddleware: Prisma.Middleware = createPrismaRedisCache({
+//     models: [
+//         {model: "Listing"},
+//     ],
+//     // storage: {type: "redis", options: {client: redis, invalidation: {referencesTTL: 300}, log: console}},
+//     storage: {type: "redis", options: {client: redis, invalidation: {referencesTTL: 300}}},
+//     cacheTime: 1,
+//     // onHit: (key) => {
+//     //     console.log("hit", key);
+//     // },
+//     // onMiss: (key) => {
+//     //     console.log("miss", key);
+//     // },
+//     // onError: (key) => {
+//     //     console.log("error", key);
+//     // },
+// });
 
 
 // Prisma use soft delete for listing table
@@ -58,6 +58,6 @@ prismaClient.$use(async (params, next) => {
 })
 
 
-prismaClient.$use(cacheMiddleware);
+// prismaClient.$use(cacheMiddleware);
 
 export const prisma = prismaClient;
