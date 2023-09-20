@@ -30,7 +30,7 @@ export default function ProfilePageMainContent({ tab }: Props) {
 
   // fetch user data
   const fetchUserData = async () => {
-    const response = await fetch("/api/user", {
+    const response = await fetch("/api/users", {
       method: "GET",
       cache: "no-store",
       headers: {

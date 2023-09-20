@@ -12,7 +12,6 @@ import {prisma} from "@/app/lib/db/client";
  */
 export async function GET(req: Request) {
     try {
-
         const decodedToken = await getDecodedIdToken()
 
         const applicationUser =  await prisma.applicationUser.findUnique({
