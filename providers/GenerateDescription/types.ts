@@ -2,10 +2,10 @@ export namespace Description {
   export type CreateProps = {};
   export type CreateResponse = {};
   export type CreateMutationPayload = {
-    listingType: string;
+    listingType: string | null;
     streetNumber?: number | string;
-    interiorType: string;
-    propertyType: string;
+    interiorType: string | null;
+    propertyType: string | null;
     currency: string;
     price: number | string;
     rooms?: number | null | string;
@@ -15,13 +15,13 @@ export namespace Description {
     floorNumber?: number | null | string;
     numberOfFloorsProperty?: number | null | string;
     numberOfFloorsCommon?: number | null | string;
-    heatingType: string;
+    heatingType: string | null;
     areaLand?: string | number;
     areaLiving?: string | number;
     areaTotal?: string | number;
-    upkeepType?: string;
+    upkeepType?: string | null;
     yearBuilt?: string | number;
-    buildingType?: string;
+    buildingType?: string | null;
     outsideArea?: string | number;
     garage?: string | number;
     garden?: string | number;

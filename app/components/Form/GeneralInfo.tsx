@@ -11,26 +11,47 @@ import {
 } from "@tremor/react";
 import property1 from "@/public/property1.png";
 import StepsTopInfo from "./StepsTopInfo";
-import { CURRENCIES, LISTING_TYPES, PROPERTY_TYPES } from "@/app/Constants";
+import {
+  CURRENCIES,
+  CreatePropertyFormikPropInterface,
+  LISTING_TYPES,
+  PROPERTY_TYPES,
+} from "@/app/Constants";
 import React, { useState } from "react";
 import PropertyPlacementRadioButtons from "../PropertyPlacementRadioButtons";
 import { FormHelperText } from "@mui/material";
 import { AutocompleteAddress } from "@/types";
 import { AddressAutocomplete } from "@/app/components/Form/AddressAutocomplete";
+import { FormikProps } from "formik";
+import { boolean } from "zod";
 
-const GeneralInfo = (props: any) => {
-  const { formik, handleNext, step, isShow } = props;
+interface CreatePropertyComponentPropInterface {
+  formik: FormikProps<CreatePropertyFormikPropInterface>;
+  handleNext: () => void;
+  step: number;
+  isShow: boolean;
+}
+
+const GeneralInfo = ({
+  formik,
+  handleNext,
+  step,
+  isShow,
+}: CreatePropertyComponentPropInterface) => {
+  // const { formik, handleNext, step, isShow } = props;
 
   const [show, setShow] = useState(true);
   const [showError, setShowErros] = useState(false);
   const [showAddress, setShowAddress] = useState(
     formik.values.route ||
-      formik.values.administrativeArea ||
-      formik.values.locality ||
-      formik.values.streetNumber ||
-      formik.values.postalCode ||
-      formik.values.latitude ||
-      formik.values.longitude
+      Boolean(
+        formik.values.administrativeArea ||
+          formik.values.locality ||
+          formik.values.streetNumber ||
+          formik.values.postalCode ||
+          formik.values.latitude ||
+          formik.values.longitude
+      )
   );
   const title = "Add essential information about your property";
   const stepNumber = "Step 1";
@@ -51,7 +72,7 @@ const GeneralInfo = (props: any) => {
     }
   };
 
-  const validateStep1 = (e) => {
+  const validateStep1 = () => {
     event?.preventDefault();
     let errors: any = {};
     if (!formik.values.listingType) {

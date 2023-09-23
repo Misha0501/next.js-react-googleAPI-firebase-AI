@@ -6,6 +6,7 @@ import { Navigation } from "@/app/components/Navigation";
 import Providers from "@/utils/provider";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Footer from "./components/layout/Footer";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,7 +22,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html className="scroll-smooth" lang="en">
       <head>
         <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
         <script
@@ -35,12 +36,13 @@ export default function RootLayout({
       </head>
       <body>
         <Navigation />
-        <main>
+        <main className="min-h-screen">
           <AuthContextProvider>
             <ToastContainer autoClose={8000} />
             <Providers>{children}</Providers>
           </AuthContextProvider>
         </main>
+        <Footer />
       </body>
     </html>
   );

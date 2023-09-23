@@ -8,8 +8,22 @@ import { useCreateProperty } from "@/providers/Listing";
 import { useAuthContext } from "@/app/context/AuthContext";
 import { Listing, ListingImage } from "@/types";
 import { toast } from "react-toastify";
+import { FormikProps } from "formik";
+import { CreatePropertyFormikPropInterface } from "@/app/Constants";
 
-function Confirmation({ formik, handleBack, step }: any) {
+interface CreatePropertyComponentPropInterface {
+  formik: FormikProps<CreatePropertyFormikPropInterface>;
+  handleBack?: () => void;
+  step: number;
+  isShow: boolean;
+}
+
+function Confirmation({
+  formik,
+  handleBack,
+  step,
+  isShow,
+}: CreatePropertyComponentPropInterface) {
   const { authToken } = useAuthContext();
   const title = "Confirm your advertisment";
   const stepNumber = "Step 4";

@@ -11,7 +11,7 @@ import GeneralInfo from "./GeneralInfo";
 import MoreDetails from "./MoreDetails";
 import DescriptionAndImages from "./DescriptionAndImages";
 import Confirmation from "./Confirmation";
-import { Formik, FieldArray } from "formik"; // Import Formik components
+import { Formik, FieldArray, FormikProps } from "formik"; // Import Formik components
 import * as Yup from "yup";
 import { MuiStepper } from "./Styled";
 
@@ -51,7 +51,44 @@ export default function MultiForm() {
     setActiveStep(0);
   };
 
-  const formContent = (step: number, formik: any) => {
+  interface CreatePropertyFormikPropInterface {
+    listingType: string;
+    propertyType: string;
+    address: string;
+    streetNumber: string;
+    route: string;
+    locality: string;
+    administrativeArea: string;
+    postalCode: string;
+    latitude: string;
+    longitude: string;
+    currency: string;
+    price: number | string;
+    rooms?: number;
+    bedrooms?: number;
+    bathrooms?: number;
+    totalarea?: number;
+    livingarea?: number;
+    outsidearea?: number;
+    garden?: number;
+    garage?: number;
+    volume?: number;
+    interiortype?: string;
+    upkeeptype?: string;
+    heatingtype?: string;
+    yearBuilt?: number;
+    numberOfFloorsCommon?: number;
+    floorNumber?: number;
+    buildingtype?: string;
+    characteristics?: string;
+    discription?: string;
+    images: any;
+  }
+
+  const formContent = (
+    step: number,
+    formik: FormikProps<CreatePropertyFormikPropInterface>
+  ) => {
     switch (step) {
       case 0:
         return (
@@ -80,7 +117,7 @@ export default function MultiForm() {
             formik={formik}
             handleNext={handleNext}
             step={step}
-            FieldArray={FieldArray}
+            // FieldArray={FieldArray}
           />
         );
       case 3:
@@ -88,7 +125,7 @@ export default function MultiForm() {
           <Confirmation
             isShow={showForm3}
             formik={formik}
-            handleSubmit={formik.handleSubmit}
+            // handleSubmit={formik.handleSubmit}
             handleBack={handleBackStep3}
             step={step}
           />
@@ -111,7 +148,7 @@ export default function MultiForm() {
       <Formik
         initialValues={{
           listingType: "RENT",
-          propertyType: undefined,
+          propertyType: "",
           address: "",
           streetNumber: "",
           route: "",
@@ -121,8 +158,9 @@ export default function MultiForm() {
           latitude: "",
           longitude: "",
           currency: "",
-          price: undefined,
+          price: 0 as string | number,
           rooms: undefined,
+          // rooms: undefined as number | undefined,
           bedrooms: undefined,
           bathrooms: undefined,
           totalarea: undefined,
@@ -149,7 +187,7 @@ export default function MultiForm() {
           streetNumber: Yup.string(),
           administrativeArea: Yup.string(),
           currency: Yup.string().required("Currency is required"),
-          price: Yup.number().required("Price is required"),
+          price: Yup.number().positive().required("Price is required"),
           rooms: Yup.number(),
           bedrooms: Yup.number(),
           bathrooms: Yup.number(),

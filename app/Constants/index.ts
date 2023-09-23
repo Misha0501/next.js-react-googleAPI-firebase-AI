@@ -8,6 +8,7 @@ import {
   PropertyType,
   UpkeepType,
 } from "@/types";
+import { FormikProps } from "formik";
 
 export const HEATING_TYPES: HeatingType[] = ["CENTRAL", "BOILER"];
 export const INTERIOR_TYPES: InteriorType[] = ["FURNISHED", "UNFURNISHED"];
@@ -20,5 +21,11 @@ export const PROPERTY_TYPES: PropertyType[] = [
   "PARKING",
   "LAND",
 ];
-export const BUILDING_TYPE: BuildingType[] = ["New building" , "Old building"];
-export const CHARACTERISTICS: Characteristics[] = ["Balcony" , "Garden" , "Renewable energy" , "Lying / sitting bath" , "Swimming pool"];
+export const BUILDING_TYPE: BuildingType[] = ["New building", "Old building"];
+export const CHARACTERISTICS: Characteristics[] = [
+  "Balcony",
+  "Garden",
+  "Renewable energy",
+  "Lying / sitting bath",
+  "Swimming pool",
+];

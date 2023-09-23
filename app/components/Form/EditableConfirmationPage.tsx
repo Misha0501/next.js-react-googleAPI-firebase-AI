@@ -12,6 +12,7 @@ import {
   BUILDING_TYPE,
   CHARACTERISTICS,
   CURRENCIES,
+  CreatePropertyFormikPropInterface,
   HEATING_TYPES,
   INTERIOR_TYPES,
   LISTING_TYPES,
@@ -22,8 +23,14 @@ import MultiSelectRadioButton from "../MultiSelectRadioButton";
 import SingleSelectRadioButton from "../SingleSelectRadioButton";
 import { PlacingPropertyImagesHandler } from "@/app/components/PlacingPropertyImagesHandler";
 import React from "react";
+import { FormikProps } from "formik";
+interface CreatePropertyComponentPropInterface {
+  formik: FormikProps<CreatePropertyFormikPropInterface>;
+}
 
-function EditableConfirmationPage({ formik }: any) {
+function EditableConfirmationPage({
+  formik,
+}: CreatePropertyComponentPropInterface) {
   return (
     <>
       <Divider />
@@ -172,7 +179,7 @@ function EditableConfirmationPage({ formik }: any) {
         </div>
       </div>
       <Divider />
-      {formik.values.propertyType !== "LAND" &&
+      {formik.values.propertyType !== "LAND" && (
         <div className="detail_single_box flex gap-4 flex-col">
           <div>
             <p className={"font-bold text-lg mb-2"}>
@@ -213,12 +220,15 @@ function EditableConfirmationPage({ formik }: any) {
               min={0}
               id="bathrooms"
               onValueChange={(e) => formik.setFieldValue("bathrooms", e, true)}
-              error={Boolean(formik.touched.bathrooms && formik.errors.bathrooms)}
+              error={Boolean(
+                formik.touched.bathrooms && formik.errors.bathrooms
+              )}
               value={formik.values.bathrooms}
               onBlur={formik.handleBlur}
             />
           </div>
-        </div>}
+        </div>
+      )}
       <Divider />
       {/*<div className="detail_single_box flex gap-2 flex-col">*/}
       {/*  <div className="flex justify-between">*/}
@@ -267,7 +277,7 @@ function EditableConfirmationPage({ formik }: any) {
           error={Boolean(formik.touched.totalarea && formik.errors.totalarea)}
           value={formik.values.totalarea}
         /> */}
-        {formik.values.propertyType !== "LAND" &&
+        {formik.values.propertyType !== "LAND" && (
           <>
             <div className="flex gap-1 flex-col">
               <span className="mb-2 font-bold text-sm">Living area</span>
@@ -281,7 +291,9 @@ function EditableConfirmationPage({ formik }: any) {
                   id="livingarea"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  error={!!formik.touched.livingarea && !!formik.errors.livingarea}
+                  error={
+                    !!formik.touched.livingarea && !!formik.errors.livingarea
+                  }
                   value={formik.values.livingarea}
                 />
                 m2
@@ -396,7 +408,7 @@ function EditableConfirmationPage({ formik }: any) {
               </div>
             </div>
           </>
-        }
+        )}
         {/* <TextInput
           className={"w-min border-[#97B6FF]"}
           name="volume"
@@ -408,7 +420,7 @@ function EditableConfirmationPage({ formik }: any) {
         /> */}
       </div>
       <Divider />
-      {formik.values.propertyType !== "LAND" &&
+      {formik.values.propertyType !== "LAND" && (
         <>
           <div className="detail_single_box flex gap-2 flex-col">
             <div className="flex justify-between">
@@ -417,7 +429,7 @@ function EditableConfirmationPage({ formik }: any) {
             </div>
             <div className="max-w-lg">
               <SingleSelectRadioButton
-                onBlur={formik.onBlur}
+                onBlur={formik.handleBlur}
                 value={formik.values.interiortype}
                 options={INTERIOR_TYPES}
                 onChange={(e) => formik.setFieldValue("interiortype", e, true)}
@@ -459,7 +471,9 @@ function EditableConfirmationPage({ formik }: any) {
           <Divider />
           <div className="detail_single_box flex flex-col gap-4">
             <div>
-              <p className={"font-bold text-lg mb-2"}>Building specifications</p>
+              <p className={"font-bold text-lg mb-2"}>
+                Building specifications
+              </p>
             </div>
             <div className="flex flex-col gap-1">
               <span className="mb-2 font-bold text-sm">Year of built</span>
@@ -470,15 +484,19 @@ function EditableConfirmationPage({ formik }: any) {
                 onBlur={formik.handleBlur}
                 name="yearBuilt"
                 id="yearBuilt"
-                onValueChange={(e) => formik.setFieldValue("yearBuilt", e, true)}
-                error={Boolean(formik.touched.yearBuilt && formik.errors.yearBuilt)}
+                onValueChange={(e) =>
+                  formik.setFieldValue("yearBuilt", e, true)
+                }
+                error={Boolean(
+                  formik.touched.yearBuilt && formik.errors.yearBuilt
+                )}
                 value={formik.values.yearBuilt}
               />
             </div>
             <div className="flex flex-col gap-1">
-          <span className="mb-2  font-bold text-sm">
-            Floors in the building
-          </span>
+              <span className="mb-2  font-bold text-sm">
+                Floors in the building
+              </span>
               <NumberInput
                 className={"w-min border-[#97B6FF]"}
                 name="numberOfFloorsCommon"
@@ -489,20 +507,22 @@ function EditableConfirmationPage({ formik }: any) {
                 }
                 error={Boolean(
                   formik.touched.numberOfFloorsCommon &&
-                  formik.errors.numberOfFloorsCommon
+                    formik.errors.numberOfFloorsCommon
                 )}
                 value={formik.values.numberOfFloorsCommon}
               />
             </div>
             <div className="flex flex-col gap-1">
-          <span className="mb-2 font-bold text-sm">
-            Apartment located at floor number
-          </span>
+              <span className="mb-2 font-bold text-sm">
+                Apartment located at floor number
+              </span>
               <NumberInput
                 className={"w-min border-[#97B6FF]"}
                 name="floorNumber"
                 id="floorNumber"
-                onValueChange={(e) => formik.setFieldValue("floorNumber", e, true)}
+                onValueChange={(e) =>
+                  formik.setFieldValue("floorNumber", e, true)
+                }
                 onBlur={formik.handleBlur}
                 error={Boolean(
                   formik.touched.floorNumber && formik.errors.floorNumber
@@ -531,7 +551,7 @@ function EditableConfirmationPage({ formik }: any) {
           {/*  </div>*/}
           {/*</div>*/}
         </>
-      }
+      )}
       <Divider />
       <div className="detail_single_box">
         <div className="flex justify-between">

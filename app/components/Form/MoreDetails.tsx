@@ -16,6 +16,7 @@ import {
 import {
   BUILDING_TYPE,
   CHARACTERISTICS,
+  CreatePropertyFormikPropInterface,
   HEATING_TYPES,
   INTERIOR_TYPES,
   UPKEEP_TYPES,
@@ -23,15 +24,30 @@ import {
 import SingleSelectRadioButton from "../SingleSelectRadioButton";
 import MultiSelectRadioButton from "../MultiSelectRadioButton";
 import { FormHelperText } from "@mui/material";
+import { FormikProps } from "formik";
 
-const MoreDetails = (props: any) => {
-  const { formik, handleBack, step, handleNext, isShow } = props;
+interface CreatePropertyComponentPropInterface {
+  formik: FormikProps<CreatePropertyFormikPropInterface>;
+  handleNext: () => void;
+  handleBack: () => void;
+  step: number;
+  isShow: boolean;
+}
+
+const MoreDetails = ({
+  formik,
+  handleBack,
+  step,
+  handleNext,
+  isShow,
+}: CreatePropertyComponentPropInterface) => {
+  // const { formik, handleBack, step, handleNext, isShow } = props;
   const [show, setShow] = useState(true);
   const [showError, setShowErros] = useState(false);
   const title = "Tell Us More About Your Property";
   const stepNumber = "Step 2";
 
-  const check = (e) => {
+  const check = () => {
     event?.preventDefault();
     let errors: any = {};
     // if (!formik.values.rooms && formik.values.propertyType !== "LAND") {
@@ -244,136 +260,138 @@ const MoreDetails = (props: any) => {
                     </div>
                   </div>
                 </div>
-                {formik.values.propertyType !== "LAND" && <>
-                  <Divider />
-                  <div className="py-6">
-                    <div className="flex justify-between items-center">
-                      <span>Living area</span>
-                      <div className="flex items-center gap-2">
-                        <NumberInput
-                          placeholder="0"
-                          enableStepper={false}
-                          className={"w-min "}
-                          min={0}
-                          name="livingarea"
-                          id="livingarea"
-                          onChange={formik.handleChange}
-                          onBlur={formik.handleBlur}
-                          error={showError && !!formik.errors.livingarea}
-                          value={formik.values.livingarea}
-                        />
-                        m2
+                {formik.values.propertyType !== "LAND" && (
+                  <>
+                    <Divider />
+                    <div className="py-6">
+                      <div className="flex justify-between items-center">
+                        <span>Living area</span>
+                        <div className="flex items-center gap-2">
+                          <NumberInput
+                            placeholder="0"
+                            enableStepper={false}
+                            className={"w-min "}
+                            min={0}
+                            name="livingarea"
+                            id="livingarea"
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                            error={showError && !!formik.errors.livingarea}
+                            value={formik.values.livingarea}
+                          />
+                          m2
+                        </div>
                       </div>
-                    </div>
-                    {/* {showError && formik.errors.livingarea && (
+                      {/* {showError && formik.errors.livingarea && (
                     <FormHelperText className="flex justify-end" error>
                       {formik.errors.livingarea}
                     </FormHelperText>
                   )} */}
-                  </div>
-                  <Divider />
-                  <div className="py-6">
-                    <div className="flex justify-between items-center">
-                      <span>Outside area</span>
-                      <div className="flex items-center gap-2">
-                        <NumberInput
-                          enableStepper={false}
-                          placeholder="0"
-                          className={"w-min "}
-                          min={0}
-                          name="outsidearea"
-                          id="outsidearea"
-                          onChange={formik.handleChange}
-                          onBlur={formik.handleBlur}
-                          error={showError && !!formik.errors.outsidearea}
-                          value={formik.values.outsidearea}
-                        />
-                        m2
-                      </div>
                     </div>
-                    {/* {showError && formik.errors.outsidearea && (
+                    <Divider />
+                    <div className="py-6">
+                      <div className="flex justify-between items-center">
+                        <span>Outside area</span>
+                        <div className="flex items-center gap-2">
+                          <NumberInput
+                            enableStepper={false}
+                            placeholder="0"
+                            className={"w-min "}
+                            min={0}
+                            name="outsidearea"
+                            id="outsidearea"
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                            error={showError && !!formik.errors.outsidearea}
+                            value={formik.values.outsidearea}
+                          />
+                          m2
+                        </div>
+                      </div>
+                      {/* {showError && formik.errors.outsidearea && (
                     <FormHelperText className="flex justify-end" error>
                       {formik.errors.outsidearea}
                     </FormHelperText>
                   )} */}
-                  </div>
-                  <Divider />
-                  <div className="py-6">
-                    <div className="flex justify-between items-center">
-                      <span>Garden</span>
-                      <div className="flex items-center gap-2">
-                        <NumberInput
-                          enableStepper={false}
-                          placeholder="0"
-                          className={"w-min "}
-                          name="garden"
-                          id="garden"
-                          onChange={formik.handleChange}
-                          onBlur={formik.handleBlur}
-                          error={showError && !!formik.errors.garden}
-                          value={formik.values.garden}
-                        />
-                        m2
-                      </div>
                     </div>
-                    {/* {showError && formik.errors.garden && (
+                    <Divider />
+                    <div className="py-6">
+                      <div className="flex justify-between items-center">
+                        <span>Garden</span>
+                        <div className="flex items-center gap-2">
+                          <NumberInput
+                            enableStepper={false}
+                            placeholder="0"
+                            className={"w-min "}
+                            name="garden"
+                            id="garden"
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                            error={showError && !!formik.errors.garden}
+                            value={formik.values.garden}
+                          />
+                          m2
+                        </div>
+                      </div>
+                      {/* {showError && formik.errors.garden && (
                     <FormHelperText className="flex justify-end" error>
                       {formik.errors.garden}
                     </FormHelperText>
                   )} */}
-                  </div>
-                  <Divider />
-                  <div className="py-6">
-                    <div className="flex justify-between items-center">
-                      <span>Garage</span>
-                      <div className="flex items-center gap-2">
-                        <NumberInput
-                          enableStepper={false}
-                          placeholder="0"
-                          className={"w-min "}
-                          name="garage"
-                          id="garage"
-                          onChange={formik.handleChange}
-                          onBlur={formik.handleBlur}
-                          error={showError && !!formik.errors.garage}
-                          value={formik.values.garage}
-                        />
-                        m2
-                      </div>
                     </div>
-                    {/* {showError && formik.errors.garage && (
+                    <Divider />
+                    <div className="py-6">
+                      <div className="flex justify-between items-center">
+                        <span>Garage</span>
+                        <div className="flex items-center gap-2">
+                          <NumberInput
+                            enableStepper={false}
+                            placeholder="0"
+                            className={"w-min "}
+                            name="garage"
+                            id="garage"
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                            error={showError && !!formik.errors.garage}
+                            value={formik.values.garage}
+                          />
+                          m2
+                        </div>
+                      </div>
+                      {/* {showError && formik.errors.garage && (
                     <FormHelperText className="flex justify-end" error>
                       {formik.errors.garage}
                     </FormHelperText>
                   )} */}
-                  </div>
-                  <Divider />
-                  <div className="py-6">
-                    <div className="flex justify-between items-center">
-                      <span>Volume</span>
-                      <div className="flex items-center gap-2">
-                        <NumberInput
-                          enableStepper={false}
-                          placeholder="0"
-                          className={"w-min "}
-                          name="volume"
-                          id="volume"
-                          onChange={formik.handleChange}
-                          onBlur={formik.handleBlur}
-                          error={showError && !!formik.errors.volume}
-                          value={formik.values.volume}
-                        />
-                        m3
-                      </div>
                     </div>
-                    {/* {showError && formik.errors.volume && (
+                    <Divider />
+                    <div className="py-6">
+                      <div className="flex justify-between items-center">
+                        <span>Volume</span>
+                        <div className="flex items-center gap-2">
+                          <NumberInput
+                            enableStepper={false}
+                            placeholder="0"
+                            className={"w-min "}
+                            name="volume"
+                            id="volume"
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                            error={showError && !!formik.errors.volume}
+                            value={formik.values.volume}
+                          />
+                          m3
+                        </div>
+                      </div>
+                      {/* {showError && formik.errors.volume && (
                     <FormHelperText className="flex justify-end" error>
                       {formik.errors.volume}
                     </FormHelperText>
                   )} */}
-                  </div>
-                  <Divider />
-                </>}
+                    </div>
+                    <Divider />
+                  </>
+                )}
               </div>
             </div>
             {formik.values.propertyType === "LAND" ? null : (
@@ -385,7 +403,7 @@ const MoreDetails = (props: any) => {
                   </p>
                   <div className="">
                     <SingleSelectRadioButton
-                      onBlur={formik.onBlur}
+                      onBlur={formik.handleBlur}
                       value={formik.values.interiortype}
                       options={INTERIOR_TYPES}
                       onChange={(e) =>
@@ -576,7 +594,7 @@ const MoreDetails = (props: any) => {
                 className="w-[247px] h-[56px] mt-20 border border-[#2C72F6]"
                 // onClick={check}
                 onClick={async () => {
-                  const errors = check(formik.values);
+                  const errors = check();
                   formik.setErrors(errors);
                   if (Object.keys(errors).length === 0) {
                     handleNext();

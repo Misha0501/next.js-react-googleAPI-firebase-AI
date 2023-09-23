@@ -10,9 +10,25 @@ import {
 import { ListingImage } from "@/types";
 import { PlacingPropertyImagesHandler } from "@/app/components/PlacingPropertyImagesHandler";
 import { useGenerateDescription } from "@/providers/GenerateDescription";
+import { CreatePropertyFormikPropInterface } from "@/app/Constants";
+import { FormikProps } from "formik";
 
-function DescriptionAndImages(props: any) {
-  const { formik, handleBack, step, handleNext, FieldArray, isShow } = props;
+interface CreatePropertyComponentPropInterface {
+  formik: FormikProps<CreatePropertyFormikPropInterface>;
+  handleNext: () => void;
+  handleBack: () => void;
+  step: number;
+  isShow: boolean;
+}
+
+function DescriptionAndImages({
+  formik,
+  handleBack,
+  step,
+  handleNext,
+  isShow,
+}: CreatePropertyComponentPropInterface) {
+  // const { formik, handleBack, step, handleNext, isShow } = props;
   const [show, setShow] = useState(true);
   const [textAreaWordCount, setTextAreaWordCount] = useState(0);
   const [noOfHighlights, setNoOfHighlights] = useState(0);
@@ -28,7 +44,7 @@ function DescriptionAndImages(props: any) {
 
   const handleImagesChange = (images: ListingImage[]) => {
     formik.setFieldValue("images", images, true);
-  }
+  };
 
   const generateDescription = () => {
     generate.mutate({
@@ -40,12 +56,12 @@ function DescriptionAndImages(props: any) {
       rooms: formik.values.rooms,
       bathrooms: formik.values.bathrooms,
       bedrooms: formik.values.bedrooms,
-      parking: formik.values.parking,
+      // parking: formik.values.parking,      // Redundant One
       floorNumber: formik.values.floorNumber,
-      numberOfFloorsProperty: formik.values.numberOfFloorsProperty,
+      // numberOfFloorsProperty: formik.values.numberOfFloorsProperty,      // Redundant One
       numberOfFloorsCommon: formik.values.numberOfFloorsCommon,
       heatingType: formik.values.heatingtype || null,
-      areaLand: formik.values.areaLand,
+      areaLand: formik.values.totalarea,
       areaLiving: formik.values.livingarea,
       areaTotal: formik.values.totalarea,
       upkeepType: formik.values.upkeeptype || null,

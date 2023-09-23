@@ -78,8 +78,7 @@ export function useUpdateProperty(
         queryClient.invalidateQueries({
           queryKey: getKeyFromProps(props, "DETAIL"),
         });
-        queryClient.invalidateQueries(KEY)
-          ;
+        queryClient.invalidateQueries(KEY);
       },
     }
   );
