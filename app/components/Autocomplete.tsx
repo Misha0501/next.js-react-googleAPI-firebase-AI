@@ -32,10 +32,10 @@ const AutoComplete = ({ onLocalityChange, onAddressChange, initialValue, autocom
 
   const autoCompleteRef = useRef();
   const inputRef = useRef();
-  let options = {
+  const options = {
     componentRestrictions: { country: "bg" },
     fields: ["address_components", "geometry", "name"],
-    types: ["(cities)"]
+    types: ["(cities)"],
   };
 
   // Tracking address changes

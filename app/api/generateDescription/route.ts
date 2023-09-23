@@ -21,7 +21,9 @@ export async function POST(request: Request) {
         },
         {
           role: "user",
-          content: `Hi there, provide a description of a property for sale/rent (depending on the listingType). Imagine you are the owner of the property. Try to include something about the location of the property. The property data: ${JSON.stringify(
+          content: `Hi there, provide a description of a property for sale/rent (depending on the listingType). 
+          Imagine you are the owner of the property. Try to include something about the location of the property. 
+          The property data: ${JSON.stringify(
             parsedValues,
           )})}`,
         },

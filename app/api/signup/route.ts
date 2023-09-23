@@ -9,27 +9,27 @@ import {prisma} from "@/app/lib/db/client";
 export async function POST(req: Request) {
     try {
         // Extract the `req properties` from the body of the request
-        const {email, displayName, providerId, firebaseUID} = await req.json()
+        const { email, displayName, providerId, firebaseUID } = await req.json();
 
         // Create user if not exists in the DB
         const applicationUser = await prisma.applicationUser.upsert({
-            where: {
-                email: email,
-                firebaseUID: firebaseUID,
-            },
-            update: {},
-            create: {
-                displayName: displayName,
-                email: email,
-                providerId: providerId,
-                firebaseUID: firebaseUID,
-            },
-        })
-        return NextResponse.json({applicationUser})
+          where: {
+            email: email,
+            firebaseUID: firebaseUID,
+          },
+          update: {},
+          create: {
+            displayName: displayName,
+            email: email,
+            providerId: providerId,
+            firebaseUID: firebaseUID,
+          },
+        });
+        return NextResponse.json({ applicationUser });
     } catch (e) {
-        console.error(e)
-        return new Response('Something went wrong please try again later', {
-            status: 500,
-        })
+        console.error(e);
+        return new Response("Something went wrong please try again later", {
+            status: 500
+        });
     }
 }
