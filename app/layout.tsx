@@ -36,7 +36,7 @@ export default function RootLayout({
       </head>
       <body>
         <Navigation />
-        <main className="min-h-screen">
+        <main>
           <AuthContextProvider>
             <ToastContainer autoClose={8000} />
             <Providers>{children}</Providers>
