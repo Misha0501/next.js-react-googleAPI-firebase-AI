@@ -1,7 +1,7 @@
 datasource db {
-  provider          = "postgresql"
-    url = env("POSTGRES_PRISMA_URL") // uses connection pooling
-    directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+  provider  = "postgresql"
+  url       = env("POSTGRES_PRISMA_URL") // uses connection pooling
+  directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
 }
 
 generator client {
@@ -9,19 +9,21 @@ generator client {
 }
 
 model ApplicationUser {
-  id                    Int                     @id @default(autoincrement())
-  firebaseUID           String                  @default("")
-  email                 String                  @unique
-  displayName           String                  @default("")
-  providerId            String                  @default("")
-  createdAt             DateTime                @default(now())
-  updatedAt             DateTime                @updatedAt
-  Membership            Membership[]
-  Invoice               Invoice[]
-  Listing               Listing[]
-  SavedListing          SavedListing[]
-  SavedSearch           SavedSearch[]
-  RecentlyViewedListing RecentlyViewedListing[]
+  id                              Int                       @id @default(autoincrement())
+  firebaseUID                     String                    @default("")
+  email                           String                    @unique
+  displayName                     String                    @default("")
+  providerId                      String                    @default("")
+  createdAt                       DateTime                  @default(now())
+  updatedAt                       DateTime                  @updatedAt
+  Membership                      Membership[]
+  Invoice                         Invoice[]
+  Listing                         Listing[]
+  SavedListing                    SavedListing[]
+  SavedSearch                     SavedSearch[]
+  RecentlyViewedListing           RecentlyViewedListing[]
+  CompanyMembershipInviteSender   CompanyMembershipInvite[] @relation("sender")
+  CompanyMembershipInviteReceiver CompanyMembershipInvite[] @relation("receiver")
 }
 
 model Membership {
@@ -37,16 +39,17 @@ model Membership {
 }
 
 model Company {
-  id           Int            @id @default(autoincrement())
-  memberships  Membership[]
-  name         String         @unique
-  phoneNumber  String
-  description  String
-  createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @updatedAt
-  Listing      Listing[]
-  Subscription Subscription[]
-  Address      Address[]
+  id                      Int                       @id @default(autoincrement())
+  memberships             Membership[]
+  name                    String                    @unique
+  phoneNumber             String?
+  description             String?
+  createdAt               DateTime                  @default(now())
+  updatedAt               DateTime                  @updatedAt
+  Listing                 Listing[]
+  Subscription            Subscription[]
+  Address                 Address[]
+  CompanyMembershipInvite CompanyMembershipInvite[]
 }
 
 model ListingImage {
@@ -292,4 +295,19 @@ model RecentlyViewedListing {
   listingId         Int
   listing           Listing         @relation(fields: [listingId], references: [id])
   createdAt         DateTime        @default(now())
+}
+
+model CompanyMembershipInvite {
+  id                           Int             @id @default(autoincrement())
+  applicationUserIdSender      Int
+  applicationUserSender        ApplicationUser @relation("sender", fields: [applicationUserIdSender], references: [id])
+  applicationUserEmailReceiver String
+  applicationUserReceiver      ApplicationUser @relation("receiver", fields: [applicationUserEmailReceiver], references: [email])
+  companyId                    Int
+  company                      Company         @relation(fields: [companyId], references: [id])
+  applicationUserRole                      String
+  expiresAt                    DateTime?
+  accepted                    DateTime?
+  declined                    DateTime?
+  createdAt                    DateTime        @default(now())
 }
