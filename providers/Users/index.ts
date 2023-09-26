@@ -1,12 +1,13 @@
-import { UseQueryResult, useQuery } from "react-query";
+import { UseQueryResult, useQuery, useMutation } from "react-query";
 import * as api from "./api";
 import { Users } from "./types";
+import { userOwnData } from "./api";
 
 const KEY = "Users";
 
 export function getKeyFromProps(
   props: any,
-  type: "LISTING" | "DETAIL"
+  type: "OWN DATA" | "DETAIL"
 ): string[] {
   const key = [KEY, type];
   key.push(props);
@@ -24,3 +25,26 @@ export function useUserDetail(
     }
   );
 }
+
+export function useUserOwnData(
+  props: Users.DetailProps
+): UseQueryResult<Users.DetailResponse> {
+  return useQuery(
+    getKeyFromProps(props, "OWN DATA"),
+    () => api.userOwnData(props),
+    {
+      retry: 0,
+    }
+  );
+}
+
+export function useUpdateUser(
+  props: any
+) {
+  // const queryClient = useQueryClient();
+  return useMutation((payload) => api.update({ ...props, data: payload }), {
+    mutationKey: `${KEY} | Update`,
+    retry: 0
+  });
+}
+

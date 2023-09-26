@@ -10,3 +10,32 @@ export async function userDetail(
     url: `/api/users/${props?.id}`,
   });
 }
+
+export async function userOwnData(
+  props?: Users.DetailAPIPayload
+): Promise<Users.DetailResponse> {
+  return service({
+    method: "GET",
+    url: `/api/users`,
+    headers: {
+      //@ts-ignore
+      Authorization: props.authToken,
+    },
+  });
+}
+
+export async function update(
+  props: any,
+  authToken?: string
+) {
+  return service({
+    method: "PUT",
+    url: `/api/users`,
+    body: props.data,
+    headers: {
+      //@ts-ignore
+      Authorization: props.authToken,
+    },
+  });
+}
+

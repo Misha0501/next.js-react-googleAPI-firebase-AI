@@ -96,6 +96,7 @@ export namespace Users {
     id: number;
     email: string;
     displayName: string;
+    phoneNumber: string;
     createdAt: string;
     Company?: Company;
     Listing?: Listing[];

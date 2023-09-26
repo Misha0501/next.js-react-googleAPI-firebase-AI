@@ -39,6 +39,7 @@ export async function GET(req: Request) {
 
     return NextResponse.json(applicationUser);
   } catch (error) {
+    console.error(error);
     if (error instanceof z.ZodError) {
       return new Response(error.message, { status: 422 });
     }
@@ -85,6 +86,7 @@ export async function PUT(req: Request) {
 
     return NextResponse.json(updatedApplicationUser);
   } catch (error) {
+    console.error(error);
     if (error instanceof z.ZodError) {
       return new Response(error.message, { status: 422 });
     }

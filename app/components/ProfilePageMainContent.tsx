@@ -11,6 +11,7 @@ import { ProfilePageOwnListings } from "@/app/components/ProfilePageOwnListings"
 import { RecentlyViewedListings } from "@/app/components/RecentlyViewedListings";
 import { CompanyTab } from "@/app/components/profile/CompanyTab";
 import { InvitesTab } from "@/app/components/profile/InvitesTab";
+import { PersonalDetailsTab } from "@/app/components/profile/PersonalDetailsTab";
 
 type Props = {
   tab: string;
@@ -95,6 +96,7 @@ export default function ProfilePageMainContent({ tab }: Props) {
           </TabPanel>
           <TabPanel>
             <p className={"font-bold text-4xl mb-8"}>Personal details</p>
+            <PersonalDetailsTab/>
           </TabPanel>
           <TabPanel>
             <p className={"font-bold text-4xl mb-8"}>Company</p>
