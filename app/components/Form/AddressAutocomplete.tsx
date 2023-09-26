@@ -1,13 +1,5 @@
-import { useRef, useEffect, useState, useCallback } from "react";
-import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
-import {
-  AutocompleteAddress,
-  CurrencyType,
-  HeatingType,
-  InteriorType,
-  ListingImage,
-  UpkeepType,
-} from "@/types";
+import { useEffect, useRef, useState } from "react";
+import { AutocompleteAddress } from "@/types";
 import { TextInput } from "@tremor/react";
 
 window.initMap = function (e) {
