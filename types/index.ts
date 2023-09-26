@@ -4,8 +4,14 @@ export type UpkeepType = "EXCELLENT" | "GOOD" | "FAIR" | "POOR";
 export type ListingType = "RENT" | "SELL";
 export type CurrencyType = "EUR" | "USD" | "BGN";
 export type PropertyType = "HOUSE" | "APARTMENT" | "PARKING" | "LAND";
-export type BuildingType = "New building" | "Old building" ;
-export type Characteristics = "Balcony" | "Garden" | "Renewable energy" | "Lying / sitting bath" | "Swimming pool"
+export type CompanyMembershipRoleType = "ADMIN" | "EDITOR";
+export type BuildingType = "New building" | "Old building";
+export type Characteristics =
+  | "Balcony"
+  | "Garden"
+  | "Renewable energy"
+  | "Lying / sitting bath"
+  | "Swimming pool";
 
 export type FirebaseAPISignInAuthResponse = {
   kind: string;
@@ -22,7 +28,7 @@ export type ListingImage = {
   id?: number;
   listingId?: number;
   positionInListing?: number;
-  url: string
+  url: string;
   imagePath?: string;
   createdAt?: string;
   updatedAt?: string;
@@ -84,7 +90,7 @@ export type Address = {
   updatedAt: string;
   listingId: number;
   companyId: number | null;
-}
+};
 
 export type SavedListing = {
   applicationUserId: number;
@@ -129,23 +135,22 @@ export type SavedSearch = {
 };
 
 export type ApplicationUser = {
-Listing: Listing[];
-SavedListing: SavedListing[];
-SavedSearch: any[];
-createdAt: string;
-displayName: string;
-email: string;
-firebaseUID: string;
-id: number;
-providerId: string;
-updatedAt: string;
-}
+  Listing: Listing[];
+  SavedListing: SavedListing[];
+  SavedSearch: any[];
+  createdAt: string;
+  displayName: string;
+  email: string;
+  firebaseUID: string;
+  id: number;
+  providerId: string;
+  updatedAt: string;
+};
 
 export type MatchedListingsAndSearches = {
   listing: Listing;
   matchedSearches: SavedSearch[];
-}
-
+};
 
 export type AutocompleteAddress = {
   streetNumber: string;
@@ -163,7 +168,7 @@ export type RecentlyViewedListing = {
   applicationUserId: number;
   listingId: number;
   listing: Listing;
-}
+};
 
 export type Company = {
   id: number;
@@ -175,16 +180,31 @@ export type Company = {
   Address?: Address[];
   memberships?: Membership[];
   Listings?: Listing[];
-}
+};
 
 export type Membership = {
   company: Company;
   applicationUserId: number;
   applicationUser?: ApplicationUser;
-  applicationUserRole : string;
+  applicationUserRole: string;
   companyId: number;
   createdAt: string;
   id: number;
   isActive: boolean;
   updatedAt: string;
-}
+};
+
+export type CompanyMembershipInvite = {
+  accepted: boolean;
+  applicationUserEmailReceiver: string;
+  applicationUserIdSender: number;
+  applicationUserReceiver: ApplicationUser;
+  applicationUserSender: ApplicationUser;
+  applicationUserRole: CompanyMembershipRoleType;
+  company: Company;
+  companyId: number;
+  createdAt: string;
+  declined: string;
+  expiresAt: string;
+  id: number;
+};

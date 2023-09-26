@@ -7,8 +7,8 @@ import {
   ListingType,
   PropertyType,
   UpkeepType,
+  CompanyMembershipRoleType
 } from "@/types";
-import { FormikProps } from "formik";
 
 export const HEATING_TYPES: HeatingType[] = ["CENTRAL", "BOILER"];
 export const INTERIOR_TYPES: InteriorType[] = ["FURNISHED", "UNFURNISHED"];
@@ -28,4 +28,8 @@ export const CHARACTERISTICS: Characteristics[] = [
   "Renewable energy",
   "Lying / sitting bath",
   "Swimming pool",
+];
+export const COMPANY_MEMBERSHIP_ROLE: CompanyMembershipRoleType[] = [
+  // "ADMIN",
+  "EDITOR",
 ];

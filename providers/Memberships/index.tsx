@@ -1,4 +1,4 @@
-import { useQuery, UseQueryResult } from "react-query";
+import { useMutation, useQuery, UseQueryResult } from "react-query";
 import * as api from "./api";
 import { SavedListing } from "@/types";
 
@@ -13,19 +13,13 @@ export function useCompanyMemberships(
   });
 }
 
-// // Create
-// export function useCreateSavedListing(
-//   props: SavedListing
-// ): UseMutationResult<
-//   SavedListing,
-//   {
-//     listingId?: number;
-//   },
-//   SavedListing
-// > {
-//   // const queryClient = useQueryClient();
-//   return useMutation((payload) => api.create({ ...props, data: payload }), {
-//     mutationKey: `${KEY} | Create`,
-//     retry: 0
-//   });
-// }
+// Create
+export function useCreateMembership(
+  props: any
+) {
+  // const queryClient = useQueryClient();
+  return useMutation((payload) => api.create({ ...props, data: payload }), {
+    mutationKey: `${KEY} | Create`,
+    retry: 0
+  });
+}

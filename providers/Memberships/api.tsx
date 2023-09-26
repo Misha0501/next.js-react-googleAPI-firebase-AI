@@ -10,3 +10,19 @@ export async function companyMemberships(props?: any): Promise<any> {
     },
   });
 }
+
+// Create
+export async function create(
+  props: any,
+  authToken?: string
+){
+  return service({
+    method: "POST",
+    url: `/api/memberships`,
+    body: props.data,
+    headers: {
+      //@ts-ignore
+      Authorization: props.authToken,
+    },
+  });
+}

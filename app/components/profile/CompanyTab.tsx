@@ -66,12 +66,6 @@ export const CompanyTab = () => {
   });
   const [showAddress, setShowAddress] = useState(false);
 
-  console.log("companycompanycompanycompany");
-  console.log(company);
-
-  console.log("formikkkkkk");
-  console.log(formik.values);
-
   const handleAddressChange = (address: AutocompleteAddress) => {
     if (!address) return;
 
@@ -80,23 +74,16 @@ export const CompanyTab = () => {
   };
 
   const handleFormSubmit = (values: FormValues) => {
-    console.log("values");
-    console.log(values);
     createCompany.mutate(values);
   };
 
   useEffect(() => {
-    console.log("create company fetch");
     if (createCompany.isSuccess) {
-      console.log("createCompany.isSuccess");
-      console.log(createCompany);
       toast.success("Company created successfully");
       return;
     }
 
     if (createCompany.isError) {
-      console.log("createCompany.isError");
-      console.log(createCompany);
       toast.error(
         "There was an error creating the company: " +
           createCompany?.error?.message ||
@@ -104,24 +91,20 @@ export const CompanyTab = () => {
       );
       return;
     }
-    console.log("createCompany");
-    console.log(createCompany);
   }, [createCompany.isSuccess, createCompany.isError]);
 
+  console.log("companyMembershipscompanyMemberships");
+  console.log(companyMemberships);
   useEffect(() => {
-    console.log("companyMemberships");
-    console.log(companyMemberships);
-
     if (
       companyMemberships.isSuccess &&
       companyMemberships?.data &&
       companyMemberships?.data?.length !== 0
     ) {
-      let company = companyMemberships.data?.[0]?.company;
+      let company = companyMemberships.data?.company;
       if (!company) return;
       const companyAddress = company.Address?.[0];
-      console.log("set company");
-      console.log(company);
+
       if (companyAddress?.locality) {
         setShowAddress(true);
       }

@@ -87,6 +87,8 @@ async function service(args: IAPArgs): Promise<any> {
 
   if (!data.ok) {
     if (data.status === 422) {
+      const json = await data.json()
+      console.error(json);
       throw new Error("Something went wrong please try again later");
     }
     const errorMessage = await data.text();

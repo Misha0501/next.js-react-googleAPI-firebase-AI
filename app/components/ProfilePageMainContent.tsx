@@ -10,12 +10,13 @@ import { useAuthContext } from "@/app/context/AuthContext";
 import { ProfilePageOwnListings } from "@/app/components/ProfilePageOwnListings";
 import { RecentlyViewedListings } from "@/app/components/RecentlyViewedListings";
 import { CompanyTab } from "@/app/components/profile/CompanyTab";
+import { InvitesTab } from "@/app/components/profile/InvitesTab";
 
 type Props = {
   tab: string;
 };
 export default function ProfilePageMainContent({ tab }: Props) {
-  const tabList = ["myProperties", "saved", "myAccount", "company", "logOut"];
+  const tabList = ["myProperties", "saved", "myAccount", "company", "invites", "logOut"];
   const activeTab = tabList.indexOf(tab);
   const router = useRouter();
   const { authToken, user } = useAuthContext();
@@ -70,13 +71,15 @@ export default function ProfilePageMainContent({ tab }: Props) {
             className={"flex flex-col gap-2 w-fit mx-auto items-center mb-8"}
           >
             <div className={"font-bold"}>{applicationUser?.displayName}</div>
-            <div className={"text-gray-400"}>Visitor/Seller</div>
+            <div className={"font-bold"}>{applicationUser?.email}</div>
+            {/*<div className={"text-gray-400"}>Visitor/Seller</div>*/}
           </div>
           <div className="h-full w-fit mx-auto">
             <Tab className={"w-fit"}>My properties</Tab>
             <Tab className={"w-fit"}>Saved</Tab>
             <Tab className={"w-fit"}>Personal details</Tab>
             <Tab className={"w-fit"}>Company</Tab>
+            <Tab className={"w-fit"}>Invites</Tab>
             <Tab className={"w-fit"}>Recently viewed</Tab>
             <Tab className={"w-fit"} onClick={handleLogOut}>Log out</Tab>
           </div>
@@ -96,6 +99,10 @@ export default function ProfilePageMainContent({ tab }: Props) {
           <TabPanel>
             <p className={"font-bold text-4xl mb-8"}>Company</p>
             <CompanyTab></CompanyTab>
+          </TabPanel>
+          <TabPanel>
+            <p className={"font-bold text-4xl mb-8"}>Invites</p>
+            <InvitesTab></InvitesTab>
           </TabPanel>
           <TabPanel>
             <p className={"font-bold text-4xl mb-8"}>Recently viewed</p>

@@ -29,7 +29,7 @@ export async function GET(req: NextRequest) {
       },
     });
 
-    return NextResponse.json([membership] || []);
+    return NextResponse.json(membership);
   } catch (error) {
     console.error(error);
     if (error instanceof z.ZodError) {

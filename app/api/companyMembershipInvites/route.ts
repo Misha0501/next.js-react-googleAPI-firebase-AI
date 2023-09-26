@@ -33,9 +33,13 @@ export async function GET(req: NextRequest) {
         where: {
           applicationUserEmailReceiver: applicationUser.email,
         },
+        orderBy: {
+          createdAt: "desc",
+        },
         include: {
           company: true,
           applicationUserSender: true,
+          applicationUserReceiver: true,
         },
       });
     } else {
@@ -44,14 +48,20 @@ export async function GET(req: NextRequest) {
         where: {
           applicationUserIdSender: applicationUser.id,
         },
+        orderBy: {
+          createdAt: "desc",
+        },
         include: {
           company: true,
+          applicationUserSender: true,
           applicationUserReceiver: true,
         },
       });
     }
 
-    return NextResponse.json(invites);
+    const response = invites || [];
+
+    return NextResponse.json(response);
   } catch (error) {
     console.error(error);
     if (error instanceof z.ZodError) {

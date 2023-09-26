@@ -5,7 +5,7 @@ import { ResponseError } from "@/classes/ResponseError";
 import { getApplicationUserServer } from "@/app/lib/getApplicationUserServer";
 import { prisma } from "@/app/lib/db/client";
 import { companySchema } from "@/app/lib/validations/company";
-
+import { Prisma } from '@prisma/client'
 /**
  * POST Route to create a new company.
  * @param req
@@ -54,6 +54,13 @@ export async function POST(req: Request) {
     return NextResponse.json(company);
   } catch (error) {
     console.error(error);
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      // The .code property can be accessed in a type-safe manner
+      if (error.code === 'P2002') {
+        return new Response("Company with this name already exists, please select a different name", { status: 400 });
+      }
+    }
+
     if (error instanceof z.ZodError) {
       return new Response(error.message, { status: 422 });
     }
