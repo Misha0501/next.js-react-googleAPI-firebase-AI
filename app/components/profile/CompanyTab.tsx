@@ -4,11 +4,11 @@ import React, { useEffect, useState } from "react";
 import { useAuthContext } from "@/app/context/AuthContext";
 import { useCompanyMemberships } from "@/providers/Memberships";
 import * as Yup from "yup";
-import { Field, Form, Formik, useFormik } from "formik";
+import { useFormik } from "formik";
 import { Button, TextInput } from "@tremor/react";
 import { AddressAutocomplete } from "@/app/components/Form/AddressAutocomplete";
 import { useCreateCompany } from "@/providers/Companies";
-import { Address, AutocompleteAddress } from "@/types";
+import { AutocompleteAddress } from "@/types";
 import { toast } from "react-toastify";
 
 const CompanyCreateUpdateSchema = Yup.object().shape({
