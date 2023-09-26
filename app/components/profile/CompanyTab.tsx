@@ -7,7 +7,7 @@ import * as Yup from "yup";
 import { useFormik } from "formik";
 import { Button, TextInput } from "@tremor/react";
 import { AddressAutocomplete } from "@/app/components/Form/AddressAutocomplete";
-import { useCreateCompany } from "@/providers/Companies";
+import { useCreateCompany, useUpdateCompany } from "@/providers/Companies";
 import { AutocompleteAddress } from "@/types";
 import { toast } from "react-toastify";
 
@@ -43,11 +43,13 @@ export const CompanyTab = () => {
   const { authToken } = useAuthContext();
   const companyMemberships = useCompanyMemberships({ authToken });
   const [company, setCompany] = useState({
+    id: "",
     name: "",
     phoneNumber: "",
     email: "",
     description: "",
     address: {
+      id: "",
       locality: "",
       route: "",
       streetNumber: "",
@@ -57,7 +59,9 @@ export const CompanyTab = () => {
       longitude: "",
     },
   });
+  const [formSubmitMethod, setFormSubmitMethod] = useState("POST");
   const createCompany = useCreateCompany({ authToken });
+  const updateCompany = useUpdateCompany({ authToken });
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: company,
@@ -73,28 +77,26 @@ export const CompanyTab = () => {
     setShowAddress(true);
   };
 
-  const handleFormSubmit = (values: FormValues) => {
-    createCompany.mutate(values);
-  };
+  const handleFormSubmit = async (values: FormValues) => {
+    try {
+      if (formSubmitMethod == "PUT") {
+        await updateCompany.mutateAsync(values);
+        toast.success("Company updated successfully");
+        return;
+      }
 
-  useEffect(() => {
-    if (createCompany.isSuccess) {
+      await createCompany.mutateAsync(values);
       toast.success("Company created successfully");
-      return;
-    }
 
-    if (createCompany.isError) {
+    } catch (error) {
       toast.error(
         "There was an error creating the company: " +
-          createCompany?.error?.message ||
-          "Something went wrong. Please try again",
+        error?.message ||
+        "Something went wrong. Please try again",
       );
-      return;
     }
-  }, [createCompany.isSuccess, createCompany.isError]);
+  };
 
-  console.log("companyMembershipscompanyMemberships");
-  console.log(companyMemberships);
   useEffect(() => {
     if (
       companyMemberships.isSuccess &&
@@ -108,6 +110,7 @@ export const CompanyTab = () => {
       if (companyAddress?.locality) {
         setShowAddress(true);
       }
+      setFormSubmitMethod("PUT");
       setCompany({ ...company, address: { ...companyAddress } });
     }
   }, [companyMemberships.data, companyMemberships.isSuccess]);
@@ -233,7 +236,15 @@ export const CompanyTab = () => {
             </p>
           </div>
         )}
-        <Button type={"submit"} disabled={createCompany.isLoading}>
+        {updateCompany.isError && (
+          <div className="mb-7">
+            <p className={"mb-2 text-red-600"}>
+              {updateCompany?.error?.message ||
+                "Something went wrong. Please try again"}
+            </p>
+          </div>
+        )}
+        <Button type={"submit"} disabled={createCompany.isLoading || updateCompany.isLoading}>
           Submit
         </Button>
       </form>

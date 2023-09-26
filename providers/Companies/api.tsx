@@ -1,4 +1,3 @@
-
 import service from "@/services";
 
 export async function create(
@@ -15,3 +14,19 @@ export async function create(
     },
   });
 }
+
+export async function update(
+  props: any,
+  authToken?: string
+) {
+  return service({
+    method: "PUT",
+    url: `/api/companies`,
+    body: props.data,
+    headers: {
+      //@ts-ignore
+      Authorization: props.authToken,
+    },
+  });
+}
+
