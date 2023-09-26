@@ -85,7 +85,15 @@ async function service(args: IAPArgs): Promise<any> {
 
   const data = await fetch(fetchUrl, props);
 
+  if (!data.ok) {
+    if (data.status === 422) {
+      throw new Error("Something went wrong please try again later");
+    }
+    const errorMessage = await data.text();
+    throw new Error(errorMessage);
+  }
   // logSuccess(API_URL, JSON.stringify(data));
   return parseJSON ? await data.json() : data;
 }
+
 export default service;

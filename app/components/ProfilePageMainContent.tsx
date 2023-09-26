@@ -9,12 +9,13 @@ import { useEffect, useState } from "react";
 import { useAuthContext } from "@/app/context/AuthContext";
 import { ProfilePageOwnListings } from "@/app/components/ProfilePageOwnListings";
 import { RecentlyViewedListings } from "@/app/components/RecentlyViewedListings";
+import { CompanyTab } from "@/app/components/profile/CompanyTab";
 
 type Props = {
   tab: string;
 };
 export default function ProfilePageMainContent({ tab }: Props) {
-  const tabList = ["myProperties", "saved", "myAccount", "logOut"];
+  const tabList = ["myProperties", "saved", "myAccount", "company", "logOut"];
   const activeTab = tabList.indexOf(tab);
   const router = useRouter();
   const { authToken, user } = useAuthContext();
@@ -40,8 +41,6 @@ export default function ProfilePageMainContent({ tab }: Props) {
     });
 
     const data = await response.json();
-    console.log("datadatadatadata");
-    console.log(data);
     setApplicationUser(data);
     setIsLoading(false);
   };
@@ -77,6 +76,7 @@ export default function ProfilePageMainContent({ tab }: Props) {
             <Tab className={"w-fit"}>My properties</Tab>
             <Tab className={"w-fit"}>Saved</Tab>
             <Tab className={"w-fit"}>Personal details</Tab>
+            <Tab className={"w-fit"}>Company</Tab>
             <Tab className={"w-fit"}>Recently viewed</Tab>
             <Tab className={"w-fit"} onClick={handleLogOut}>Log out</Tab>
           </div>
@@ -92,6 +92,10 @@ export default function ProfilePageMainContent({ tab }: Props) {
           </TabPanel>
           <TabPanel>
             <p className={"font-bold text-4xl mb-8"}>Personal details</p>
+          </TabPanel>
+          <TabPanel>
+            <p className={"font-bold text-4xl mb-8"}>Company</p>
+            <CompanyTab></CompanyTab>
           </TabPanel>
           <TabPanel>
             <p className={"font-bold text-4xl mb-8"}>Recently viewed</p>

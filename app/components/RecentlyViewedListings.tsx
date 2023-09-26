@@ -17,12 +17,12 @@ export const RecentlyViewedListings = () => {
 
   useEffect(() => {
     if (!recentlyViewedListingsResponse.isSuccess) return;
-    const recentlyViewedListingsData = recentlyViewedListingsResponse.data.results;
+    const recentlyViewedListingsData = recentlyViewedListingsResponse?.data?.results;
     const recentlyViewedListings = recentlyViewedListingsData.map((item) => item.listing);
     setPopulatedListings(recentlyViewedListings);
 
     if (!savedListings.isSuccess) return;
-    const savedListingsData = savedListings.data.results;
+    const savedListingsData = savedListings?.data?.results;
     const populated = getPopulatedListingsSaved(recentlyViewedListings, savedListingsData);
     setPopulatedListings(populated);
 

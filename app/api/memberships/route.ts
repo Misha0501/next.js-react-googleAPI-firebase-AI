@@ -4,7 +4,6 @@ import { z } from "zod";
 import { ResponseError } from "@/classes/ResponseError";
 import { getApplicationUserServer } from "@/app/lib/getApplicationUserServer";
 import { prisma } from "@/app/lib/db/client";
-import { listingsSearchParamSchema } from "@/app/lib/validations/listing";
 import { membershipSchema } from "@/app/lib/validations/membership";
 
 /**
@@ -21,9 +20,16 @@ export async function GET(req: NextRequest) {
       where: {
         applicationUserId: applicationUser.id,
       },
+      include: {
+        company: {
+          include: {
+            Address: true,
+          }
+        }
+      },
     });
 
-    return NextResponse.json(membership);
+    return NextResponse.json([membership] || []);
   } catch (error) {
     console.error(error);
     if (error instanceof z.ZodError) {

@@ -164,3 +164,27 @@ export type RecentlyViewedListing = {
   listingId: number;
   listing: Listing;
 }
+
+export type Company = {
+  id: number;
+  name: string;
+  phoneNumber: string;
+  description: string;
+  createdAt: string;
+  updatedAt: string;
+  Address?: Address[];
+  memberships?: Membership[];
+  Listings?: Listing[];
+}
+
+export type Membership = {
+  company: Company;
+  applicationUserId: number;
+  applicationUser?: ApplicationUser;
+  applicationUserRole : string;
+  companyId: number;
+  createdAt: string;
+  id: number;
+  isActive: boolean;
+  updatedAt: string;
+}

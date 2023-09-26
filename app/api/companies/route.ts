@@ -17,7 +17,7 @@ export async function POST(req: Request) {
       await getApplicationUserServer(true);
 
     const parsedValues = companySchema.parse(await req.json());
-    let { name, description, phoneNumber, address } = parsedValues;
+    let { name, description, phoneNumber, address, email } = parsedValues;
 
     // check if the user already has a membership
     const membership = await prisma.membership.findUnique({
@@ -27,13 +27,14 @@ export async function POST(req: Request) {
     });
 
     if (membership)
-      return new Response("You are already a membership of a company", {
+      return new Response("You are already a member of a company", {
         status: 400,
       });
 
     const company = await prisma.company.create({
       data: {
         description,
+        email,
         name,
         phoneNumber,
         Address: {
