@@ -64,6 +64,7 @@ function Confirmation({
         administrativeAreaLevelOne: formik.values.administrativeArea,
         locality: formik.values.locality,
         streetNumber: formik.values.streetNumber,
+        neighborhood: formik.values.neighborhood,
         postalCode: formik.values.postalCode,
         latitude: formik.values.latitude,
         longitude: formik.values.longitude
@@ -176,6 +177,9 @@ function Confirmation({
                 <p className="py-2 text-[16px]">
                   {formik.values.route || "-"}
                 </p>
+                <p className=" font-semibold text-[14px] ">Neighborhood</p>
+                <p className="py-2 text-[16px]">{formik.values.neighborhood || "-"}</p>
+
                 <p className=" font-semibold text-[14px] ">City</p>
                 <p className="py-2 text-[16px]">{formik.values.locality || "-"}</p>
                 <p className=" font-semibold text-[14px] ">

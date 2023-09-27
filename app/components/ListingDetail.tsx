@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { CheckCircleIcon, PhotoIcon, Square3Stack3DIcon } from "@heroicons/react/24/outline";
-import { Button, Divider, Icon, LineChart, Title } from "@tremor/react";
+import { BarChart, Button, Divider, Icon, LineChart, Title } from "@tremor/react";
 import { GoBackBtn } from "./GoBackBtn";
 import Image from "next/image";
 import { useListingDetailPage } from "@/providers/Listing";
@@ -30,6 +30,26 @@ const ListingDetail = () => {
   const [openLightBox, setOpenLightBox] = useState(false);
   const [lightBoxImageIndex, setLightBoxImageIndex] = useState(0);
   const createRecentlyViewedListing = useCreateRecentlyViewedListing({ authToken });
+  const [averagePriceNeighborhoodChartData, setAveragePriceNeighborhoodChartData] = useState();
+
+  useEffect(() => {
+    if(listingDetail?.data?.averagePriceInNeighborhood) {
+      setAveragePriceNeighborhoodChartData([
+        {
+          name: "Average price in the neighborhood",
+          "Listing price": listingDetail?.data?.averagePriceInNeighborhood,
+        },
+        {
+          name: "This listing's price",
+          "Listing price": listingDetail?.data?.price,
+        }
+      ])
+    }
+  }, [listingDetail?.data?.averagePriceInNeighborhood, listingDetail.isSuccess]);
+
+  const dataFormatter = (number: number) => {
+    return "€ " + Intl.NumberFormat("eu").format(number).toString();
+  };
 
   let stats = useMemo(
     () => [
@@ -321,6 +341,27 @@ const ListingDetail = () => {
           {/*<p className="text-[14] pt-8">See more results</p>*/}
         </div>
       )}
+
+      {averagePriceNeighborhoodChartData && (
+        <div className=" container">
+          <p className="font-medium text-[24px] pt-14">Price comparison graph</p>
+          <Title className="pt-8">
+            This graph shows the average price in the neighborhood{" "}
+            {listingDetail?.data?.Address[0]?.neighborhood}{" "}
+            for properties with the same type compared to this listing.
+          </Title>
+          <BarChart
+            className="mt-6"
+            data={averagePriceNeighborhoodChartData}
+            index="name"
+            categories={["Listing price"]}
+            colors={["blue"]}
+            valueFormatter={dataFormatter}
+            yAxisWidth={48}
+          />
+        </div>
+      )}
+
       {/*<div className="py-8 mt-16 bg-[#F2F2F2]">*/}
       {/*    <div className="container">*/}
       {/*        <p className="font-medium text-[24px]">Similar in this area</p>*/}

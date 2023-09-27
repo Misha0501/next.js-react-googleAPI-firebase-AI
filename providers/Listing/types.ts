@@ -148,6 +148,7 @@ export namespace Poperty {
     ListingImage: ListingImage[];
     Address: Address[];
     ListingPrice: ListingPrice[];
+    averagePriceInNeighborhood: number | null;
     buildingType?: string | number;
     areaGarden?: string | number;
     balcony?: string;
