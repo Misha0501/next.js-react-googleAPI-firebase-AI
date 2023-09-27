@@ -4,9 +4,13 @@ import { prisma } from "@/app/lib/db/client";
 /**
  * Get average price in neighborhood
  * @param listing Listing
+ * @param excludeCurrentListing boolean
  * @returns number | null
  */
-export const getAveragePriceInNeighborhood = async (listing: Listing) => {
+export const getAveragePriceInNeighborhood = async (
+  listing: Listing,
+  excludeCurrentListing: boolean = false,
+) => {
   try {
     // Get listing's neighborhood from address
     const neighborhood = listing.Address?.[0]?.neighborhood;
@@ -29,10 +33,12 @@ export const getAveragePriceInNeighborhood = async (listing: Listing) => {
       },
     });
 
-    // exclude current listing from listingsInNeighborhood
-    listingsInNeighborhood = listingsInNeighborhood.filter(
-      (listingInNeighborhood) => listingInNeighborhood.id !== listing.id,
-    );
+    if (excludeCurrentListing) {
+      // exclude current listing from listingsInNeighborhood
+      listingsInNeighborhood = listingsInNeighborhood.filter(
+        (listingInNeighborhood) => listingInNeighborhood.id !== listing.id,
+      );
+    }
 
     // Get average price of listings in the same neighborhood
     const averagePrice =

@@ -53,6 +53,7 @@ export type Listing = {
   floorNumber: number;
   heatingType: HeatingType;
   houseNumber: string;
+  averagePriceInNeighborhood?: number;
   ListingPrice: ListingPrice[];
   id: number;
   interiorType: InteriorType;
