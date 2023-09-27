@@ -48,10 +48,10 @@ function Footer() {
           <Link href={"#"} className="font-normal text-base text-[#292932]">
             Visitor FAQs
           </Link>
-          <Link href={"#"} className="font-normal text-base text-[#292932]">
+          <Link href={"/contact"} className="font-normal text-base text-[#292932]">
             Get in touch
           </Link>
-          <Link href={"#"} className="font-normal text-base text-[#292932]">
+          <Link href={"/contact"} className="font-normal text-base text-[#292932]">
             Work with us
           </Link>
           <Link href={"#"} className="font-normal text-base text-[#292932]">
