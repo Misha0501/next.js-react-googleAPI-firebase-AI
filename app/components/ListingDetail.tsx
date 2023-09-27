@@ -347,7 +347,7 @@ const ListingDetail = () => {
           <p className="font-medium text-[24px] pt-14">Price comparison graph</p>
           <Title className="pt-8">
             This graph shows the average price in the neighborhood{" "}
-            {listingDetail?.data?.Address[0]?.locality}{" "}
+            {listingDetail?.data?.Address[0]?.neighborhood}{" "}
             for properties with the same type compared to this listing.
           </Title>
           <BarChart

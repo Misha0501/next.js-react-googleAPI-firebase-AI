@@ -28,11 +28,7 @@ export async function GET(request: Request, {params}: { params: { slug: number }
             include: {
                 ListingImage: true,
                 Address: true,
-                ListingPrice: {
-                    orderBy: {
-                        createdAt: 'desc',
-                    }
-                }
+                ListingPrice: true,
             },
         });
 
