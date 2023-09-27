@@ -64,8 +64,9 @@ export async function POST(request: Request) {
     if (error instanceof OpenAI.APIError) {
       return new Response(error.name, { status: error.status });
     }
+
+    return new Response("Something went wrong, please try again later.", {
+      status: 500,
+    });
   }
-  return new Response("Something went wrong, please try again later.", {
-    status: 500,
-  });
 }
