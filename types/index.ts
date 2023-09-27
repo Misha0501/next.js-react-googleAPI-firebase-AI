@@ -53,6 +53,7 @@ export type Listing = {
   floorNumber: number;
   heatingType: HeatingType;
   houseNumber: string;
+  ListingPrice: ListingPrice[];
   id: number;
   interiorType: InteriorType;
   latitude: string;
@@ -76,6 +77,16 @@ export type Listing = {
   price?: number;
   currency?: CurrencyType;
 };
+
+export type ListingPrice = {
+  id: number;
+  listingId: number;
+  listing?: Listing;
+  price: number;
+  currency: CurrencyType;
+  createdAt: string;
+  updatedAt: string;
+}
 
 export type Address = {
   createdAt: string;

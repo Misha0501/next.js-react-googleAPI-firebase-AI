@@ -59,6 +59,7 @@ const GeneralInfo = ({
   const handleAddressChange = (address: AutocompleteAddress) => {
     if (address) {
       formik.setFieldValue("route", address.route);
+      formik.setFieldValue("neighborhood", address.neighborhood);
       formik.setFieldValue("streetNumber", address.streetNumber);
       formik.setFieldValue("locality", address.locality);
       formik.setFieldValue(
@@ -205,6 +206,10 @@ const GeneralInfo = ({
                     <div className="mb-7">
                       <p className={"mb-2"}>Street</p>
                       <TextInput value={formik.values.route} disabled />
+                    </div>
+                    <div className="mb-7">
+                      <p className={"mb-2"}>Neighborhood</p>
+                      <TextInput value={formik.values.neighborhood} disabled />
                     </div>
                     <div className="mb-7">
                       <p className={"mb-2"}>City</p>

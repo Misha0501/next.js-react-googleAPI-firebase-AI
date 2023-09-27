@@ -58,6 +58,7 @@ export default function MultiForm() {
     streetNumber: string;
     route: string;
     locality: string;
+    neighborhood: string;
     administrativeArea: string;
     postalCode: string;
     latitude: string;
@@ -153,6 +154,7 @@ export default function MultiForm() {
           streetNumber: "",
           route: "",
           locality: "",
+          neighborhood: "",
           administrativeArea: "",
           postalCode: "",
           latitude: "",

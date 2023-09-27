@@ -1,11 +1,12 @@
-import {z} from "zod";
-import {ResponseError} from "@/classes/ResponseError";
-import {NextResponse} from "next/server";
-import {prisma} from "@/app/lib/db/client";
-import {getApplicationUserServer} from "@/app/lib/getApplicationUserServer";
-import {ApplicationUser} from '@prisma/client'
-import {userAllowedManipulateListing} from "@/app/lib/listing/userAllowedManipulateListing";
-import {getApplicationUserCompanyId} from "@/app/lib/listing/getApplicationUserCompanyId";
+import { z } from "zod";
+import { ResponseError } from "@/classes/ResponseError";
+import { NextResponse } from "next/server";
+import { prisma } from "@/app/lib/db/client";
+import { getApplicationUserServer } from "@/app/lib/getApplicationUserServer";
+import { ApplicationUser } from "@prisma/client";
+import { userAllowedManipulateListing } from "@/app/lib/listing/userAllowedManipulateListing";
+import { getApplicationUserCompanyId } from "@/app/lib/listing/getApplicationUserCompanyId";
+import { getAveragePriceInNeighborhood } from "@/app/lib/listing/getAveragePriceInNeighborhood";
 
 /**
  * GET Route to retrieve specific listing with provided slug.
@@ -27,11 +28,18 @@ export async function GET(request: Request, {params}: { params: { slug: number }
             include: {
                 ListingImage: true,
                 Address: true,
-                ListingPrice: true,
+                ListingPrice: {
+                    orderBy: {
+                        createdAt: 'desc',
+                    }
+                }
             },
         });
 
         if (!listing) throw new ResponseError("Listing with provided id wasn't found.", 404)
+
+        // Get average price in the neighborhood of the listing
+        listing.averagePriceInNeighborhood = await getAveragePriceInNeighborhood(listing);
 
         return NextResponse.json(listing);
     } catch (error) {
