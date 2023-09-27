@@ -7,6 +7,7 @@ import { useFormik } from "formik";
 import { Button, TextInput } from "@tremor/react";
 import { toast } from "react-toastify";
 import { useUpdateUser, useUserOwnData } from "@/providers/Users";
+import { useRouter } from "next/navigation";
 
 const ApplicationUserUpdateSchema = Yup.object().shape({
   displayName: Yup.string()
@@ -16,11 +17,13 @@ const ApplicationUserUpdateSchema = Yup.object().shape({
   phoneNumber: Yup.string()
     .min(8, "Phone number is too short")
     .max(50, "Phone number is too long"),
+  newPassword: Yup.string().min(6, "The password must be a string with at least 6 characters.").max(50, "The password must be a string of up to 50 characters."),
 });
 
 interface FormValues {
   displayName: string;
   phoneNumber: string;
+  newPassword: string,
 }
 
 export const PersonalDetailsTab = () => {
@@ -28,7 +31,10 @@ export const PersonalDetailsTab = () => {
   const [personalDetails, setPersonalDetails] = useState({
     displayName: "",
     phoneNumber: "",
+    newPassword: "",
   });
+
+  const router = useRouter()
 
   const userData = useUserOwnData({ authToken });
   const updateUser = useUpdateUser({ authToken });
@@ -44,6 +50,12 @@ export const PersonalDetailsTab = () => {
     try {
       await updateUser.mutateAsync(values);
       toast.success("Updated successfully");
+
+      // redirect to login if changed password
+      if(values.newPassword) {
+        router.push("/signin")
+      }
+
       return;
     } catch (error) {
       toast.error(error?.message || "Something went wrong. Please try again");
@@ -97,6 +109,26 @@ export const PersonalDetailsTab = () => {
             }
             error={
               formik.errors.phoneNumber && formik.touched.phoneNumber
+                ? true
+                : undefined
+            }
+          />
+        </div>
+        <div className="mb-7">
+          <p className={"mb-1"}>New password</p>
+          <p className={"text-gray-500 mb-2"}>After resetting the password you will be redirected to the sing in page</p>
+          <TextInput
+            defaultValue={formik.values.newPassword}
+            onChange={(event) => {
+              formik.values.newPassword = event.target.value;
+            }}
+            errorMessage={
+              formik.errors.newPassword && formik.touched.newPassword
+                ? formik.errors.newPassword
+                : undefined
+            }
+            error={
+              formik.errors.newPassword && formik.touched.newPassword
                 ? true
                 : undefined
             }

@@ -5,8 +5,8 @@ import { ResponseError } from "@/classes/ResponseError";
 import { getDecodedIdToken } from "@/app/lib/getDecodedIdToken";
 import { prisma } from "@/app/lib/db/client";
 import { ApplicationUser } from "@prisma/client";
-import { listingSchemaPutRequest } from "@/app/lib/validations/listing";
 import { userPUTSchema } from "@/app/lib/validations/user";
+import { firebaseAdmin } from "@/app/lib/firebase/configAdmin";
 
 /**
  * GET Route to retrieve users data
@@ -72,8 +72,13 @@ export async function PUT(req: Request) {
       await getApplicationUserServer(true);
 
     const parsedValues = userPUTSchema.parse(await req.json());
-    const { displayName, phoneNumber, newPassword } =
-      parsedValues;
+    const { displayName, phoneNumber, newPassword } = parsedValues;
+
+    await firebaseAdmin.auth().updateUser(applicationUser.firebaseUID, {
+      displayName,
+      phoneNumber,
+      ...(newPassword && { password: newPassword }),
+    });
 
     const updatedApplicationUser = await prisma.applicationUser.update({
       where: { id: applicationUser.id },
@@ -96,6 +101,13 @@ export async function PUT(req: Request) {
     }
 
     if (error.errorInfo && error.errorInfo.code) {
+      if(error.errorInfo.code === "auth/invalid-password") {
+        return new Response(
+          "The password must be a string with at least 6 characters.",
+          { status: 400 },
+        );
+      }
+
       return new Response(
         "Your auth token is invalid or it has expired. Get a new auth token and try again.",
         { status: 400 },
