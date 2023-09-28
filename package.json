@@ -57,6 +57,9 @@
     "@types/nodemailer": "^6.4.10",
     "prettier": "^3.0.3",
     "prisma": "^5.1.1",
-    "sass": "^1.66.1"
+    "sass": "^1.66.1",
+    "checkly": "latest",
+    "ts-node": "latest",
+    "typescript": "latest"
   }
 }
