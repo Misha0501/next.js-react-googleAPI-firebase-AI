@@ -1,1 +1,1 @@
-console.log("a test file to test the build proces 11s");
+console.log("a test file to test the build proces 11222s");

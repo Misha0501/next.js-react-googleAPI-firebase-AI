@@ -8,3 +8,10 @@ test('Custom Browser Check', async ({ page }) => {
   expect(response?.status()).toBeLessThan(400)
   await page.screenshot({ path: 'screenshot.jpg' })
 })
+
+
+test('Custom Browser Check Two', async ({ page }) => {
+  const response = await page.goto('https://real-estate-website-two-eta.vercel.app/')
+  expect(response?.status()).toBeLessThan(400)
+  await page.screenshot({ path: 'screenshot.jpg' })
+})
