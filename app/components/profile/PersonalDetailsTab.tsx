@@ -8,6 +8,8 @@ import { Button, TextInput } from "@tremor/react";
 import { toast } from "react-toastify";
 import { useUpdateUser, useUserOwnData } from "@/providers/Users";
 import { useRouter } from "next/navigation";
+import { signOut } from "@firebase/auth";
+import { firebaseClientAuth } from "@/app/lib/firebase/configClient";
 
 const ApplicationUserUpdateSchema = Yup.object().shape({
   displayName: Yup.string()
@@ -53,6 +55,7 @@ export const PersonalDetailsTab = () => {
 
       // redirect to login if changed password
       if(values.newPassword) {
+        await signOut(firebaseClientAuth);
         router.push("/signin")
       }
 
