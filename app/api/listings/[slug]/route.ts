@@ -71,7 +71,7 @@ export async function DELETE(request: Request, {params}: { params: { slug: numbe
 
         if (isNaN(id)) throw new ResponseError("ID must be a valid number", 422);
 
-        const applicationUser: ApplicationUser = await getApplicationUserServer();
+        const applicationUser: ApplicationUser = await getApplicationUserServer(true);
 
         const applicationUserId = applicationUser.id;
         const listing = await prisma.listing.findUnique({

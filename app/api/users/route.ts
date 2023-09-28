@@ -20,7 +20,24 @@ export async function GET(req: Request) {
     const applicationUser = await prisma.applicationUser.findUnique({
       where: { email: decodedToken.email },
       include: {
-        Membership: true,
+        Membership: {
+          include: {
+            company: {
+              include: {
+                Listing: {
+                  include: {
+                    ListingImage: true,
+                    Address: true,
+                    ListingPrice: true,
+                  },
+                  where: {
+                    deleted: null,
+                  },
+                },
+              },
+            },
+          },
+        },
         Invoice: true,
         Listing: {
           include: {
@@ -101,7 +118,7 @@ export async function PUT(req: Request) {
     }
 
     if (error.errorInfo && error.errorInfo.code) {
-      if(error.errorInfo.code === "auth/invalid-password") {
+      if (error.errorInfo.code === "auth/invalid-password") {
         return new Response(
           "The password must be a string with at least 6 characters.",
           { status: 400 },

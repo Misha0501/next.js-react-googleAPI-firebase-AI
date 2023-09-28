@@ -149,6 +149,7 @@ export type SavedSearch = {
 export type ApplicationUser = {
   Listing: Listing[];
   SavedListing: SavedListing[];
+  Membership: Membership[];
   SavedSearch: any[];
   createdAt: string;
   displayName: string;
@@ -191,7 +192,7 @@ export type Company = {
   updatedAt: string;
   Address?: Address[];
   memberships?: Membership[];
-  Listings?: Listing[];
+  Listing?: Listing[];
 };
 
 export type Membership = {
