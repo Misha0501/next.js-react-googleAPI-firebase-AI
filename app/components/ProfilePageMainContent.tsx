@@ -13,6 +13,7 @@ import { InvitesTab } from "@/app/components/profile/InvitesTab";
 import { PersonalDetailsTab } from "@/app/components/profile/PersonalDetailsTab";
 import { ApplicationUser, Company } from "@/types";
 import { PropertiesTab } from "@/app/components/profile/PropertiesTab";
+import { ProfilePageOwnListings } from "@/app/components/ProfilePageOwnListings";
 
 type Props = {
   tab: string;
@@ -29,7 +30,8 @@ export default function ProfilePageMainContent({ tab }: Props) {
   const activeTab = tabList.indexOf(tab);
   const router = useRouter();
   const { authToken, user } = useAuthContext();
-  const [applicationUser, setApplicationUser] = useState<ApplicationUser | null>(null);
+  const [applicationUser, setApplicationUser] =
+    useState<ApplicationUser | null>(null);
   const [company, setCompany] = useState<Company | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
@@ -103,7 +105,17 @@ export default function ProfilePageMainContent({ tab }: Props) {
         <TabPanels className={"pt-12 pl-20"}>
           <TabPanel>
             <p className={"font-bold text-4xl mb-12"}>Properties</p>
-            <PropertiesTab company={company} userListings={applicationUser?.Listing || []}/>
+            {company && (
+              <PropertiesTab
+                company={company}
+                userListings={applicationUser?.Listing || []}
+              />
+            )}
+            {!company && (
+              <ProfilePageOwnListings
+                initialListings={applicationUser?.Listing || []}
+              ></ProfilePageOwnListings>
+            )}
           </TabPanel>
           <TabPanel>
             <p className={"font-bold text-4xl mb-12"}>Saved items</p>
