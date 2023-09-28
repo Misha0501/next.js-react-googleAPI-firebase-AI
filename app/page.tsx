@@ -10,6 +10,8 @@ export default async function Home() {
                 <div className="container z-10">
                     <div className="hero__inner text-center">
                         <h1 className={"mb-16"}>Find your future home with ease TEST</h1>
+                          <p>ENVIRONMENT_URL {process.env.ENVIRONMENT_URL}</p>
+                          <p>NEXT_PUBLIC_ENVIRONMENT_URL {process.env.NEXT_PUBLIC_ENVIRONMENT_URL}</p>
                         <HomeHeroHeaderSearch></HomeHeroHeaderSearch>
                     </div>
                 </div>
