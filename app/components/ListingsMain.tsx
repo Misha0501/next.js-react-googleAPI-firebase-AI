@@ -54,7 +54,10 @@ export const ListingsMain = ({ searchParams, listingType, locality }) => {
     page: page,
   });
 
-  const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
+  const handlePageChange = (
+    event: React.ChangeEvent<unknown>,
+    value: number,
+  ) => {
     setPage(value);
   };
 
@@ -82,11 +85,11 @@ export const ListingsMain = ({ searchParams, listingType, locality }) => {
     // populate listings with saved listings data
     const populatedListingsWithSavedListingData = listings.map((listing) => {
       const savedListingListingId = savedListingsListingIds.find(
-        (savedListingId) => savedListingId === listing.id
+        (savedListingId) => savedListingId === listing.id,
       );
       const savedListing = savedListings.find(
         (savedListing: SavedListing) =>
-          savedListing.listingId === savedListingListingId
+          savedListing.listingId === savedListingListingId,
       );
 
       if (savedListingListingId && savedListingListingId && savedListing) {
@@ -132,12 +135,16 @@ export const ListingsMain = ({ searchParams, listingType, locality }) => {
     <div className="w-full">
       <div className="flex flex-row justify-between">
         <>
-          <div>
-            <div className={"text-xl mb-12"}>
-              <span className={"font-bold"}>Results: </span>{" "}
-              <span>{totalListings} properties found.</span>
+          {propertyListing.isLoading && <CircularProgress />}
+          {propertyListing.isSuccess && (
+            <div>
+              <div className={"text-xl mb-12"}>
+                <span className={"font-bold"}>Results: </span>{" "}
+                <span>{totalListings} properties found.</span>
+              </div>
             </div>
-          </div>
+          )}
+
           {/*<Select*/}
           {/*  style={{ width: "300px" }}*/}
           {/*  onValueChange={(e) => setSortBy(e)}*/}
@@ -159,7 +166,15 @@ export const ListingsMain = ({ searchParams, listingType, locality }) => {
             />
           ))}
       </div>
-      <Pagination shape="rounded" count={numberOfPages} page={page} onChange={handlePageChange} variant="outlined" color="primary" className={"mx-auto w-fit"} />
+      <Pagination
+        shape="rounded"
+        count={numberOfPages}
+        page={page}
+        onChange={handlePageChange}
+        variant="outlined"
+        color="primary"
+        className={"mx-auto w-fit"}
+      />
     </div>
   );
 };
