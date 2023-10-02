@@ -4,7 +4,6 @@ import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@tremor/react";
 import { firebaseClientAuth } from "@/app/lib/firebase/configClient";
-import { signOut } from "@firebase/auth";
 import { useEffect, useState } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { Disclosure } from "@headlessui/react";
@@ -12,10 +11,6 @@ import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 
 export const Navigation = () => {
   const [user, setUser] = useState();
-  const handleSingOut = async () => {
-    console.log("handle sign out");
-    await signOut(firebaseClientAuth);
-  };
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(firebaseClientAuth, async (user) => {
@@ -33,7 +28,7 @@ export const Navigation = () => {
       <Disclosure as="nav" className="py-3 sm:py-4 duration-1000 border-b-2">
         {({ open, close }) => (
           <>
-            <div className="max-w-screen-xl m-auto pl-5 pr-5 md:p-0 ">
+            <div className="container">
               <div className="relative flex h-16 items-center justify-between">
                 <div className="absolute inset-y-0 right-0 flex items-center sm:hidden">
                   {/* Mobile menu button*/}
@@ -85,20 +80,46 @@ export const Navigation = () => {
               <Disclosure.Panel className="absolute w-full p-2 top-0 left-0 z-40 bg-white duration-700 border-t-2 sm:hidden shadow-[0_35px_60px_-10px_rgba(167,165,165,0.3)] ">
                 <div className="space-y-1 px-2 pb-3 pt-2 flex flex-col items-end gap-3">
                   <Link href="/profile/saved">
-                    <Button variant="secondary" onClick={() => { close() }}>Saved properties</Button>
+                    <Button
+                      variant="secondary"
+                      onClick={() => {
+                        close();
+                      }}
+                    >
+                      Saved properties
+                    </Button>
                   </Link>
                   <Link href="/placeproperties">
-                    <Button variant="secondary" onClick={() => { close() }}>Place your property</Button>
+                    <Button
+                      variant="secondary"
+                      onClick={() => {
+                        close();
+                      }}
+                    >
+                      Place your property
+                    </Button>
                   </Link>
                   {user && (
                     <Link href="/profile/myProperties">
-                      <Button onClick={() => { close() }}>Profile</Button>
+                      <Button
+                        onClick={() => {
+                          close();
+                        }}
+                      >
+                        Profile
+                      </Button>
                     </Link>
                   )}
                   {!user && (
-                      <Link href="/signin">
-                        <Button onClick={() => { close() }}>Sign in</Button>
-                      </Link>
+                    <Link href="/signin">
+                      <Button
+                        onClick={() => {
+                          close();
+                        }}
+                      >
+                        Sign in
+                      </Button>
+                    </Link>
                   )}
                 </div>
               </Disclosure.Panel>
