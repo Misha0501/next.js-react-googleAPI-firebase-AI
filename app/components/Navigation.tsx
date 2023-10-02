@@ -44,14 +44,16 @@ export const Navigation = () => {
                 </div>
                 <div className="flex flex-1 items-center justify-between">
                   <div className="flex flex-shrink-0 items-center">
-                    <Image
-                      className={"w-24"}
-                      width={60}
-                      height={35}
-                      src={logo}
-                      alt="Company logo"
-                      placeholder="blur" // Optional blur-up while loading
-                    />
+                    <Link href="/">
+                      <Image
+                        className={"w-24"}
+                        width={60}
+                        height={35}
+                        src={logo}
+                        alt="Company logo"
+                        placeholder="blur" // Optional blur-up while loading
+                      />
+                    </Link>
                   </div>
                   <div className="hidden sm:ml-6 sm:block">
                     <div className="flex space-x-4">
