@@ -1,9 +1,15 @@
-import Image from "next/image";
 import React, { useState } from "react";
+import { Listing } from "@/types";
+import { getCurrencySign } from "@/app/lib/getCurrencySign";
+import Link from "next/link";
+import { Button } from "@tremor/react";
 
-import property1 from "@/public/Ajmere-Dale-Square-thumbnail.jpg";
+type Props = {
+  showForm: () => void;
+  listing: Listing | undefined;
+};
 
-function ListingAgentContactCard({ showForm, propertyPrice }: any) {
+function ListingAgentContactCard({ showForm, listing }: Props) {
   const allDetails = {
     propertyPrice: "312.000",
     agentName: "Sofia Johns",
@@ -15,66 +21,61 @@ function ListingAgentContactCard({ showForm, propertyPrice }: any) {
     setAgentContactState(
       agentContactState !== allDetails.agentContactNo
         ? allDetails.agentContactNo
-        : "Show Phone Number"
+        : "Show Phone Number",
     );
   };
   const showContactForm = () => {
     showForm((prevState: boolean) => !prevState);
-    // showForm(true)
   };
 
   return (
     <>
       <div className=" mb-8 w-full max-w-md bg-[#F2F2F2]  rounded-lg shadow-md px-8 py-9">
         <div className="mb-8">
-          <p className="mb-1 text-lg  font-light text-gray-500 dark:text-gray-400">
-            Rent Price{" "}
+          <p className="mb-1 font-light text-gray-500 dark:text-gray-400">
+            Asking Price{" "}
           </p>
           <div className="flex items-baseline mb-8 text-gray-900 dark:text-white">
-            <span className="text-3xl font-semibold">€ </span>
+            <span className="text-2xl font-semibold">
+              {getCurrencySign(listing?.currency)}
+            </span>
             <span className="text-3xl font-semibold tracking-tight">
-              {propertyPrice}
+              {new Intl.NumberFormat().format(listing?.price)}
             </span>
           </div>
-          <button
+          <Button
             onClick={showContactNo}
-            type="button"
-            className="text-blue-600 bg-transparent  font-extrabold   border-blue-600 border-2 p-4 rounded-lg text-xl  inline-flex justify-center w-full text-center"
+            className="w-full"
+            variant={"secondary"}
           >
             {agentContactState}
-          </button>
+          </Button>
         </div>
         <div>
-          <p className="mb-6 text-lg  font-light text-gray-500 dark:text-gray-400">
-            Listed by real estate agent{" "}
+          <p className="mb-6 font-light text-gray-500 dark:text-gray-400">
+            Listed by {listing?.company?.name ? " real estate agent" : " private owner"}
           </p>
           <div className="flex items-center space-x-4 mb-8">
-            <div className="flex">
-              <Image
-                width={50}
-                height={50}
-                className=" rounded-full"
-                src={property1}
-                alt="Agent image"
-                placeholder="blur"
-              />
-            </div>
-            <div className="flex-1  min-w-0">
-              <p className="text-lg font-bold text-gray-900 truncate dark:text-white">
-                {allDetails.agentName}
-              </p>
-              <p className="text-md text-gray-500 truncate dark:text-gray-400">
-                {allDetails.stateName}
-              </p>
+            <div className="flex-1 min-w-0">
+              <Link href={`/users/${listing?.applicationUser?.id}`}>
+                <p className="font-bold text-gray-900 truncate dark:text-white">
+                  {listing?.applicationUser?.displayName}
+                </p>
+                {listing?.company?.name && (
+                  <p className="text-md text-gray-500 truncate dark:text-gray-400">
+                    {listing?.company?.name}
+                  </p>
+                )}
+              </Link>
             </div>
           </div>
-          <button
+          <Button
             onClick={showContactForm}
-            type="button"
-            className="text-white bg-[#2C72F6]  font-extrabold p-4 rounded-lg text-xl  inline-flex justify-center w-full text-center"
+            variant={"primary"}
+            className={"w-full"}
           >
-            Contact with agent{" "}
-          </button>
+            Contact with seller{" "}
+          </Button>
         </div>
       </div>
     </>

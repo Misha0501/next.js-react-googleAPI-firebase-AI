@@ -15,15 +15,16 @@ import { getFetchUrl } from "@/app/lib/getFetchUrl";
 import { useAuthContext } from "@/app/context/AuthContext";
 import { useEffect, useState } from "react";
 import { Skeleton } from "@mui/material";
+import { getCurrencySign } from "@/app/lib/getCurrencySign";
 
 type ListingItemProps = {
   listingItemInitial: Listing;
-  onSavedIconClick: (listingItem: Listing) => void;
+  onSavedIconClick?: (listingItem: Listing) => void;
   isLoadingSavedListings: boolean;
   ownerView: boolean;
-  onEditIconClick: (listingItem: Listing) => void;
-  onDeleteIconClick: (listingItem: Listing) => void;
-  onStateChanged: (listingItem: Listing) => void;
+  onEditIconClick?: (listingItem: Listing) => void;
+  onDeleteIconClick?: (listingItem: Listing) => void;
+  onStateChanged?: (listingItem: Listing) => void;
   isLoading?: boolean;
 };
 
@@ -41,7 +42,7 @@ export const ListingItem = ({
   const { authToken } = useAuthContext();
 
   const router = useRouter();
-  var moneyFormatter = new Intl.NumberFormat();
+  let moneyFormatter = new Intl.NumberFormat();
 
   const goToListingPage = () => {
     router.push(`/listings/${listingItem.id}`);
@@ -115,18 +116,6 @@ export const ListingItem = ({
     return +(Math.round(num + "e+2") + "e-2");
   };
 
-  const getCurrencySign = (currency: CurrencyType) => {
-    switch (currency) {
-      case "EUR":
-        return "€";
-      case "USD":
-        return "$";
-      case "BGN":
-        return "лв.";
-      default:
-        return "";
-    }
-  };
 
   return (
     <div

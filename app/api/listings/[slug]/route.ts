@@ -26,6 +26,8 @@ export async function GET(request: Request, {params}: { params: { slug: number }
                 deleted: null,
             },
             include: {
+                applicationUser: true,
+                company: true,
                 ListingImage: true,
                 Address: true,
                 ListingPrice: true,

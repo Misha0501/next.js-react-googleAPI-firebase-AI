@@ -1,3 +1,5 @@
+import { ApplicationUser, Company } from "@/types";
+
 export namespace Poperty {
   export type ListingProps = {
     propertyType?: string[] | null;
@@ -145,6 +147,8 @@ export namespace Poperty {
     createdAt: string;
     updatedAt: string;
     deleted: boolean | null;
+    company: Company | null;
+    applicationUser: ApplicationUser;
     ListingImage: ListingImage[];
     Address: Address[];
     ListingPrice: ListingPrice[];

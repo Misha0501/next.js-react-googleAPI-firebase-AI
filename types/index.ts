@@ -38,6 +38,7 @@ export type Listing = {
   active: boolean;
   activeUntil: string;
   applicationUserId: number;
+  applicationUser: ApplicationUser;
   areaGarage: number;
   areaLand: number;
   areaLiving: number;
@@ -46,6 +47,7 @@ export type Listing = {
   bathrooms: number;
   bedrooms: number;
   companyId: number;
+  company: Company;
   constructedYear: string;
   createdAt: string;
   deleted: boolean;

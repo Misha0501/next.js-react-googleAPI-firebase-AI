@@ -1,12 +1,24 @@
 "use client";
 
-import {useEffect, useMemo, useState} from "react";
-import {CheckCircleIcon, HeartIcon, PhotoIcon, Square3Stack3DIcon} from "@heroicons/react/24/outline";
-import {BarChart, Button, Divider, Icon, LineChart, Title} from "@tremor/react";
-import {GoBackBtn} from "./GoBackBtn";
+import { useEffect, useMemo, useState } from "react";
+import {
+  CheckCircleIcon,
+  HeartIcon,
+  PhotoIcon,
+  Square3Stack3DIcon,
+} from "@heroicons/react/24/outline";
+import {
+  BarChart,
+  Button,
+  Divider,
+  Icon,
+  LineChart,
+  Title,
+} from "@tremor/react";
+import { GoBackBtn } from "./GoBackBtn";
 import Image from "next/image";
-import {useListingDetailPage} from "@/providers/Listing";
-import {useParams} from "next/navigation";
+import { useListingDetailPage } from "@/providers/Listing";
+import { useParams } from "next/navigation";
 
 import ListingAgentContactCard from "./ListingAgentContactCard";
 import ListingContactAgentForm from "./ListingContactAgentForm";
@@ -17,11 +29,17 @@ import "yet-another-react-lightbox/styles.css";
 import "yet-another-react-lightbox/plugins/thumbnails.css";
 import Thumbnails from "yet-another-react-lightbox/plugins/thumbnails";
 import ListingDetailContent from "./ListingDetailContent";
-import {useCreateRecentlyViewedListing} from "@/providers/RecentlyViewedListings";
-import {useAuthContext} from "@/app/context/AuthContext";
+import { useCreateRecentlyViewedListing } from "@/providers/RecentlyViewedListings";
+import { useAuthContext } from "@/app/context/AuthContext";
 import FloatingContactWidget from "./FloatingContactWidget";
-import {BedRoomIcon, PhotosIcon, VerticaleMap, WindowsIcon,} from "@/public/BedIcon";
+import {
+  BedRoomIcon,
+  PhotosIcon,
+  VerticaleMap,
+  WindowsIcon,
+} from "@/public/BedIcon";
 import Link from "next/link";
+import { Listing } from "@/types";
 
 const ListingDetail = () => {
   const { authToken } = useAuthContext();
@@ -34,10 +52,16 @@ const ListingDetail = () => {
   const createRecentlyViewedListing = useCreateRecentlyViewedListing({
     authToken,
   });
-  const [averagePriceNeighborhoodChartData, setAveragePriceNeighborhoodChartData] = useState();
+  const [
+    averagePriceNeighborhoodChartData,
+    setAveragePriceNeighborhoodChartData,
+  ] = useState();
+  console.log("listingDetail");
+  console.log(listingDetail);
+  console.log(listingDetail.data);
 
   useEffect(() => {
-    if(listingDetail?.data?.averagePriceInNeighborhood) {
+    if (listingDetail?.data?.averagePriceInNeighborhood) {
       setAveragePriceNeighborhoodChartData([
         {
           name: "Average price in the neighborhood",
@@ -46,10 +70,13 @@ const ListingDetail = () => {
         {
           name: "This listing's price",
           "Listing price": listingDetail?.data?.price,
-        }
-      ])
+        },
+      ]);
     }
-  }, [listingDetail?.data?.averagePriceInNeighborhood, listingDetail.isSuccess]);
+  }, [
+    listingDetail?.data?.averagePriceInNeighborhood,
+    listingDetail.isSuccess,
+  ]);
 
   const dataFormatter = (number: number) => {
     return "€ " + Intl.NumberFormat("eu").format(number).toString();
@@ -83,7 +110,7 @@ const ListingDetail = () => {
         icon: CheckCircleIcon,
       },
     ],
-    [listingDetail?.data]
+    [listingDetail?.data],
   );
   let generalInfo = useMemo(
     () => [
@@ -100,7 +127,7 @@ const ListingDetail = () => {
       { title: "Floor", value: listingDetail.data?.floorNumber },
       { title: "Balcony/terrace", value: listingDetail?.data?.balcony },
     ],
-    [listingDetail?.data]
+    [listingDetail?.data],
   );
 
   let areaAndCapacity = useMemo(
@@ -112,7 +139,7 @@ const ListingDetail = () => {
       { title: "Volume", value: listingDetail.data?.volume },
       { title: "Garage", value: listingDetail.data?.areaGarage },
     ],
-    [listingDetail?.data]
+    [listingDetail?.data],
   );
 
   let construction = useMemo(
@@ -124,7 +151,7 @@ const ListingDetail = () => {
         value: listingDetail.data?.numberOfFloorsProperty,
       },
     ],
-    [listingDetail?.data]
+    [listingDetail?.data],
   );
 
   const generalInfoFunc = (val: any) => {
@@ -369,9 +396,16 @@ const ListingDetail = () => {
                             </p>
                           </div>
                         </div>
-                        <p className="text-[#717D96] text-base">
-                          Sofia real estate
-                        </p>
+                        <Link
+                          href={`/users/${listingDetail?.data?.applicationUser?.id}`}
+                        >
+                          <p className="text-[#717D96] text-base">
+                            {listingDetail?.data?.company?.name
+                              ? listingDetail?.data?.company?.name
+                              : listingDetail?.data?.applicationUser
+                                  ?.displayName}
+                          </p>
+                        </Link>
                       </div>
                       <div>
                         <Icon
@@ -399,10 +433,10 @@ const ListingDetail = () => {
                       <GoogleMap
                         location={{
                           lat: parseFloat(
-                            listingDetail?.data?.Address[0]?.latitude
+                            listingDetail?.data?.Address[0]?.latitude,
                           ),
                           lng: parseFloat(
-                            listingDetail?.data?.Address[0]?.longitude
+                            listingDetail?.data?.Address[0]?.longitude,
                           ),
                           address: listingDetail?.data?.Address[0]?.locality,
                         }}
@@ -411,15 +445,17 @@ const ListingDetail = () => {
                     </div>
                   )}
                 </div>
-                <div className="sm:col-span-1 md:col-span-1 lg:col-span-1">
-                  <ListingAgentContactCard
-                    showForm={setShowContactWithAgent}
-                    propertyPrice={listingDetail?.data?.price}
-                  />
-                  {showContactWithAgent && (
-                    <ListingContactAgentForm name={"Sofia Jones"} />
-                  )}
-                </div>
+                {listingDetail?.data && (
+                  <div className="sm:col-span-1 md:col-span-1 lg:col-span-1">
+                    <ListingAgentContactCard
+                      showForm={setShowContactWithAgent}
+                      listing={listingDetail?.data}
+                    />
+                    {showContactWithAgent && (
+                      <ListingContactAgentForm name={"Sofia Jones"} />
+                    )}
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -445,11 +481,13 @@ const ListingDetail = () => {
 
       {averagePriceNeighborhoodChartData && (
         <div className=" container">
-          <p className="font-medium text-[24px] pt-14">Price comparison graph</p>
+          <p className="font-medium text-[24px] pt-14">
+            Price comparison graph
+          </p>
           <Title className="pt-8">
             This graph shows the average price in the neighborhood{" "}
-            {listingDetail?.data?.Address[0]?.neighborhood}{" "}
-            for properties with the same type compared to this listing.
+            {listingDetail?.data?.Address[0]?.neighborhood} for properties with
+            the same type compared to this listing.
           </Title>
           <BarChart
             className="mt-6"

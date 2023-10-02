@@ -27,7 +27,6 @@ function UserPageMain() {
     }
   }, [userDetail?.data]);
 
-  function doNothing() {}
 
   return (
     <div className="py-8 xl:py-16 max-w-sm m-auto md:max-w-md  xl:max-w-7xl mb-[68px] md:mb-0">
@@ -38,8 +37,8 @@ function UserPageMain() {
         </div>
       ) : (
         <>
-          <div className="grid grid-cols-1 xl:grid-cols-3 gap-10 mt-5 xl:mt-10">
-            <div className="xl:col-span-2 flex flex-col gap-4">
+          <div className="grid grid-cols-1 xl:grid-cols-3 gap-10 mt-5 xl:my-10">
+            <div className="xl:col-span-2 flex flex-col">
               {userDetail?.data?.Company?.image && (
                 <Image
                   className="rounded-lg"
@@ -54,14 +53,6 @@ function UserPageMain() {
                   ? userDetail?.data?.Company?.name
                   : userDetail?.data?.displayName}
               </h3>
-              <div className="flex items-center gap-3">
-                <p className="font-bold text-2xl text-[#717D96]">
-                  {userDetail?.data?.Company
-                    ? userDetail?.data?.Company?.Listing?.length
-                    : userDetail?.data?.Listing?.length}
-                </p>
-                <p className="font-normal text-base text-[#717D96]">for sale</p>
-              </div>
               <div className="flex  my-6">
                 <Link
                   href={"#descriptionSection"}
@@ -77,32 +68,23 @@ function UserPageMain() {
                 </Link>
                 {userDetail?.data?.Company && (
                   <Link
-                    href={"#officeSection"}
+                    href={"#contactSection"}
                     className="p-4 bg-none text-[#717D96]  font-bold focus:bg-[#EDF0F7]   focus:text-[#2D3648]  active:bg-[#EDF0F7] active:border-b-2 active:border-[#2D3648]  active:text-[#2D3648] focus:border-b-2 focus:border-[#2D3648]"
                   >
-                    Office
+                    Contact
                   </Link>
                 )}
               </div>
-              <Divider />
               <div id="descriptionSection" className="flex flex-col gap-4 my-6">
-                <p className="font-bold text-2xl text-[#222222]">Description</p>
-                <div className="flex gap-4">
-                  {/* <p className="underline decoration-1 font-bold text-sm text-[#222222]">
-                Translate
-              </p> */}
-                </div>
+                <p className="font-bold text-2xl text-[#222222]">About us</p>
                 {userDetail?.data?.Company?.description && (
                   <p className="text-base font-normal text-[#4A5468]">
                     {userDetail?.data?.Company?.description}
                   </p>
                 )}
-                <p className="underline decoration-1 font-bold text-sm text-[#222222]">
-                  Show more &gt;
-                </p>
               </div>
               <Divider />
-              <div id="contactSection" className="flex flex-col gap-4 my-6">
+              <div id="contactSection" className="flex flex-col gap-4">
                 <p className="font-bold text-2xl text-[#222222]">Contact</p>
                 <div className="mt-4">
                   <p className="text-md font-semibold mb-2">Phone number</p>
@@ -113,61 +95,50 @@ function UserPageMain() {
                     </p>
                   </div>
                 </div>
-                <div className="mt-4 mb-4">
-                  <p className="text-md font-semibold mb-2">Address</p>
-                  <div className="flex items-center">
-                    <MapIcon width={15} height={15} />
-
-                    <p className="text-md font-normal ml-2  text-[#717D96]">
-                      {" "}
-                      {userDetail?.data?.Company?.Address?.[0]?.locality || "-"}
-                    </p>
-                  </div>
-                </div>
-                <Button className="w-fit" variant="secondary">
-                  Show on Maps
-                </Button>
+                {userDetail?.data?.Company && (
+                  <>
+                    <div className="mt-4 mb-4">
+                      <p className="text-md font-semibold mb-2">Address</p>
+                      <div className="flex items-center">
+                        <MapIcon width={15} height={15} />
+                        <p className="text-md font-normal ml-2  text-[#717D96]">
+                          {" "}
+                          {userDetail?.data?.Company?.Address?.[0]?.locality ||
+                            "-"}
+                        </p>
+                      </div>
+                    </div>
+                    {userDetail?.data?.Company?.Address?.[0]?.latitude &&
+                      userDetail?.data?.Company?.Address?.[0]?.longitude && (
+                        <div
+                          id="officeSection"
+                          className="flex flex-col gap-4 my-6"
+                        >
+                          <div className="rounded-lg overflow-hidden">
+                            <GoogleMap
+                              location={{
+                                lat: parseFloat(
+                                  userDetail?.data?.Company?.Address?.[0]
+                                    ?.latitude,
+                                ),
+                                lng: parseFloat(
+                                  userDetail?.data?.Company?.Address?.[0]
+                                    ?.longitude,
+                                ),
+                                address:
+                                  userDetail?.data?.Company?.Address?.[0]
+                                    ?.locality,
+                              }}
+                            />
+                          </div>
+                        </div>
+                      )}
+                  </>
+                )}
               </div>
               <Divider />
-              {userDetail?.data?.Company && (
-                <>
-                  <div id="officeSection" className="flex flex-col gap-4 my-6">
-                    <p className="font-bold text-2xl text-[#222222]">
-                      Our office
-                    </p>
-                    <p className="text-lg font-normal text-[#717D96]">
-                      {userDetail?.data?.Company?.Address?.[0]?.locality}
-                    </p>
-
-                    <div className="rounded-lg overflow-hidden">
-                      <GoogleMap
-                        location={{
-                          lat: parseFloat(
-                            userDetail?.data?.Company?.Address?.[0]?.latitude
-                          ),
-                          lng: parseFloat(
-                            userDetail?.data?.Company?.Address?.[0]?.longitude
-                          ),
-                          address:
-                            userDetail?.data?.Company?.Address?.[0]?.locality,
-                        }}
-                      />
-                    </div>
-
-                    <p className=" font-bold text-sm text-[#222222]">
-                      See more results in Sofia &gt;
-                    </p>
-                  </div>
-                  <Divider />
-                </>
-              )}
             </div>
-            <div>
-              <div className="mb-12">
-                <ListingContactAgentForm name={"Company Name"} />
-              </div>
-              <Divider className=" xl:hidden" />
-            </div>
+            <ListingContactAgentForm name={"Company Name"} />
           </div>
           <div id="propertiesSection" className="flex flex-col gap-12 my-6">
             <p className="font-bold text-2xl text-[#222222]">Our properties</p>
@@ -176,14 +147,10 @@ function UserPageMain() {
                 {propertyListing &&
                   propertyListing.map((item, index) => (
                     <ListingItem
-                      // @ts-ignore
                       listingItemInitial={item}
                       key={index}
-                      onSavedIconClick={doNothing}
                       isLoadingSavedListings={false}
                       isLoading={userDetail?.isFetching}
-                      onEditIconClick={doNothing}
-                      onDeleteIconClick={doNothing}
                       ownerView={false}
                     />
                   ))}
