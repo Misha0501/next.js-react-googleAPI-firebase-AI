@@ -14,6 +14,7 @@ import Confirmation from "./Confirmation";
 import { Formik, FieldArray, FormikProps } from "formik"; // Import Formik components
 import * as Yup from "yup";
 import { MuiStepper } from "./Styled";
+import FloatingContactWidget from "../FloatingContactWidget";
 
 const steps = [
   "General information",
@@ -138,7 +139,7 @@ export default function MultiForm() {
 
   return (
     <div className="py-11">
-      <div className="max-w-screen-xl m-auto">
+      <div className="max-w-screen-xl m-auto pl-5 pr-5 md:p-0">
         <GoBackBtn
           //@ts-ignore
           label="Back to account"
@@ -223,7 +224,7 @@ export default function MultiForm() {
               <Box>
                 <div className=" bg-[#F2F2F2] shadow-[0_4px_20px_0px_rgba(0,0,0,0.1)]">
                   <MuiStepper
-                    className="max-w-screen-xl m-auto"
+                    className="max-w-screen-xl m-auto hidden md:flex lg:flex xl:flex 2xl:flex"
                     activeStep={activeStep}
                     orientation="horizontal"
                   >

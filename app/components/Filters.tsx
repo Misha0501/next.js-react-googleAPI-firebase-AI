@@ -17,7 +17,7 @@ import {
   priceRentMaxOptions,
   priceRentMinOptions,
   priceSellMaxOptions,
-  priceSellMinOptions
+  priceSellMinOptions,
 } from "../Constants/filters";
 
 import { FromToFilter } from "./FromToFilter";
@@ -36,7 +36,7 @@ export function Filters({ onParamsChange, listingType }: any) {
     areaTotal: { min: undefined, max: undefined }, // Square meters total filter
     roomRange: { min: undefined, max: undefined }, // Rooms filter
     bedroomRange: { min: undefined, max: undefined }, // Bedrooms filter
-    listedSince: undefined // Listed since filter
+    listedSince: undefined, // Listed since filter
   });
   const removeUndefinedAndNoMaxValues = (filters: any) => {
     // set max value in all filterValues properties to undefined if it's set to NO_MAX
@@ -48,12 +48,10 @@ export function Filters({ onParamsChange, listingType }: any) {
 
       // remove undefined children from params[key]
       if (typeof result[key] === "object") {
-
         Object.keys(result[key]).forEach((childKey) => {
           const child = result[key][childKey];
 
           if (child === NO_MAX) {
-
             result[key][childKey] = undefined;
           }
         });
@@ -164,11 +162,11 @@ export function Filters({ onParamsChange, listingType }: any) {
     (values: any) => {
       setFilterValues((prevFilterValues) => ({
         ...prevFilterValues,
-        propertyType: values
+        propertyType: values,
       }));
       const queryParams = generateQueryParams({
         ...filterValues,
-        propertyType: values
+        propertyType: values,
       });
       setQueryParams(queryParams);
     },
@@ -179,11 +177,11 @@ export function Filters({ onParamsChange, listingType }: any) {
     (min: any, max: any) => {
       setFilterValues((prevFilterValues) => ({
         ...prevFilterValues,
-        livingAreaRange: { min, max }
+        livingAreaRange: { min, max },
       }));
       const queryParams = generateQueryParams({
         ...filterValues,
-        livingAreaRange: { min, max }
+        livingAreaRange: { min, max },
       });
       setQueryParams(queryParams);
     },
@@ -194,11 +192,11 @@ export function Filters({ onParamsChange, listingType }: any) {
     (min: any, max: any) => {
       setFilterValues((prevFilterValues) => ({
         ...prevFilterValues,
-        areaTotal: { min, max }
+        areaTotal: { min, max },
       }));
       const queryParams = generateQueryParams({
         ...filterValues,
-        areaTotal: { min, max }
+        areaTotal: { min, max },
       });
       setQueryParams(queryParams);
     },
@@ -209,11 +207,11 @@ export function Filters({ onParamsChange, listingType }: any) {
     (min: any, max: any) => {
       setFilterValues((prevFilterValues) => ({
         ...prevFilterValues,
-        priceRange: { min, max }
+        priceRange: { min, max },
       }));
       const queryParams = generateQueryParams({
         ...filterValues,
-        priceRange: { min, max }
+        priceRange: { min, max },
       });
       setQueryParams(queryParams);
     },
@@ -224,11 +222,11 @@ export function Filters({ onParamsChange, listingType }: any) {
     (min: any, max: any) => {
       setFilterValues((prevFilterValues) => ({
         ...prevFilterValues,
-        roomRange: { min, max }
+        roomRange: { min, max },
       }));
       const queryParams = generateQueryParams({
         ...filterValues,
-        roomRange: { min, max }
+        roomRange: { min, max },
       });
       setQueryParams(queryParams);
     },
@@ -239,11 +237,11 @@ export function Filters({ onParamsChange, listingType }: any) {
     (min: any, max: any) => {
       setFilterValues((prevFilterValues) => ({
         ...prevFilterValues,
-        bedroomRange: { min, max }
+        bedroomRange: { min, max },
       }));
       const queryParams = generateQueryParams({
         ...filterValues,
-        bedroomRange: { min, max }
+        bedroomRange: { min, max },
       });
       setQueryParams(queryParams);
     },
@@ -254,11 +252,11 @@ export function Filters({ onParamsChange, listingType }: any) {
     (values: any) => {
       setFilterValues((prevFilterValues) => ({
         ...prevFilterValues,
-        listedSince: values
+        listedSince: values,
       }));
       const queryParams = generateQueryParams({
         ...filterValues,
-        listedSince: values
+        listedSince: values,
       });
       setQueryParams(queryParams);
     },
@@ -272,22 +270,22 @@ export function Filters({ onParamsChange, listingType }: any) {
 
   return (
     <>
-      <p className={"font-bold mb-4"}>Price</p>
-      {listingType === "SELL" &&
-        <FromToFilter
-          valuesTo={priceSellMaxOptions}
-          valuesFrom={priceSellMinOptions}
-          initialFrom={filterValues.priceRange.min || "0"}
-          initialTo={filterValues.priceRange.max || NO_MAX}
-          onChangeFrom={(value) =>
-            handlePriceChange(value, filterValues.priceRange.max)
-          }
-          onChangeTo={(value) =>
-            handlePriceChange(filterValues.priceRange.min, value)
-          }
-        ></FromToFilter>
-      }
-      {listingType === "RENT" &&
+      <p className={"font-bold mb-4"}>Price Range </p>
+      {/* {listingType === "SELL" && */}
+      <FromToFilter
+        valuesTo={priceRentMaxOptions}
+        valuesFrom={priceRentMinOptions}
+        initialFrom={filterValues.priceRange.min || "0"}
+        initialTo={filterValues.priceRange.max || NO_MAX}
+        onChangeFrom={(value) =>
+          handlePriceChange(value, filterValues.priceRange.max)
+        }
+        onChangeTo={(value) =>
+          handlePriceChange(filterValues.priceRange.min, value)
+        }
+      />
+      {/*  } */}
+      {/* {listingType === "RENT" &&
         <FromToFilter
           valuesTo={priceRentMaxOptions}
           valuesFrom={priceRentMinOptions}
@@ -299,16 +297,18 @@ export function Filters({ onParamsChange, listingType }: any) {
           onChangeTo={(value) =>
             handlePriceChange(filterValues.priceRange.min, value)
           }
-        ></FromToFilter>
-      }
-      <Divider />
-      <p className={"font-bold mb-4"}>Property type</p>
+        />
+      } */}
+      <Divider className="my-6" />
+      <p className={"font-bold mb-4 text-[#2D3648]"}>Property type</p>
       <PropertyTypeFilter
         selectedValues={filterValues.propertyType}
         onChange={handlePropertyTypeChange}
       />
-      <Divider />
-      <p className={"font-bold mb-4"}>Square meters living area</p>
+      <Divider className="my-6" />
+      <p className={"font-bold mb-4 text-[#2D3648]"}>
+        Square meters living area
+      </p>
       <FromToFilter
         valuesTo={areaLivingMaxOptions}
         valuesFrom={areaLivingMinOptions}
@@ -321,8 +321,8 @@ export function Filters({ onParamsChange, listingType }: any) {
           handleLivingAreaChange(filterValues.livingAreaRange.min, value)
         }
       ></FromToFilter>
-      <Divider />
-      <p className={"font-bold mb-4"}>Square meters property</p>
+      <Divider className="my-6" />
+      <p className={"font-bold text-base mb-4"}>Square meters property</p>
       <FromToFilter
         initialFrom={filterValues.areaTotal.min || "0"}
         initialTo={filterValues.areaTotal.max || NO_MAX}
@@ -335,8 +335,8 @@ export function Filters({ onParamsChange, listingType }: any) {
           handleLivingLandChange(filterValues.areaTotal.min, value)
         }
       ></FromToFilter>
-      <Divider />
-      <p className={"font-bold mb-4"}>Rooms</p>
+      <Divider className="my-6" />
+      <p className={"font-bold mb-4 text-[#2D3648]"}>Rooms</p>
       <FromToFilter
         initialFrom={filterValues.roomRange.min || "0"}
         initialTo={filterValues.roomRange.max || NO_MAX}
@@ -349,8 +349,8 @@ export function Filters({ onParamsChange, listingType }: any) {
           handleRoomChange(filterValues.roomRange.min, value)
         }
       ></FromToFilter>
-      <Divider />
-      <p className={"font-bold mb-4"}>Bedrooms</p>
+      <Divider className="my-6" />
+      <p className={"font-bold mb-4 text-[#2D3648]"}>Bedrooms</p>
       <FromToFilter
         initialFrom={filterValues.bedroomRange.min || "0"}
         initialTo={filterValues.bedroomRange.max || NO_MAX}
@@ -363,13 +363,13 @@ export function Filters({ onParamsChange, listingType }: any) {
           handleBedroomChange(filterValues.bedroomRange.min, value)
         }
       ></FromToFilter>
-      <Divider />
-      <p className={"font-bold mb-4"}>Listed since</p>
+      <Divider className="my-6" />
+      <p className={"font-bold mb-4 text-[#2D3648]"}>Listed since</p>
       <RadioGroupCustom
         options={listedSinceOptions}
         onChange={handleListedSince}
-      ></RadioGroupCustom>
-      <Divider />
+      />
+      <Divider className="my-6" />
     </>
   );
 }

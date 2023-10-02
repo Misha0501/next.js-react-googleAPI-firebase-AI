@@ -1,7 +1,10 @@
 "use client";
 import Autocomplete from "@/app/components/Autocomplete";
 
-export const ListingsPageHeader = ({ onLocalityChange, initialLocality }: any) => {
+export const ListingsPageHeader = ({
+  onLocalityChange,
+  initialLocality,
+}: any) => {
   const handleOnSubmit = (e: any) => {
     // get the value from input with name="locality"
     e.preventDefault();
@@ -11,14 +14,19 @@ export const ListingsPageHeader = ({ onLocalityChange, initialLocality }: any) =
     } else {
       onLocalityChange("");
     }
-
   };
 
   return (
-    <header className="pb-10 pt-16">
-      <div className="container flex items-center space-x-3 ">
-        <form className="w-full flex items-center bg-white border-2 rounded-lg" onSubmit={handleOnSubmit}>
-          <Autocomplete onLocalityChange={onLocalityChange} initialValue={initialLocality} />
+    <header className=" lg:pb-10 lg:pt-16 ">
+      <div className="container flex items-center">
+        <form
+          className="w-full flex items-center bg-white border-2 rounded-lg"
+          onSubmit={handleOnSubmit}
+        >
+          <Autocomplete
+            onLocalityChange={onLocalityChange}
+            initialValue={initialLocality}
+          />
         </form>
       </div>
     </header>

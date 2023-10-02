@@ -1,12 +1,11 @@
-import { useRef, useEffect, useState, useCallback } from "react";
+import { useEffect, useRef, useState } from "react";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
-import { AutocompleteAddress, CurrencyType, HeatingType, InteriorType, ListingImage, UpkeepType } from "@/types";
+import { AutocompleteAddress } from "@/types";
 
-window.initMap = function(e) {
+window.initMap = function (e) {
   console.log(e);
   console.log("in init map");
 };
-
 
 type AutocompleteProps = {
   onLocalityChange?: (locality: string) => void;
@@ -14,10 +13,14 @@ type AutocompleteProps = {
   initialValue?: string;
   submitBtnType?: string;
   autocompleteType?: string;
-}
+};
 
-const AutoComplete = ({ onLocalityChange, onAddressChange, initialValue, autocompleteType }: AutocompleteProps) => {
-
+const AutoComplete = ({
+  onLocalityChange,
+  onAddressChange,
+  initialValue,
+  autocompleteType,
+}: AutocompleteProps) => {
   const [address, setAddress] = useState({
     streetNumber: "",
     route: "",
@@ -26,7 +29,7 @@ const AutoComplete = ({ onLocalityChange, onAddressChange, initialValue, autocom
     postalCode: "",
     neighborhood: "",
     latitude: "",
-    longitude: ""
+    longitude: "",
   });
   const [inputValue, setInputValue] = useState(initialValue || "");
 
@@ -48,7 +51,6 @@ const AutoComplete = ({ onLocalityChange, onAddressChange, initialValue, autocom
       setInputValue(address.locality);
       onLocalityChange(address.locality);
     }
-
   }, [address]);
 
   const placeChanged = (e) => {
@@ -109,7 +111,7 @@ const AutoComplete = ({ onLocalityChange, onAddressChange, initialValue, autocom
       postalCode,
       neighborhood,
       latitude: place?.geometry?.location?.lat(),
-      longitude: place?.geometry?.location?.lng()
+      longitude: place?.geometry?.location?.lng(),
     });
   };
 
@@ -128,13 +130,14 @@ const AutoComplete = ({ onLocalityChange, onAddressChange, initialValue, autocom
 
   return (
     <>
-      <input className="hero__search w-full p-3 pl-8 rounded-l-lg outline-0 focus:outline-none text-black"
-             type={"text"}
-             placeholder={"E.g: Sophia, Plovdiv, Varna"}
-             ref={inputRef}
-             name={"locality"}
-             value={inputValue}
-             onChange={(e) => setInputValue(e.target.value)}
+      <input
+        className="hero__search w-full py-3 pl-8 rounded-l-lg outline-0 focus:outline-none text-black"
+        type={"text"}
+        placeholder={"E.g: Sophia, Plovdiv, Varna"}
+        ref={inputRef}
+        name={"locality"}
+        value={inputValue}
+        onChange={(e) => setInputValue(e.target.value)}
       />
       <button type={"submit"} className="p-3 bg-gray-200 rounded-r-lg">
         <MagnifyingGlassIcon className={"h-6 w-6 text-gray-600"} />

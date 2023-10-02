@@ -100,24 +100,13 @@ function Confirmation({
         <NextToConfirmationPage listingItem={createdProperty} />
       ) : (
         <div className="max-w-screen-xl m-auto">
-          <div className="flex items-center justify-center">
-            <div className="py-10 w-full gap-20 align-middle">
-              <div>
-                <p className="text-[18px] text-[#222]">{stepNumber}</p>
-                <h4
-                  className="text-[40px] font-bold py-10"
-                  style={{ lineHeight: "120%" }}
-                >
-                  {title}
-                </h4>
-              </div>
-            </div>
+          <div>
             {disableState ? (
               <Button
                 type="button"
                 onClick={handleButtonClick}
                 className={
-                  " text-lg  w-[258px] bg-[#4785FD] text-white font-bold py-4 px-6  rounded-lg"
+                  " text-lg  w-full md:w-1/6 bg-[#4785FD] text-white font-bold py-4 px-6 rounded-lg"
                 }
               >
                 Edit
@@ -130,7 +119,7 @@ function Confirmation({
               <Button
                 onClick={() => setDisableState(true)}
                 className={
-                  " text-lg  w-[258px] bg-[#4785FD] text-white font-bold py-4 px-6  rounded-lg"
+                  " text-lg  w-full md:w-1/6 bg-[#4785FD] text-white font-bold py-4 px-6  rounded-lg"
                 }
               >
                 Save Changes
@@ -139,6 +128,17 @@ function Confirmation({
           </div>
           {disableState ? (
             <div>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 py-10 w-full gap-0 md:gap-20 align-middle">
+                <div>
+                  <p className="text-[18px] text-[#222]">{stepNumber}</p>
+                  <h4
+                    className="text-[24px] md:text-[40px] font-bold py-10"
+                    style={{ lineHeight: "120%" }}
+                  >
+                    {title}
+                  </h4>
+                </div>
+              </div>
               <div className="detail_single_box">
                 <div className="flex justify-between">
                   <p className={"font-semibold text-[18px] mb-2"}>
@@ -384,16 +384,16 @@ function Confirmation({
                         {formik?.values?.floorNumber}
                       </p>
 
-                    {/*    <span className="mb-2 font-semibold text-[14px] ">*/}
-                    {/*  Building type*/}
-                    {/*</span>*/}
+                      {/*    <span className="mb-2 font-semibold text-[14px] ">*/}
+                      {/*  Building type*/}
+                      {/*</span>*/}
 
-                    {/*    <p className="py-2 text-[16px]">*/}
-                    {/*      {formik?.values?.buildingtype}*/}
-                    {/*    </p>*/}
-                  </div>
+                      {/*    <p className="py-2 text-[16px]">*/}
+                      {/*      {formik?.values?.buildingtype}*/}
+                      {/*    </p>*/}
+                    </div>
 
-                </>)}
+                  </>)}
               </div>
 
               <Divider />
@@ -429,7 +429,7 @@ function Confirmation({
                 )}
                 {formik.values?.images?.slice(1)?.map((el: ListingImage, index: number) => (
                   <div className={"max-w-[500px] mb-3"}
-                       key={index}
+                    key={index}
                   >
                     <Image
                       alt="Property image"
@@ -462,10 +462,10 @@ function Confirmation({
                 </p>
               </div>
               <Divider />
-              <div>
+              <div className="flex gap-2.5">
                 {step > 0 && (
                   <Button
-                    className="w-[247px] h-[56px] mt-8 mr-8 bg-transparent border border-[#2C72F6] text-[#2C72F6]"
+                    className="w-2/5 md:w-[247px] h-[56px] mt-8  bg-transparent border border-[#2C72F6] text-[#2C72F6]"
                     onClick={handleBack}
                     disabled={createProperty.isLoading}
                   >
@@ -476,7 +476,7 @@ function Confirmation({
                   type="button"
                   disabled={createProperty.isLoading}
                   onClick={confirmBtnHandler}
-                  className="w-[247px] h-[56px] mt-8 border border-[#2C72F6]"
+                  className="w-3/5 md:w-[247px] h-[56px] mt-8 border border-[#2C72F6]"
                 >
                   Confirm
                 </Button>

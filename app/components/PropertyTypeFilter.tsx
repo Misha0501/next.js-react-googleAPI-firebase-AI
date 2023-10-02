@@ -16,7 +16,7 @@ export function PropertyTypeFilter({ onChange, selectedValues }: any) {
   };
 
   return (
-    <>
+    <div className="flex flex-col gap-2">
       {PROPERTY_TYPES &&
         PROPERTY_TYPES.map((item, index) => (
           <div className="flex items-center gap-3" key={index}>
@@ -28,6 +28,6 @@ export function PropertyTypeFilter({ onChange, selectedValues }: any) {
             />
           </div>
         ))}
-    </>
+    </div>
   );
 }

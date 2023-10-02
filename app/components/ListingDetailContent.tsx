@@ -32,9 +32,9 @@ const ListingDetailContent = ({
       )}
       <div className="pb-6">
         <p className="text-[24px]">General information</p>
-        <div className="grid grid-cols-2 gap-6 pt-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-6 pt-8 ">
           {generalInfo.map((item, index) => (
-            <div key={index} className="flex justify-between">
+            <div key={index} className="flex justify-between sm:border-0 border-b border-gray-200 sm:pb-0 pb-3.5">
               <p className="text-[16px] text-[#848484]">{item.title}</p>
               <p className="text-[16px]">{item.value || "-"}</p>
             </div>
@@ -44,9 +44,9 @@ const ListingDetailContent = ({
       <Divider />
       <div className="pb-6">
         <p className="text-[24px]">Area and Capacity</p>
-        <div className="grid grid-cols-2 gap-6 pt-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-6 pt-8">
           {areaAndCapacity?.map((item, index) => (
-            <div key={index} className="flex justify-between">
+            <div key={index} className="flex justify-between sm:border-0 border-b border-gray-200 sm:pb-0 pb-3.5">
               <p className="text-[16px] text-[#848484]">{item.title}</p>
               <p className="text-[16px]">{item.value || "-"}</p>
             </div>
@@ -56,9 +56,9 @@ const ListingDetailContent = ({
       <Divider />
       <div className="pb-6">
         <p className="text-[24px]">Construction</p>
-        <div className="grid grid-cols-2 gap-6 pt-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-6 pt-8">
           {construction?.map((item, index) => (
-            <div key={index} className="flex justify-between">
+            <div key={index} className="flex justify-between sm:border-0 border-b border-gray-200 sm:pb-0 pb-3.5">
               <p className="text-[16px] text-[#848484]">{item.title}</p>
               <p className="text-[16px]">{item.value || "-"}</p>
             </div>
@@ -68,8 +68,8 @@ const ListingDetailContent = ({
       <Divider />
       <div className="pb-6">
         <p className="text-[24px]">Heating</p>
-        <div className="grid grid-cols-2 gap-6 pt-8">
-          <div className="flex justify-between">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-6 pt-8">
+          <div className="flex justify-between sm:border-0 border-b border-gray-200 sm:pb-0 pb-3.5">
             <p className="text-[16px] text-[#848484]">Heating Type</p>
             <p className="text-[16px]">{heatingType || "-"}</p>
           </div>

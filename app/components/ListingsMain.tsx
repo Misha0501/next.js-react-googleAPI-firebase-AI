@@ -155,7 +155,7 @@ export const ListingsMain = ({ searchParams, listingType, locality }) => {
           {/*</Select>*/}
         </>
       </div>
-      <div className={"grid grid-cols-2 gap-16 mb-12"}>
+      <div className={"grid grid-cols-1 gap-8 md:grid-cols-2 lg:gap-16 mb-12"}>
         {populatedListings &&
           populatedListings.map((item, index) => (
             <ListingItem

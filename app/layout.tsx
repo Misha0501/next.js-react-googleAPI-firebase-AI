@@ -25,6 +25,7 @@ export default function RootLayout({
     <html className="scroll-smooth" lang="en">
       <head>
         <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
+
         <script
           async
           src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAuL3ldHARXcYSsaNhLNRrzLgUDxLtEiAA&libraries=places&callback=initMap"
@@ -36,7 +37,7 @@ export default function RootLayout({
       </head>
       <body>
         <Navigation />
-        <main>
+        <main className="pb-12 md:pb-0">
           <AuthContextProvider>
             <ToastContainer autoClose={8000} />
             <Providers>{children}</Providers>

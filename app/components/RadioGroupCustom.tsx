@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { RadioButton } from "@/app/components/RadioButton";
 
-export const RadioGroupCustom = ({ options, onChange }) => {
+export const RadioGroupCustom = ({ options, onChange }: any) => {
   const [selectedValye, setSelectedValue] = useState(null);
 
   const handleOnChange = (value) => {
@@ -12,7 +12,7 @@ export const RadioGroupCustom = ({ options, onChange }) => {
   };
 
   return (
-    <div className="flex flex-col gap-y-2">
+    <div className="flex flex-col gap-2">
       {options &&
         options.map((item, index) => (
           <RadioButton

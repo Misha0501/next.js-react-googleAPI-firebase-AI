@@ -7,7 +7,6 @@
   //--background-start-rgb: 214, 219, 220;
   //--background-end-rgb: 255, 255, 255;
   font-size: 14px;
-
 }
 
 @media (prefers-color-scheme: dark) {
@@ -18,19 +17,20 @@
   //}
 }
 
-.text-tremor-default, .tremor-Button-root {
-  span{
+.text-tremor-default,
+.tremor-Button-root {
+  span {
     font-size: 1rem !important;
   }
-
 }
 body {
   color: rgb(var(--foreground-rgb));
   background: linear-gradient(
-                  to bottom,
-                  transparent,
-                  rgb(var(--background-end-rgb))
-  ) rgb(var(--background-start-rgb));
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
 }
 
 h1 {
@@ -53,10 +53,10 @@ img {
 
 button {
   font-size: 16px;
-  span{  font-size: 16px;
+  span {
+    font-size: 16px;
   }
 }
-
 
 .pac-container {
   border-radius: 8px;
@@ -65,10 +65,13 @@ button {
   padding: 8px 12px;
 }
 
-
 .pac-container:after {
   /* Disclaimer: not needed to show 'powered by Google' if also a Google Map is shown */
 
   background-image: none !important;
   height: 0px;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
 }

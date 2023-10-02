@@ -24,39 +24,41 @@ const StepsTopInfo: React.FC<StepsTopInfoProps> = ({
   handleBack,
 }) => {
   return (
-    <div className="grid grid-cols-2 py-10 w-full gap-20 align-middle">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 py-10 w-full gap-0 md:gap-20 align-middle">
       <div>
         <p className="text-[18px] text-[#222]">{stepNumber}</p>
         <h4
-          className="text-[40px] font-bold py-10"
+          className="text-[24px] md:text-[40px] font-bold py-10"
           style={{ lineHeight: "120%" }}
         >
           {title}
         </h4>
-        <p className="text-[16px] text-[#222] pb-10">{description}</p>
-        {step > 0 && (
+        <p className="text-[14px] md:text-[16px] text-[#222] pb-10">{description}</p>
+        <div className="flex items-center justify-between gap-2.5">
+          {step > 0 && (
+            <Button
+              className="w-2/5 h-[56px] mt-8  bg-transparent border border-[#2C72F6] text-[#2C72F6]"
+              onClick={handleBack}
+            >
+              Go Back
+            </Button>
+          )}
           <Button
-            className="w-[247px] h-[56px] mt-8 mr-8 bg-transparent border border-[#2C72F6] text-[#2C72F6]"
-            onClick={handleBack}
+            className="w-3/5 h-[56px] mt-8 border border-[#2C72F6]"
+            onClick={onClick}
           >
-            Go Back
+            Next{" "}
+            <Icon
+              className="text-white align-middle"
+              icon={ArrowSmallRightIcon}
+            />
           </Button>
-        )}
-        <Button
-          className="w-[247px] h-[56px] mt-8 border border-[#2C72F6]"
-          onClick={onClick}
-        >
-          Next{" "}
-          <Icon
-            className="text-white align-middle"
-            icon={ArrowSmallRightIcon}
-          />
-        </Button>
+        </div>
       </div>
       <div>
         {imageSrc && (
           <Image
-            className={"object-cover w-full rounded-lg"}
+            className={"object-cover w-full rounded-lg hidden md:block lg:block xl:block 2xl:block"}
             height={400}
             src={imageSrc}
             alt="property"

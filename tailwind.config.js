@@ -32,6 +32,8 @@ module.exports = {
                         DEFAULT: "#3b82f6", // blue-500
                         emphasis: "#1d4ed8", // blue-700
                         inverted: "#ffffff", // white
+                        textSecondary: "#717D96",
+                        textPrimary: "#2D3648"
                     },
                     background: {
                         muted: "#f9fafb", // gray-50
