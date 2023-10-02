@@ -8,82 +8,86 @@ import { useRouter } from "next/navigation";
 import { classNames } from "@/app/lib/classNames";
 import Autocomplete from "@/app/components/Autocomplete";
 
-export function HomeHeroHeaderSearch() {
+export function HomeHeroHeaderSearch({ setListingType }: any) {
   const [listingTypeSelectedIndex, setListingTypeSelectedIndex] = useState(0);
   const [listingTypeSelected, setListingTypeSelected] = useState("SELL");
   const [selectedLocality, setSelectedLocality] = useState("");
   const router = useRouter();
 
-  let [popularSearches] = useState(
-    [
-      {
-        locality: "Sofia",
-        href: "sofia"
-      },
-      {
-        locality: "Plovdiv",
-        href: "plovdiv"
-      },
-      {
-        locality: "Varna",
-        href: "varna"
-      },
-      {
-        locality: "Burgas",
-        href: "burgas"
-      },
-      {
-        locality: "Ruse",
-        href: "ruse"
-      },
-      {
-        locality: "Pleven",
-        href: "pleven"
-      },
-      {
-        locality: "Silven",
-        href: "silven"
-      }
-
-    ]
-  );
+  let popularSearches = [
+    {
+      locality: "Sofia",
+      href: "sofia",
+    },
+    {
+      locality: "Plovdiv",
+      href: "plovdiv",
+    },
+    {
+      locality: "Varna",
+      href: "varna",
+    },
+    {
+      locality: "Burgas",
+      href: "burgas",
+    },
+    {
+      locality: "Ruse",
+      href: "ruse",
+    },
+    {
+      locality: "Pleven",
+      href: "pleven",
+    },
+    {
+      locality: "Silven",
+      href: "silven",
+    },
+  ];
 
   const handleSelectedLocalityChange = (locality: string) => {
     console.log("!!!!!!!!!!!!!!");
     console.log(listingTypeSelected);
-    router.push(`/listings?listingType=${listingTypeSelected}&locality=${locality}`);
+    router.push(
+      `/listings?listingType=${listingTypeSelected}&locality=${locality}`
+    );
   };
-
-
 
   useEffect(() => {
     setListingTypeSelected(listingTypeSelectedIndex === 0 ? "SELL" : "RENT");
+    setListingType(listingTypeSelectedIndex === 0 ? "SELL" : "RENT");
   }, [listingTypeSelectedIndex]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const url = `/listings?listingType=${listingTypeSelected}${selectedLocality ? `&locality=${selectedLocality}` : ""}`;
+    const url = `/listings?listingType=${listingTypeSelected}${
+      selectedLocality ? `&locality=${selectedLocality}` : ""
+    }`;
     router.push(url);
   };
 
   return (
     <>
-      <form className={"flex flex-col justify-center items-center"} onSubmit={handleSubmit} onKeyDown={(e) => {
-        // Prevent submit on enter
-        e.key === "Enter" && e.preventDefault();
-      }}
+      <form
+        className={"flex flex-col justify-center items-center"}
+        onSubmit={handleSubmit}
+        onKeyDown={(e) => {
+          // Prevent submit on enter
+          e.key === "Enter" && e.preventDefault();
+        }}
       >
-        <Tab.Group selectedIndex={listingTypeSelectedIndex} onChange={setListingTypeSelectedIndex}>
-          <Tab.List
-            className="flex space-x-1 rounded-xl bg-blue-900/20 p-1 mb-5 w-full max-w-[300px] text-black">
+        <Tab.Group
+          selectedIndex={listingTypeSelectedIndex}
+          onChange={setListingTypeSelectedIndex}
+        >
+          <Tab.List className="flex gap-2 p-1 mb-5 w-full max-w-[300px]">
             <Tab
               className={({ selected }) =>
                 classNames(
-                  "w-full rounded-lg py-2.5 text-sm font-medium leading-5",
-                  "ring-white ring-opacity-60 focus:outline-none ",
+                  "w-full rounded-lg py-2 px-3 text-sm font-bold leading-6 outline-none focus:outline-none active:outline-none",
                   selected
-                    ? "bg-white shadow"
-                    : "text-gray-100 bg-white/[0.12] text-white"
+                    ? "bg-[#97B6FF] text-white"
+                    : "text-[#222222] bg-[#F2F2F2]"
                 )
               }
             >
@@ -92,11 +96,11 @@ export function HomeHeroHeaderSearch() {
             <Tab
               className={({ selected }) =>
                 classNames(
-                  "w-full rounded-lg py-2.5 text-sm font-medium leading-5",
-                  "ring-white ring-opacity-60 focus:outline-none ",
+                  // "ring-white ring-opacity-60 focus:outline-none ",
+                  "w-full rounded-lg py-2 px-3 text-sm font-bold leading-6 outline-none focus:outline-none active:outline-none",
                   selected
-                    ? "bg-white shadow"
-                    : "text-gray-100 bg-white/[0.12] text-white"
+                    ? "bg-[#97B6FF] text-white"
+                    : "text-[#222222] bg-[#F2F2F2]"
                 )
               }
             >
@@ -106,8 +110,10 @@ export function HomeHeroHeaderSearch() {
         </Tab.Group>
 
         <div className="relative max-w-2xl w-full flex items-center mb-10">
-          <Autocomplete className="hero__search w-full p-3 pl-8 rounded-l-lg outline-0 focus:outline-none text-black"
-                        onLocalityChange={handleSelectedLocalityChange} />
+          <Autocomplete
+            // className="hero__search w-full p-3 pl-8 rounded-l-lg outline-0 focus:outline-none text-black"
+            onLocalityChange={handleSelectedLocalityChange}
+          />
         </div>
         <div className="hero__popular-searches">
           <div className={"font-bold mb-2 text-xl"}>Popular searches</div>
@@ -123,9 +129,10 @@ export function HomeHeroHeaderSearch() {
             ))}
           </div>
         </div>
-        <button type={"submit"} hidden>Search</button>
+        <button type={"submit"} hidden>
+          Search
+        </button>
       </form>
     </>
-
   );
 }

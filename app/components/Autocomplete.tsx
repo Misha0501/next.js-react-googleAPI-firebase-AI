@@ -1,6 +1,7 @@
-import { useEffect, useRef, useState } from "react";
-import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
-import { AutocompleteAddress } from "@/types";
+import {useEffect, useRef, useState} from "react";
+import {MagnifyingGlassIcon} from "@heroicons/react/24/solid";
+import {AutocompleteAddress,} from "@/types";
+import {Icon} from "@tremor/react";
 
 window.initMap = function (e) {
   console.log(e);
@@ -129,9 +130,16 @@ const AutoComplete = ({
   }, [window.google]);
 
   return (
-    <>
+    <div className="py-2 pl-3 pr-2 flex justify-between m-auto w-full  bg-white border-[#CBD2E0] rounded-lg h-16">
+      <Icon
+        icon={MagnifyingGlassIcon}
+        size="lg"
+        className="text-black hidden lg:flex"
+      />
+
       <input
-        className="hero__search w-full py-3 pl-8 rounded-l-lg outline-0 focus:outline-none text-black"
+        className="hero__search w-full border-none pl-0 lg:pl-2 outline-none focus:outline-none text-black focus:border-none active:border-none active:outline-none"
+        // icon={MagnifyingGlassIcon}
         type={"text"}
         placeholder={"E.g: Sophia, Plovdiv, Varna"}
         ref={inputRef}
@@ -139,10 +147,13 @@ const AutoComplete = ({
         value={inputValue}
         onChange={(e) => setInputValue(e.target.value)}
       />
-      <button type={"submit"} className="p-3 bg-gray-200 rounded-r-lg">
-        <MagnifyingGlassIcon className={"h-6 w-6 text-gray-600"} />
+      <button
+        type={"submit"}
+        className=" bg-[#2C72F6] text-white py-2 px-3 text-sm font-bold rounded-lg w-full max-w-fit lg:max-w-[172px] border-none hover:bg-[#4a70c3]"
+      >
+        Search
       </button>
-    </>
+    </div>
   );
 };
 export default AutoComplete;
