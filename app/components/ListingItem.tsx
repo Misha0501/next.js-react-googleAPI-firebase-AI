@@ -1,5 +1,4 @@
 "use client";
-import imagePlaceholder from "@/public/imagePlaceholder.png";
 import Image from "next/image";
 import {
   HeartIcon as HeartIconSolid,
@@ -7,7 +6,7 @@ import {
   TrashIcon,
 } from "@heroicons/react/24/solid";
 import { HeartIcon as HeartIconOutline } from "@heroicons/react/24/outline";
-import { CurrencyType, Listing, SavedListing } from "@/types";
+import { Listing, SavedListing } from "@/types";
 import { useRouter } from "next/navigation";
 import { GridIcon } from "@/public/GridIcon";
 import { BedIcon } from "@/public/BedIcon";
@@ -16,6 +15,8 @@ import { useAuthContext } from "@/app/context/AuthContext";
 import { useEffect, useState } from "react";
 import { Skeleton } from "@mui/material";
 import { getCurrencySign } from "@/app/lib/getCurrencySign";
+import { moneyFormatter } from "@/app/lib/formatPrice";
+import { roundNumberTwoDecimal } from "@/app/lib/roundNumberTwoDecimal";
 
 type ListingItemProps = {
   listingItemInitial: Listing;
@@ -42,7 +43,6 @@ export const ListingItem = ({
   const { authToken } = useAuthContext();
 
   const router = useRouter();
-  let moneyFormatter = new Intl.NumberFormat();
 
   const goToListingPage = () => {
     router.push(`/listings/${listingItem.id}`);
@@ -112,11 +112,6 @@ export const ListingItem = ({
     }
   };
 
-  const roundToTwo = (num: number) => {
-    return +(Math.round(num + "e+2") + "e-2");
-  };
-
-
   return (
     <div
       className={"rounded-lg overflow-hidden drop-shadow-2xl bg-white h-fit"}
@@ -159,14 +154,14 @@ export const ListingItem = ({
                 <>
                   <span className={"font-bold text-[#0071b3] text-xl"}>
                     {getCurrencySign(listingItem?.currency)}
-                    {moneyFormatter.format(listingItem?.price)}
+                    {moneyFormatter(listingItem?.price)}
                   </span>
                   {listingItem?.areaTotal &&
                     listingItem?.price &&
                     listingItem?.currency && (
                       <span className={"text-gray-500 font-semibold"}>
-                        {roundToTwo(
-                          listingItem?.price / listingItem?.areaTotal
+                        {roundNumberTwoDecimal(
+                          listingItem?.price / listingItem?.areaTotal,
                         )}{" "}
                         {getCurrencySign(listingItem?.currency)} / &#13217;
                       </span>
@@ -193,7 +188,7 @@ export const ListingItem = ({
               <>
                 {listingItem?.areaTotal && (
                   <div className="flex items-center gap-2 mb-4">
-                    <GridIcon></GridIcon>
+                    <GridIcon/>
                     <span className={"text-gray-500"}>
                       {listingItem?.areaTotal} m²
                     </span>
@@ -201,7 +196,7 @@ export const ListingItem = ({
                 )}
                 {listingItem?.bedrooms && (
                   <div className="flex items-center gap-2 mb-4">
-                    <BedIcon />
+                    <BedIcon/>
                     <span className={"text-gray-500"}>
                       {listingItem?.bedrooms}
                     </span>

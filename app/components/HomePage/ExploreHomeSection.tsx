@@ -33,12 +33,8 @@ function ExploreHomeSection({ listingTypeSelected }: any) {
     <section className="max-w-screen-xl m-auto flex flex-col text-center gap-12 px-4 md:px-0 py-20">
       <div className="flex flex-col gap-3">
         <h3 className="text-[#222222]  font-bold text-2xl md:text-[40px]">
-          Explore home with us
+          Explore properties with us
         </h3>
-        <p className="text-base font-normal text-[#616161]">
-          Based on your searches, here are some places you might be interested
-          in
-        </p>
       </div>
       <div className="block md:flex gap-8 justify-between">
         {popularSearches.map((item, index) => (

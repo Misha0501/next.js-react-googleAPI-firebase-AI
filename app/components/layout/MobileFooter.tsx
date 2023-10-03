@@ -10,17 +10,19 @@ import { MENU } from "./Content";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-function MobleFooter() {
+function MobileFooter() {
   const pathName = usePathname();
   const isActiveRoute = (route?: string) => {
     if (route === pathName) {
       return true;
     }
   };
+
   return (
-    <div className="block md:hidden fixed bottom-0 left-0 right-0 bg-white z-50 border-t-2 border-[#1A202C]">
+    <div className="block lg:hidden fixed bottom-0 left-0 right-0 bg-white z-50 border-t-2 border-[#1A202C]">
       <List
         disablePadding
+        className={"flex items-center container"}
         sx={{
           display: "flex",
           "& li.MuiListItem-root svg": {
@@ -41,7 +43,7 @@ function MobleFooter() {
             disablePadding
             sx={{ color: isActiveRoute(item.link) ? "#2C72F6" : "#969ba3" }}
           >
-            <Link href={item.link} key={item.title} passHref={true}>
+            <Link href={item.link} key={item.title} passHref={true} className={"mx-auto"}>
               <ListItemButton sx={{ display: "block" }}>
                 <ListItemIcon
                   sx={{
@@ -71,4 +73,4 @@ function MobleFooter() {
   );
 }
 
-export default MobleFooter;
+export default MobileFooter;

@@ -1,7 +1,10 @@
+import { Button } from "@tremor/react";
+
 interface PropInterface {
-  name: string | undefined;
+  name: string;
+  emailTo: string;
 }
-function ListingContactAgentForm({ name }: PropInterface) {
+function ListingContactAgentForm({ name, emailTo }: PropInterface) {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     console.log("Form submit btn clicked");
@@ -12,7 +15,7 @@ function ListingContactAgentForm({ name }: PropInterface) {
     <>
       <div className=" w-full bg-[#F2F2F2]  rounded-lg shadow-md px-8 py-9">
         <p className="mb-8 text-2xl  font-bold">
-          Contact {name ? name : "seller"}
+          Contact {name || 'Seller'}
         </p>
 
         <form onSubmit={handleSubmit} className="space-y-6">
@@ -61,12 +64,13 @@ function ListingContactAgentForm({ name }: PropInterface) {
             />
           </div>
 
-          <button
+          <Button
             type="submit"
-            className="mt-12 text-white bg-[#2C72F6]  font-extrabold p-4 rounded-lg text-xl  inline-flex justify-center w-full text-center"
+            variant={"primary"}
+            className={"w-full"}
           >
-            Get more info about agent{" "}
-          </button>
+            Send
+          </Button>
         </form>
         <p className="mt-6 text-[12px]  font-light text-[#848484]">
           When you send an enquiry, you accept our terms & privacy policy. Your

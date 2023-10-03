@@ -138,7 +138,7 @@ function UserPageMain() {
               </div>
               <Divider className={"mb-0"}/>
             </div>
-            <ListingContactAgentForm name={userDetail?.data?.displayName} />
+            <ListingContactAgentForm name={userDetail?.data?.displayName || ''}  emailTo={""}/>
           </div>
           <div id="propertiesSection" className="flex flex-col gap-12">
             <p className="font-bold text-2xl text-[#222222]">Our properties</p>

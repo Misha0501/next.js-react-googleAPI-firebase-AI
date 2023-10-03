@@ -193,6 +193,7 @@ export type Company = {
   description: string;
   createdAt: string;
   updatedAt: string;
+  email: string;
   Address?: Address[];
   memberships?: Membership[];
   Listing?: Listing[];

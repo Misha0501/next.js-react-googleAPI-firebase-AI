@@ -1,12 +1,12 @@
 import { Select, SelectItem } from "@tremor/react";
 import Link from "next/link";
-import MobleFooter from "./MobileFooter";
+import MobileFooter from "./MobileFooter";
 
 function Footer() {
   const availableLanguages = ["English", "French", "Italian", "Portuguese"];
   return (
     <>
-      <footer className="bg-[#F5F5F9] py-6 px-3 xl:px-16  xl:py-10 hidden md:block">
+      <footer className="bg-[#F5F5F9] py-6 px-3 xl:px-16  xl:py-10 hidden lg:block">
         <div className="flex justify-between gap-4 flex-col md:flex-row mb-16 container">
           <div>
             <p className="text-2xl font-bold text-[#2D3648] mb-5">Logo</p>
@@ -142,7 +142,7 @@ function Footer() {
           </Link>
         </div>
       </footer>
-      <MobleFooter />
+      <MobileFooter />
     </>
   );
 }

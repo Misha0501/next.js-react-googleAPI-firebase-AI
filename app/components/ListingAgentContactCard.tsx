@@ -13,7 +13,8 @@ function ListingAgentContactCard({ showForm, listing }: Props) {
   let [agentContactState, setAgentContactState] = useState("Show Phone Number");
 
   let contactNumber =
-    (listing?.company?.phoneNumber ?? listing?.applicationUser?.phoneNumber) ||
+    listing?.company?.phoneNumber ??
+    listing?.applicationUser?.phoneNumber ??
     "";
   const showContactNo = () => {
     setAgentContactState(
@@ -40,21 +41,25 @@ function ListingAgentContactCard({ showForm, listing }: Props) {
               {new Intl.NumberFormat().format(listing?.price)}
             </span>
           </div>
-          {agentContactState !== contactNumber && (
-            <Button
-              onClick={showContactNo}
-              className="w-full"
-              variant={"secondary"}
-            >
-              {agentContactState}
-            </Button>
-          )}
-          {agentContactState === contactNumber && (
-            <a href={`tel:${contactNumber}`}>
-              <Button className="w-full" variant={"secondary"}>
-                {agentContactState}
-              </Button>
-            </a>
+          {contactNumber && (
+            <>
+              {agentContactState !== contactNumber && (
+                <Button
+                  onClick={showContactNo}
+                  className="w-full"
+                  variant={"secondary"}
+                >
+                  {agentContactState}
+                </Button>
+              )}
+              {agentContactState === contactNumber && (
+                <a href={`tel:${contactNumber}`}>
+                  <Button className="w-full" variant={"secondary"}>
+                    {agentContactState}
+                  </Button>
+                </a>
+              )}
+            </>
           )}
         </div>
         <div>
@@ -81,7 +86,7 @@ function ListingAgentContactCard({ showForm, listing }: Props) {
             variant={"primary"}
             className={"w-full"}
           >
-            Contact with seller{" "}
+            Contact seller
           </Button>
         </div>
       </div>
