@@ -56,7 +56,10 @@ export const Navigation = () => {
                     </Link>
                   </div>
                   <div className="hidden sm:ml-6 sm:block">
-                    <div className="flex space-x-4">
+                    <div className="flex space-x-4 items-center">
+                      <Link href="/contact">
+                        <Button variant="light">Contact</Button>
+                      </Link>
                       <Link href="/profile/saved">
                         <Button variant="secondary">Saved properties</Button>
                       </Link>
@@ -81,6 +84,16 @@ export const Navigation = () => {
             <div className="relative duration-700">
               <Disclosure.Panel className="absolute w-full p-2 top-0 left-0 z-40 bg-white duration-700 border-t-2 sm:hidden shadow-[0_35px_60px_-10px_rgba(167,165,165,0.3)] ">
                 <div className="space-y-1 px-2 pb-3 pt-2 flex flex-col items-end gap-3">
+                  <Link href="/contact">
+                    <Button
+                      variant="light"
+                      onClick={() => {
+                        close();
+                      }}
+                    >
+                      Contact
+                    </Button>
+                  </Link>
                   <Link href="/profile/saved">
                     <Button
                       variant="secondary"
