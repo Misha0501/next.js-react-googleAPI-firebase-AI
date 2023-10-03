@@ -1,14 +1,12 @@
 "use client";
 import { Tab } from "@headlessui/react";
-import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-
 import { classNames } from "@/app/lib/classNames";
 import Autocomplete from "@/app/components/Autocomplete";
 
-export function HomeHeroHeaderSearch({ setListingType }: any) {
+export function HomeHeroHeaderSearch() {
   const [listingTypeSelectedIndex, setListingTypeSelectedIndex] = useState(0);
   const [listingTypeSelected, setListingTypeSelected] = useState("SELL");
   const [selectedLocality, setSelectedLocality] = useState("");
@@ -47,13 +45,12 @@ export function HomeHeroHeaderSearch({ setListingType }: any) {
 
   const handleSelectedLocalityChange = (locality: string) => {
     router.push(
-      `/listings?listingType=${listingTypeSelected}&locality=${locality}`
+      `/listings?listingType=${listingTypeSelected}&locality=${locality}`,
     );
   };
 
   useEffect(() => {
     setListingTypeSelected(listingTypeSelectedIndex === 0 ? "SELL" : "RENT");
-    setListingType(listingTypeSelectedIndex === 0 ? "SELL" : "RENT");
   }, [listingTypeSelectedIndex]);
 
   const handleSubmit = (e) => {
@@ -85,7 +82,7 @@ export function HomeHeroHeaderSearch({ setListingType }: any) {
                   "w-full rounded-lg py-2 px-3 text-sm font-bold leading-6 outline-none focus:outline-none active:outline-none",
                   selected
                     ? "bg-[#97B6FF] text-white"
-                    : "text-[#222222] bg-[#F2F2F2]"
+                    : "text-[#222222] bg-[#F2F2F2]",
                 )
               }
             >
@@ -98,7 +95,7 @@ export function HomeHeroHeaderSearch({ setListingType }: any) {
                   "w-full rounded-lg py-2 px-3 text-sm font-bold leading-6 outline-none focus:outline-none active:outline-none",
                   selected
                     ? "bg-[#97B6FF] text-white"
-                    : "text-[#222222] bg-[#F2F2F2]"
+                    : "text-[#222222] bg-[#F2F2F2]",
                 )
               }
             >

@@ -134,7 +134,7 @@ const AutoComplete = ({
       <Icon
         icon={MagnifyingGlassIcon}
         size="lg"
-        className="text-black hidden lg:flex"
+        className="text-black flex"
       />
 
       <input

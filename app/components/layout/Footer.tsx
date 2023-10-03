@@ -68,64 +68,34 @@ function Footer() {
             </div>
           </div>
           <div className="flex flex-col gap-3">
-            <Link href={"#"} className="font-bold text-base text-[#292932]">
+            <Link href={"/listings"} className="font-bold text-base text-[#292932]">
               Find Property
             </Link>
-            <Link href={"#"} className="font-normal text-base text-[#292932]">
+            <Link href={"/listings?locality=Sofia"} className="font-normal text-base text-[#292932]">
               Properties in Sofia
             </Link>
-            <Link href={"#"} className="font-normal text-base text-[#292932]">
+            <Link href={"/listings?locality=Varna"} className="font-normal text-base text-[#292932]">
               Properties in Varna
             </Link>
-            <Link href={"#"} className="font-normal text-base text-[#292932]">
+            <Link href={"/listings?locality=Plovdiv"} className="font-normal text-base text-[#292932]">
               Properties in Plovdiv
             </Link>
-            <Link href={"#"} className="font-normal text-base text-[#292932]">
+            <Link href={"/listings?locality=Burgas"} className="font-normal text-base text-[#292932]">
               Properties in Burgas
             </Link>
           </div>
 
           <div className="flex flex-col gap-3">
-            <Link href={"#"} className="font-bold text-base text-[#292932]">
-              Resources
+            <Link href={"/contact"} className="font-bold text-base text-[#292932]">
+              Contact
             </Link>
-            <Link href={"#"} className="font-normal text-base text-[#292932]">
-              Property Podcasts
-            </Link>
-            <Link href={"#"} className="font-normal text-base text-[#292932]">
-              How to buy guide
-            </Link>
-          </div>
-          <div className="flex flex-col gap-3">
-            <Link href={"#"} className="font-bold text-base text-[#292932]">
-              Get help
-            </Link>
-            <Link href={"#"} className="font-normal text-base text-[#292932]">
-              Estate agent FAQs
-            </Link>
-            <Link href={"#"} className="font-normal text-base text-[#292932]">
-              Visitor FAQs
-            </Link>
-            <Link href={"#"} className="font-normal text-base text-[#292932]">
+            <Link href={"/contact"} className="font-normal text-base text-[#292932]">
               Get in touch
             </Link>
-            <Link href={"#"} className="font-normal text-base text-[#292932]">
+            <Link href={"/contact"} className="font-normal text-base text-[#292932]">
               Work with us
             </Link>
-            <Link href={"#"} className="font-normal text-base text-[#292932]">
-              About us
-            </Link>
           </div>
-
-          {/*<div className="col-span-2">*/}
-          {/*  <Select defaultValue="English">*/}
-          {/*    {availableLanguages.map((lang, key) => (*/}
-          {/*      <SelectItem key={key} value={lang}>*/}
-          {/*        {lang}*/}
-          {/*      </SelectItem>*/}
-          {/*    ))}*/}
-          {/*  </Select>*/}
-          {/*</div>*/}
         </div>
         <div className="flex justify-center md:justify-start gap-6">
           <Link href={"#"} className="text-[#717D96] text-sm font-semibold">

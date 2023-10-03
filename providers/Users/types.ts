@@ -4,6 +4,7 @@ export namespace Users {
     name: string;
     phoneNumber: string;
     description: string;
+    email: string;
     createdAt: Date;
     updatedAt: Date;
     Address: Address[];

@@ -194,7 +194,7 @@ const ListingDetail = () => {
         />
         <div className="pt-0 lg:pt-10">
           <div className="flex items-center justify-between">
-            <h4 className="text-[40px] px-4 lg:px-0 capitalize font-bold hidden lg:block">
+            <h1 className="capitalize font-bold text-3xl pt-8">
               {listingDetail?.data?.propertyType}
               {listingDetail?.data?.rooms
                 ? ` ${listingDetail?.data?.rooms} ROOMS`
@@ -205,7 +205,7 @@ const ListingDetail = () => {
               {listingDetail?.data?.listingType
                 ? ` FOR ${listingDetail?.data?.listingType}`
                 : null}
-            </h4>
+            </h1>
             {/*<div>*/}
             {/*    <Button*/}
             {/*        className="bg-[#f2f2f2]	text-black  border-0 mr-2"*/}
@@ -224,7 +224,7 @@ const ListingDetail = () => {
             {/*    </Button>*/}
             {/*</div>*/}
           </div>
-          <p className="pt-2 px-4 lg:px-0 text-[18px] text-[#848484] hidden lg:block">
+          <p className="pt-2 lg:px-0 text-[18px] text-[#848484] mb-3">
             {listingDetail?.data?.Address?.[0]?.route}
           </p>
           <div className=" relative pt-0 lg:pt-8">

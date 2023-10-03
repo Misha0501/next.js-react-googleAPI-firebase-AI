@@ -1,30 +1,30 @@
 "use client";
 import { PlusSmallIcon } from "@heroicons/react/24/solid";
-import { Button, Icon } from "@tremor/react";
+import { Button } from "@tremor/react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
-function ExploreHomeSection({ listingTypeSelected }: any) {
+function ExploreHomeSection() {
   const router = useRouter();
   let popularSearches = [
     {
       locality: "Sofia",
-      href: `listings?locality=Sofia&listingType=${listingTypeSelected}`,
+      href: `listings?locality=Sofia&listingType=SELL`,
       img: "/e1.png",
     },
     {
       locality: "Plovdiv",
-      href: `listings?locality=Plovdiv&listingType=${listingTypeSelected}`,
+      href: `listings?locality=Plovdiv&listingType=SELL`,
       img: "/e3.jpg",
     },
     {
       locality: "Varna",
-      href: `listings?locality=Varna&listingType=${listingTypeSelected}`,
+      href: `listings?locality=Varna&listingType=SELL`,
       img: "/e4.jpg",
     },
     {
       locality: "Byala",
-      href: `listings?locality=Byala&listingType=${listingTypeSelected}`,
+      href: `listings?locality=Byala&listingType=SELL`,
       img: "/e2.jpg",
     },
   ];

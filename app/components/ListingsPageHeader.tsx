@@ -17,7 +17,7 @@ export const ListingsPageHeader = ({
   };
 
   return (
-    <header className="pb-10 pt-16">
+    <header>
       <div className="container flex items-center space-x-3 ">
         <form
           className="w-full  flex items-center bg-white border-2 rounded-lg"

@@ -1,28 +1,20 @@
-"use client";
-// import headerImg from '@/public/header-hero.jpg'
 import headerImg from "@/public/header-hero.jpg";
 import Image from "next/image";
 import { HomeHeroHeaderSearch } from "@/app/components/HomeHeroHeaderSearch";
-import HomeWebsiteInfoSection from "./components/HomePage/WebsiteInfoSectionHome";
-import ExploreHomeSection from "./components/HomePage/ExploreHomeSection";
-import NewestRentalSection from "./components/HomePage/NewestRentalSection";
-import { useState } from "react";
+import HomeWebsiteInfoSection from "@/app/components/HomePage/WebsiteInfoSectionHome";
+import ExploreHomeSection from "@/app/components/HomePage/ExploreHomeSection";
 
 export default function Home() {
-  const [listingTypeSelected, setListingTypeSelected] = useState("SELL");
   return (
     <div>
-      <header
-        className={
-          "hero min-h-[500px] overflow-hidden bg-black relative flex justify-center items-center py-16 lg:py-24 text-white"
-        }
-      >
-        <div className="container z-10 text-center">
-          <HomeHeroHeaderSearch
-            setListingType={(e) => setListingTypeSelected(e)}
-          />
+      <header className={'hero min-h-[700px] bg-black relative flex justify-center items-center pt-24 pb-16 text-white'}>
+        <div className="container z-10">
+          <div className="hero__inner text-center">
+            <h1 className={"mb-6 lg:mb-16"}>Find your future home with ease</h1>
+            <HomeHeroHeaderSearch></HomeHeroHeaderSearch>
+          </div>
         </div>
-        <div className={"hero__img absolute inset-0 opacity-90"}>
+        <div className={'hero__img absolute inset-0 opacity-60'}>
           <Image
             className={"h-full w-full object-cover"}
             width={1500}
@@ -34,7 +26,7 @@ export default function Home() {
         </div>
       </header>
       <HomeWebsiteInfoSection />
-      <ExploreHomeSection listingTypeSelected={listingTypeSelected} />
+      <ExploreHomeSection/>
       {/*<NewestRentalSection />*/}
     </div>
   );
