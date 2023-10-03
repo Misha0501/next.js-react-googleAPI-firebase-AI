@@ -46,14 +46,14 @@ function UserPageMain() {
   };
 
   return (
-    <div className="py-8 xl:py-16 m-auto mb-[68px] md:mb-0">
+    <div className="pt-8 pb-32 lg:pt-10">
       {userDetail?.isFetching ? (
         <div className="flex items-center justify-center mt-7">
           <CircularProgress />
         </div>
       ) : (
         <>
-          <div className="grid grid-cols-1 xl:grid-cols-3 gap-10 mt-5 my-10">
+          <div className="grid grid-cols-1 xl:grid-cols-3 gap-10 pt-6 pb-32 xl:pt-10">
             <div className="xl:col-span-2 flex flex-col">
               <h3 className="text-[#222222] text-2xl xl:text-[40px] font-bold">
                 {userDetail?.data?.Company
@@ -159,9 +159,12 @@ function UserPageMain() {
                       <p className="text-md font-semibold mb-2">Address</p>
                       <div className="flex items-center">
                         <MapIcon width={15} height={15} />
-                        <p className="text-md font-normal ml-2  text-[#717D96]">
-                          {" "}
-                          {company?.Address?.[0]?.locality || "-"}
+                        <p className="text-md ml-2 text-[#717D96]">
+                          {company?.Address?.[0]?.streetNumber}{" "}
+                          {company?.Address?.[0]?.route}, {" "}
+                          {company?.Address?.[0]?.locality}, {" "}
+                          {company?.Address?.[0]?.postalCode}
+
                         </p>
                       </div>
                     </div>

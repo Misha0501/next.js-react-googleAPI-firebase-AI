@@ -110,7 +110,7 @@ export const ListingsPageContent = () => {
   };
 
   return (
-    <div className="w-full flex flex-col my-6 gap-6 lg:my-0 lg:gap-0">
+    <div className="w-full flex flex-col my-8 lg:my-12 gap-6">
       <ListingsPageHeader
         onLocalityChange={handleSelectedLocalityChange}
         initialLocality={locality}

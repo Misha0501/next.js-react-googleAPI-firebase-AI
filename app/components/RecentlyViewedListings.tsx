@@ -29,11 +29,11 @@ export const RecentlyViewedListings = () => {
   }, [recentlyViewedListingsResponse.data?.results, recentlyViewedListingsResponse.isSuccess, savedListings.data?.results, savedListings.isSuccess]);
 
   return (
-    <div className="mt-10 w-full">
+    <div className="mt-6 lg:mt-10 w-full">
       {recentlyViewedListingsResponse.isLoading && <p>Loading...</p>}
       {recentlyViewedListingsResponse.isError && <p>Oops! Something went wrong. Please try again.</p>}
       {!recentlyViewedListingsResponse.isLoading && !recentlyViewedListingsResponse.isError && <div>
-        <div className={"grid grid-cols-3 gap-16 mt-10"}>
+        <div className={"grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-8 mt-10"}>
           {populatedListings && populatedListings.map((item, index) => (
             <ListingItem listingItemInitial={item} key={index} />
           ))}

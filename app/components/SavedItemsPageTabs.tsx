@@ -6,8 +6,6 @@ import { useAuthContext } from "@/app/context/AuthContext";
 import { SavedListings } from "@/app/components/SavedListings";
 import { SavedSearches } from "@/app/components/SavedSearches";
 
-const sortingByValues = ["Newest", "Price (low to high)", "Price (high to low)"];
-
 export const SavedItemsPageTabs = () => {
     const {authToken} = useAuthContext()
     const handleTabChange = (tabIndex: number) => {

@@ -1,15 +1,10 @@
 "use client";
 
-import { Select, SelectItem, Tab, TabGroup, TabList, TabPanel, TabPanels } from "@tremor/react";
 import { useEffect, useState } from "react";
 import { ListingItem } from "@/app/components/ListingItem";
 import { getFetchUrl } from "@/app/lib/getFetchUrl";
 import { useAuthContext } from "@/app/context/AuthContext";
-import { ListBulletIcon } from "@heroicons/react/24/solid";
-import { ListBulletIcon as ListBulletIconOutline } from "@heroicons/react/24/outline";
-import { Listing, SavedListing } from "@/types";
-
-const sortingByValues = ["Newest", "Price (low to high)", "Price (high to low)"];
+import { SavedListing } from "@/types";
 
 export const SavedListings = () => {
   const { authToken } = useAuthContext();
@@ -67,8 +62,7 @@ export const SavedListings = () => {
             className={"font-bold"}>Results: </span> {savedListingsTotal} {savedListingsTotal === 0 || savedListingsTotal > 1 ? "properties" : "property"} saved
           </div>
         </div>
-
-        <div className={"grid grid-cols-3 gap-16 mt-10"}>
+        <div className={"grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-8 mt-10"}>
           {savedListings && savedListings.map((item, index) => (
             <ListingItem listingItemInitial={item.listing} key={index} onStateChanged={() => fetchSavedListings()}  />
           ))}
