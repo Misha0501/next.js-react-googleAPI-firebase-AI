@@ -29,7 +29,7 @@ function UserPageMain() {
 
 
   return (
-    <div className="py-8 xl:py-16 max-w-sm m-auto md:max-w-md  xl:max-w-7xl mb-[68px] md:mb-0">
+    <div className="py-8 xl:py-16 m-auto mb-[68px] md:mb-0">
       <GoBackBtn label="Back to account" className="text-black" />
       {userDetail?.isFetching ? (
         <div className="flex items-center justify-center mt-7">
@@ -37,7 +37,7 @@ function UserPageMain() {
         </div>
       ) : (
         <>
-          <div className="grid grid-cols-1 xl:grid-cols-3 gap-10 mt-5 xl:my-10">
+          <div className="grid grid-cols-1 xl:grid-cols-3 gap-10 mt-5 my-10">
             <div className="xl:col-span-2 flex flex-col">
               {userDetail?.data?.Company?.image && (
                 <Image
@@ -55,7 +55,7 @@ function UserPageMain() {
               </h3>
               <div className="flex  my-6">
                 <Link
-                  href={"#descriptionSection"}
+                  href={"#aboutSection"}
                   className="p-4 bg-none text-[#717D96]  font-bold focus:bg-[#EDF0F7]  focus:text-[#2D3648]  active:bg-[#EDF0F7] active:border-b-2 active:border-[#2D3648]  active:text-[#2D3648] focus:border-b-2 focus:border-[#2D3648]"
                 >
                   About us
@@ -75,7 +75,7 @@ function UserPageMain() {
                   </Link>
                 )}
               </div>
-              <div id="descriptionSection" className="flex flex-col gap-4 my-6">
+              <div id="aboutSection" className="flex flex-col gap-4">
                 <p className="font-bold text-2xl text-[#222222]">About us</p>
                 {userDetail?.data?.Company?.description && (
                   <p className="text-base font-normal text-[#4A5468]">
@@ -136,11 +136,11 @@ function UserPageMain() {
                   </>
                 )}
               </div>
-              <Divider />
+              <Divider className={"mb-0"}/>
             </div>
-            <ListingContactAgentForm name={"Company Name"} />
+            <ListingContactAgentForm name={userDetail?.data?.displayName} />
           </div>
-          <div id="propertiesSection" className="flex flex-col gap-12 my-6">
+          <div id="propertiesSection" className="flex flex-col gap-12">
             <p className="font-bold text-2xl text-[#222222]">Our properties</p>
             {propertyListing?.length ? (
               <div className="grid grid-cols-1 xl:grid-cols-3 gap-x-6 gap-y-10">

@@ -17,6 +17,7 @@ export const AuthContextProvider = ({ children }) => {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(firebaseClientAuth, async (user) => {
+      console.log("user", user);
       if (user) {
         setUser(user);
         const token = await user.getIdToken();

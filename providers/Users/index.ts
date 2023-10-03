@@ -41,7 +41,6 @@ export function useUserOwnData(
 export function useUpdateUser(
   props: any
 ) {
-  // const queryClient = useQueryClient();
   return useMutation((payload) => api.update({ ...props, data: payload }), {
     mutationKey: `${KEY} | Update`,
     retry: 0

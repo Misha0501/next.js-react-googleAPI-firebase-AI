@@ -10,27 +10,24 @@ type Props = {
 };
 
 function ListingAgentContactCard({ showForm, listing }: Props) {
-  const allDetails = {
-    propertyPrice: "312.000",
-    agentName: "Sofia Johns",
-    stateName: "Sofia Real State",
-    agentContactNo: "+ 1 (234) 567-89-00",
-  };
   let [agentContactState, setAgentContactState] = useState("Show Phone Number");
+
+  let contactNumber =
+    (listing?.company?.phoneNumber ?? listing?.applicationUser?.phoneNumber) ||
+    "";
   const showContactNo = () => {
     setAgentContactState(
-      agentContactState !== allDetails.agentContactNo
-        ? allDetails.agentContactNo
-        : "Show Phone Number",
+      agentContactState !== contactNumber ? contactNumber : "Show Phone Number",
     );
   };
+
   const showContactForm = () => {
     showForm((prevState: boolean) => !prevState);
   };
 
   return (
     <>
-      <div className=" mb-8 w-full max-w-md bg-[#F2F2F2]  rounded-lg shadow-md px-8 py-9">
+      <div className=" mb-8 w-full bg-[#F2F2F2] rounded-lg shadow-md px-8 py-9">
         <div className="mb-8">
           <p className="mb-1 font-light text-gray-500 dark:text-gray-400">
             Asking Price{" "}
@@ -43,17 +40,27 @@ function ListingAgentContactCard({ showForm, listing }: Props) {
               {new Intl.NumberFormat().format(listing?.price)}
             </span>
           </div>
-          <Button
-            onClick={showContactNo}
-            className="w-full"
-            variant={"secondary"}
-          >
-            {agentContactState}
-          </Button>
+          {agentContactState !== contactNumber && (
+            <Button
+              onClick={showContactNo}
+              className="w-full"
+              variant={"secondary"}
+            >
+              {agentContactState}
+            </Button>
+          )}
+          {agentContactState === contactNumber && (
+            <a href={`tel:${contactNumber}`}>
+              <Button className="w-full" variant={"secondary"}>
+                {agentContactState}
+              </Button>
+            </a>
+          )}
         </div>
         <div>
           <p className="mb-6 font-light text-gray-500 dark:text-gray-400">
-            Listed by {listing?.company?.name ? " real estate agent" : " private owner"}
+            Listed by{" "}
+            {listing?.company?.name ? " real estate agent" : " private owner"}
           </p>
           <div className="flex items-center space-x-4 mb-8">
             <div className="flex-1 min-w-0">

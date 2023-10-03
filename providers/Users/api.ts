@@ -26,7 +26,6 @@ export async function userOwnData(
 
 export async function update(
   props: any,
-  authToken?: string
 ) {
   return service({
     method: "PUT",
@@ -34,7 +33,7 @@ export async function update(
     body: props.data,
     headers: {
       //@ts-ignore
-      Authorization: props.authToken,
+      Authorization: props.authToken || props.data.authToken,
     },
   });
 }

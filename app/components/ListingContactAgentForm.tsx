@@ -1,13 +1,7 @@
 interface PropInterface {
-  name: string;
+  name: string | undefined;
 }
 function ListingContactAgentForm({ name }: PropInterface) {
-  const allDetails = {
-    propertyPrice: "312.000",
-    agentName: name,
-    stateName: "Sofia Real State",
-    agentContactNo: "+ 1 (234) 567-89-00",
-  };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     console.log("Form submit btn clicked");
@@ -16,9 +10,9 @@ function ListingContactAgentForm({ name }: PropInterface) {
 
   return (
     <>
-      <div className=" w-full max-w-md bg-[#F2F2F2]  rounded-lg shadow-md px-8 py-9">
+      <div className=" w-full bg-[#F2F2F2]  rounded-lg shadow-md px-8 py-9">
         <p className="mb-8 text-2xl  font-bold">
-          Contact to {allDetails.agentName}{" "}
+          Contact {name ? name : "seller"}
         </p>
 
         <form onSubmit={handleSubmit} className="space-y-6">

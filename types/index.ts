@@ -156,6 +156,7 @@ export type ApplicationUser = {
   createdAt: string;
   displayName: string;
   email: string;
+  phoneNumber: string;
   firebaseUID: string;
   id: number;
   providerId: string;

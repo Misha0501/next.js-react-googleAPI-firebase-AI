@@ -11,6 +11,7 @@ export async function POST(req: Request) {
         // Extract the `req properties` from the body of the request
         const {email, displayName, providerId, firebaseUID} = await req.json()
 
+        console.log('display name', displayName );
         // Create user if not exists in the DB
         const applicationUser = await prisma.applicationUser.upsert({
             where: {

@@ -56,9 +56,6 @@ const ListingDetail = () => {
     averagePriceNeighborhoodChartData,
     setAveragePriceNeighborhoodChartData,
   ] = useState();
-  console.log("listingDetail");
-  console.log(listingDetail);
-  console.log(listingDetail.data);
 
   useEffect(() => {
     if (listingDetail?.data?.averagePriceInNeighborhood) {
@@ -154,36 +151,6 @@ const ListingDetail = () => {
     [listingDetail?.data],
   );
 
-  const generalInfoFunc = (val: any) => {
-    console.log("Do nothing");
-  };
-  const similarAreaInfo = [
-    {
-      listingItem: {
-        areaLiving: 400,
-        savedListingId: true,
-      },
-      isLoadingSavedListings: false,
-      onSavedIconClick: generalInfoFunc,
-    },
-    {
-      listingItem: {
-        areaLiving: 400,
-        savedListingId: true,
-      },
-      isLoadingSavedListings: false,
-      onSavedIconClick: generalInfoFunc,
-    },
-    {
-      listingItem: {
-        areaLiving: 400,
-        savedListingId: true,
-      },
-      isLoadingSavedListings: false,
-      onSavedIconClick: generalInfoFunc,
-    },
-  ];
-
   useEffect(() => {
     // Create recently viewed listing if user is logged in
     if (listingDetail.isSuccess && authToken) {
@@ -203,7 +170,7 @@ const ListingDetail = () => {
   }));
 
   return (
-    <div className="mb-[68px] md:mb-0">
+    <div className="mb-[68px] lg:mb-0">
       <div className="mb-16 max-w-screen-xl m-auto">
         <Lightbox
           open={openLightBox}
@@ -212,14 +179,14 @@ const ListingDetail = () => {
           slides={slides}
           index={lightBoxImageIndex}
         />
-        <div className="pt-0 pb-11 md:pt-11">
+        <div className="pt-0 pb-11 lg:pt-11">
           <GoBackBtn
             label="Back to results"
-            className="text-black pl-5 pr-5 md:p-0 hidden md:flex"
+            className="text-black pl-5 pr-5 lg:p-0 hidden lg:flex"
           />
-          <div className=" pt-0 md:pt-10">
+          <div className=" pt-0 lg:pt-10">
             <div className="flex items-center justify-between">
-              <h4 className="text-[40px] px-4 md:px-0 capitalize font-bold hidden md:block">
+              <h4 className="text-[40px] px-4 lg:px-0 capitalize font-bold hidden lg:block">
                 {listingDetail?.data?.propertyType}
                 {listingDetail?.data?.rooms
                   ? ` ${listingDetail?.data?.rooms} ROOMS`
@@ -249,11 +216,11 @@ const ListingDetail = () => {
               {/*    </Button>*/}
               {/*</div>*/}
             </div>
-            <p className="pt-2 px-4 md:px-0 text-[18px] text-[#848484] hidden md:block">
+            <p className="pt-2 px-4 lg:px-0 text-[18px] text-[#848484] hidden lg:block">
               {listingDetail?.data?.Address?.[0]?.route}
             </p>
-            <div className=" relative pt-0 md:pt-8">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-0 md:gap-4">
+            <div className=" relative pt-0 lg:pt-8">
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-0 lg:gap-4">
                 {listingDetail?.data?.ListingImage?.[0]?.url && (
                   <div
                     onClick={() => handleOpenLightBox(0)}
@@ -261,7 +228,7 @@ const ListingDetail = () => {
                   >
                     <Image
                       className={
-                        "cursor-pointer object-cover h-full md:h-[480px] w-full  md:rounded-lg"
+                        "cursor-pointer object-cover h-full lg:h-[480px] w-full  lg:rounded-lg"
                       }
                       height={230}
                       width={380}
@@ -275,7 +242,7 @@ const ListingDetail = () => {
                 <div>
                   {listingDetail?.data?.ListingImage?.[1]?.url && (
                     <div
-                      className="hidden md:block"
+                      className="hidden lg:block"
                       onClick={() => handleOpenLightBox(1)}
                     >
                       <Image
@@ -291,7 +258,7 @@ const ListingDetail = () => {
                   )}
                   {listingDetail?.data?.ListingImage?.[2]?.url && (
                     <div
-                      className="hidden md:block"
+                      className="hidden lg:block"
                       onClick={() => handleOpenLightBox(2)}
                     >
                       <Image
@@ -311,7 +278,7 @@ const ListingDetail = () => {
               {listingDetail?.data?.ListingImage?.[2]?.url && (
                 <Button
                   onClick={() => setOpenLightBox(true)}
-                  className="absolute bottom-6 right-6 text-white bg-[#97B6FF]  p-3 rounded-lg text-sm border-none  justify-center max-w-sm text-center hidden md:inline-flex"
+                  className="absolute bottom-6 right-6 text-white bg-[#97B6FF]  p-3 rounded-lg text-sm border-none  justify-center max-w-sm text-center hidden lg:inline-flex"
                   icon={PhotoIcon}
                 >
                   View all photos
@@ -321,7 +288,7 @@ const ListingDetail = () => {
 
             {/* Mobile Resolution */}
 
-            <div className="block md:hidden bg-[#F2F2F2] mb-4 border-b border-[#ccc]">
+            <div className="block lg:hidden bg-[#F2F2F2] mb-4 border-b border-[#ccc]">
               {/* <Divider /> */}
               <div className="flex justify-around py-4">
                 <div className="photos">
@@ -345,11 +312,11 @@ const ListingDetail = () => {
                 </div>
               </div>
             </div>
-            <div className="px-4 md:px-0 md:pt-8 ">
+            <div className="px-4 lg:px-0 lg:pt-8 ">
               <div className="grid grid-cols-1 gap-4 xl:grid-cols-3">
-                <div className="md:col-span-2 ">
+                <div className="lg:col-span-2 ">
                   {/* Desktop Resolution */}
-                  <div className="bg-[#f2f2f2] rounded-lg shadow-md  py-8  flex-col lg:flex-row items-center justify-between hidden md:flex">
+                  <div className="bg-[#f2f2f2] rounded-lg shadow-md  py-8  flex-col lg:flex-row items-center justify-between hidden lg:flex">
                     {stats?.map((el, index) => (
                       <div
                         key={index}
@@ -370,7 +337,7 @@ const ListingDetail = () => {
                     ))}
                   </div>
                   {/* Mobile Resolution */}
-                  <div className="block md:hidden py-2">
+                  <div className="block lg:hidden py-2">
                     <div className="price_details flex justify-between">
                       <div>
                         <h2 className="text-2xl font-bold">
@@ -428,7 +395,6 @@ const ListingDetail = () => {
                   </div>
                   {listingDetail?.data?.Address[0].latitude && (
                     <div id="mapSection">
-                      <Divider />
                       <p className="text-[24px] pb-8">View on map</p>
                       <GoogleMap
                         location={{
@@ -446,7 +412,7 @@ const ListingDetail = () => {
                   )}
                 </div>
                 {listingDetail?.data && (
-                  <div className="sm:col-span-1 md:col-span-1 lg:col-span-1">
+                  <div className="sm:col-span-1 lg:col-span-1 lg:col-span-1">
                     <ListingAgentContactCard
                       showForm={setShowContactWithAgent}
                       listing={listingDetail?.data}
@@ -461,23 +427,6 @@ const ListingDetail = () => {
           </div>
         </div>
       </div>
-      {/* <div className="py-8 mt-16 bg-[#F2F2F2]">
-        <div className="max-w-screen-xl m-auto px-4 md:px-0 md:pt-8">
-          <p className="font-medium text-[24px]">Similar in this area</p>
-          <div className="flex justify-normal gap-10 py-8 ">
-            {similarAreaInfo.map((item, index) => (
-              <div key={index} className="basis-1/3">
-                <ListingItem
-                  //@ts-ignore
-                  listingItem={item.listingItem}
-                  onSavedIconClick={item.onSavedIconClick}
-                  isLoadingSavedListings={item.isLoadingSavedListings}
-                />
-              </div>
-            ))}
-          </div>
-        </div>
-      </div> */}
 
       {averagePriceNeighborhoodChartData && (
         <div className=" container">
@@ -501,25 +450,9 @@ const ListingDetail = () => {
         </div>
       )}
 
-      {/*<div className="py-8 mt-16 bg-[#F2F2F2]">*/}
-      {/*    <div className="container">*/}
-      {/*        <p className="font-medium text-[24px]">Similar in this area</p>*/}
-      {/*        <div className="flex justify-normal gap-10 py-8 ">*/}
-      {/*            {similarAreaInfo.map((item, index) => (*/}
-      {/*                <div key={index} className="basis-1/3">*/}
-      {/*                    <ListingItem*/}
-      {/*                        listingItem={item.listingItem}*/}
-      {/*                        onSavedIconClick={item.onSavedIconClick}*/}
-      {/*                        isLoadingSavedListings={item.isLoadingSavedListings}*/}
-      {/*                    />*/}
-      {/*                </div>*/}
-      {/*            ))}*/}
-      {/*        </div>*/}
-      {/*    </div>*/}
-      {/*</div>*/}
 
       {listingDetail?.data?.ListingPrice?.length > 1 && (
-        <div className="max-w-screen-xl m-auto px-4 md:px-0 md:pt-8 ">
+        <div className="max-w-screen-xl m-auto px-4 lg:px-0 lg:pt-8 ">
           <p className="font-medium text-[24px] pt-14">Price change graph</p>
           <Title className="pt-8">
             This listing has changed its price{" "}
