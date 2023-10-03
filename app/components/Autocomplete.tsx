@@ -1,7 +1,7 @@
 import {useEffect, useRef, useState} from "react";
 import {MagnifyingGlassIcon} from "@heroicons/react/24/solid";
 import {AutocompleteAddress,} from "@/types";
-import {Icon} from "@tremor/react";
+import { Button, Icon } from "@tremor/react";
 
 window.initMap = function (e) {
   console.log(e);
@@ -147,12 +147,12 @@ const AutoComplete = ({
         value={inputValue}
         onChange={(e) => setInputValue(e.target.value)}
       />
-      <button
+      <Button
         type={"submit"}
-        className=" bg-[#2C72F6] text-white py-2 px-3 text-sm font-bold rounded-lg w-full max-w-fit lg:max-w-[172px] border-none hover:bg-[#4a70c3]"
+        variant={"primary"}
       >
         Search
-      </button>
+      </Button>
     </div>
   );
 };

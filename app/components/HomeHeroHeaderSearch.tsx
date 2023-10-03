@@ -46,8 +46,6 @@ export function HomeHeroHeaderSearch({ setListingType }: any) {
   ];
 
   const handleSelectedLocalityChange = (locality: string) => {
-    console.log("!!!!!!!!!!!!!!");
-    console.log(listingTypeSelected);
     router.push(
       `/listings?listingType=${listingTypeSelected}&locality=${locality}`
     );
