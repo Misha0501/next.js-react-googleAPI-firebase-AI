@@ -76,7 +76,7 @@ const EditForm = ({ formik, addressId, id, loading }: any) => {
     if (updateProperty.isSuccess) {
       toast("Property updated successfully", { type: "success" });
       // redirect user to the profile page
-      router.push("/profile/myAccount");
+      router.push("/profile/myProperties");
     }
   }, [updateProperty?.isSuccess]);
 
