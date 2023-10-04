@@ -3,13 +3,16 @@ import { ListingsMain } from "@/app/components/ListingsMain";
 import { ListingsPageHeader } from "@/app/components/ListingsPageHeader";
 import { ListingsPageFilters } from "@/app/components/ListingsPageFilters";
 import { Fragment, useCallback, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@tremor/react";
 import { getFetchUrl } from "@/app/lib/getFetchUrl";
 import { useAuthContext } from "@/app/context/AuthContext";
 import { NO_MAX } from "@/app/Constants/filters";
 import { Dialog, Transition } from "@headlessui/react";
 import Link from "next/link";
+import { useCreateSavedSearches } from "@/providers/SavedSearaches";
+import { toast } from "react-toastify";
+import { Modal } from "@/app/components/Modal";
 
 export const ListingsPageContent = () => {
   const { authToken } = useAuthContext();
@@ -17,9 +20,13 @@ export const ListingsPageContent = () => {
   const [search, setSearch] = useState(null);
   const [listingType, setListingType] = useState(undefined);
   const [locality, setLocality] = useState(param.get("locality") || "");
+  const createSavedSearches = useCreateSavedSearches({ authToken });
+  let [showAuthModal, setShowAuthModal] = useState(false);
+
   let [savedSearchConfirmationModal, setSavedSearchConfirmationModal] =
     useState(false);
   let [savedSearchError, setSavedSearchError] = useState("");
+  const router = useRouter();
 
   const onParamsChange = useCallback((data) => {
     setSearch(data);
@@ -67,31 +74,21 @@ export const ListingsPageContent = () => {
   };
 
   const handleSaveSearch = async () => {
-    try {
-      const response = await fetch(getFetchUrl(`/api/savedSearches`), {
-        method: "POST",
-        cache: "no-store",
-        headers: {
-          "Content-type": "application/json",
-          Authorization: authToken,
-        },
-        body: JSON.stringify(getSavedSearchesBodyObjectFromFilters(search)),
-      });
-      const data = await response.json();
+    // If the user is not logged in, show the login modal
+    if (!authToken) {
+      setShowAuthModal(true);
+      return;
+    }
 
-      if (response.status !== 200) {
-        console.error("Error response:", response);
-        console.error("Error data:", data);
-        setSavedSearchError("Something went wrong, please try again later.");
-        setSavedSearchConfirmationModal(true);
-        return;
-      }
+    try {
+      await createSavedSearches.mutateAsync({
+        data: getSavedSearchesBodyObjectFromFilters(search),
+      });
       setSavedSearchConfirmationModal(true);
+      toast.success("Your search has been saved!");
     } catch (e) {
       console.error("error");
-      console.error(e);
-      setSavedSearchError("Something went wrong, please try again later.");
-      setSavedSearchConfirmationModal(true);
+      toast.error("Oops! Something went wrong. Please try again later.");
     }
   };
 
@@ -109,7 +106,7 @@ export const ListingsPageContent = () => {
         >
           Filters
         </Button>
-        <Button variant={"secondary"} onClick={handleSaveSearch}>
+        <Button variant={"secondary"} onClick={handleSaveSearch} loading={createSavedSearches.isLoading}>
           Save search
         </Button>
       </div>
@@ -136,6 +133,13 @@ export const ListingsPageContent = () => {
           />
         </div>
       </section>
+      <Modal
+        title={"To save the search please log in or create an account."}
+        show={showAuthModal}
+        onClose={() => setShowAuthModal(false)}
+        onCancelClick={() => setShowAuthModal(false)}
+        onSubmitClick={() => router.push("/signin")}
+      />
       {/* Confirmation modal*/}
       <Transition appear show={savedSearchConfirmationModal} as={Fragment}>
         <Dialog
