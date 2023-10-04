@@ -17,10 +17,10 @@ import { Skeleton } from "@mui/material";
 import { getCurrencySign } from "@/app/lib/getCurrencySign";
 import { moneyFormatter } from "@/app/lib/formatPrice";
 import { roundNumberTwoDecimal } from "@/app/lib/roundNumberTwoDecimal";
+import { Modal } from "@/app/components/Modal";
 
 type ListingItemProps = {
   listingItemInitial: Listing;
-  onSavedIconClick?: (listingItem: Listing) => void;
   isLoadingSavedListings: boolean;
   ownerView: boolean;
   onEditIconClick?: (listingItem: Listing) => void;
@@ -31,7 +31,6 @@ type ListingItemProps = {
 
 export const ListingItem = ({
   listingItemInitial,
-  onSavedIconClick,
   isLoadingSavedListings = false,
   ownerView,
   onDeleteIconClick,
@@ -43,6 +42,7 @@ export const ListingItem = ({
   const { authToken } = useAuthContext();
 
   const router = useRouter();
+  let [showAuthModal, setShowAuthModal] = useState(false);
 
   const goToListingPage = () => {
     router.push(`/listings/${listingItem.id}`);
@@ -63,6 +63,12 @@ export const ListingItem = ({
   }, [listingItemInitial]);
 
   const handleSavedIconClick = async () => {
+    if (!authToken) {
+      setShowAuthModal(true);
+      // router.push("/signin");
+      return;
+    }
+
     // if listings isn't saved we do a post request to save it
     if (!listingItem.savedListingId) {
       await fetch(getFetchUrl(`/api/savedListings`), {
@@ -95,7 +101,7 @@ export const ListingItem = ({
             "Content-type": "application/json",
             Authorization: authToken,
           },
-        }
+        },
       ).catch((error) => {
         console.error(error);
       });
@@ -188,7 +194,7 @@ export const ListingItem = ({
               <>
                 {listingItem?.areaTotal && (
                   <div className="flex items-center gap-2 mb-4">
-                    <GridIcon/>
+                    <GridIcon />
                     <span className={"text-gray-500"}>
                       {listingItem?.areaTotal} m²
                     </span>
@@ -196,7 +202,7 @@ export const ListingItem = ({
                 )}
                 {listingItem?.bedrooms && (
                   <div className="flex items-center gap-2 mb-4">
-                    <BedIcon/>
+                    <BedIcon />
                     <span className={"text-gray-500"}>
                       {listingItem?.bedrooms}
                     </span>
@@ -239,6 +245,13 @@ export const ListingItem = ({
           </div>
         )}
       </div>
+      <Modal
+        title={"To save property please log in or create an account."}
+        show={showAuthModal}
+        onClose={() => setShowAuthModal(false)}
+        onCancelClick={() => setShowAuthModal(false)}
+        onSubmitClick={() => router.push("/signin")}
+      />
     </div>
   );
 };
