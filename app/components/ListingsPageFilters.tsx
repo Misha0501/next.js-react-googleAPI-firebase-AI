@@ -87,7 +87,7 @@ export const ListingsPageFilters = ({
         type="button"
         onClick={showFiltersMobile}
         variant={"primary"}
-        className={"w-full"}
+        className={"w-full lg:hidden"}
       >
         Search
       </Button>

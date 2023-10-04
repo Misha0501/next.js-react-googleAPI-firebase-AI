@@ -119,7 +119,7 @@ export const ListingsPageContent = () => {
             className={`${
               !showFiltersMobile
                 ? "hidden lg:block"
-                : "fixed inset-0 bg-white z-10 pt-4 pb-24 overflow-y-scroll px-4 md:min-w-min lg:p-0 md:block md:static"
+                : "fixed inset-0 bg-white z-10 pt-4 pb-24 overflow-y-scroll px-4 lg:min-w-min lg:block lg:static lg:p-0 lg:overflow-y-visible"
             }`}
           >
             <ListingsPageFilters
