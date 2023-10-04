@@ -1,21 +1,32 @@
-"use client";
-
-import {Divider, Icon, Tab, TabGroup, TabList, TabPanel, TabPanels,} from "@tremor/react";
-import {Fragment, useState} from "react";
-import {ListingType} from "@/types";
+import {
+  Button,
+  Tab,
+  TabGroup,
+  TabList,
+  TabPanel,
+  TabPanels,
+} from "@tremor/react";
+import { Fragment, useState } from "react";
+import { ListingType } from "@/types";
 import Filters from "@/app/components/Filters";
-import {useSearchParams} from "next/navigation";
-import {XMarkIcon} from "@heroicons/react/24/solid";
+import { useSearchParams } from "next/navigation";
+import { XMarkIcon } from "@heroicons/react/24/solid";
 
+type Props = {
+  onParamsChange: (data: any) => void;
+  onListingTypeChange: (listingType: ListingType) => void;
+  locality?: string;
+  showFiltersMobile: () => void;
+};
 export const ListingsPageFilters = ({
   onParamsChange,
   onListingTypeChange,
   locality,
-  showDrawerFunction,
-}: any) => {
+  showFiltersMobile,
+}: Props) => {
   const params = useSearchParams();
   const [listingType, setListingType] = useState<ListingType | any>(
-    params.get("listingType") || "SELL"
+    params.get("listingType") || "SELL",
   );
   const [filterValues, setFilterValues] = useState({});
 
@@ -30,18 +41,13 @@ export const ListingsPageFilters = ({
   };
 
   return (
-    <div className="filters w-full py-6 lg:p-0 max-w-sm m-auto md:max-w-md">
-      <div className={"flex items-center justify-between"}>
-        <button
-          type="button"
-          onClick={showDrawerFunction}
-          className=" bg-transparent  hover:bg-gray-200 hover:text-gray-900 rounded-lg text-2xl font-semibold items-center justify-center dark:hover:bg-gray-600 dark:hover:text-white lg:hidden"
-        >
-          <Icon className="text-[#2D3648] h-18 w-18 text-lg" icon={XMarkIcon} />
-        </button>
+    <>
+      <div
+        className={"flex justify-end lg:hidden cursor-pointer"}
+        onClick={showFiltersMobile}
+      >
+        <XMarkIcon className="text-[#2D3648] h-6 w-6 text-lg" />
       </div>
-      <Divider />
-
       <TabGroup
         defaultIndex={listingType === "SELL" ? 0 : 1}
         onIndexChange={handleTabChange}
@@ -77,6 +83,14 @@ export const ListingsPageFilters = ({
           </TabPanel>
         </TabPanels>
       </TabGroup>
-    </div>
+      <Button
+        type="button"
+        onClick={showFiltersMobile}
+        variant={"primary"}
+        className={"w-full"}
+      >
+        Search
+      </Button>
+    </>
   );
 };
