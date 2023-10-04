@@ -25,11 +25,13 @@ import PropertyPlacementRadioButtons from "../PropertyPlacementRadioButtons";
 import { useUpdateProperty } from "@/providers/Listing";
 import { useAuthContext } from "@/app/context/AuthContext";
 import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
 const EditForm = ({ formik, addressId, id, loading }: any) => {
   const [showError, setShowErros] = useState(false);
   const { authToken } = useAuthContext();
   const updateProperty = useUpdateProperty({ authToken });
+  const router = useRouter();
   function updateBtnHandler() {
     event.preventDefault();
     // formik.handleSubmit;
@@ -73,6 +75,8 @@ const EditForm = ({ formik, addressId, id, loading }: any) => {
   useEffect(() => {
     if (updateProperty.isSuccess) {
       toast("Property updated successfully", { type: "success" });
+      // redirect user to the profile page
+      router.push("/profile/myAccount");
     }
   }, [updateProperty?.isSuccess]);
 

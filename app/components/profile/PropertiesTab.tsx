@@ -14,7 +14,7 @@ export const PropertiesTab = ({ userListings, company }: Props) => {
           <TabGroup>
               <TabList className="space-x-0 w-min mb-10">
                   <Tab
-                    className={"ui-selected:bg-gray-100 ui-selected:rounded-t-lg w-full justify-center px-4 pt-3"}>Place by you</Tab>
+                    className={"ui-selected:bg-gray-100 ui-selected:rounded-t-lg w-full justify-center px-4 pt-3"}>Placed by you</Tab>
                   <Tab
                     className={"ui-selected:bg-gray-100 ui-selected:rounded-t-lg w-full justify-center px-4 pt-3"}>Company owned</Tab>
               </TabList>
