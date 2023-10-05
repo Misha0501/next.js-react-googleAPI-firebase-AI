@@ -84,6 +84,7 @@ export const ListingsMain = ({ searchParams, listingType, locality }: Props ) =>
   }, [listingsData, pageSize]);
 
   const populatedListings = useMemo(() => {
+    if (!savedListings?.length) return listings;
     if (!listings?.length) return [];
 
     let savedListingsListingIds: number[] = [];
@@ -92,7 +93,7 @@ export const ListingsMain = ({ searchParams, listingType, locality }: Props ) =>
     savedListingsListingIds = savedListings.map((el: SavedListing) => el.listingId);
 
     // populate listings with saved listings data
-    return listings.map((listing: Listing) => {
+    const populatedListings = listings.map((listing: Listing) => {
       const savedListingListingId = savedListingsListingIds.find(
         (savedListingId) => savedListingId === listing.id,
       );
@@ -109,6 +110,7 @@ export const ListingsMain = ({ searchParams, listingType, locality }: Props ) =>
       }
       return listing;
     });
+    return populatedListings;
   }, [savedListings, listings]);
 
   useEffect(() => {
