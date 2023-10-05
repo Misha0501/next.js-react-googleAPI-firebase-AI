@@ -6,9 +6,37 @@ import {
   ListItemIcon,
   ListItemText,
 } from "@mui/material";
-import { MENU } from "./Content";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import {
+  HeartIcon,
+  HomeIcon,
+  ListBulletIcon,
+  UserGroupIcon,
+} from "@heroicons/react/24/outline";
+
+const MOBILE_NAV_ITEMS = [
+  {
+    title: "Home",
+    icon: <HomeIcon />,
+    link: "/",
+  },
+  {
+    title: "Favourites",
+    icon: <HeartIcon />,
+    link: "/profile/savedItems",
+  },
+  {
+    title: "Saved",
+    icon: <ListBulletIcon />,
+    link: "/listings",
+  },
+  {
+    title: "Profile",
+    icon: <UserGroupIcon />,
+    link: "/profile/myProperties",
+  },
+];
 
 function MobileFooter() {
   const pathName = usePathname();
@@ -37,13 +65,18 @@ function MobileFooter() {
           },
         }}
       >
-        {MENU.map((item: any, index) => (
+        {MOBILE_NAV_ITEMS.map((item: any, index) => (
           <ListItem
             key={item.title}
             disablePadding
             sx={{ color: isActiveRoute(item.link) ? "#2C72F6" : "#969ba3" }}
           >
-            <Link href={item.link} key={item.title} passHref={true} className={"mx-auto"}>
+            <Link
+              href={item.link}
+              key={item.title}
+              passHref={true}
+              className={"mx-auto"}
+            >
               <ListItemButton sx={{ display: "block" }}>
                 <ListItemIcon
                   sx={{
@@ -60,7 +93,6 @@ function MobileFooter() {
                     "& span": {
                       fontSize: "12px",
                       fontWeight: "500",
-                      letterSpacing: "-0.12px",
                     },
                   }}
                 />

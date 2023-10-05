@@ -77,7 +77,6 @@ async function service(args: IAPArgs): Promise<any> {
   }
 
   let fetchUrl = baseDomain || getFetchUrl(url);
-    // `https://${baseDomain || process.env.API_URL || process.env.VERCEL_URL || process.env.NEXT_PUBLIC_VERCEL_URL}${url}`;
 
   if (queryParams) {
     fetchUrl = `${fetchUrl}?${qs.stringify(queryParams)}`;
