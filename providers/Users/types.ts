@@ -1,3 +1,5 @@
+import { Membership } from "@/types";
+
 export namespace Users {
   export interface Company {
     id: number;
@@ -98,6 +100,7 @@ export namespace Users {
     email: string;
     displayName: string;
     phoneNumber: string;
+    Membership: Membership[];
     createdAt: string;
     Company?: Company;
     Listing?: Listing[];

@@ -17,7 +17,7 @@ type Props = {
 export const ListingsMain = ({ searchParams, listingType, locality }: Props ) => {
   const { authToken } = useAuthContext();
   const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(3);
+  const [pageSize, setPageSize] = useState(15);
   const [sortBy, setSortBy] = useState(undefined);
   const { data: savedListingsData, isLoading: savedListingsIsLoading } = useSavedListings({ authToken });
 
@@ -84,7 +84,6 @@ export const ListingsMain = ({ searchParams, listingType, locality }: Props ) =>
   }, [listingsData, pageSize]);
 
   const populatedListings = useMemo(() => {
-    if (!savedListings?.length) return [];
     if (!listings?.length) return [];
 
     let savedListingsListingIds: number[] = [];

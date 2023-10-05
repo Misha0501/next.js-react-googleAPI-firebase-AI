@@ -5,15 +5,16 @@ import { signOut } from "@firebase/auth";
 import { firebaseClientAuth } from "@/app/lib/firebase/configClient";
 import { useRouter } from "next/navigation";
 import { SavedItemsPageTabs } from "@/app/components/SavedItemsPageTabs";
-import { useEffect, useState } from "react";
+import { useMemo } from "react";
 import { useAuthContext } from "@/app/context/AuthContext";
 import { RecentlyViewedListings } from "@/app/components/RecentlyViewedListings";
 import { CompanyTab } from "@/app/components/profile/CompanyTab";
 import { InvitesTab } from "@/app/components/profile/InvitesTab";
 import { PersonalDetailsTab } from "@/app/components/profile/PersonalDetailsTab";
-import { ApplicationUser, Company } from "@/types";
 import { PropertiesTab } from "@/app/components/profile/PropertiesTab";
 import { ProfilePageOwnListings } from "@/app/components/ProfilePageOwnListings";
+import { useUserOwnData } from "@/providers/Users";
+import { CircularProgress } from "@mui/material";
 
 type Props = {
   tab: string;
@@ -30,55 +31,24 @@ export default function ProfilePageMainContent({ tab }: Props) {
   const activeTab = tabList.indexOf(tab);
   const router = useRouter();
   const { authToken, user } = useAuthContext();
-  const [applicationUser, setApplicationUser] =
-    useState<ApplicationUser | null>(null);
-  const [company, setCompany] = useState<Company | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState("");
+
+  const { data: applicationUser, isLoading, error} = useUserOwnData({ authToken });
+
+  const company = useMemo(() => {
+    if (applicationUser?.Membership && applicationUser?.Membership.length) {
+      return applicationUser?.Membership[0].company;
+    }
+
+    return null;
+  }, [applicationUser]);
 
   const handleLogOut = async () => {
     await signOut(firebaseClientAuth);
     router.push("/");
   };
 
-  // fetch user data
-  const fetchUserData = async () => {
-    const response = await fetch("/api/users", {
-      method: "GET",
-      cache: "no-store",
-      headers: {
-        "Content-type": "application/json",
-        Authorization: authToken,
-      },
-    });
-
-    const data: ApplicationUser = await response.json();
-
-    // Check if user is part of a company if so fetch set company
-    if (data?.Membership && data?.Membership.length) {
-      setCompany(data?.Membership[0].company);
-    }
-    setApplicationUser(data);
-    setIsLoading(false);
-  };
-
-  useEffect(() => {
-    // redirect to login if not logged in
-    if (!user) {
-      router.push("/signin");
-    }
-
-    console.log("use effect");
-    setIsLoading(true);
-
-    fetchUserData().catch((error) => {
-      console.error(error.message);
-      setIsLoading(false);
-      setError("Something went wrong. Please try again later.");
-    });
-  }, []);
-  if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>{error} </div>;
+  if (isLoading) return <CircularProgress />;
+  if (error) return <p className={"text-red-500"}>Oops something went wrong, please try again later</p>;
   return (
     <div className={""}>
       <TabGroup

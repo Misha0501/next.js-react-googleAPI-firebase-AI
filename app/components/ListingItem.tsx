@@ -35,7 +35,7 @@ type ListingItemProps = {
 
 export const ListingItem = ({
   listingItemInitial,
-  isLoadingSavedListings = true,
+  isLoadingSavedListings = false,
   ownerView,
   onDeleteIconClick,
   onStateChanged,
