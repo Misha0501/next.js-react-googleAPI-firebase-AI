@@ -1,8 +1,8 @@
 import headerImg from "@/public/header-hero.jpg";
 import Image from "next/image";
 import { HomeHeroHeaderSearch } from "@/app/components/HomeHeroHeaderSearch";
-import HomeWebsiteInfoSection from "@/app/components/HomePage/WebsiteInfoSectionHome";
-import ExploreHomeSection from "@/app/components/HomePage/ExploreHomeSection";
+import HomeWebsiteInfoSection from "@/app/components/homePage/WebsiteInfoSectionHome";
+import ExploreHomeSection from "@/app/components/homePage/ExploreHomeSection";
 
 export default function Home() {
   return (

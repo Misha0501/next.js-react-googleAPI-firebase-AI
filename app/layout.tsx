@@ -2,7 +2,7 @@ import "./globals.scss";
 import type { Metadata } from "next";
 import { AuthContextProvider } from "./context/AuthContext";
 import { Inter } from "next/font/google";
-import { Navigation } from "@/app/components/Navigation";
+import { Navigation } from "@/app/components/layout/Navigation";
 import Providers from "@/utils/provider";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";

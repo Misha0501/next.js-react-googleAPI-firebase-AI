@@ -21,7 +21,7 @@ import React, { useState } from "react";
 import PropertyPlacementRadioButtons from "../PropertyPlacementRadioButtons";
 import { FormHelperText } from "@mui/material";
 import { AutocompleteAddress } from "@/types";
-import { AddressAutocomplete } from "@/app/components/Form/AddressAutocomplete";
+import { AddressAutocomplete } from "@/app/components/propertyPlacement/AddressAutocomplete";
 import { FormikProps } from "formik";
 import { boolean } from "zod";
 

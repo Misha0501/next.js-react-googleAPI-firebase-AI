@@ -4,22 +4,22 @@ import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@tremor/react";
 import { signOut } from "@firebase/auth";
 import { firebaseClientAuth } from "@/app/lib/firebase/configClient";
 import { useRouter } from "next/navigation";
-import { SavedItemsPageTabs } from "@/app/components/SavedItemsPageTabs";
+import { SavedItemsPageTabs } from "@/app/components/profilePage/SavedItemsPageTabs";
 import { useMemo } from "react";
 import { useAuthContext } from "@/app/context/AuthContext";
-import { RecentlyViewedListings } from "@/app/components/RecentlyViewedListings";
-import { CompanyTab } from "@/app/components/profile/CompanyTab";
-import { InvitesTab } from "@/app/components/profile/InvitesTab";
-import { PersonalDetailsTab } from "@/app/components/profile/PersonalDetailsTab";
-import { PropertiesTab } from "@/app/components/profile/PropertiesTab";
-import { ProfilePageOwnListings } from "@/app/components/ProfilePageOwnListings";
+import { RecentlyViewedListings } from "@/app/components/profilePage/RecentlyViewedListings";
+import { CompanyTab } from "@/app/components/profilePage/CompanyTab";
+import { InvitesTab } from "@/app/components/profilePage/InvitesTab";
+import { PersonalDetailsTab } from "@/app/components/profilePage/PersonalDetailsTab";
+import { PropertiesTab } from "@/app/components/profilePage/PropertiesTab";
+import { ProfilePageOwnListings } from "@/app/components/profilePage/ProfilePageOwnListings";
 import { useUserOwnData } from "@/providers/Users";
 import { CircularProgress } from "@mui/material";
 
 type Props = {
   tab: string;
 };
-export default function ProfilePageMainContent({ tab }: Props) {
+export const ProfilePageMainContent = ({ tab }: Props) => {
   const tabList = [
     "myProperties",
     "saved",
@@ -116,4 +116,4 @@ export default function ProfilePageMainContent({ tab }: Props) {
       </TabGroup>
     </div>
   );
-}
+};
