@@ -4,8 +4,9 @@ import { Listing } from "@/types";
 import { ListingItem } from "@/app/components/ListingItem";
 import { Fragment, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import { getFetchUrl } from "@/app/lib/getFetchUrl";
 import { useAuthContext } from "@/app/context/AuthContext";
+import { useDeleteListing } from "@/providers/Listing";
+import { toast } from "react-toastify";
 
 type Props = {
   initialListings: Listing[];
@@ -17,6 +18,7 @@ export const ProfilePageOwnListings = ({ initialListings }: Props) => {
   let [deleteConfirmationModalOpen, setDeleteConfirmationModalOpen] =
     useState(false);
   const [listingToDelete, setListingToDelete] = useState<Listing | null>(null);
+  const deleteListingQuery = useDeleteListing({ authToken });
 
   function closeModal() {
     setDeleteConfirmationModalOpen(false);
@@ -29,27 +31,21 @@ export const ProfilePageOwnListings = ({ initialListings }: Props) => {
   const deleteListing = () => {
     if (!listingToDelete) return;
 
-    fetch(getFetchUrl(`/api/listings/${listingToDelete.id}`), {
-      method: "DELETE",
-      cache: "no-store",
-      headers: {
-        "Content-type": "application/json",
-        Authorization: authToken,
-      },
-    })
-      .then(() => {
-        const filteredListings = listings.filter(
-          (listing) => listing.id !== listingToDelete.id,
-        );
-        setListings(filteredListings);
-        setListingToDelete(null);
-        closeModal();
-      })
-      .catch((error) => {
+    deleteListingQuery
+      .mutateAsync({ id: listingToDelete.id }).catch((error) => {
         console.error(error.message);
+        toast.error(error.message);
         closeModal();
         setListingToDelete(null);
       });
+
+    // optimistic update
+    const filteredListings = listings.filter(
+      (listing) => listing.id !== listingToDelete.id,
+    );
+    setListings(filteredListings);
+    setListingToDelete(null);
+    closeModal();
   };
 
   return (
@@ -62,7 +58,7 @@ export const ProfilePageOwnListings = ({ initialListings }: Props) => {
               listingItemInitial={listing}
               onDeleteIconClick={onDeletedIconClick}
               ownerView={true}
-            ></ListingItem>
+            />
           ))}
       </div>
 

@@ -84,3 +84,14 @@ export function useUpdateProperty(
     }
   );
 }
+
+// Delete
+export function useDeleteListing(
+  props: any
+){
+  return useMutation((payload) => api.deleteItem({ ...props, data: payload }), {
+    mutationKey: `${KEY} | Delete`,
+    retry: 0
+  });
+}
+
