@@ -6,7 +6,7 @@ import { Fragment, useCallback, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@tremor/react";
 import { useAuthContext } from "@/app/context/AuthContext";
-import { NO_MAX } from "@/app/Constants/filters";
+import { NO_MAX } from "@/app/lib/constants/filters";
 import { Dialog, Transition } from "@headlessui/react";
 import Link from "next/link";
 import { useCreateSavedSearches } from "@/providers/SavedSearaches";

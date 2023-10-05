@@ -1,8 +1,8 @@
 "use client";
 import { useState, useEffect } from "react";
 import { Checkbox } from "@/app/components/Checkbox";
-import { propertyTypesInitialState } from "../Constants/filters";
-import { PROPERTY_TYPES } from "../Constants";
+import { propertyTypesInitialState } from "@/app/lib/constants/filters";
+import { PROPERTY_TYPES } from "../lib/constants";
 
 export function PropertyTypeFilter({ onChange, selectedValues }: any) {
   const handleCheckboxChange = (value: any) => {

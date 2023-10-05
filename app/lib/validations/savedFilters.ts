@@ -6,7 +6,7 @@ import {
     LISTING_TYPES,
     PROPERTY_TYPES,
     UPKEEP_TYPES
-} from "@/app/Constants";
+} from "../constants";
 
 export const savedFiltersSchema = z.object({
     locality: z.string().optional(),

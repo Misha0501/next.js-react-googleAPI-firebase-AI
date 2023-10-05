@@ -1,3 +1,7 @@
+/**
+ * Get API fetch url
+ * @param route Route to get the fetch url for
+ */
 export const getFetchUrl = (route: string) => {
     return `${
       process.env.NODE_ENV === "production"

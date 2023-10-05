@@ -2,6 +2,10 @@ import { sendEmail } from "@/app/lib/email";
 import { prisma } from "@/app/lib/db/client";
 import { MatchedListingsAndSearches } from "@/types";
 
+/**
+ * Sends emails to users with matched listings/saved searches
+ * @param matchedListingsAndSearches Matched listings and saved searches
+ */
 export const sendEmailsToMatchedListingsSearches = async (matchedListingsAndSearches: MatchedListingsAndSearches[]) => {
   // Send emails to users with matched listings/saved searches
   for (let i = 0; i < matchedListingsAndSearches.length; i++) {
@@ -11,6 +15,8 @@ export const sendEmailsToMatchedListingsSearches = async (matchedListingsAndSear
     for (let j = 0; j < matchedSearches.length; j++) {
       const matchedSearch = matchedSearches[j];
       const applicationUser = matchedSearch.applicationUser;
+      if(!applicationUser) continue;
+
       try {
         console.log("Sending email to user with matched listing and a link to the listing id: "
           + matchedListing.id

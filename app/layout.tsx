@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { AuthContextProvider } from "./context/AuthContext";
 import { Inter } from "next/font/google";
 import { Navigation } from "@/app/components/layout/Navigation";
-import Providers from "@/utils/provider";
+import ReactQueryProvider from "@/app/lib/reactQuery/ReactQueryProvider";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Footer from "./components/layout/Footer";
@@ -40,7 +40,7 @@ export default function RootLayout({
         <main className="pb-12 md:pb-0">
           <AuthContextProvider>
             <ToastContainer autoClose={8000} />
-            <Providers>{children}</Providers>
+            <ReactQueryProvider>{children}</ReactQueryProvider>
           </AuthContextProvider>
         </main>
         <Footer />

@@ -1,4 +1,12 @@
-export const userAllowedManipulateListing = (applicationUserId, applicationUserCompanyId, listing) => {
+import { Listing } from "@/types";
+
+/**
+ * Check if user is allowed to manipulate listing
+ * @param applicationUserId
+ * @param applicationUserCompanyId
+ * @param listing
+ */
+export const userAllowedManipulateListing = (applicationUserId: number, applicationUserCompanyId: number, listing: Listing) => {
     if(!listing) return false;
 
     const listingOwnerId = listing.applicationUserId;

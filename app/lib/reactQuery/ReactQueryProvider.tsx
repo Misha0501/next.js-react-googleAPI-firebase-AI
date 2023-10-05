@@ -2,9 +2,8 @@
 
 import React from "react";
 import { QueryClientProvider, QueryClient } from "react-query";
-import { ReactQueryDevtools } from "react-query/devtools";
 
-function Providers({ children }: React.PropsWithChildren) {
+function ReactQueryProvider({ children }: React.PropsWithChildren) {
   const [client] = React.useState(
     new QueryClient({
       defaultOptions: {
@@ -21,4 +20,4 @@ function Providers({ children }: React.PropsWithChildren) {
   );
 }
 
-export default Providers;
+export default ReactQueryProvider;

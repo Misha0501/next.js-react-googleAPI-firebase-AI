@@ -3,6 +3,9 @@ import {cookies, headers} from "next/headers";
 import {DecodedIdToken} from "firebase-admin/lib/auth/token-verifier";
 import {ResponseError} from "@/classes/ResponseError";
 
+/**
+ * Get the firebase's decoded id token from the request
+ */
 export const getDecodedIdToken = async (): Promise<DecodedIdToken> => {
     const headersList = headers()
     const headerAuthorizationToken = headersList.get('Authorization')

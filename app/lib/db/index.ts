@@ -1,5 +1,11 @@
-export const prismaQueryConditionsFromMinMaxValue = (minValue: number | null, maxValue: number | null, valueName: string) => {
-    let result = {};
+/**
+ * Helper function to generate prisma query conditions from min and max value
+ * @param minValue
+ * @param maxValue
+ * @param valueName
+ */
+export const prismaQueryConditionsFromMinMaxValue = (minValue: number | null | undefined, maxValue: number | null | undefined, valueName: string) => {
+    let result: any = {};
 
     if (minValue == null && maxValue == null) return result;
 
@@ -10,8 +16,14 @@ export const prismaQueryConditionsFromMinMaxValue = (minValue: number | null, ma
     return result;
 }
 
-export const prismaQueryConditionsFromMinMaxValidDateStringValue = (minValue: string | null, maxValue: string | null, valueName: string) => {
-    let result = {};
+/**
+ * Helper function to generate prisma query conditions from min and max date string values
+ * @param minValue
+ * @param maxValue
+ * @param valueName
+ */
+export const prismaQueryConditionsFromMinMaxValidDateStringValue = (minValue: string | null | undefined, maxValue: string | null | undefined, valueName: string) => {
+    let result: any = {};
 
     if (minValue == null && maxValue == null) return result;
 
@@ -22,9 +34,15 @@ export const prismaQueryConditionsFromMinMaxValidDateStringValue = (minValue: st
     return result;
 }
 
-export const prismaQueryConditionsFromArray = (valueArray, singleValueName, isNumber = false) => {
+/**
+ * Helper function to generate prisma query conditions from aray of values
+ * @param valueArray
+ * @param singleValueName
+ * @param isNumber
+ */
+export const prismaQueryConditionsFromArray = (valueArray: any[] | undefined, singleValueName: string, isNumber = false) => {
     if (!valueArray) return {};
-    let result = {
+    let result: any = {
         OR: [],
     };
     if (valueArray.length === 0) return result;
@@ -39,8 +57,8 @@ export const prismaQueryConditionsFromArray = (valueArray, singleValueName, isNu
     }
 
     if (valueArray.length > 1) {
-        valueArray.forEach(val => {
-            const tempObj = {}
+        valueArray.forEach((val: any) => {
+            const tempObj: any = {}
             if(isNumber) {
                 tempObj[singleValueName] = Number(val);
             } else {

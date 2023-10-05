@@ -65,7 +65,7 @@ export async function GET(req: NextRequest) {
     } = parsedValues;
 
     // Prisma where object that that will be field with conditions
-    let prismaQueryConditions = {
+    let prismaQueryConditions: any = {
       AND: [],
     };
 

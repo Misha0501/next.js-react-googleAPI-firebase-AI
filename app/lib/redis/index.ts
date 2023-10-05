@@ -1,5 +1,8 @@
 import Redis from "ioredis";
 
+/**
+ * Get Redis url from environment variables
+ */
 const getRedisUrl = () => {
     if (process.env.REDIS_URL) {
         return process.env.REDIS_URL;

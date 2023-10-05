@@ -16,7 +16,7 @@ import {
   CreatePropertyFormikPropInterface,
   LISTING_TYPES,
   PROPERTY_TYPES,
-} from "@/app/Constants";
+} from "../../lib/constants";
 import React, { useState } from "react";
 import PropertyPlacementRadioButtons from "../PropertyPlacementRadioButtons";
 import { FormHelperText } from "@mui/material";

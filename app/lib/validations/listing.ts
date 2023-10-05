@@ -7,7 +7,7 @@ import {
   LISTING_TYPES,
   UPKEEP_TYPES,
     PROPERTY_TYPES
-} from "@/app/Constants";
+} from "../constants";
 const tenYearsFromNow = new Date();
 tenYearsFromNow.setFullYear(tenYearsFromNow.getFullYear() + 10);
 

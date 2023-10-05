@@ -17,7 +17,7 @@ import {
   LISTING_TYPES,
   PROPERTY_TYPES,
   UPKEEP_TYPES,
-} from "@/app/Constants";
+} from "../../lib/constants";
 import SingleSelectRadioButton from "../SingleSelectRadioButton";
 import { CircularProgress, FormHelperText } from "@mui/material";
 import PropertyPlacementRadioButtons from "../PropertyPlacementRadioButtons";

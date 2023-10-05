@@ -77,7 +77,7 @@ export type Listing = {
   upkeepType: UpkeepType;
   volume: number;
   savedListingId?: number;
-  price?: number;
+  price: number;
   currency?: CurrencyType;
 };
 
@@ -89,7 +89,7 @@ export type ListingPrice = {
   currency: CurrencyType;
   createdAt: string;
   updatedAt: string;
-}
+};
 
 export type Address = {
   createdAt: string;
@@ -117,30 +117,30 @@ export type SavedListing = {
 
 export type SavedSearch = {
   id?: number;
-  areaTotalMin?: string | number | null;
-  areaTotalMax?: string | number | null;
-  areaLivingMin?: string | number | null;
-  areaLivingMax?: string | number | null;
-  areaLandMin?: string | number | null;
-  areaLandMax?: string | number | null;
-  roomsMin?: string | number | null;
-  roomsMax?: string | number | null;
-  bedroomsMin?: string | number | null;
-  bedroomsMax?: string | number | null;
-  listedSince?: string | number | null;
+  areaTotalMin?: number | null;
+  areaTotalMax?: number | null;
+  areaLivingMin?: number | null;
+  areaLivingMax?: number | null;
+  areaLandMin?: number | null;
+  areaLandMax?: number | null;
+  roomsMin?: number | null;
+  roomsMax?: number | null;
+  bedroomsMin?: number | null;
+  bedroomsMax?: number | null;
+  listedSince?: number | null;
   constructedYearMin?: string | number | null;
   constructedYearMax?: string | number | null;
-  priceMin?: string | number | null;
-  priceMax?: string | number | null;
+  priceMin?: number | null;
+  priceMax?: number | null;
   propertyType?: PropertyType[] | null;
   listingType?: ListingType | null;
   upkeepType?: UpkeepType[] | null;
   interiorType?: InteriorType[] | null;
   heatingType?: HeatingType[] | null;
-  bathroomsMin?: string | number | null;
-  bathroomsMax?: string | number | null;
-  areaOutsideMin?: string | number | null;
-  areaOutsideMax?: string | number | null;
+  bathroomsMin?: number | null;
+  bathroomsMax?: number | null;
+  areaOutsideMin?: number | null;
+  areaOutsideMax?: number | null;
   applicationUserId?: number;
   applicationUser?: ApplicationUser;
   locality?: string | null;

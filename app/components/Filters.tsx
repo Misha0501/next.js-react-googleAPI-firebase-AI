@@ -18,7 +18,7 @@ import {
   priceRentMinOptions,
   priceSellMaxOptions,
   priceSellMinOptions,
-} from "../Constants/filters";
+} from "@/app/lib/constants/filters";
 
 import { FromToFilter } from "./FromToFilter";
 import { RadioGroupCustom } from "./RadioGroupCustom";

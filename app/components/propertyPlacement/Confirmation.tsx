@@ -9,7 +9,7 @@ import { useAuthContext } from "@/app/context/AuthContext";
 import { Listing, ListingImage } from "@/types";
 import { toast } from "react-toastify";
 import { FormikProps } from "formik";
-import { CreatePropertyFormikPropInterface } from "@/app/Constants";
+import { CreatePropertyFormikPropInterface } from "../../lib/constants";
 
 interface CreatePropertyComponentPropInterface {
   formik: FormikProps<CreatePropertyFormikPropInterface>;

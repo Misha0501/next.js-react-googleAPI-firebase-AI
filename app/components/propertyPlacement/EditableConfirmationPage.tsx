@@ -18,7 +18,7 @@ import {
   LISTING_TYPES,
   PROPERTY_TYPES,
   UPKEEP_TYPES,
-} from "@/app/Constants";
+} from "../../lib/constants";
 import MultiSelectRadioButton from "../MultiSelectRadioButton";
 import SingleSelectRadioButton from "../SingleSelectRadioButton";
 import { PlacingPropertyImagesHandler } from "@/app/components/PlacingPropertyImagesHandler";

@@ -1,5 +1,5 @@
 import * as z from "zod";
-import {CURRENCIES, HEATING_TYPES, INTERIOR_TYPES, LISTING_TYPES, PROPERTY_TYPES, UPKEEP_TYPES} from "@/app/Constants";
+import {CURRENCIES, HEATING_TYPES, INTERIOR_TYPES, LISTING_TYPES, PROPERTY_TYPES, UPKEEP_TYPES} from "../constants";
 import {listingSchema} from "@/app/lib/validations/listing";
 
 export const openAISchema = z.object({

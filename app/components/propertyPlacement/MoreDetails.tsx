@@ -20,7 +20,7 @@ import {
   HEATING_TYPES,
   INTERIOR_TYPES,
   UPKEEP_TYPES,
-} from "@/app/Constants";
+} from "../../lib/constants";
 import SingleSelectRadioButton from "../SingleSelectRadioButton";
 import MultiSelectRadioButton from "../MultiSelectRadioButton";
 import { FormHelperText } from "@mui/material";

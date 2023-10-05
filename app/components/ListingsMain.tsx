@@ -4,7 +4,7 @@ import { ListingItem } from "@/app/components/ListingItem";
 import { usePropertyListing } from "@/providers/Listing";
 import { useAuthContext } from "@/app/context/AuthContext";
 import { Listing, SavedListing } from "@/types";
-import { NO_MAX } from "../Constants/filters";
+import { NO_MAX } from "@/app/lib/constants/filters";
 import { CircularProgress, Pagination } from "@mui/material";
 import { useSavedListings } from "@/providers/SavedListings";
 

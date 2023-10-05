@@ -3,6 +3,10 @@ import {getDecodedIdToken} from "@/app/lib/getDecodedIdToken";
 import {ApplicationUser} from '@prisma/client'
 import {prisma} from "@/app/lib/db/client";
 
+/**
+ * Get the application user from the server
+ * @param includeCompanyMembership Whether to include the company membership
+ */
 export const getApplicationUserServer = async (includeCompanyMembership: boolean = false): Promise<ApplicationUser> => {
     try {
 

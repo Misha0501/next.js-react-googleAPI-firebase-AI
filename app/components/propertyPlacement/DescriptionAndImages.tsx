@@ -10,7 +10,7 @@ import {
 import { ListingImage } from "@/types";
 import { PlacingPropertyImagesHandler } from "@/app/components/PlacingPropertyImagesHandler";
 import { useGenerateDescription } from "@/providers/GenerateDescription";
-import { CreatePropertyFormikPropInterface } from "@/app/Constants";
+import { CreatePropertyFormikPropInterface } from "../../lib/constants";
 import { FormikProps } from "formik";
 
 interface CreatePropertyComponentPropInterface {
