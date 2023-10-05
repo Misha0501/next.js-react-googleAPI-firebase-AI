@@ -1,3 +1,6 @@
+/**
+ * Custom response error
+ */
 export class ResponseError extends Error {
     constructor(message, status) {
         super(message);

@@ -38,7 +38,6 @@ export default function SignInPageContent() {
           if (!loading || !loading.current) return;
 
           loading.current.style.display = "none";
-
         }
       }
     });
