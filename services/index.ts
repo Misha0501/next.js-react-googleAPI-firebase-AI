@@ -1,3 +1,7 @@
+/**
+ * This is a generic service that can be used to make API calls.
+ */
+
 import { useAuthContext } from "@/app/context/AuthContext";
 import omit from "lodash/omit";
 import qs from "query-string";
