@@ -3,7 +3,7 @@ import { Tab } from "@headlessui/react";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { classNames } from "@/app/lib/classNames";
+import { classNamesJoin } from "@/app/lib/classNamesJoin";
 import Autocomplete from "@/app/components/Autocomplete";
 
 export function HomeHeroHeaderSearch() {
@@ -78,7 +78,7 @@ export function HomeHeroHeaderSearch() {
           <Tab.List className="flex gap-2 p-1 mb-5 w-full max-w-[300px]">
             <Tab
               className={({ selected }) =>
-                classNames(
+                classNamesJoin(
                   "w-full rounded-lg py-2 px-3 text-sm font-bold leading-6 outline-none focus:outline-none active:outline-none",
                   selected
                     ? "bg-[#97B6FF] text-white"
@@ -90,7 +90,7 @@ export function HomeHeroHeaderSearch() {
             </Tab>
             <Tab
               className={({ selected }) =>
-                classNames(
+                classNamesJoin(
                   // "ring-white ring-opacity-60 focus:outline-none ",
                   "w-full rounded-lg py-2 px-3 text-sm font-bold leading-6 outline-none focus:outline-none active:outline-none",
                   selected
