@@ -1,6 +1,4 @@
-import { useAuthContext } from "@/app/context/AuthContext";
 import service from "../../services";
-import { Poperty } from "./types";
 
 export async function savedSearches(props?: any): Promise<any> {
   return service({
@@ -15,9 +13,9 @@ export async function savedSearches(props?: any): Promise<any> {
 }
 
 export async function create(
-  props: Poperty.CreateAPIPayload,
+  props: any,
   authToken?: string
-): Promise<Poperty.CreateResponse> {
+) {
   return service({
     method: "POST",
     url: `/api/savedSearches`,
@@ -28,7 +26,6 @@ export async function create(
     },
   });
 }
-
 
 export async function deleteItem(props: any) {
   return service({

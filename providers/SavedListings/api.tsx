@@ -12,9 +12,9 @@ export async function savedListings(props?: any): Promise<any> {
 }
 
 export async function create(
-  props: Poperty.CreateAPIPayload,
+  props: any,
   authToken?: string
-): Promise<Poperty.CreateResponse> {
+){
   return service({
     method: "POST",
     url: `/api/savedListings`,
