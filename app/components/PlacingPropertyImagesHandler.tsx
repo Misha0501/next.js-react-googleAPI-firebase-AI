@@ -12,6 +12,9 @@ import Image from "next/image";
 import { EllipsisHorizontalIcon, PlusIcon } from "@heroicons/react/24/solid";
 import { ListingImage } from "@/types";
 import { Popover } from "@headlessui/react";
+import { useDeleteListingImage } from "@/providers/ListingImages";
+import { toast } from "react-toastify";
+import { uniqueID } from "@/app/lib/uniqueID";
 
 type PlacingPropertyImagesHandlerProps = {
   onChange: (images: ListingImage[]) => void;
@@ -31,6 +34,8 @@ export const PlacingPropertyImagesHandler = ({
 
   const hiddenFileInput = useRef(null);
 
+  const deleteListingImage = useDeleteListingImage({ authToken });
+
   // Programatically click the hidden file input element
   const handleFileInputClick = (event: any) => {
     event.preventDefault();
@@ -39,6 +44,11 @@ export const PlacingPropertyImagesHandler = ({
 
   const [firebaseUID, setFirebaseUID] = useState();
   const [uploading, setUploading] = useState(false);
+
+  useEffect(() => {
+    setImages(initialImages || images);
+  }, [initialImages]);
+
   const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
     try {
       console.log("Starting handleFileChange");
@@ -73,7 +83,7 @@ export const PlacingPropertyImagesHandler = ({
       // Create a root reference
       const storage = getStorage();
 
-      const imagePath = `publicImages/${fileName}`;
+      const imagePath = `publicImages/${uniqueID() + '-' + fileName}`;
 
       // Create a reference to the image
       const imageRef = ref(storage, imagePath);
@@ -119,17 +129,8 @@ export const PlacingPropertyImagesHandler = ({
     console.log("deleteImage: ", listingImage);
     try {
       if (listingImage.id) {
-        // if the image is already saved in the database, we need to delete it from the database
-        const response = await fetch(`/api/listingImages/${listingImage.id}`, {
-          method: "DELETE",
-          cache: "no-store",
-          headers: {
-            "Content-type": "application/json",
-            Authorization: authToken,
-          },
-        });
-
-        console.log("File deleted successfully from the db");
+        console.log("deleteImage: ", listingImage.id);
+        await deleteListingImage.mutateAsync({ id: listingImage.id })
       }
 
       // Delete the file from the firebase storage
@@ -139,16 +140,7 @@ export const PlacingPropertyImagesHandler = ({
       const desertRef = ref(storage, listingImage.imagePath);
 
       // Delete the file
-      deleteObject(desertRef)
-        .then(() => {
-          // File deleted successfully
-          console.log("File deleted successfully");
-        })
-        .catch((error) => {
-          // Uh-oh, an error occurred!
-          setError("Something went wrong. Please try again.");
-          console.error(error);
-        });
+      await deleteObject(desertRef)
 
       // remove the image from the images state
       images.splice(fileIndex, 1);
@@ -162,6 +154,7 @@ export const PlacingPropertyImagesHandler = ({
       onChange(sortedImages);
       setImages([...sortedImages]);
     } catch (error) {
+      setError("Something went wrong. Please try again.");
       console.error(error);
     }
   };

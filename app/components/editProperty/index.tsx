@@ -1,14 +1,10 @@
 "use client";
-import React, { useState } from "react";
-import { GoBackBtn } from "../GoBackBtn";
-import { Formik } from "formik"; // Import Formik components
+import React from "react";
+import { Formik } from "formik";
 import * as Yup from "yup";
 import { useListingDetailPage } from "@/providers/Listing";
 import { useParams } from "next/navigation";
-import { FormHelperText } from "@mui/material";
 import EditForm from "./EditForm";
-
-const InitalImages: any = [];
 
 export default function EditProperty() {
   const params = useParams();

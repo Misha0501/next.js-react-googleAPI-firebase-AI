@@ -58,6 +58,7 @@ model ListingImage {
   id                Int      @id @default(autoincrement())
   listingId         Int
   listing           Listing  @relation(fields: [listingId], references: [id])
+  imagePath           String?
   positionInListing Int?
   url               String
   createdAt         DateTime @default(now())

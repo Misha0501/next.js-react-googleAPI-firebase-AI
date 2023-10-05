@@ -35,6 +35,7 @@ export const listingSchema = z.object({
     .array(
       z.object({
         url: z.string(),
+        imagePath: z.string().optional(),
         positionInListing: z.number(),
       }),
     )
@@ -153,6 +154,7 @@ export const listingSchemaPutRequest = listingSchema.extend({
       z.object({
         id: z.number().optional(),
         url: z.string(),
+        imagePath: z.string().optional(),
         positionInListing: z.number(),
       }),
     )

@@ -1,7 +1,4 @@
-import { useAuthContext } from "@/app/context/AuthContext";
 import service from "../../services";
-import { Poperty } from "./types";
-
 export async function savedListings(props?: any): Promise<any> {
   return service({
     method: "GET",

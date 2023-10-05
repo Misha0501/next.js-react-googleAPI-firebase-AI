@@ -7,8 +7,7 @@ import {
   SelectItem,
   TextInput,
 } from "@tremor/react";
-import isEqual from "lodash/isEqual";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { PlacingPropertyImagesHandler } from "../PlacingPropertyImagesHandler";
 import {
   BUILDING_TYPE,
@@ -28,14 +27,15 @@ import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 
 const EditForm = ({ formik, addressId, id, loading }: any) => {
-  const [showError, setShowErros] = useState(false);
+  const [showError, setShowErrors] = useState(false);
   const { authToken } = useAuthContext();
   const updateProperty = useUpdateProperty({ authToken });
   const router = useRouter();
-  function updateBtnHandler() {
+
+  async function submitHandler() {
     event.preventDefault();
-    // formik.handleSubmit;
-    updateProperty.mutate({
+
+    let values: any = {
       id: id,
       listingType: formik?.values?.listingType || null,
       propertyType: formik?.values?.propertyType || null,
@@ -70,21 +70,28 @@ const EditForm = ({ formik, addressId, id, loading }: any) => {
         id: addressId,
       },
       images: formik.values.images,
-    });
-  }
-  useEffect(() => {
-    if (updateProperty.isSuccess) {
-      toast("Property updated successfully", { type: "success" });
-      // redirect user to the profile page
-      router.push("/profile/myProperties");
-    }
-  }, [updateProperty?.isSuccess]);
+    };
 
-  useEffect(() => {
-    if (updateProperty.isError) {
-      toast("Error updating property", { type: "error" });
-    }
-  }, [updateProperty?.isError]);
+    // remove empty values
+    Object.keys(values).forEach((key) => {
+      if (
+        values[key] === null ||
+        values[key] === undefined ||
+        values[key] === ""
+      ) {
+        delete values[key];
+      }
+    });
+
+    await updateProperty.mutateAsync(values).catch((error) => {
+      toast.error(error || "Error updating property");
+    });
+
+    toast("Property updated successfully", { type: "success" });
+    // redirect user to the profile page
+    router.push("/profile/myProperties");
+  }
+
   const validateForm = () => {
     event.preventDefault();
     let errors: any = {};
@@ -113,9 +120,6 @@ const EditForm = ({ formik, addressId, id, loading }: any) => {
       errors.heatingtype = "Required";
     }
 
-    // if (errors) {
-    //   toast("Please fill in all required fields.", { type: "error" });
-    // }
     return errors;
   };
   if (loading) {
@@ -312,7 +316,7 @@ const EditForm = ({ formik, addressId, id, loading }: any) => {
                 id="bedrooms"
                 onValueChange={(e) => formik.setFieldValue("bedrooms", e, true)}
                 error={Boolean(
-                  formik.touched.bedrooms && formik.errors.bedrooms
+                  formik.touched.bedrooms && formik.errors.bedrooms,
                 )}
                 value={formik.values.bedrooms}
                 onBlur={formik.handleBlur}
@@ -329,7 +333,7 @@ const EditForm = ({ formik, addressId, id, loading }: any) => {
                   formik.setFieldValue("bathrooms", e, true)
                 }
                 error={Boolean(
-                  formik.touched.bathrooms && formik.errors.bathrooms
+                  formik.touched.bathrooms && formik.errors.bathrooms,
                 )}
                 value={formik.values.bathrooms}
                 onBlur={formik.handleBlur}
@@ -539,7 +543,7 @@ const EditForm = ({ formik, addressId, id, loading }: any) => {
                     formik.setFieldValue("yearBuilt", e, true)
                   }
                   error={Boolean(
-                    formik.touched.yearBuilt && formik.errors.yearBuilt
+                    formik.touched.yearBuilt && formik.errors.yearBuilt,
                   )}
                   value={formik.values.yearBuilt}
                 />
@@ -558,7 +562,7 @@ const EditForm = ({ formik, addressId, id, loading }: any) => {
                   }
                   error={Boolean(
                     formik.touched.numberOfFloorsCommon &&
-                      formik.errors.numberOfFloorsCommon
+                      formik.errors.numberOfFloorsCommon,
                   )}
                   value={formik.values.numberOfFloorsCommon}
                 />
@@ -576,7 +580,7 @@ const EditForm = ({ formik, addressId, id, loading }: any) => {
                   }
                   onBlur={formik.handleBlur}
                   error={Boolean(
-                    formik.touched.floorNumber && formik.errors.floorNumber
+                    formik.touched.floorNumber && formik.errors.floorNumber,
                   )}
                   value={formik.values.floorNumber}
                 />
@@ -622,21 +626,16 @@ const EditForm = ({ formik, addressId, id, loading }: any) => {
         <Divider />
         <div className="detail_single_box flex flex-col gap-6">
           <p className={"font-bold text-lg mb-2"}>Property description</p>
-          {/* <Icon icon={PencilSquareIcon} /> */}
 
           <div className=" flex flex-col gap-4">
             <span className="font-bold text-lg">Description</span>
 
             <textarea
-              //   error={Boolean(
-              //     formik.touched.discription && formik.errors.discription
-              //   )}
-              maxLength={1000}
               name="discription"
               id="discription"
               onChange={formik.handleChange}
               value={formik.values.discription}
-              placeholder="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sapien ornare vitae amet."
+              placeholder="Tell about your property"
               className={
                 "border-2 border-[#97B6FF] rounded-md max-w-lg  outline-0 h-48 max-h-64 min-h-fit  p-3 text-gray-500 text-md"
               }
@@ -647,17 +646,18 @@ const EditForm = ({ formik, addressId, id, loading }: any) => {
       </div>
       <Button
         type="submit"
-        disabled={isEqual(formik.values, formik.initialValues)}
+        // disabled={isEqual(formik.values, formik.initialValues)}
         onClick={async () => {
           const errors = validateForm();
           formik.setErrors(errors);
           if (Object.keys(errors).length === 0) {
-            updateBtnHandler();
+            submitHandler();
           } else {
-            setShowErros(true);
+            setShowErrors(true);
           }
         }}
         className="w-[247px] h-[56px] mt-8 border border-[#2C72F6]"
+        loading={updateProperty.isLoading}
       >
         Submit
       </Button>

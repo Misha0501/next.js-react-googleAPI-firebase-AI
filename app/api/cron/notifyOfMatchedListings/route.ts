@@ -6,7 +6,7 @@ import { MatchedListingsAndSearches } from "@/types";
 import { getMatchedListingsAndSearches } from "@/app/lib/notifyOfMatchedListings/getMatchedListingsAndSearches";
 import {
   sendEmailsToMatchedListingsSearches
-} from "@/app/lib/notifyOfMatchedListings/SendEmailsToMatchedListingsSearches";
+} from "@/app/lib/notifyOfMatchedListings/sendEmailsToMatchedListingsSearches";
 
 export const dynamic = "force-dynamic"; // Force dynamic (server) route instead of static page
 

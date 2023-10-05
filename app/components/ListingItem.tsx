@@ -92,6 +92,10 @@ export const ListingItem = ({
       }
     } catch (error) {
       toast.error("Oops! Something went wrong. Please try again later.");
+    } finally {
+      if (onStateChanged) {
+        onStateChanged(listingItem);
+      }
     }
   };
   const handleDeletedIconClick = () => {
