@@ -19,8 +19,8 @@ import Image from "next/image";
 import { useListingDetailPage } from "@/providers/Listing";
 import { useParams, useRouter } from "next/navigation";
 
-import ListingAgentContactCard from "./ListingAgentContactCard";
-import ListingContactAgentForm from "./ListingContactAgentForm";
+import { ListingAgentContactCard } from "./ListingAgentContactCard";
+import { ListingContactAgentForm } from "./ListingContactAgentForm";
 import GoogleMap from "./GoogleMap";
 
 import Lightbox from "yet-another-react-lightbox";

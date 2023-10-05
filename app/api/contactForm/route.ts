@@ -18,6 +18,7 @@ export async function POST(req: Request) {
     // Assign subject to "Contact Form" if subject is not set
     subject = subject ? subject : "Contact Form";
 
+    // Send email
     await sendEmail({
       to: emailTo,
       subject,

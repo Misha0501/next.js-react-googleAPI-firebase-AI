@@ -5,7 +5,6 @@ import { ListingsPageFilters } from "@/app/components/ListingsPageFilters";
 import { Fragment, useCallback, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@tremor/react";
-import { getFetchUrl } from "@/app/lib/getFetchUrl";
 import { useAuthContext } from "@/app/context/AuthContext";
 import { NO_MAX } from "@/app/Constants/filters";
 import { Dialog, Transition } from "@headlessui/react";
@@ -36,7 +35,7 @@ export const ListingsPageContent = () => {
     setLocality(locality);
   };
 
-  const [showFiltersMobile, setShowFiltersMobile] = useState(true);
+  const [showFiltersMobile, setShowFiltersMobile] = useState(false);
 
   // Create a proper saved search object from the filter values
   const getSavedSearchesBodyObjectFromFilters = (filterValues) => {
@@ -106,7 +105,11 @@ export const ListingsPageContent = () => {
         >
           Filters
         </Button>
-        <Button variant={"secondary"} onClick={handleSaveSearch} loading={createSavedSearches.isLoading}>
+        <Button
+          variant={"secondary"}
+          onClick={handleSaveSearch}
+          loading={createSavedSearches.isLoading}
+        >
           Save search
         </Button>
       </div>

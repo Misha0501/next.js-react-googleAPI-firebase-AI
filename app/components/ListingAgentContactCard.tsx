@@ -9,7 +9,7 @@ type Props = {
   listing: Listing | undefined;
 };
 
-function ListingAgentContactCard({ showForm, listing }: Props) {
+export const ListingAgentContactCard = ({ showForm, listing }: Props) => {
   let [agentContactState, setAgentContactState] = useState("Show Phone Number");
 
   let contactNumber =
@@ -92,6 +92,4 @@ function ListingAgentContactCard({ showForm, listing }: Props) {
       </div>
     </>
   );
-}
-
-export default ListingAgentContactCard;
+};

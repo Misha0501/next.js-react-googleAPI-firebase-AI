@@ -3,7 +3,6 @@ import * as api from "./api";
 
 const KEY = "SavedSearches";
 
-// RecentlyViewed Listings
 export function useSavedSearches(
   props: any
 ) {
@@ -12,7 +11,6 @@ export function useSavedSearches(
   });
 }
 
-// Create
 export function useCreateSavedSearches(
   props: any
 ){
@@ -23,7 +21,6 @@ export function useCreateSavedSearches(
   });
 }
 
-// Delete
 export function useDeleteSavedSearch(
   props: any
 ){

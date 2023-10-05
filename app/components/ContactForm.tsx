@@ -11,6 +11,13 @@ interface FormValues {
   phoneNumber: string;
   email: string;
   message: string;
+  emailTo?: string;
+  subject?: string;
+}
+
+type Props = {
+  emailTo?: string;
+  subject?: string;
 }
 
 const ContactFormSchema = Yup.object().shape({
@@ -22,7 +29,7 @@ const ContactFormSchema = Yup.object().shape({
   message: Yup.string().required("Required"),
 });
 
-export const ContactForm = ({}) => {
+export const ContactForm = ({emailTo, subject} : Props) => {
   const sendEmail = useSendEmail({});
 
   const initialValues: FormValues = {
@@ -30,6 +37,8 @@ export const ContactForm = ({}) => {
     phoneNumber: "",
     email: "",
     message: "",
+    emailTo: emailTo ?? "",
+    subject: subject ?? "",
   };
 
   const formik = useFormik({
@@ -37,6 +46,7 @@ export const ContactForm = ({}) => {
     validationSchema: ContactFormSchema,
     onSubmit: (values) => handleFormSubmit(values),
   });
+
   const handleFormSubmit = async (values: FormValues) => {
     try {
       // send email
@@ -49,7 +59,7 @@ export const ContactForm = ({}) => {
   };
 
   return (
-    <form className="flex flex-col gap-6 mt-12" onSubmit={formik.handleSubmit}>
+    <form className="flex flex-col gap-6" onSubmit={formik.handleSubmit}>
       <div className="flex flex-col gap-2">
         <label htmlFor="name">Name</label>
         <TextInput

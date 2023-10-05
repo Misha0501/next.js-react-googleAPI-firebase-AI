@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useMemo } from "react";
-import ListingContactAgentForm from "../ListingContactAgentForm";
+import { ListingContactAgentForm } from "../ListingContactAgentForm";
 import { Divider } from "@tremor/react";
 import GoogleMap from "../GoogleMap";
 import { ListingItem } from "../ListingItem";
@@ -201,7 +201,12 @@ function UserPageMain() {
             <div id={"contactAgentForm"}>
               <ListingContactAgentForm
                 name={userDetail?.data?.displayName ?? ""}
-                emailTo={""}
+                emailTo={
+                  company?.email ??
+                  userDetail?.data?.email ??
+                  ""
+                }
+                subject={"Someone is interested in your company!"}
               />
             </div>
           </div>

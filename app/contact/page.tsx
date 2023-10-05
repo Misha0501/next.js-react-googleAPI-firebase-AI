@@ -6,7 +6,7 @@ import {
 import whatsapp from "@/public/whatsapp.png";
 import viber from "@/public/viber.png";
 import Image from "next/image";
-import { ContactForm } from "@/app/components/contactPage/ContactForm";
+import { ContactForm } from "@/app/components/ContactForm";
 
 export default function ContactPage() {
   return (
@@ -68,7 +68,7 @@ export default function ContactPage() {
             <h1 className={"text-3xl mb-3 font-semibold text-gray-800"}>
               Get in touch
             </h1>
-            <p className={"text-gray-500"}>
+            <p className={"text-gray-500 mb-8"}>
               Feel free to contact us if you have any troubles with the website,
               want to join the team, or have a proposition.
             </p>

@@ -1,77 +1,18 @@
-import { Button } from "@tremor/react";
+import { ContactForm } from "@/app/components/ContactForm";
 
 interface PropInterface {
   name: string;
   emailTo: string;
+  subject?: string;
 }
-function ListingContactAgentForm({ name, emailTo }: PropInterface) {
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    console.log("Form submit btn clicked");
-    e.preventDefault();
-  };
-
+export const ListingContactAgentForm = ({ name, emailTo, subject }: PropInterface) => {
   return (
     <>
       <div className=" w-full bg-[#F2F2F2]  rounded-lg shadow-md px-8 py-9">
-        <p className="mb-8 text-2xl  font-bold">
+        <p className="mb-4 text-2xl font-bold">
           Contact {name || 'Seller'}
         </p>
-
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div>
-            <label
-              htmlFor="name"
-              className="block mb-1 text-md font-bold text-gray-900 dark:text-gray-300"
-            >
-              Your Name
-            </label>
-            <input
-              type="text"
-              id="name"
-              className=" shadow-sm bg-gray-50 border-2 border-blue-400 text-gray-900 text-lg rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500 dark:shadow-sm-light"
-              placeholder="User Name"
-              required
-            />
-          </div>
-          <div>
-            <label
-              htmlFor="email"
-              className="block mb-1 text-md font-bold text-gray-900 dark:text-gray-300"
-            >
-              Your Email
-            </label>
-            <input
-              type="email"
-              id="email"
-              className="block p-3 w-full text-lg text-gray-900 bg-gray-50 rounded-lg border-2 border-blue-400 shadow-sm focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500 dark:shadow-sm-light"
-              placeholder="Email"
-              required
-            />
-          </div>
-          <div className="sm:col-span-2">
-            <label
-              htmlFor="message"
-              className="block mb-1 text-md font-bold text-gray-900 dark:text-gray-400"
-            >
-              Your message
-            </label>
-            <textarea
-              id="message"
-              rows={4}
-              className="block p-2.5 w-full text-lg text-gray-900 bg-gray-50 rounded-lg shadow-sm border-2 border-blue-400 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-              placeholder="Leave a comment..."
-            />
-          </div>
-
-          <Button
-            type="submit"
-            variant={"primary"}
-            className={"w-full"}
-          >
-            Send
-          </Button>
-        </form>
+        <ContactForm emailTo={emailTo} subject={subject ?? 'Someone is interested in your property!' } />
         <p className="mt-6 text-[12px]  font-light text-[#848484]">
           When you send an enquiry, you accept our terms & privacy policy. Your
           enquiry will be sent to the estate agent shown, who will reply to you
@@ -81,4 +22,3 @@ function ListingContactAgentForm({ name, emailTo }: PropInterface) {
     </>
   );
 }
-export default ListingContactAgentForm;
