@@ -6,18 +6,22 @@ import {
   TrashIcon,
 } from "@heroicons/react/24/solid";
 import { HeartIcon as HeartIconOutline } from "@heroicons/react/24/outline";
-import { Listing, SavedListing } from "@/types";
+import { Listing } from "@/types";
 import { useRouter } from "next/navigation";
 import { GridIcon } from "@/public/GridIcon";
 import { BedIcon } from "@/public/BedIcon";
-import { getFetchUrl } from "@/app/lib/getFetchUrl";
 import { useAuthContext } from "@/app/context/AuthContext";
 import { useEffect, useState } from "react";
-import { Skeleton } from "@mui/material";
+import { CircularProgress, Skeleton } from "@mui/material";
 import { getCurrencySign } from "@/app/lib/getCurrencySign";
 import { moneyFormatter } from "@/app/lib/formatPrice";
 import { roundNumberTwoDecimal } from "@/app/lib/roundNumberTwoDecimal";
 import { Modal } from "@/app/components/Modal";
+import {
+  useCreateSavedListing,
+  useDeleteSavedListing,
+} from "@/providers/SavedListings";
+import { toast } from "react-toastify";
 
 type ListingItemProps = {
   listingItemInitial: Listing;
@@ -31,7 +35,7 @@ type ListingItemProps = {
 
 export const ListingItem = ({
   listingItemInitial,
-  isLoadingSavedListings = false,
+  isLoadingSavedListings = true,
   ownerView,
   onDeleteIconClick,
   onStateChanged,
@@ -43,6 +47,9 @@ export const ListingItem = ({
 
   const router = useRouter();
   let [showAuthModal, setShowAuthModal] = useState(false);
+
+  const createSavedListing = useCreateSavedListing({ authToken });
+  const deleteSavedListing = useDeleteSavedListing({ authToken });
 
   const goToListingPage = () => {
     router.push(`/listings/${listingItem.id}`);
@@ -63,53 +70,28 @@ export const ListingItem = ({
   }, [listingItemInitial]);
 
   const handleSavedIconClick = async () => {
+    // if user is not logged in show the auth modal
     if (!authToken) {
       setShowAuthModal(true);
-      // router.push("/signin");
       return;
     }
 
-    // if listings isn't saved we do a post request to save it
-    if (!listingItem.savedListingId) {
-      await fetch(getFetchUrl(`/api/savedListings`), {
-        method: "POST",
-        cache: "no-store",
-        headers: {
-          "Content-type": "application/json",
-          Authorization: authToken,
-        },
-        body: JSON.stringify({ listingId: listingItem.id }),
-      })
-        .then((response) => response.json())
-        .then((savedListing: SavedListing) => {
-          setListingItem({ ...listingItem, savedListingId: savedListing.id });
-          console.log("state change did post");
-        })
-        .catch((error) => {
-          console.error(error);
+    try {
+      if (!listingItem.savedListingId) {
+        // if listings isn't saved do a post request to save it
+        const savedListing = await createSavedListing.mutateAsync({
+          listingId: listingItem.id,
         });
-    } else {
-      // if it's saved we do a delete request
-      if (!listingItem.savedListingId) return;
+        setListingItem({ ...listingItem, savedListingId: savedListing.id });
+      } else {
+        // if it's saved do a delete request
+        if (!listingItem.savedListingId) return;
+        await deleteSavedListing.mutateAsync({ id: listingItem.savedListingId });
 
-      await fetch(
-        getFetchUrl(`/api/savedListings/${listingItem.savedListingId}`),
-        {
-          method: "DELETE",
-          cache: "no-store",
-          headers: {
-            "Content-type": "application/json",
-            Authorization: authToken,
-          },
-        },
-      ).catch((error) => {
-        console.error(error);
-      });
-
-      setListingItem({ ...listingItem, savedListingId: null });
-    }
-    if (onStateChanged) {
-      onStateChanged(listingItem);
+        setListingItem({ ...listingItem, savedListingId: null });
+      }
+    } catch (error) {
+      toast.error("Oops! Something went wrong. Please try again later.");
     }
   };
   const handleDeletedIconClick = () => {
@@ -232,9 +214,9 @@ export const ListingItem = ({
             </div>
           )}
         </div>
-        {isLoadingSavedListings && "loading"}
+        {(isLoadingSavedListings || createSavedListing.isLoading || deleteSavedListing.isLoading) && <CircularProgress size={28}/>}
 
-        {!ownerView && !isLoadingSavedListings && (
+        {!ownerView && !isLoadingSavedListings && !createSavedListing.isLoading && !deleteSavedListing.isLoading && (
           <div onClick={handleSavedIconClick} className={"cursor-pointer"}>
             {listingItem?.savedListingId && (
               <HeartIconSolid className={"h-8 w-8 text-gray-500"} />

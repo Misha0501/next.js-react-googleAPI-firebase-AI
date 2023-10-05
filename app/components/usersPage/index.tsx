@@ -219,7 +219,6 @@ function UserPageMain() {
                     <ListingItem
                       listingItemInitial={item}
                       key={index}
-                      isLoadingSavedListings={false}
                       isLoading={userDetail?.isFetching}
                       ownerView={false}
                     />

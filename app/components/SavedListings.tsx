@@ -64,7 +64,7 @@ export const SavedListings = () => {
         </div>
         <div className={"grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-8 mt-10"}>
           {savedListings && savedListings.map((item, index) => (
-            <ListingItem listingItemInitial={item.listing} key={index} onStateChanged={() => fetchSavedListings()}  />
+            <ListingItem listingItemInitial={item.listing} key={index} />
           ))}
         </div>
       </div>}

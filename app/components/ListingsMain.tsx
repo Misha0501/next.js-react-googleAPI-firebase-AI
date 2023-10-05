@@ -1,25 +1,32 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ListingItem } from "@/app/components/ListingItem";
 import { usePropertyListing } from "@/providers/Listing";
 import { useAuthContext } from "@/app/context/AuthContext";
 import { Listing, SavedListing } from "@/types";
-import { getFetchUrl } from "@/app/lib/getFetchUrl";
 import { NO_MAX } from "../Constants/filters";
 import { CircularProgress, Pagination } from "@mui/material";
+import { useSavedListings } from "@/providers/SavedListings";
 
-export const ListingsMain = ({ searchParams, listingType, locality }) => {
+type Props = {
+  searchParams: any;
+  listingType: string;
+  locality: string;
+}
+
+export const ListingsMain = ({ searchParams, listingType, locality }: Props ) => {
   const { authToken } = useAuthContext();
-  const [populatedListings, setPopulatedListings] = useState<Listing[]>([]);
-  // const [isLoadingListings, setIsLoadingListings] = useState(true);
-  const [isLoadingSavedListings, setIsLoadingSavedListings] = useState(true);
   const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(15);
-  const [numberOfPages, setNumberOfPages] = useState(0);
-  const [totalListings, setTotalListings] = useState(0);
+  const [pageSize, setPageSize] = useState(3);
   const [sortBy, setSortBy] = useState(undefined);
+  const { data: savedListingsData, isLoading: savedListingsIsLoading } = useSavedListings({ authToken });
 
-  const propertyListing = usePropertyListing({
+  const {
+    data: listingsData,
+    isLoading,
+    isError,
+    isSuccess,
+  } = usePropertyListing({
     priceMin: searchParams?.priceRange.min,
     priceMax:
       searchParams?.priceRange.max === NO_MAX
@@ -61,32 +68,36 @@ export const ListingsMain = ({ searchParams, listingType, locality }) => {
     setPage(value);
   };
 
-  const updateListingsWithSavedFeature = async (listings: Listing[]) => {
-    // get the data from the api
-    const response = await fetch(getFetchUrl(`/api/savedListings`), {
-      method: "GET",
-      cache: "no-store",
-      headers: {
-        "Content-type": "application/json",
-        Authorization: authToken,
-      },
-    });
-    // convert the data to json
-    const data = await response.json();
+  const savedListings = useMemo(() => {
+    if (!savedListingsData) return [];
+    return savedListingsData.results;
+  }, [savedListingsData]);
 
-    let savedListings: SavedListing[] = data.results;
+  const listings = useMemo(() => {
+    if (!listingsData) return [];
+    return listingsData.results;
+  }, [listingsData]);
+
+  const numberOfPages = useMemo(() => {
+    if (!listingsData) return 0;
+    return Math.ceil(listingsData.total / pageSize);
+  }, [listingsData, pageSize]);
+
+  const populatedListings = useMemo(() => {
+    if (!savedListings?.length) return [];
+    if (!listings?.length) return [];
+
     let savedListingsListingIds: number[] = [];
 
     // Store all savedListing's listingIds
-    if (savedListings) {
-      savedListingsListingIds = savedListings.map((el) => el.listingId);
-    }
+    savedListingsListingIds = savedListings.map((el: SavedListing) => el.listingId);
 
     // populate listings with saved listings data
-    const populatedListingsWithSavedListingData = listings.map((listing) => {
+    return listings.map((listing: Listing) => {
       const savedListingListingId = savedListingsListingIds.find(
         (savedListingId) => savedListingId === listing.id,
       );
+
       const savedListing = savedListings.find(
         (savedListing: SavedListing) =>
           savedListing.listingId === savedListingListingId,
@@ -99,72 +110,41 @@ export const ListingsMain = ({ searchParams, listingType, locality }) => {
       }
       return listing;
     });
+  }, [savedListings, listings]);
 
-    setPopulatedListings([...populatedListingsWithSavedListingData]);
-    setIsLoadingSavedListings(false);
-  };
-
-  console.log("propertyListing.data");
-  console.log(propertyListing.data);
   useEffect(() => {
-    if (propertyListing.isSuccess) {
-      // Fetch saved icons
-      const listings = propertyListing.data.results;
+    if (!listingsData) return;
+    // Assing pages related variables
+    setPage(listingsData?.page);
+  }, [listingsData]);
 
-      setTotalListings(propertyListing.data.total);
-      setPage(propertyListing.data.page);
-      // Calculate and set number of pages
-      setNumberOfPages(Math.ceil(propertyListing.data.total / pageSize));
-      console.log("In use effect main listings");
-      setPopulatedListings(listings);
 
-      updateListingsWithSavedFeature(listings).catch((e) => {
-        console.error("Error fetching saved listings: ", e);
-        // if saved listings aren't fetched we still want to display the listings
-        setPopulatedListings(listings);
-        setIsLoadingSavedListings(false);
-      });
-    }
-  }, [propertyListing?.data?.results, page]);
-
-  if (propertyListing?.isError) {
-    return <p>{propertyListing?.error?.message}</p>;
+  if (isError) {
+    return (
+      <p className={"text-red-500"}>
+        Oops there was an error, please try again.
+      </p>
+    );
   }
-
   return (
     <div className="w-full">
       <div className="flex flex-row justify-between">
         <>
-          {propertyListing.isLoading && <CircularProgress />}
-          {propertyListing.isSuccess && (
+          {isLoading && <CircularProgress />}
+          {isSuccess && (
             <div>
               <div className={"text-xl mb-12"}>
                 <span className={"font-bold"}>Results: </span>{" "}
-                <span>{totalListings} properties found.</span>
+                <span>{listingsData?.total} properties found.</span>
               </div>
             </div>
           )}
-
-          {/*<Select*/}
-          {/*  style={{ width: "300px" }}*/}
-          {/*  onValueChange={(e) => setSortBy(e)}*/}
-          {/*>*/}
-          {/*  {sortOption.map((el, index) => (*/}
-          {/*    <SelectItem value={el} key={index}></SelectItem>*/}
-          {/*  ))}*/}
-          {/*</Select>*/}
         </>
       </div>
       <div className={"grid grid-cols-1 gap-8 md:grid-cols-2 lg:gap-16 mb-12"}>
-        {populatedListings &&
-          populatedListings.map((item, index) => (
-            <ListingItem
-              listingItemInitial={item}
-              key={index}
-              isLoadingSavedListings={isLoadingSavedListings}
-              isLoading={propertyListing?.isFetching}
-            />
-          ))}
+        {populatedListings.map((item, index) => (
+          <ListingItem listingItemInitial={item} key={index} isLoadingSavedListings={savedListingsIsLoading}/>
+        ))}
       </div>
       <Pagination
         shape="rounded"

@@ -7,6 +7,7 @@ import {
 } from "react-query";
 import * as api from "./api";
 import { Poperty } from "./types";
+import { Listing } from "@/types";
 
 const KEY = "PropertyListing";
 

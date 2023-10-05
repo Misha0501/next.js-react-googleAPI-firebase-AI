@@ -29,3 +29,21 @@ export function useCreateSavedListing(
     retry: 0
   });
 }
+
+
+
+// Delete
+export function useDeleteSavedListing(
+  props: SavedListing
+): UseMutationResult<
+  SavedListing,
+  {
+    listingId?: number;
+  },
+  SavedListing
+> {
+  return useMutation((payload) => api.deleteItem({ ...props, data: payload }), {
+    mutationKey: `${KEY} | Delete`,
+    retry: 0
+  });
+}

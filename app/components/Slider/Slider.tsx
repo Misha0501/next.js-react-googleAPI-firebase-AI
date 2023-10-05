@@ -136,7 +136,6 @@ const SlickSlider = () => {
           <div key={index} className="pr-8">
             <ListingItem
               listingItemInitial={item}
-              isLoadingSavedListings={false}
               isLoading={false}
               onEditIconClick={doNothing}
               onDeleteIconClick={doNothing}
