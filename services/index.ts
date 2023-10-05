@@ -3,9 +3,6 @@ import omit from "lodash/omit";
 import qs from "query-string";
 import { getFetchUrl } from "@/app/lib/getFetchUrl";
 
-// const API_URL = PUBLIC_API_URL;
-// const API_URL = "http://localhost:3000";
-
 interface IDefaultHeadersProps {
   medium: string;
   "Content-Type": string;
