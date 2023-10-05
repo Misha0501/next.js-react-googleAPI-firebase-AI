@@ -1,4 +1,4 @@
-import { ResponseError } from "@/classes/ResponseError";
+import { ResponseError } from "@/app/lib/classes/ResponseError";
 import { contactFormSchema } from "@/app/lib/validations/contactForm";
 import { NextResponse } from "next/server";
 import { z } from "zod";

@@ -8,7 +8,7 @@ import {
 } from "@tremor/react";
 import { Fragment, useState } from "react";
 import { ListingType } from "@/types";
-import Filters from "@/app/components/Filters";
+import Filters from "@/app/components/listingsPage/Filters";
 import { useSearchParams } from "next/navigation";
 import { XMarkIcon } from "@heroicons/react/24/solid";
 

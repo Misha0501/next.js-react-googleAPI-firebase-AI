@@ -19,9 +19,9 @@ import Image from "next/image";
 import { useListingDetailPage } from "@/providers/Listing";
 import { useParams, useRouter } from "next/navigation";
 
-import { ListingAgentContactCard } from "./ListingAgentContactCard";
-import { ListingContactAgentForm } from "./ListingContactAgentForm";
-import GoogleMap from "./GoogleMap";
+import { ListingAgentContactCard } from "../ListingAgentContactCard";
+import { ListingContactAgentForm } from "../ListingContactAgentForm";
+import GoogleMap from "../GoogleMap";
 
 import Lightbox from "yet-another-react-lightbox";
 import "yet-another-react-lightbox/styles.css";
@@ -30,7 +30,7 @@ import Thumbnails from "yet-another-react-lightbox/plugins/thumbnails";
 import ListingDetailContent from "./ListingDetailContent";
 import { useCreateRecentlyViewedListing } from "@/providers/RecentlyViewedListings";
 import { useAuthContext } from "@/app/context/AuthContext";
-import FloatingContactWidget from "./FloatingContactWidget";
+import FloatingContactBar from "../FloatingContactBar";
 import {
   BedRoomIcon,
   PhotosIcon,
@@ -487,7 +487,7 @@ const ListingDetail = () => {
           </div>
         </div>
       )}
-      <FloatingContactWidget
+      <FloatingContactBar
         phoneNumber={contactNumber}
         onContactClick={handleContactAgentClick}
       />

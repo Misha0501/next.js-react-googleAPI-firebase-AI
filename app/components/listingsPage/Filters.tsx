@@ -21,7 +21,7 @@ import {
 } from "@/app/lib/constants/filters";
 
 import { FromToFilter } from "./FromToFilter";
-import { RadioGroupCustom } from "./RadioGroupCustom";
+import { RadioGroupCustom } from "../RadioGroupCustom";
 import { usePathname } from "next/navigation";
 
 export function Filters({ onParamsChange, listingType }: any) {

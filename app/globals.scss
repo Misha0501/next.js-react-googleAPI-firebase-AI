@@ -3,26 +3,9 @@
 @tailwind utilities;
 
 :root {
-  //--foreground-rgb: 0, 0, 0;
-  //--background-start-rgb: 214, 219, 220;
-  //--background-end-rgb: 255, 255, 255;
   font-size: 14px;
 }
 
-@media (prefers-color-scheme: dark) {
-  //:root {
-  //  --foreground-rgb: 255, 255, 255;
-  //  --background-start-rgb: 0, 0, 0;
-  //  --background-end-rgb: 0, 0, 0;
-  //}
-}
-
-.text-tremor-default,
-.tremor-Button-root {
-  span {
-    font-size: 1rem !important;
-  }
-}
 body {
   color: rgb(var(--foreground-rgb));
   background: linear-gradient(
@@ -52,9 +35,16 @@ img {
 }
 
 button {
-  font-size: 16px;
+  font-size: 1rem;
   span {
-    font-size: 16px;
+    font-size: 1rem;
+  }
+}
+
+.text-tremor-default,
+.tremor-Button-root {
+  span {
+    font-size: 1rem !important;
   }
 }
 

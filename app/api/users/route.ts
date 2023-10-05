@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { getApplicationUserServer } from "@/app/lib/getApplicationUserServer";
-import { ResponseError } from "@/classes/ResponseError";
+import { ResponseError } from "@/app/lib/classes/ResponseError";
 import { getDecodedIdToken } from "@/app/lib/getDecodedIdToken";
 import { prisma } from "@/app/lib/db/client";
 import { ApplicationUser } from "@prisma/client";

@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import SlickSlider from "../Slider/Slider";
+import SlickSlider from "@/app/components/slider/Slider";
 
 function NewestRentalSection() {
     return (

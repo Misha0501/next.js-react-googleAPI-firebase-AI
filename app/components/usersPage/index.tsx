@@ -9,7 +9,7 @@ import Link from "next/link";
 import { useUserDetail } from "@/providers/Users";
 import { useParams, useRouter } from "next/navigation";
 import { CircularProgress } from "@mui/material";
-import FloatingContactWidget from "../FloatingContactWidget";
+import FloatingContactBar from "../FloatingContactBar";
 import { EnvelopeIcon, MapIcon, PhoneIcon } from "@heroicons/react/24/outline";
 
 function UserPageMain() {
@@ -230,7 +230,7 @@ function UserPageMain() {
               </p>
             )}
           </div>
-          <FloatingContactWidget
+          <FloatingContactBar
             phoneNumber={contactNumber}
             onContactClick={handleContactAgentClick}
           />

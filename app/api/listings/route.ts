@@ -6,7 +6,7 @@ import {
   listingsSearchParamSchema,
 } from "@/app/lib/validations/listing";
 import { z } from "zod";
-import { ResponseError } from "@/classes/ResponseError";
+import { ResponseError } from "@/app/lib/classes/ResponseError";
 import { getApplicationUserServer } from "@/app/lib/getApplicationUserServer";
 import { valuesFromSearchParams } from "@/app/lib/validations/valuesFromSearchParams";
 import {

@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import openAI from "@/app/lib/openAI";
 import OpenAI from "openai";
-import { ResponseError } from "@/classes/ResponseError";
+import { ResponseError } from "@/app/lib/classes/ResponseError";
 import * as z from "zod";
 import {openAISchema} from "@/app/lib/validations/openAI";
 

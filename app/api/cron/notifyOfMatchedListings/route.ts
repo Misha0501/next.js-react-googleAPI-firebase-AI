@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import OpenAI from "openai";
-import { ResponseError } from "@/classes/ResponseError";
+import { ResponseError } from "@/app/lib/classes/ResponseError";
 import { prisma } from "@/app/lib/db/client";
 import { MatchedListingsAndSearches } from "@/types";
 import { getMatchedListingsAndSearches } from "@/app/lib/notifyOfMatchedListings/getMatchedListingsAndSearches";

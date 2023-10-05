@@ -1,4 +1,4 @@
-import MultiForm  from "../components/propertyPlacement";
+import MultiForm  from "../components/propertyPlacementEdit";
 
 function PlacePropertyPage() {
   return (

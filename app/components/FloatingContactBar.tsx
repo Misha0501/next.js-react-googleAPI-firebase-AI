@@ -8,7 +8,7 @@ type Props = {
   phoneNumber: string;
   onContactClick: () => void;
 };
-export const FloatingContactWidget = ({
+export const FloatingContactBar = ({
   phoneNumber,
   onContactClick,
 }: Props) => {
@@ -35,4 +35,4 @@ export const FloatingContactWidget = ({
   );
 };
 
-export default FloatingContactWidget;
+export default FloatingContactBar;

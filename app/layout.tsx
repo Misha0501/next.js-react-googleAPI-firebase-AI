@@ -11,9 +11,9 @@ import Footer from "./components/layout/Footer";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Real estate website for Bulgarian market",
+  title: "Real estate marketplace for Bulgarian market",
   description:
-    "Real estate website for Bulgarian market with User Experience first approach",
+    "Real estate marketplace for Bulgarian market with User Experience first approach",
 };
 
 export default function RootLayout({

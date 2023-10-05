@@ -6,7 +6,7 @@ import { useCompanyMemberships } from "@/providers/Memberships";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import { Button, TextInput } from "@tremor/react";
-import { AddressAutocomplete } from "@/app/components/propertyPlacement/AddressAutocomplete";
+import { AddressAutocomplete } from "@/app/components/propertyPlacementEdit/AddressAutocomplete";
 import { useCreateCompany, useUpdateCompany } from "@/providers/Companies";
 import { AutocompleteAddress } from "@/types";
 import { toast } from "react-toastify";

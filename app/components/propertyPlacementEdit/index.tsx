@@ -5,16 +5,13 @@ import Step from "@mui/material/Step";
 import { Grid, Typography } from "@mui/material";
 import StepLabel from "@mui/material/StepLabel";
 import LinearProgress from "@mui/material/LinearProgress";
-
-import { GoBackBtn } from "../GoBackBtn";
 import GeneralInfo from "./GeneralInfo";
 import MoreDetails from "./MoreDetails";
 import DescriptionAndImages from "./DescriptionAndImages";
 import Confirmation from "./Confirmation";
-import { Formik, FieldArray, FormikProps } from "formik"; // Import Formik components
+import { Formik, FormikProps } from "formik";
 import * as Yup from "yup";
 import { MuiStepper } from "./Styled";
-import FloatingContactWidget from "../FloatingContactWidget";
 
 const steps = [
   "General information",
@@ -139,14 +136,6 @@ export default function MultiForm() {
 
   return (
     <div className="py-11">
-      <div className="max-w-screen-xl m-auto pl-5 pr-5 md:p-0">
-        <GoBackBtn
-          //@ts-ignore
-          label="Back to account"
-          className="text-black"
-        />
-      </div>
-
       <Formik
         initialValues={{
           listingType: "RENT",

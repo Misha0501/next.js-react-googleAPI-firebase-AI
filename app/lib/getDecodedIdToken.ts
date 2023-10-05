@@ -1,7 +1,7 @@
 import {firebaseAdmin} from "@/app/lib/firebase/configAdmin";
 import {cookies, headers} from "next/headers";
 import {DecodedIdToken} from "firebase-admin/lib/auth/token-verifier";
-import {ResponseError} from "@/classes/ResponseError";
+import {ResponseError} from "@/app/lib/classes/ResponseError";
 
 /**
  * Get the firebase's decoded id token from the request

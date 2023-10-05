@@ -1,4 +1,4 @@
-import ListingDetail from "@/app/components/ListingDetail";
+import ListingDetail from "@/app/components/listingDetailPage/ListingDetail";
 
 export const revalidate = 300;
 

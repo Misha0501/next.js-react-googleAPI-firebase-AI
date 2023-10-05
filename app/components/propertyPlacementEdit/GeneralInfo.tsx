@@ -11,22 +11,16 @@ import {
 } from "@tremor/react";
 import property1 from "@/public/property1.png";
 import StepsTopInfo from "./StepsTopInfo";
-import {
-  CURRENCIES,
-  CreatePropertyFormikPropInterface,
-  LISTING_TYPES,
-  PROPERTY_TYPES,
-} from "../../lib/constants";
+import { CURRENCIES, LISTING_TYPES, PROPERTY_TYPES } from "../../lib/constants";
 import React, { useState } from "react";
 import PropertyPlacementRadioButtons from "../PropertyPlacementRadioButtons";
 import { FormHelperText } from "@mui/material";
 import { AutocompleteAddress } from "@/types";
-import { AddressAutocomplete } from "@/app/components/propertyPlacement/AddressAutocomplete";
+import { AddressAutocomplete } from "@/app/components/propertyPlacementEdit/AddressAutocomplete";
 import { FormikProps } from "formik";
-import { boolean } from "zod";
 
 interface CreatePropertyComponentPropInterface {
-  formik: FormikProps<CreatePropertyFormikPropInterface>;
+  formik: FormikProps<any>;
   handleNext: () => void;
   step: number;
   isShow: boolean;
@@ -38,7 +32,6 @@ const GeneralInfo = ({
   step,
   isShow,
 }: CreatePropertyComponentPropInterface) => {
-  // const { formik, handleNext, step, isShow } = props;
 
   const [show, setShow] = useState(true);
   const [showError, setShowErros] = useState(false);

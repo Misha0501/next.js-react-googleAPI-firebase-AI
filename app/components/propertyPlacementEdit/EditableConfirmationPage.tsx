@@ -1,31 +1,26 @@
 import {
   Divider,
-  //   Icon,
   NumberInput,
   Select,
   SelectItem,
   TextInput,
 } from "@tremor/react";
-import Image from "next/image";
 import PropertyPlacementRadioButtons from "../PropertyPlacementRadioButtons";
 import {
-  BUILDING_TYPE,
-  CHARACTERISTICS,
   CURRENCIES,
-  CreatePropertyFormikPropInterface,
   HEATING_TYPES,
   INTERIOR_TYPES,
   LISTING_TYPES,
   PROPERTY_TYPES,
   UPKEEP_TYPES,
 } from "../../lib/constants";
-import MultiSelectRadioButton from "../MultiSelectRadioButton";
 import SingleSelectRadioButton from "../SingleSelectRadioButton";
 import { PlacingPropertyImagesHandler } from "@/app/components/PlacingPropertyImagesHandler";
 import React from "react";
 import { FormikProps } from "formik";
+
 interface CreatePropertyComponentPropInterface {
-  formik: FormikProps<CreatePropertyFormikPropInterface>;
+  formik: FormikProps<any>;
 }
 
 function EditableConfirmationPage({

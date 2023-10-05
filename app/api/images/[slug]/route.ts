@@ -1,5 +1,5 @@
 import {z} from "zod";
-import {ResponseError} from "@/classes/ResponseError";
+import {ResponseError} from "@/app/lib/classes/ResponseError";
 import {NextResponse} from "next/server";
 import {prisma} from "@/app/lib/db/client";
 import {getApplicationUserServer} from "@/app/lib/getApplicationUserServer";

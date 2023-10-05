@@ -1,4 +1,4 @@
-import { ProfilePageMainContent } from "@/app/components/profilePage/ProfilePageMainContent";
+import { ProfilePageMainContent } from "@/app/components/listingsPage/profilePage/ProfilePageMainContent";
 import { redirectToSignInIfNotLoggedInSSR } from "@/app/lib/redirectToSignInIfNotLoggedInSSR";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";

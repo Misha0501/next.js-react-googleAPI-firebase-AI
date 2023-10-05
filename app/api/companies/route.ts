@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { ApplicationUser, Prisma } from "@prisma/client";
 import { z } from "zod";
-import { ResponseError } from "@/classes/ResponseError";
+import { ResponseError } from "@/app/lib/classes/ResponseError";
 import { getApplicationUserServer } from "@/app/lib/getApplicationUserServer";
 import { prisma } from "@/app/lib/db/client";
 import { companyPUTSchema, companySchema } from "@/app/lib/validations/company";

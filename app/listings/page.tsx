@@ -1,4 +1,4 @@
-import { ListingsPageContent } from "@/app/components/ListingsPageContent";
+import { ListingsPageContent } from "@/app/components/listingsPage/ListingsPageContent";
 
 type ListingsPageProps = {
   params?: { slug: string };

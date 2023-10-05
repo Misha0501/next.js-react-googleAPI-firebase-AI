@@ -1,7 +1,7 @@
 "use client";
-import { ListingsMain } from "@/app/components/ListingsMain";
-import { ListingsPageHeader } from "@/app/components/ListingsPageHeader";
-import { ListingsPageFilters } from "@/app/components/ListingsPageFilters";
+import { ListingsMain } from "@/app/components/listingsPage/ListingsMain";
+import { ListingsPageHeader } from "@/app/components/listingsPage/ListingsPageHeader";
+import { ListingsPageFilters } from "@/app/components/listingsPage/ListingsPageFilters";
 import { Fragment, useCallback, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@tremor/react";
