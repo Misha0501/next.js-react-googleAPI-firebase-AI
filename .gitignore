@@ -285,5 +285,4 @@ sketch
 /.env
 /prisma/migrations
 
-#/app/lib/firebase/firebaseAdminCredentials.ts
 .env*.local
