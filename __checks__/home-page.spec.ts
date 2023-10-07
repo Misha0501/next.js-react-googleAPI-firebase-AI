@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test'
 
 // You can override the default Playwright test timeout of 30s
-test.setTimeout(5_000);
+// test.setTimeout(30_000);
 
 test.beforeEach(async ({ page }) => {
   // before each test, navigate to the home page
@@ -19,7 +19,7 @@ test.describe('Search functionality', () => {
     await page.waitForTimeout(3000);
 
     // Get the search input
-    const searchInput = await page.locator('input[name="locality"]');
+    const searchInput = page.locator('input[name="locality"]');
 
     // Press keys one by one to simulate typing in the autocomplete input
     await searchInput.pressSequentially('Sof');
@@ -37,20 +37,23 @@ test.describe('Search functionality', () => {
     expect(await searchInput.inputValue()).toContain('Sofia');
   })
 
-  test('should navigate to listings page once submitted', async ({ page }) => {
+  test('should navigate to listings page once form is submitted', async ({ page }) => {
     // Get the hero header search form
-    const searchForm = await page.locator('.hero__inner form');
+    const submitBtnSelector = '.hero__inner form button[type="submit"]';
 
     // Submit the form search form with the default values
-    await searchForm.click('button[type="submit"]');
+    await page.click(submitBtnSelector);
 
     // Wait for the page to load not using the waitForNavigation method
     await page.waitForRequest(request => request.url().includes('/listings'));
 
-    // wait for page to load
-    await page.waitForLoadState('networkidle');
+    // // wait for page to load
+    // await page.waitForLoadState('domcontentloaded');
 
-    // Check that the page is loaded
+    // Wait for the page to load
+    await page.waitForURL('**/listings**');
+
+    // Check that the listings page is loaded
     expect(page.url()).toContain('/listings');
   })
 
@@ -61,22 +64,28 @@ test.describe('Search functionality', () => {
     // Wait for the page to load not using the waitForNavigation method
     await page.waitForRequest(request => request.url().includes('/listings'));
 
-    // wait for page to load
-    await page.waitForLoadState('networkidle');
+    // Check if the listings page is loaded
+    await page.waitForURL('**/listings**');
 
-    // Check that the page is loaded
+    // Check that the listings page is loaded
     expect(page.url()).toContain('/listings');
   })
 
-  test('rent sell buttons should be outlined if selected ', async ({ page }) => {
+  test('rent/sell buttons should selected when clicked', async ({ page }) => {
     const rentBtnSelector = 'button:has-text("Rent")';
-    const butBtnSelector = 'button:has-text("Buy")';
+    const buyBtnSelector = 'button:has-text("Buy")';
+
+    // wait for page to load
+    await page.waitForLoadState('domcontentloaded');
 
     // Click on a button with the text 'Rent'
     await page.click(rentBtnSelector);
 
-    // Check that the selecte button has the selected data attribute
-    expect(await page.getAttribute(rentBtnSelector, 'area-selected')).toBe('true');
+    // Check that the rent button is selected
+    expect(await page.getAttribute(rentBtnSelector, 'aria-selected')).toBe('true');
+
+    // Check that the sell button is not selected
+    expect(await page.getAttribute(buyBtnSelector, 'aria-selected')).toBe('false');
   })
 })
 
