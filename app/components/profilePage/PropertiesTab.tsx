@@ -1,7 +1,7 @@
 "use client";
 
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@tremor/react";
-import { ProfilePageOwnListings } from "@/app/components/listingsPage/profilePage/ProfilePageOwnListings";
+import { ProfilePageOwnListings } from "@/app/components/profilePage/ProfilePageOwnListings";
 import { Company, Listing } from "@/types";
 
 type Props = {

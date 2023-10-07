@@ -19,7 +19,7 @@ import { toast } from "react-toastify";
 import { CompanyMembershipInvite } from "@/types";
 import { TrashIcon } from "@heroicons/react/24/solid";
 import { Dialog, Transition } from "@headlessui/react";
-import { COMPANY_MEMBERSHIP_ROLE } from "../../../lib/constants";
+import { COMPANY_MEMBERSHIP_ROLE } from "../../lib/constants";
 
 const InviteSchema = Yup.object().shape({
   applicationUserEmailReceiver: Yup.string()

@@ -3,8 +3,8 @@
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@tremor/react";
 import { useState } from "react";
 import { useAuthContext } from "@/app/context/AuthContext";
-import { SavedListings } from "@/app/components/listingsPage/profilePage/SavedListings";
-import { SavedSearches } from "@/app/components/listingsPage/profilePage/SavedSearches";
+import { SavedListings } from "@/app/components/profilePage/SavedListings";
+import { SavedSearches } from "@/app/components/profilePage/SavedSearches";
 
 export const SavedItemsPageTabs = () => {
     const {authToken} = useAuthContext()
