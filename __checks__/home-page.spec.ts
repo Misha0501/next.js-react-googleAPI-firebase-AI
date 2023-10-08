@@ -44,7 +44,7 @@ test.describe('Search functionality', () => {
     // Submit the form search form with the default values
     await page.click(submitBtnSelector);
 
-    // Wait for the page to load not using the waitForNavigation method
+    // Wait for the page to load
     await page.waitForRequest(request => request.url().includes('/listings'));
 
     // // wait for page to load
@@ -61,7 +61,7 @@ test.describe('Search functionality', () => {
     // Click on a popular search
     await page.click('.hero__popular-searches a:first-of-type');
 
-    // Wait for the page to load not using the waitForNavigation method
+    // Wait for the page to load
     await page.waitForRequest(request => request.url().includes('/listings'));
 
     // Check if the listings page is loaded

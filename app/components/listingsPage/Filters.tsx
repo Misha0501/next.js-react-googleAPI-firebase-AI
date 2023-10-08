@@ -170,7 +170,7 @@ export function Filters({ onParamsChange, listingType }: any) {
       });
       setQueryParams(queryParams);
     },
-    [filterValues, setFilterValues, generateQueryParams, setQueryParams]
+    [filterValues, setFilterValues, generateQueryParams, setQueryParams],
   );
 
   const handleLivingAreaChange = useCallback(
@@ -185,7 +185,7 @@ export function Filters({ onParamsChange, listingType }: any) {
       });
       setQueryParams(queryParams);
     },
-    [filterValues, setFilterValues, generateQueryParams, setQueryParams]
+    [filterValues, setFilterValues, generateQueryParams, setQueryParams],
   );
 
   const handleLivingLandChange = useCallback(
@@ -200,7 +200,7 @@ export function Filters({ onParamsChange, listingType }: any) {
       });
       setQueryParams(queryParams);
     },
-    [filterValues, setFilterValues, generateQueryParams, setQueryParams]
+    [filterValues, setFilterValues, generateQueryParams, setQueryParams],
   );
 
   const handlePriceChange = useCallback(
@@ -215,7 +215,7 @@ export function Filters({ onParamsChange, listingType }: any) {
       });
       setQueryParams(queryParams);
     },
-    [filterValues, setFilterValues, generateQueryParams, setQueryParams]
+    [filterValues, setFilterValues, generateQueryParams, setQueryParams],
   );
 
   const handleRoomChange = useCallback(
@@ -230,7 +230,7 @@ export function Filters({ onParamsChange, listingType }: any) {
       });
       setQueryParams(queryParams);
     },
-    [filterValues, setFilterValues, generateQueryParams, setQueryParams]
+    [filterValues, setFilterValues, generateQueryParams, setQueryParams],
   );
 
   const handleBedroomChange = useCallback(
@@ -245,7 +245,7 @@ export function Filters({ onParamsChange, listingType }: any) {
       });
       setQueryParams(queryParams);
     },
-    [filterValues, setFilterValues, generateQueryParams, setQueryParams]
+    [filterValues, setFilterValues, generateQueryParams, setQueryParams],
   );
 
   const handleListedSince = useCallback(
@@ -260,7 +260,7 @@ export function Filters({ onParamsChange, listingType }: any) {
       });
       setQueryParams(queryParams);
     },
-    [filterValues, setFilterValues, generateQueryParams, setQueryParams]
+    [filterValues, setFilterValues, generateQueryParams, setQueryParams],
   );
 
   useEffect(() => {
@@ -270,22 +270,23 @@ export function Filters({ onParamsChange, listingType }: any) {
 
   return (
     <>
-      <p className={"font-bold mb-4"}>Price Range </p>
-      {/* {listingType === "SELL" && */}
-      <FromToFilter
-        valuesTo={priceRentMaxOptions}
-        valuesFrom={priceRentMinOptions}
-        initialFrom={filterValues.priceRange.min || "0"}
-        initialTo={filterValues.priceRange.max || NO_MAX}
-        onChangeFrom={(value) =>
-          handlePriceChange(value, filterValues.priceRange.max)
-        }
-        onChangeTo={(value) =>
-          handlePriceChange(filterValues.priceRange.min, value)
-        }
-      />
-      {/*  } */}
-      {/* {listingType === "RENT" &&
+      <p className={"font-bold mb-4"}>Price Range</p>
+      {listingType === "SELL" && (
+        <FromToFilter
+          valuesTo={priceSellMaxOptions}
+          valuesFrom={priceSellMinOptions}
+          initialFrom={filterValues.priceRange.min || "0"}
+          initialTo={filterValues.priceRange.max || NO_MAX}
+          onChangeFrom={(value) =>
+            handlePriceChange(value, filterValues.priceRange.max)
+          }
+          onChangeTo={(value) =>
+            handlePriceChange(filterValues.priceRange.min, value)
+          }
+          id={"priceFilter"}
+        />
+      )}
+      {listingType === "RENT" && (
         <FromToFilter
           valuesTo={priceRentMaxOptions}
           valuesFrom={priceRentMinOptions}
@@ -297,13 +298,15 @@ export function Filters({ onParamsChange, listingType }: any) {
           onChangeTo={(value) =>
             handlePriceChange(filterValues.priceRange.min, value)
           }
+          id={"priceFilter"}
         />
-      } */}
+      )}
       <Divider className="my-6" />
       <p className={"font-bold mb-4 text-[#2D3648]"}>Property type</p>
       <PropertyTypeFilter
         selectedValues={filterValues.propertyType}
         onChange={handlePropertyTypeChange}
+        id={"propertyTypeFilter"}
       />
       <Divider className="my-6" />
       <p className={"font-bold mb-4 text-[#2D3648]"}>
@@ -320,6 +323,7 @@ export function Filters({ onParamsChange, listingType }: any) {
         onChangeTo={(value) =>
           handleLivingAreaChange(filterValues.livingAreaRange.min, value)
         }
+        id={"livingAreaRangeFilter"}
       ></FromToFilter>
       <Divider className="my-6" />
       <p className={"font-bold text-base mb-4"}>Square meters property</p>
@@ -334,6 +338,7 @@ export function Filters({ onParamsChange, listingType }: any) {
         onChangeTo={(value) =>
           handleLivingLandChange(filterValues.areaTotal.min, value)
         }
+        id={"areaTotalFilter"}
       ></FromToFilter>
       <Divider className="my-6" />
       <p className={"font-bold mb-4 text-[#2D3648]"}>Rooms</p>
@@ -348,6 +353,7 @@ export function Filters({ onParamsChange, listingType }: any) {
         onChangeTo={(value) =>
           handleRoomChange(filterValues.roomRange.min, value)
         }
+        id={"roomRangeFilter"}
       ></FromToFilter>
       <Divider className="my-6" />
       <p className={"font-bold mb-4 text-[#2D3648]"}>Bedrooms</p>
@@ -362,12 +368,14 @@ export function Filters({ onParamsChange, listingType }: any) {
         onChangeTo={(value) =>
           handleBedroomChange(filterValues.bedroomRange.min, value)
         }
+        id={"bedroomRangeFilter"}
       ></FromToFilter>
       <Divider className="my-6" />
       <p className={"font-bold mb-4 text-[#2D3648]"}>Listed since</p>
       <RadioGroupCustom
         options={listedSinceOptions}
         onChange={handleListedSince}
+        id={"listedSinceFilter"}
       />
       <Divider className="my-6" />
     </>

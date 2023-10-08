@@ -1,10 +1,13 @@
 "use client";
-import { useState, useEffect } from "react";
 import { Checkbox } from "@/app/components/Checkbox";
-import { propertyTypesInitialState } from "@/app/lib/constants/filters";
 import { PROPERTY_TYPES } from "../lib/constants";
 
-export function PropertyTypeFilter({ onChange, selectedValues }: any) {
+type Props = {
+  onChange: (value: any) => void;
+  selectedValues: any;
+  id?: string;
+};
+export function PropertyTypeFilter({ onChange, selectedValues, id }: Props) {
   const handleCheckboxChange = (value: any) => {
     // Toggle the selected value in the state
     const updatedSelectedValues = selectedValues.includes(value)
@@ -16,13 +19,14 @@ export function PropertyTypeFilter({ onChange, selectedValues }: any) {
   };
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-2" id={id}>
       {PROPERTY_TYPES &&
         PROPERTY_TYPES.map((item, index) => (
           <div className="flex items-center gap-3" key={index}>
             <Checkbox
               checked={selectedValues?.includes(item)}
               label={item}
+              id={id ? id + item : ""}
               onChange={() => handleCheckboxChange(item)}
               value={item}
             />

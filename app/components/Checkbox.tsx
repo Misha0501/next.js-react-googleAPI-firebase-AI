@@ -1,6 +1,11 @@
-"use client";
-
-export const Checkbox = ({ label, onChange, value, checked }) => {
+type Props = {
+  label: string;
+  onChange: (value: any) => void;
+  value: any;
+  checked: boolean;
+  id?: string;
+}
+export const Checkbox = ({ label, onChange, value, checked, id } : Props) => {
   return (
     <label className={"flex gap-x-3"}>
       <input
@@ -9,6 +14,7 @@ export const Checkbox = ({ label, onChange, value, checked }) => {
         type="checkbox"
         onChange={onChange}
         value={value}
+        id={id}
       />
       <p className="text-base font-normal text-[#2D3648]">{label}</p>
     </label>
