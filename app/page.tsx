@@ -27,7 +27,6 @@ export default function Home() {
       </header>
       <HomeWebsiteInfoSection />
       <ExploreHomeSection/>
-      {/*<NewestRentalSection />*/}
     </div>
   );
 }

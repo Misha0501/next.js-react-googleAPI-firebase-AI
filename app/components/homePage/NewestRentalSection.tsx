@@ -1,6 +1,5 @@
 "use client";
 import React from "react";
-import SlickSlider from "@/app/components/slider/Slider";
 
 function NewestRentalSection() {
     return (
@@ -15,7 +14,6 @@ function NewestRentalSection() {
                             Lorem ipsum dolor sit amet, consectetur adipiscing elit
                         </p>
                     </div>
-                    <SlickSlider/>
                 </div>
             </section>
         </>
