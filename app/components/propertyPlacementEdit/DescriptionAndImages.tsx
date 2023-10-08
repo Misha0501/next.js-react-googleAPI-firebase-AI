@@ -134,13 +134,13 @@ function DescriptionAndImages({
                 <p className={"text-md font-light text-[#616161]"}>
                   Share what&apos;s special about your space.
                 </p>
-                <Button
-                  disabled={generate.isLoading}
-                  type="button"
-                  onClick={generateDescription}
-                >
-                  Generate
-                </Button>
+                {/*<Button*/}
+                {/*  disabled={generate.isLoading}*/}
+                {/*  type="button"*/}
+                {/*  onClick={generateDescription}*/}
+                {/*>*/}
+                {/*  Generate*/}
+                {/*</Button>*/}
                 <textarea
                   disabled={generate.isLoading}
                   onChange={(e) => {
@@ -151,7 +151,7 @@ function DescriptionAndImages({
                   value={formik.values.description}
                   name="description"
                   id="description"
-                  placeholder="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sapien ornare vitae amet."
+                  placeholder="Type your description here"
                   className={
                     "border-2 border-[#97B6FF] rounded-md max-w-[676px] outline-0 min-h-[150px] p-3 text-gray-500 text-md"
                   }
