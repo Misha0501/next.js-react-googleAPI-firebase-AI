@@ -117,9 +117,7 @@ export const AddressAutocomplete = ({
 
   useEffect(() => {
     if (googleInstance) {
-      autoCompleteRef.current = new (
-        window as any
-      ).google.maps.places.Autocomplete(inputRef.current, options);
+      autoCompleteRef.current = new googleInstance.maps.places.Autocomplete(inputRef.current, options);
 
       // When the user selects an address from the drop-down, populate the
       // address fields in the form.
