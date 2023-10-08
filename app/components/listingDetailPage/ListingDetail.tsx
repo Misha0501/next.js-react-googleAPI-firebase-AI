@@ -38,7 +38,6 @@ import {
   WindowsIcon,
 } from "@/public/BedIcon";
 import Link from "next/link";
-import { Listing } from "@/types";
 
 const ListingDetail = () => {
   const { authToken } = useAuthContext();
@@ -206,23 +205,6 @@ const ListingDetail = () => {
                 ? ` FOR ${listingDetail?.data?.listingType}`
                 : null}
             </h1>
-            {/*<div>*/}
-            {/*    <Button*/}
-            {/*        className="bg-[#f2f2f2]	text-black  border-0 mr-2"*/}
-            {/*        icon={ShareIcon}*/}
-            {/*    >*/}
-            {/*        Share*/}
-            {/*    </Button>*/}
-            {/*    <Button*/}
-            {/*        className="bg-[#f2f2f2]	text-black  border-0 mr-2"*/}
-            {/*        icon={HeartIcon}*/}
-            {/*    >*/}
-            {/*        Favourite*/}
-            {/*    </Button>*/}
-            {/*    <Button className="px-16" icon={PrinterIcon}>*/}
-            {/*        Print*/}
-            {/*    </Button>*/}
-            {/*</div>*/}
           </div>
           <p className="pt-2 lg:px-0 text-[18px] text-[#848484] mb-3">
             {listingDetail?.data?.Address?.[0]?.route}
@@ -448,13 +430,11 @@ const ListingDetail = () => {
       {averagePriceNeighborhoodChartData && (
         <div className={"py-12"}>
           <div className="container">
-            <p className="font-medium text-[24px]">
-              Price comparison graph
-            </p>
+            <p className="font-medium text-[24px]">Price comparison graph</p>
             <Title className="pt-8">
               This graph shows the average price in the neighborhood{" "}
-              {listingDetail?.data?.Address[0]?.neighborhood} for properties with
-              the same type compared to this listing.
+              {listingDetail?.data?.Address[0]?.neighborhood} for properties
+              with the same type compared to this listing.
             </Title>
             <BarChart
               className="mt-6"

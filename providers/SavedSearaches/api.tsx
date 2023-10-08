@@ -4,7 +4,6 @@ export async function savedSearches(props?: any): Promise<any> {
   return service({
     method: "GET",
     url: `/api/savedSearches`,
-    queryParams: props,
     headers: {
       //@ts-ignore
       Authorization: props.authToken,

@@ -1,12 +1,9 @@
 import { NextResponse } from "next/server";
-import OpenAI from "openai";
 import { ResponseError } from "@/app/lib/classes/ResponseError";
 import { prisma } from "@/app/lib/db/client";
 import { MatchedListingsAndSearches } from "@/types";
 import { getMatchedListingsAndSearches } from "@/app/lib/notifyOfMatchedListings/getMatchedListingsAndSearches";
-import {
-  sendEmailsToMatchedListingsSearches
-} from "@/app/lib/notifyOfMatchedListings/sendEmailsToMatchedListingsSearches";
+import { sendEmailsToMatchedListingsSearches } from "@/app/lib/notifyOfMatchedListings/sendEmailsToMatchedListingsSearches";
 
 export const dynamic = "force-dynamic"; // Force dynamic (server) route instead of static page
 

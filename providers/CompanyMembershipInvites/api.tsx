@@ -4,7 +4,6 @@ export async function companyMembershipInvites(props?: any): Promise<any> {
   return service({
     method: "GET",
     url: `/api/companyMembershipInvites`,
-    queryParams: props,
     headers: {
       //@ts-ignore
       Authorization: props.authToken,

@@ -75,15 +75,6 @@ const ListingDetailContent = ({
           </div>
         </div>
       </div>
-      <Divider />
-      {/*<div className="pb-6">*/}
-      {/*  <p className="text-[24px]">Characteristics</p>*/}
-      {/*  <div className="grid grid-cols-2 gap-6 pt-8">*/}
-      {/*    <p className="text-[16px]">*/}
-      {/*      Balcony, lying/sitting bath, renewable energy, garden*/}
-      {/*    </p>*/}
-      {/*  </div>*/}
-      {/*</div>*/}
     </>
   );
 };

@@ -1,11 +1,10 @@
-import {z} from "zod";
-import {ResponseError} from "@/app/lib/classes/ResponseError";
-import {NextResponse} from "next/server";
-import {prisma} from "@/app/lib/db/client";
-import {getApplicationUserServer} from "@/app/lib/getApplicationUserServer";
-import {ApplicationUser} from '@prisma/client'
-import {userAllowedManipulateListing} from "@/app/lib/listing/userAllowedManipulateListing";
-import {getApplicationUserCompanyId} from "@/app/lib/listing/getApplicationUserCompanyId";
+import { z } from "zod";
+import { ResponseError } from "@/app/lib/classes/ResponseError";
+import { prisma } from "@/app/lib/db/client";
+import { getApplicationUserServer } from "@/app/lib/getApplicationUserServer";
+import { ApplicationUser } from "@prisma/client";
+import { userAllowedManipulateListing } from "@/app/lib/listing/userAllowedManipulateListing";
+import { getApplicationUserCompanyId } from "@/app/lib/listing/getApplicationUserCompanyId";
 
 /**
  * DELETE Route to delete a listing.

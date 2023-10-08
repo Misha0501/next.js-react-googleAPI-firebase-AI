@@ -2,7 +2,6 @@
  * This is a generic service that can be used to make API calls.
  */
 
-import { useAuthContext } from "@/app/context/AuthContext";
 import omit from "lodash/omit";
 import qs from "query-string";
 import { getFetchUrl } from "@/app/lib/getFetchUrl";
@@ -83,6 +82,7 @@ async function service(args: IAPArgs): Promise<any> {
     fetchUrl = `${fetchUrl}?${qs.stringify(queryParams)}`;
   }
 
+  console.log("fetchUrl", fetchUrl);
   const data = await fetch(fetchUrl, props);
 
   if (!data.ok) {
@@ -94,7 +94,7 @@ async function service(args: IAPArgs): Promise<any> {
     const errorMessage = await data.text();
     throw new Error(errorMessage);
   }
-  // logSuccess(API_URL, JSON.stringify(data));
+
   return parseJSON ? await data.json() : data;
 }
 

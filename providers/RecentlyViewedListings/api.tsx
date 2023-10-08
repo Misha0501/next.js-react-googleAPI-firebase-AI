@@ -6,7 +6,6 @@ export async function recentlyViewedListings(props?: any): Promise<any> {
   return service({
     method: "GET",
     url: `/api/recentlyViewedListings`,
-    queryParams: props,
     headers: {
       //@ts-ignore
       Authorization: props.authToken,
