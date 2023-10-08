@@ -43,7 +43,6 @@ export default function RootLayout({
             <ReactQueryProvider>{children}</ReactQueryProvider>
           </AuthContextProvider>
         </main>
-        <Footer />
       </body>
     </html>
   );
