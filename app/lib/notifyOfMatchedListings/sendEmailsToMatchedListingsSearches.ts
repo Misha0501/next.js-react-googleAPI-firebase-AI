@@ -18,16 +18,6 @@ export const sendEmailsToMatchedListingsSearches = async (matchedListingsAndSear
       if(!applicationUser) continue;
 
       try {
-        console.log("Sending email to user with matched listing and a link to the listing id: "
-          + matchedListing.id
-          + " and matched search: "
-          + matchedSearch.id
-          + " and user: "
-          + applicationUser.id
-          + " and email: "
-          + applicationUser.email
-        );
-
         // Send email to user with matched listing and a link to the listing
         await sendEmail({
           to: applicationUser.email,

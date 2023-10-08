@@ -70,8 +70,6 @@ const AutoComplete = ({
     // which are documented at http://goo.gle/3l5i5Mr
     for (const component of place.address_components as google.maps.GeocoderAddressComponent[]) {
       const componentType = component.types[0];
-      // console.log(component);
-      // console.log(componentType);
       switch (componentType) {
         case "street_number": {
           streetNumber = component.long_name;

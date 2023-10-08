@@ -26,8 +26,6 @@ export const PlacingPropertyImagesHandler = ({
 }: PlacingPropertyImagesHandlerProps) => {
   const { user, authToken } = useAuthContext();
 
-  console.log(initialImages, "initialImages");
-
   const [images, setImages] = useState<ListingImage[]>(initialImages || []);
 
   const [error, setError] = useState("");
@@ -51,25 +49,17 @@ export const PlacingPropertyImagesHandler = ({
 
   const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
     try {
-      console.log("Starting handleFileChange");
-
       const files = e.target.files;
       const uid = user?.uid;
 
       if (!files || !files.length) {
         // no file selected
-        console.log("no file selected");
         setError("Please select a file");
         return;
       }
 
       const file = files[0];
-      console.log("file");
-      console.log(file);
-
-      console.log("uid: ", uid);
       if (!uid) {
-        console.log("no uid");
         setError("Please (re)log in");
         return;
       }
@@ -101,7 +91,6 @@ export const PlacingPropertyImagesHandler = ({
 
       // Get the download URL
       const downloadURL = await getDownloadURL(imageRef);
-      console.log("downloadURL: ", downloadURL);
 
       // Add the image to the images state
       setImages((prevState) => {
@@ -121,15 +110,11 @@ export const PlacingPropertyImagesHandler = ({
       setUploading(false);
       setError("Something went wrong. Please try again.");
     }
-    console.log(images);
   };
 
   const deleteImage = async (listingImage: ListingImage, fileIndex: number) => {
-    console.log("deleteImage: ", fileIndex);
-    console.log("deleteImage: ", listingImage);
     try {
       if (listingImage.id) {
-        console.log("deleteImage: ", listingImage.id);
         await deleteListingImage.mutateAsync({ id: listingImage.id })
       }
 

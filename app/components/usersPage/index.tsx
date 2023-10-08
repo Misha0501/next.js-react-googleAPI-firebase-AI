@@ -27,8 +27,6 @@ function UserPageMain() {
     }
   }, [userDetail?.data]);
 
-  console.log("company", company, "userDetail", userDetail?.data?.Company);
-
   let contactNumber =
     company?.phoneNumber ?? userDetail.data?.phoneNumber ?? "";
 
