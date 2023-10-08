@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { AutocompleteAddress } from "@/types";
 import { TextInput } from "@tremor/react";
 import { useGooglePlaces } from "@/app/lib/hooks/useGoogleServices";
@@ -30,11 +30,11 @@ export const AddressAutocomplete = ({
 
   const autoCompleteRef = useRef();
   const inputRef = useRef();
-  const options = {
+  const options = useMemo(() => ({
     componentRestrictions: { country: "bg" },
     fields: ["address_components", "geometry", "name"],
     types: ["address"],
-  };
+  }), []);
 
   const [googleInstance, isLoading, loadError] = useGooglePlaces();
 
@@ -116,7 +116,7 @@ export const AddressAutocomplete = ({
   };
 
   useEffect(() => {
-    if (googleInstance) {
+    if (googleInstance && googleInstance.maps && googleInstance.maps.places) {
       autoCompleteRef.current = new googleInstance.maps.places.Autocomplete(inputRef.current, options);
 
       // When the user selects an address from the drop-down, populate the

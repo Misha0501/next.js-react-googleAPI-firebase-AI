@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 import { AutocompleteAddress } from "@/types";
 import { Button, Icon } from "@tremor/react";
@@ -32,11 +32,11 @@ const AutoComplete = ({
 
   const autoCompleteRef = useRef();
   const inputRef = useRef();
-  const options = {
+  const options = useMemo(() => ({
     componentRestrictions: { country: "bg" },
     fields: ["address_components", "geometry", "name"],
     types: ["(cities)"],
-  };
+  }), []);
 
   const [googleInstance, isLoading, loadError] = useGooglePlaces();
 
@@ -115,7 +115,7 @@ const AutoComplete = ({
   };
 
   useEffect(() => {
-    if (googleInstance) {
+    if (googleInstance && googleInstance.maps && googleInstance.maps.places) {
       autoCompleteRef.current = new googleInstance.maps.places.Autocomplete(inputRef.current, options);
 
       // When the user selects an address from the drop-down, populate the
