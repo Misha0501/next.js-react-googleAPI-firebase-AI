@@ -6,7 +6,7 @@ import { Navigation } from "@/app/components/layout/Navigation";
 import ReactQueryProvider from "@/app/lib/reactQuery/ReactQueryProvider";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Footer from "./components/layout/Footer";
+import MobileFooter from "@/app/components/layout/MobileFooter";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -43,6 +43,7 @@ export default function RootLayout({
             <ReactQueryProvider>{children}</ReactQueryProvider>
           </AuthContextProvider>
         </main>
+        <MobileFooter />
       </body>
     </html>
   );

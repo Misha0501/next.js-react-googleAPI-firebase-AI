@@ -24,7 +24,7 @@ const MOBILE_NAV_ITEMS = [
   {
     title: "Favourites",
     icon: <HeartIcon />,
-    link: "/profile/savedItems",
+    link: "/profile/saved",
   },
   {
     title: "Saved",
