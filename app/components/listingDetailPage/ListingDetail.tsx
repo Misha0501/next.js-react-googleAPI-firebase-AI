@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import {
-  CheckCircleIcon,
+  ClockIcon,
   HeartIcon,
   PhotoIcon,
   Square3Stack3DIcon,
@@ -32,12 +32,15 @@ import { useCreateRecentlyViewedListing } from "@/providers/RecentlyViewedListin
 import { useAuthContext } from "@/app/context/AuthContext";
 import FloatingContactBar from "../FloatingContactBar";
 import {
+  BedIcon,
   BedRoomIcon,
   PhotosIcon,
   VerticaleMap,
   WindowsIcon,
 } from "@/public/BedIcon";
 import Link from "next/link";
+import { GridIcon } from "@/public/GridIcon";
+import { formatToDayAndMonthWithName } from "@/app/lib/formatToDayAndMonthWithName";
 
 const ListingDetail = () => {
   const { authToken } = useAuthContext();
@@ -89,22 +92,19 @@ const ListingDetail = () => {
       {
         title: "Bedrooms",
         value: listingDetail?.data?.bedrooms,
-        icon: PhotoIcon,
+        icon: BedIcon,
       },
       {
         title: "Square Area",
         value: listingDetail?.data?.areaTotal,
-        icon: PhotoIcon,
+        icon: GridIcon,
       },
       {
-        title: "Status",
-        value: listingDetail?.data?.active ? "Active" : "Suspend",
-        icon: CheckCircleIcon,
-      },
-      {
-        title: "More",
-        value: listingDetail?.data?.active ? "Active" : "Suspend",
-        icon: CheckCircleIcon,
+        title: "Offered since",
+        value: formatToDayAndMonthWithName(
+          listingDetail?.data?.createdAt ?? "",
+        ),
+        icon: ClockIcon,
       },
     ],
     [listingDetail?.data],
