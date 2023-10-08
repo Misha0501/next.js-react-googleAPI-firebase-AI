@@ -1,11 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { AutocompleteAddress } from "@/types";
 import { TextInput } from "@tremor/react";
-
-window.initMap = function (e) {
-  console.log(e);
-  console.log("in init map");
-};
+import { useGooglePlaces } from "@/app/lib/hooks/useGoogleServices";
 
 type AutocompleteProps = {
   onLocalityChange?: (locality: string) => void;
@@ -39,6 +35,8 @@ export const AddressAutocomplete = ({
     fields: ["address_components", "geometry", "name"],
     types: ["address"],
   };
+
+  const [googleInstance, isLoading, loadError] = useGooglePlaces();
 
   // Tracking address changes
   useEffect(() => {
@@ -118,17 +116,16 @@ export const AddressAutocomplete = ({
   };
 
   useEffect(() => {
-    if (window.google) {
-      autoCompleteRef.current = new window.google.maps.places.Autocomplete(
-        inputRef.current,
-        options
-      );
+    if (googleInstance) {
+      autoCompleteRef.current = new (
+        window as any
+      ).google.maps.places.Autocomplete(inputRef.current, options);
 
       // When the user selects an address from the drop-down, populate the
       // address fields in the form.
       autoCompleteRef.current.addListener("place_changed", placeChanged);
     }
-  }, [window.google]);
+  }, [googleInstance, options]);
 
   return (
     <>

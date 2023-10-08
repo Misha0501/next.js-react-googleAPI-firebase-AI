@@ -7,6 +7,7 @@ import ReactQueryProvider from "@/app/lib/reactQuery/ReactQueryProvider";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import MobileFooter from "@/app/components/layout/MobileFooter";
+import { GoogleAutocompleteContextProvider } from "@/app/context/GoogleAutocompleteContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -25,11 +26,6 @@ export default function RootLayout({
     <html className="scroll-smooth" lang="en">
       <head>
         <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
-
-        <script
-          async
-          src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAuL3ldHARXcYSsaNhLNRrzLgUDxLtEiAA&libraries=places&callback=initMap"
-        ></script>
         <meta
           name="viewport"
           content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, user-scalable=no, viewport-fit=cover"

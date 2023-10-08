@@ -1,12 +1,8 @@
-import {useEffect, useRef, useState} from "react";
-import {MagnifyingGlassIcon} from "@heroicons/react/24/solid";
-import {AutocompleteAddress,} from "@/types";
+import { useEffect, useRef, useState } from "react";
+import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
+import { AutocompleteAddress } from "@/types";
 import { Button, Icon } from "@tremor/react";
-
-window.initMap = function (e) {
-  console.log(e);
-  console.log("in init map");
-};
+import { useGooglePlaces } from "@/app/lib/hooks/useGoogleServices";
 
 type AutocompleteProps = {
   onLocalityChange?: (locality: string) => void;
@@ -41,6 +37,8 @@ const AutoComplete = ({
     fields: ["address_components", "geometry", "name"],
     types: ["(cities)"],
   };
+
+  const [googleInstance, isLoading, loadError] = useGooglePlaces();
 
   // Tracking address changes
   useEffect(() => {
@@ -117,25 +115,20 @@ const AutoComplete = ({
   };
 
   useEffect(() => {
-    if (window.google) {
-      autoCompleteRef.current = new window.google.maps.places.Autocomplete(
-        inputRef.current,
-        options
-      );
+    if (googleInstance) {
+      autoCompleteRef.current = new (
+        window as any
+      ).google.maps.places.Autocomplete(inputRef.current, options);
 
       // When the user selects an address from the drop-down, populate the
       // address fields in the form.
       autoCompleteRef.current.addListener("place_changed", placeChanged);
     }
-  }, [window.google]);
+  }, [googleInstance, options]);
 
   return (
     <div className="py-2 pl-3 pr-2 flex justify-between m-auto w-full  bg-white border-[#CBD2E0] rounded-lg h-16">
-      <Icon
-        icon={MagnifyingGlassIcon}
-        size="lg"
-        className="text-black flex"
-      />
+      <Icon icon={MagnifyingGlassIcon} size="lg" className="text-black flex" />
 
       <input
         className="hero__search w-full border-none pl-0 lg:pl-2 outline-none focus:outline-none text-black focus:border-none active:border-none active:outline-none"
@@ -147,10 +140,7 @@ const AutoComplete = ({
         value={inputValue}
         onChange={(e) => setInputValue(e.target.value)}
       />
-      <Button
-        type={"submit"}
-        variant={"primary"}
-      >
+      <Button type={"submit"} variant={"primary"}>
         Search
       </Button>
     </div>
