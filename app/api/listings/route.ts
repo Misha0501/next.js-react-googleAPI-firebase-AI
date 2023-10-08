@@ -426,19 +426,10 @@ export async function PUT(req: Request) {
         401,
       );
 
-    // Update images or create new images if
+    // Update images or create new images if they don't exist
     if (images) {
       for (let i = 0; i < images.length; i++) {
         let image = images[i];
-
-        // if image position is -1 delete it
-        if (image.positionInListing == -1 && image.id) {
-          await prisma.listingImage.delete({
-            where: {
-              id: image.id,
-            },
-          });
-        }
 
         // if no id then create an image
         if (!image.id) {
