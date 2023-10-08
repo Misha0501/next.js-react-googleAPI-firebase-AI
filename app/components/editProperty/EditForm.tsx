@@ -44,9 +44,9 @@ const EditForm = ({ formik, addressId, id, loading }: any) => {
       rooms: formik?.values?.rooms,
       bedrooms: formik?.values?.bedrooms,
       bathrooms: formik?.values?.bathrooms,
-      areaTotal: formik?.values?.totalarea,
-      areaLiving: formik?.values?.livingarea,
-      outsideArea: formik.values?.outsidearea,
+      areaTotal: formik?.values?.totalArea,
+      areaLiving: formik?.values?.livingArea,
+      outsideArea: formik.values?.outsideArea,
       garden: formik?.values?.garden,
       garage: formik?.values?.garage,
       volume: formik?.values?.volume,
@@ -58,7 +58,7 @@ const EditForm = ({ formik, addressId, id, loading }: any) => {
       floorNumber: formik?.values?.floorNumber,
       buildingtype: formik?.values?.buildingtype || null,
       characteristics: formik?.values?.characteristics,
-      description: formik?.values?.discription,
+      description: formik?.values?.description,
       address: {
         route: formik.values.route,
         administrativeAreaLevelOne: formik.values.administrativeArea,
@@ -107,8 +107,8 @@ const EditForm = ({ formik, addressId, id, loading }: any) => {
     if (!formik.values.price) {
       errors.price = "Required";
     }
-    if (!formik.values.totalarea) {
-      errors.totalarea = "Required";
+    if (!formik.values.totalArea) {
+      errors.totalArea = "Required";
     }
     if (!formik.values.interiortype && formik.values.propertyType !== "LAND") {
       errors.interiortype = "Required";
@@ -354,17 +354,17 @@ const EditForm = ({ formik, addressId, id, loading }: any) => {
                 enableStepper={false}
                 className={"w-min border-[#97B6FF]"}
                 min={0}
-                name="totalarea"
-                id="totalarea"
+                name="totalArea"
+                id="totalArea"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                error={!!formik.touched.totalarea && !!formik.errors.totalarea}
-                value={formik?.values?.totalarea}
+                error={!!formik.touched.totalArea && !!formik.errors.totalArea}
+                value={formik?.values?.totalArea}
               />
               m2
             </div>
-            {formik.errors.totalarea && showError && (
-              <FormHelperText error>{formik.errors.totalarea}</FormHelperText>
+            {formik.errors.totalArea && showError && (
+              <FormHelperText error>{formik.errors.totalArea}</FormHelperText>
             )}
           </div>
           {formik.values.propertyType !== "LAND" && (
@@ -376,14 +376,14 @@ const EditForm = ({ formik, addressId, id, loading }: any) => {
                     enableStepper={false}
                     className={"w-min border-[#97B6FF]"}
                     min={0}
-                    name="livingarea"
-                    id="livingarea"
+                    name="livingArea"
+                    id="livingArea"
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     error={
-                      !!formik.touched.livingarea && !!formik.errors.livingarea
+                      !!formik.touched.livingArea && !!formik.errors.livingArea
                     }
-                    value={formik?.values?.livingarea}
+                    value={formik?.values?.livingArea}
                   />
                   m2
                 </div>
@@ -394,15 +394,15 @@ const EditForm = ({ formik, addressId, id, loading }: any) => {
                   <NumberInput
                     enableStepper={false}
                     className={"w-min border-[#97B6FF]"}
-                    name="outsidearea"
-                    id="outsidearea"
+                    name="outsideArea"
+                    id="outsideArea"
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     error={
-                      !!formik.touched.outsidearea &&
-                      !!formik.errors.outsidearea
+                      !!formik.touched.outsideArea &&
+                      !!formik.errors.outsideArea
                     }
-                    value={formik.values.outsidearea}
+                    value={formik.values.outsideArea}
                   />
                   m2
                 </div>
@@ -631,10 +631,10 @@ const EditForm = ({ formik, addressId, id, loading }: any) => {
             <span className="font-bold text-lg">Description</span>
 
             <textarea
-              name="discription"
-              id="discription"
+              name="description"
+              id="description"
               onChange={formik.handleChange}
-              value={formik.values.discription}
+              value={formik.values.description}
               placeholder="Tell about your property"
               className={
                 "border-2 border-[#97B6FF] rounded-md max-w-lg  outline-0 h-48 max-h-64 min-h-fit  p-3 text-gray-500 text-md"

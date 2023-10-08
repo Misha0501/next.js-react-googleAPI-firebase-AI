@@ -59,14 +59,14 @@ const MoreDetails = ({
     // if (!formik.values.bathrooms && formik.values.propertyType !== "LAND") {
     //   errors.bathrooms = "Required";
     // }
-    if (!formik.values.interiortype && formik.values.propertyType !== "LAND") {
-      errors.interiortype = "Required";
+    if (!formik.values.interiorType && formik.values.propertyType !== "LAND") {
+      errors.interiorType = "Required";
     }
-    if (!formik.values.upkeeptype && formik.values.propertyType !== "LAND") {
-      errors.upkeeptype = "Required";
+    if (!formik.values.upkeepType && formik.values.propertyType !== "LAND") {
+      errors.upkeepType = "Required";
     }
-    if (!formik.values.heatingtype && formik.values.propertyType !== "LAND") {
-      errors.heatingtype = "Required";
+    if (!formik.values.heatingType && formik.values.propertyType !== "LAND") {
+      errors.heatingType = "Required";
     }
     // if (!formik.values.yearBuilt && formik.values.propertyType !== "LAND") {
     //   errors.yearBuilt = "Required";
@@ -80,17 +80,17 @@ const MoreDetails = ({
     // if (!formik.values.floorNumber && formik.values.propertyType !== "LAND") {
     //   errors.floorNumber = "Required";
     // }
-    // if (!formik.values.buildingtype && formik.values.propertyType !== "LAND") {
-    //   errors.buildingtype = "Required";
+    // if (!formik.values.buildingType && formik.values.propertyType !== "LAND") {
+    //   errors.buildingType = "Required";
     // }
-    if (!formik.values.totalarea) {
-      errors.totalarea = "Required";
+    if (!formik.values.totalArea) {
+      errors.totalArea = "Required";
     }
-    // if (!formik.values.livingarea && formik.values.propertyType !== "LAND") {
-    //   errors.livingarea = "Required";
+    // if (!formik.values.livingArea && formik.values.propertyType !== "LAND") {
+    //   errors.livingArea = "Required";
     // }
-    // if (!formik.values.outsidearea && formik.values.propertyType !== "LAND") {
-    //   errors.outsidearea = "Required";
+    // if (!formik.values.outsideArea && formik.values.propertyType !== "LAND") {
+    //   errors.outsideArea = "Required";
     // }
     // if (!formik.values.garden && formik.values.propertyType !== "LAND") {
     //   errors.garden = "Required";
@@ -249,12 +249,12 @@ const MoreDetails = ({
                         enableStepper={false}
                         className={"w-min "}
                         min={0}
-                        name="totalarea"
-                        id="totalarea"
+                        name="totalArea"
+                        id="totalArea"
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
-                        error={showError && !!formik.errors.totalarea}
-                        value={formik.values.totalarea}
+                        error={showError && !!formik.errors.totalArea}
+                        value={formik.values.totalArea}
                       />
                       m2
                     </div>
@@ -272,19 +272,19 @@ const MoreDetails = ({
                             enableStepper={false}
                             className={"w-min "}
                             min={0}
-                            name="livingarea"
-                            id="livingarea"
+                            name="livingArea"
+                            id="livingArea"
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
-                            error={showError && !!formik.errors.livingarea}
-                            value={formik.values.livingarea}
+                            error={showError && !!formik.errors.livingArea}
+                            value={formik.values.livingArea}
                           />
                           m2
                         </div>
                       </div>
-                      {/* {showError && formik.errors.livingarea && (
+                      {/* {showError && formik.errors.livingArea && (
                     <FormHelperText className="flex justify-end" error>
-                      {formik.errors.livingarea}
+                      {formik.errors.livingArea}
                     </FormHelperText>
                   )} */}
                     </div>
@@ -298,19 +298,19 @@ const MoreDetails = ({
                             placeholder="0"
                             className={"w-min "}
                             min={0}
-                            name="outsidearea"
-                            id="outsidearea"
+                            name="outsideArea"
+                            id="outsideArea"
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
-                            error={showError && !!formik.errors.outsidearea}
-                            value={formik.values.outsidearea}
+                            error={showError && !!formik.errors.outsideArea}
+                            value={formik.values.outsideArea}
                           />
                           m2
                         </div>
                       </div>
-                      {/* {showError && formik.errors.outsidearea && (
+                      {/* {showError && formik.errors.outsideArea && (
                     <FormHelperText className="flex justify-end" error>
-                      {formik.errors.outsidearea}
+                      {formik.errors.outsideArea}
                     </FormHelperText>
                   )} */}
                     </div>
@@ -404,16 +404,16 @@ const MoreDetails = ({
                   <div className="">
                     <SingleSelectRadioButton
                       onBlur={formik.handleBlur}
-                      value={formik.values.interiortype}
+                      value={formik.values.interiorType}
                       options={INTERIOR_TYPES}
                       onChange={(e) =>
-                        formik.setFieldValue("interiortype", e, true)
+                        formik.setFieldValue("interiorType", e, true)
                       }
-                      id="interiortype"
+                      id="interiorType"
                     />
-                    {formik.errors.interiortype && showError && (
+                    {formik.errors.interiorType && showError && (
                       <FormHelperText error>
-                        {formik.errors.interiortype}
+                        {formik.errors.interiorType}
                       </FormHelperText>
                     )}
                   </div>
@@ -429,16 +429,16 @@ const MoreDetails = ({
                   </p>
                   <div className="">
                     <SingleSelectRadioButton
-                      value={formik.values.upkeeptype}
+                      value={formik.values.upkeepType}
                       options={UPKEEP_TYPES}
                       onChange={(e) =>
-                        formik.setFieldValue("upkeeptype", e, true)
+                        formik.setFieldValue("upkeepType", e, true)
                       }
-                      id="upkeeptype"
+                      id="upkeepType"
                     />
-                    {formik.errors.upkeeptype && showError && (
+                    {formik.errors.upkeepType && showError && (
                       <FormHelperText error>
-                        {formik.errors.upkeeptype}
+                        {formik.errors.upkeepType}
                       </FormHelperText>
                     )}
                   </div>
@@ -454,16 +454,16 @@ const MoreDetails = ({
                   </p>
                   <div className="">
                     <SingleSelectRadioButton
-                      value={formik.values.heatingtype}
+                      value={formik.values.heatingType}
                       options={HEATING_TYPES}
                       onChange={(e) =>
-                        formik.setFieldValue("heatingtype", e, true)
+                        formik.setFieldValue("heatingType", e, true)
                       }
-                      id="heatingtype"
+                      id="heatingType"
                     />
-                    {formik.errors.heatingtype && showError && (
+                    {formik.errors.heatingType && showError && (
                       <FormHelperText error>
-                        {formik.errors.heatingtype}
+                        {formik.errors.heatingType}
                       </FormHelperText>
                     )}
                   </div>
@@ -554,12 +554,12 @@ const MoreDetails = ({
                     {/*  <div>*/}
                     {/*    <Select*/}
                     {/*      onBlur={formik.handleBlur}*/}
-                    {/*      id="buildingtype"*/}
+                    {/*      id="buildingType"*/}
                     {/*      onChange={(e) =>*/}
-                    {/*        formik.setFieldValue("buildingtype", e, true)*/}
+                    {/*        formik.setFieldValue("buildingType", e, true)*/}
                     {/*      }*/}
                     {/*      className={"text-sm"}*/}
-                    {/*      value={formik.values.buildingtype}*/}
+                    {/*      value={formik.values.buildingType}*/}
                     {/*    >*/}
                     {/*      {BUILDING_TYPE.map((item, index) => (*/}
                     {/*        <SelectItem value={item} key={index}>*/}
@@ -567,9 +567,9 @@ const MoreDetails = ({
                     {/*        </SelectItem>*/}
                     {/*      ))}*/}
                     {/*    </Select>*/}
-                    {/*    {showError && formik.errors.buildingtype && (*/}
+                    {/*    {showError && formik.errors.buildingType && (*/}
                     {/*      <FormHelperText error>*/}
-                    {/*        {formik.errors.buildingtype}*/}
+                    {/*        {formik.errors.buildingType}*/}
                     {/*      </FormHelperText>*/}
                     {/*    )}*/}
                     {/*  </div>*/}

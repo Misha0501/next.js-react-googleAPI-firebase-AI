@@ -20,7 +20,7 @@ const steps = [
   "Confirmation",
 ];
 
-const InitalImages: any = [];
+const initialImages: any = [];
 
 export default function MultiForm() {
   const [activeStep, setActiveStep] = useState(0);
@@ -66,21 +66,21 @@ export default function MultiForm() {
     rooms?: number;
     bedrooms?: number;
     bathrooms?: number;
-    totalarea?: number;
-    livingarea?: number;
-    outsidearea?: number;
+    totalArea?: number;
+    livingArea?: number;
+    outsideArea?: number;
     garden?: number;
     garage?: number;
     volume?: number;
-    interiortype?: string;
-    upkeeptype?: string;
-    heatingtype?: string;
+    interiorType?: string;
+    upkeepType?: string;
+    heatingType?: string;
     yearBuilt?: number;
     numberOfFloorsCommon?: number;
     floorNumber?: number;
-    buildingtype?: string;
+    buildingType?: string;
     characteristics?: string;
-    discription?: string;
+    description?: string;
     images: any;
   }
 
@@ -155,22 +155,22 @@ export default function MultiForm() {
           // rooms: undefined as number | undefined,
           bedrooms: undefined,
           bathrooms: undefined,
-          totalarea: undefined,
-          livingarea: undefined,
-          outsidearea: undefined,
+          totalArea: undefined,
+          livingArea: undefined,
+          outsideArea: undefined,
           garden: undefined,
           garage: undefined,
           volume: undefined,
-          interiortype: undefined,
-          upkeeptype: "",
-          heatingtype: "",
+          interiorType: undefined,
+          upkeepType: "",
+          heatingType: "",
           yearBuilt: undefined,
           numberOfFloorsCommon: undefined,
           floorNumber: undefined,
-          buildingtype: undefined,
+          buildingType: undefined,
           characteristics: undefined,
-          discription: undefined,
-          images: InitalImages,
+          description: undefined,
+          images: initialImages,
         }}
         validationSchema={Yup.object().shape({
           listingType: Yup.string().required("Listing type is required"),
@@ -183,21 +183,21 @@ export default function MultiForm() {
           rooms: Yup.number(),
           bedrooms: Yup.number(),
           bathrooms: Yup.number(),
-          totalarea: Yup.number(),
-          livingarea: Yup.number(),
-          outsidearea: Yup.number(),
+          totalArea: Yup.number(),
+          livingArea: Yup.number(),
+          outsideArea: Yup.number(),
           garden: Yup.number(),
           garage: Yup.number(),
           volume: Yup.number(),
-          interiortype: Yup.string().required("interior type is required"),
-          upkeeptype: Yup.string().required("upkeep type is required"),
-          heatingtype: Yup.string().required("heating type is required"),
+          interiorType: Yup.string().required("interior type is required"),
+          upkeepType: Yup.string().required("upkeep type is required"),
+          heatingType: Yup.string().required("heating type is required"),
           yearBuilt: Yup.number(),
           numberOfFloorsCommon: Yup.number(),
           floorNumber: Yup.number(),
-          buildingtype: Yup.string(),
+          buildingType: Yup.string(),
           characteristics: Yup.string(),
-          discription: Yup.string().required("discription is required"),
+          description: Yup.string().required("description is required"),
         })}
         onSubmit={(values) => {
           alert(values);

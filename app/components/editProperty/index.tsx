@@ -30,9 +30,9 @@ export default function EditProperty() {
             rooms: listingDetailPage?.data?.rooms,
             bedrooms: listingDetailPage?.data?.bedrooms,
             bathrooms: listingDetailPage?.data?.bathrooms,
-            totalarea: listingDetailPage?.data?.areaTotal,
-            livingarea: listingDetailPage?.data?.areaLiving,
-            outsidearea: listingDetailPage?.data?.areaOutside,
+            totalArea: listingDetailPage?.data?.areaTotal,
+            livingArea: listingDetailPage?.data?.areaLiving,
+            outsideArea: listingDetailPage?.data?.areaOutside,
             garden: listingDetailPage?.data?.areaGarden,
             garage: listingDetailPage?.data?.areaGarage,
             volume: listingDetailPage?.data?.volume,
@@ -42,7 +42,7 @@ export default function EditProperty() {
             yearBuilt: listingDetailPage?.data?.constructedYear,
             numberOfFloorsCommon: listingDetailPage?.data?.numberOfFloorsCommon,
             floorNumber: listingDetailPage?.data?.floorNumber,
-            discription: listingDetailPage?.data?.description,
+            description: listingDetailPage?.data?.description,
             images: listingDetailPage?.data?.ListingImage,
           }}
           validationSchema={Yup.object().shape({
@@ -53,9 +53,9 @@ export default function EditProperty() {
             rooms: Yup.number(),
             bedrooms: Yup.number(),
             bathrooms: Yup.number(),
-            totalarea: Yup.number().required("Total Area Requried"),
-            livingarea: Yup.number(),
-            outsidearea: Yup.number(),
+            totalArea: Yup.number().required("Total Area Requried"),
+            livingArea: Yup.number(),
+            outsideArea: Yup.number(),
             garden: Yup.number(),
             garage: Yup.number(),
             volume: Yup.number(),
@@ -65,7 +65,7 @@ export default function EditProperty() {
             yearBuilt: Yup.number(),
             numberOfFloorsCommon: Yup.number(),
             floorNumber: Yup.number(),
-            discription: Yup.string(),
+            description: Yup.string(),
           })}
           enableReinitialize={true}
           onSubmit={(values) => {}}

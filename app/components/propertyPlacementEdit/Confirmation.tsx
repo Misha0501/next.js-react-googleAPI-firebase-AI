@@ -44,21 +44,21 @@ function Confirmation({
       rooms: formik?.values?.rooms,
       bedrooms: formik?.values?.bedrooms,
       bathrooms: formik?.values?.bathrooms,
-      areaTotal: formik?.values?.totalarea,
-      areaLiving: formik?.values?.livingarea,
-      outsideArea: formik.values?.outsidearea,
+      areaTotal: formik?.values?.totalArea,
+      areaLiving: formik?.values?.livingArea,
+      outsideArea: formik.values?.outsideArea,
       garden: formik?.values?.garden,
       garage: formik?.values?.garage,
       volume: formik?.values?.volume,
-      interiorType: formik?.values?.interiortype || null,
-      upkeepType: formik?.values?.upkeeptype || null,
-      heatingType: formik?.values?.heatingtype || null,
+      interiorType: formik?.values?.interiorType || null,
+      upkeepType: formik?.values?.upkeepType || null,
+      heatingType: formik?.values?.heatingType || null,
       yearBuilt: formik?.values?.yearBuilt,
       numberOfFloorsCommon: formik?.values?.numberOfFloorsCommon,
       floorNumber: formik?.values?.floorNumber,
-      buildingtype: formik?.values?.buildingtype || null,
+      buildingType: formik?.values?.buildingType || null,
       characteristics: formik?.values?.characteristics,
-      description: formik?.values?.discription,
+      description: formik?.values?.description,
       address: {
         route: formik.values.route,
         administrativeAreaLevelOne: formik.values.administrativeArea,
@@ -273,7 +273,7 @@ function Confirmation({
                   Total area
                 </span>
                 <p className="py-2 text-[16px]">
-                  {formik?.values?.totalarea} m2
+                  {formik?.values?.totalArea} m2
                 </p>
 
                 {formik.values.propertyType !== "LAND" && (
@@ -283,7 +283,7 @@ function Confirmation({
                     </span>
 
                     <p className="py-2 text-[16px]">
-                      {formik?.values?.livingarea}
+                      {formik?.values?.livingArea}
                     </p>
 
                     <span className="mb-2 font-semibold text-[14px] ">
@@ -291,7 +291,7 @@ function Confirmation({
                     </span>
 
                     <p className="py-2 text-[16px]">
-                      {formik?.values?.outsidearea}
+                      {formik?.values?.outsideArea}
                     </p>
 
                     <span className="mb-2 font-semibold text-[14px] ">
@@ -325,7 +325,7 @@ function Confirmation({
                     </div>
 
                     <p className="py-2 text-[16px]">
-                      {formik?.values?.interiortype}
+                      {formik?.values?.interiorType}
                     </p>
                     <Divider />
                     <div className="detail_single_box">
@@ -337,7 +337,7 @@ function Confirmation({
                       </div>
 
                       <p className="py-2 text-[16px]">
-                        {formik?.values?.upkeeptype}
+                        {formik?.values?.upkeepType}
                       </p>
                     </div>
                     <Divider />
@@ -350,7 +350,7 @@ function Confirmation({
                       </div>
 
                       <p className="py-2 text-[16px]">
-                        {formik?.values?.heatingtype}
+                        {formik?.values?.heatingType}
                       </p>
                     </div>
                     <Divider />
@@ -389,7 +389,7 @@ function Confirmation({
                       {/*</span>*/}
 
                       {/*    <p className="py-2 text-[16px]">*/}
-                      {/*      {formik?.values?.buildingtype}*/}
+                      {/*      {formik?.values?.buildingType}*/}
                       {/*    </p>*/}
                     </div>
 
@@ -458,7 +458,7 @@ function Confirmation({
                 <span className="mb-2 font-bold text-[14px]">Description</span>
 
                 <p className="py-2 text-[16px]">
-                  {formik?.values?.discription}
+                  {formik?.values?.description}
                 </p>
               </div>
               <Divider />

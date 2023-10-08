@@ -50,7 +50,7 @@ function DescriptionAndImages({
     generate.mutate({
       listingType: formik.values.listingType || null,
       propertyType: formik.values.propertyType || null,
-      interiorType: formik.values.interiortype || null,
+      interiorType: formik.values.interiorType || null,
       currency: formik.values.currency,
       price: formik.values.price,
       rooms: formik.values.rooms,
@@ -60,14 +60,14 @@ function DescriptionAndImages({
       floorNumber: formik.values.floorNumber,
       // numberOfFloorsProperty: formik.values.numberOfFloorsProperty,      // Redundant One
       numberOfFloorsCommon: formik.values.numberOfFloorsCommon,
-      heatingType: formik.values.heatingtype || null,
-      areaLand: formik.values.totalarea,
-      areaLiving: formik.values.livingarea,
-      areaTotal: formik.values.totalarea,
-      upkeepType: formik.values.upkeeptype || null,
+      heatingType: formik.values.heatingType || null,
+      areaLand: formik.values.totalArea,
+      areaLiving: formik.values.livingArea,
+      areaTotal: formik.values.totalArea,
+      upkeepType: formik.values.upkeepType || null,
       yearBuilt: formik.values.yearBuilt,
-      buildingType: formik.values.buildingtype || null,
-      outsideArea: formik.values.outsidearea,
+      buildingType: formik.values.buildingType || null,
+      outsideArea: formik.values.outsideArea,
       garage: formik.values.garage,
       garden: formik.values.garden,
     });
@@ -75,7 +75,7 @@ function DescriptionAndImages({
 
   useEffect(() => {
     if (generate.isSuccess) {
-      formik.setFieldValue("discription", generate?.data, true);
+      formik.setFieldValue("description", generate?.data, true);
     }
   }, [generate.isSuccess]);
 
@@ -145,12 +145,12 @@ function DescriptionAndImages({
                   disabled={generate.isLoading}
                   onChange={(e) => {
                     setTextAreaWordCount(e.target.value.length);
-                    formik.setFieldValue("discription", e.target.value);
+                    formik.setFieldValue("description", e.target.value);
                   }}
                   // maxLength={4000}
-                  value={formik.values.discription}
-                  name="discription"
-                  id="discription"
+                  value={formik.values.description}
+                  name="description"
+                  id="description"
                   placeholder="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sapien ornare vitae amet."
                   className={
                     "border-2 border-[#97B6FF] rounded-md max-w-[676px] outline-0 min-h-[150px] p-3 text-gray-500 text-md"
@@ -162,13 +162,13 @@ function DescriptionAndImages({
                   max={1000}
                   style={{ height: "200px" }}
                   multiple
-                  name="discription"
-                  id="discription"
+                  name="description"
+                  id="description"
                   onChange={formik.handleChange}
                   error={Boolean(
-                    formik.touched.discription && formik.errors.discription
+                    formik.touched.description && formik.errors.description
                   )}
-                  value={formik.values.discription}
+                  value={formik.values.description}
                 /> */}
                 {/*<p className={"text-xs font-normal text-[#222222]"}>*/}
                 {/*  {textAreaWordCount}/4000*/}

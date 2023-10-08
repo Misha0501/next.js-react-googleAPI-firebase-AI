@@ -253,24 +253,24 @@ function EditableConfirmationPage({
               enableStepper={false}
               className={"w-min border-[#97B6FF]"}
               min={0}
-              name="totalarea"
-              id="totalarea"
+              name="totalArea"
+              id="totalArea"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              error={!!formik.touched.totalarea && !!formik.errors.totalarea}
-              value={formik.values.totalarea}
+              error={!!formik.touched.totalArea && !!formik.errors.totalArea}
+              value={formik.values.totalArea}
             />
             m2
           </div>
         </div>
         {/* <TextInput
           className={"w-min border-[#97B6FF]"}
-          name="totalarea"
-          id="totalarea"
+          name="totalArea"
+          id="totalArea"
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
-          error={Boolean(formik.touched.totalarea && formik.errors.totalarea)}
-          value={formik.values.totalarea}
+          error={Boolean(formik.touched.totalArea && formik.errors.totalArea)}
+          value={formik.values.totalArea}
         /> */}
         {formik.values.propertyType !== "LAND" && (
           <>
@@ -282,26 +282,26 @@ function EditableConfirmationPage({
                   enableStepper={false}
                   className={"w-min border-[#97B6FF]"}
                   min={0}
-                  name="livingarea"
-                  id="livingarea"
+                  name="livingArea"
+                  id="livingArea"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   error={
-                    !!formik.touched.livingarea && !!formik.errors.livingarea
+                    !!formik.touched.livingArea && !!formik.errors.livingArea
                   }
-                  value={formik.values.livingarea}
+                  value={formik.values.livingArea}
                 />
                 m2
               </div>
             </div>
             {/* <TextInput
           className={"w-min border-[#97B6FF]"}
-          name="livingarea"
-          id="livingarea"
+          name="livingArea"
+          id="livingArea"
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
-          error={Boolean(formik.touched.livingarea && formik.errors.livingarea)}
-          value={formik.values.livingarea}
+          error={Boolean(formik.touched.livingArea && formik.errors.livingArea)}
+          value={formik.values.livingArea}
         /> */}
             <div className="flex gap-1 flex-col">
               <span className="mb-2 font-bold text-sm">Outside area</span>
@@ -310,28 +310,28 @@ function EditableConfirmationPage({
                   enableStepper={false}
                   placeholder="0"
                   className={"w-min border-[#97B6FF]"}
-                  name="outsidearea"
-                  id="outsidearea"
+                  name="outsideArea"
+                  id="outsideArea"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   error={
-                    !!formik.touched.outsidearea && !!formik.errors.outsidearea
+                    !!formik.touched.outsideArea && !!formik.errors.outsideArea
                   }
-                  value={formik.values.outsidearea}
+                  value={formik.values.outsideArea}
                 />
                 m2
               </div>
             </div>
             {/* <TextInput
           className={"w-min border-[#97B6FF]"}
-          name="outsidearea"
-          id="outsidearea"
+          name="outsideArea"
+          id="outsideArea"
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           error={Boolean(
-            formik.touched.outsidearea && formik.errors.outsidearea
+            formik.touched.outsideArea && formik.errors.outsideArea
           )}
-          value={formik.values.outsidearea}
+          value={formik.values.outsideArea}
         /> */}
             <div className="flex gap-1 flex-col">
               <span className="mb-2 font-bold text-sm">Garden</span>
@@ -425,12 +425,12 @@ function EditableConfirmationPage({
             <div className="max-w-lg">
               <SingleSelectRadioButton
                 onBlur={formik.handleBlur}
-                value={formik.values.interiortype}
+                value={formik.values.interiorType}
                 options={INTERIOR_TYPES}
-                onChange={(e) => formik.setFieldValue("interiortype", e, true)}
-                id="interiortype"
+                onChange={(e) => formik.setFieldValue("interiorType", e, true)}
+                id="interiorType"
               />
-              {formik.errors.interiortype ? <p>error</p> : null}
+              {formik.errors.interiorType ? <p>error</p> : null}
             </div>
           </div>
           <Divider />
@@ -441,10 +441,10 @@ function EditableConfirmationPage({
             </div>
             <div className="max-w-lg">
               <SingleSelectRadioButton
-                value={formik.values.upkeeptype}
+                value={formik.values.upkeepType}
                 options={UPKEEP_TYPES}
-                onChange={(e) => formik.setFieldValue("upkeeptype", e, true)}
-                id="upkeeptype"
+                onChange={(e) => formik.setFieldValue("upkeepType", e, true)}
+                id="upkeepType"
               />
             </div>
           </div>
@@ -456,10 +456,10 @@ function EditableConfirmationPage({
             </div>
             <div className="max-w-lg">
               <SingleSelectRadioButton
-                value={formik.values.heatingtype}
+                value={formik.values.heatingType}
                 options={HEATING_TYPES}
-                onChange={(e) => formik.setFieldValue("heatingtype", e, true)}
-                id="heatingtype"
+                onChange={(e) => formik.setFieldValue("heatingType", e, true)}
+                id="heatingType"
               />
             </div>
           </div>
@@ -532,9 +532,9 @@ function EditableConfirmationPage({
           {/*  <div className="max-w-sm">*/}
           {/*    <Select*/}
           {/*      onBlur={formik.handleBlur}*/}
-          {/*      value={formik.values.buildingtype}*/}
-          {/*      id="buildingtype"*/}
-          {/*      onChange={(e) => formik.setFieldValue("buildingtype", e, true)}*/}
+          {/*      value={formik.values.buildingType}*/}
+          {/*      id="buildingType"*/}
+          {/*      onChange={(e) => formik.setFieldValue("buildingType", e, true)}*/}
           {/*      className={"text-sm"}*/}
           {/*    >*/}
           {/*      {BUILDING_TYPE.map((item, index) => (*/}
@@ -569,13 +569,13 @@ function EditableConfirmationPage({
 
           <textarea
             //   error={Boolean(
-            //     formik.touched.discription && formik.errors.discription
+            //     formik.touched.description && formik.errors.description
             //   )}
             maxLength={1000}
-            name="discription"
-            id="discription"
+            name="description"
+            id="description"
             onChange={formik.handleChange}
-            value={formik.values.discription}
+            value={formik.values.description}
             placeholder="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sapien ornare vitae amet."
             className={
               "border-2 border-[#97B6FF] rounded-md max-w-lg  outline-0 h-48 max-h-64 min-h-fit  p-3 text-gray-500 text-md"
