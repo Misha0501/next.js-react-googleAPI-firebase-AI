@@ -1,28 +1,18 @@
 import StepsTopInfo from "./StepsTopInfo";
 import property1 from "@/public/property1.png";
-import {
-  Button,
-  Divider,
-  Icon,
-  NumberInput,
-  Select,
-  SelectItem,
-} from "@tremor/react";
+import { Button, Divider, Icon, NumberInput } from "@tremor/react";
 import { useState } from "react";
 import {
-  ArrowSmallRightIcon,
   ArrowSmallLeftIcon,
+  ArrowSmallRightIcon,
 } from "@heroicons/react/24/solid";
 import {
-  BUILDING_TYPE,
-  CHARACTERISTICS,
   CreatePropertyFormikPropInterface,
   HEATING_TYPES,
   INTERIOR_TYPES,
   UPKEEP_TYPES,
 } from "../../lib/constants";
 import SingleSelectRadioButton from "../SingleSelectRadioButton";
-import MultiSelectRadioButton from "../MultiSelectRadioButton";
 import { FormHelperText } from "@mui/material";
 import { FormikProps } from "formik";
 

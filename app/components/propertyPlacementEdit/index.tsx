@@ -230,25 +230,25 @@ export default function MultiForm() {
                   </Grid>
                 </Grid>
 
-                <LinearProgress
-                  sx={{
-                    height: "30px",
-                    marginTop: "30px",
-                    backgroundColor: "#F2F2F2",
-                    color: "#97B6FF",
-                  }}
-                  variant="determinate"
-                  value={(activeStep / 4) * 100}
-                  aria-label="hell"
-                />
-                <Typography
-                  fontWeight="semi-bold"
-                  fontSize="16px"
-                  textAlign="center"
-                  sx={{ mt: "5px" }}
-                >
-                  {(activeStep / 4) * 100}%
-                </Typography>
+                {/*<LinearProgress*/}
+                {/*  sx={{*/}
+                {/*    height: "30px",*/}
+                {/*    marginTop: "30px",*/}
+                {/*    backgroundColor: "#F2F2F2",*/}
+                {/*    color: "#97B6FF",*/}
+                {/*  }}*/}
+                {/*  variant="determinate"*/}
+                {/*  value={activeStep == 3 ? 100 : (activeStep / 4) * 100}*/}
+                {/*  aria-label="hell"*/}
+                {/*/>*/}
+                {/*<Typography*/}
+                {/*  fontWeight="semi-bold"*/}
+                {/*  fontSize="16px"*/}
+                {/*  textAlign="center"*/}
+                {/*  sx={{ mt: "5px" }}*/}
+                {/*>*/}
+                {/*  {activeStep == 3 ? 100 : (activeStep / 4) * 100}%*/}
+                {/*</Typography>*/}
               </Box>
             </div>
           </form>
