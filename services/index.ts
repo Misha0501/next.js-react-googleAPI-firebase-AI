@@ -82,7 +82,6 @@ async function service(args: IAPArgs): Promise<any> {
     fetchUrl = `${fetchUrl}?${qs.stringify(queryParams)}`;
   }
 
-  console.log("fetchUrl", fetchUrl);
   const data = await fetch(fetchUrl, props);
 
   if (!data.ok) {
