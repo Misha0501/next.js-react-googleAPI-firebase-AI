@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "dotenv -e .env.development next dev",
+    "dev": "next dev",
     "build": "prisma generate && next build",
     "start": "next start",
     "lint": "next lint",
@@ -27,6 +27,7 @@
     "autoprefixer": "10.4.14",
     "axios": "^1.4.0",
     "cookies-next": "^2.1.2",
+    "dotenv": "^16.3.1",
     "eslint": "8.45.0",
     "eslint-config-next": "13.4.12",
     "firebase": "^10.1.0",
