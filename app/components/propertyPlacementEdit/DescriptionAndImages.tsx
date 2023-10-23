@@ -134,13 +134,18 @@ function DescriptionAndImages({
                 <p className={"text-md font-light text-[#616161]"}>
                   Share what&apos;s special about your space.
                 </p>
-                {/*<Button*/}
-                {/*  disabled={generate.isLoading}*/}
-                {/*  type="button"*/}
-                {/*  onClick={generateDescription}*/}
-                {/*>*/}
-                {/*  Generate*/}
-                {/*</Button>*/}
+                <p className={"text-md font-light text-[#616161] text-sm"}>
+                  Let us help you with that and generate a description for you. Just click the button below. <br />
+                  It can take up to 30 seconds.
+                </p>
+                <Button
+                  loading={generate.isLoading}
+                  type="button"
+                  variant={"secondary"}
+                  onClick={generateDescription}
+                >
+                  Generate
+                </Button>
                 <textarea
                   disabled={generate.isLoading}
                   onChange={(e) => {
@@ -156,75 +161,31 @@ function DescriptionAndImages({
                     "border-2 border-[#97B6FF] rounded-md max-w-[676px] outline-0 min-h-[150px] p-3 text-gray-500 text-md"
                   }
                 />
-
-                {/* <TextInput
-                  disabled={generate.isLoading}
-                  max={1000}
-                  style={{ height: "200px" }}
-                  multiple
-                  name="description"
-                  id="description"
-                  onChange={formik.handleChange}
-                  error={Boolean(
-                    formik.touched.description && formik.errors.description
-                  )}
-                  value={formik.values.description}
-                /> */}
-                {/*<p className={"text-xs font-normal text-[#222222]"}>*/}
-                {/*  {textAreaWordCount}/4000*/}
-                {/*</p>*/}
               </div>
             </div>
-
             <Divider className={"my-8 md:my-14"} />
-            <div className="grid md:grid-cols-2 gap-8 md:gap-16 mb-6">
-              {/* <p className={"text-2xl font-bold"}>Highlights</p> */}
-            </div>
-            <div className="flex items-center justify-between ">
-              {/* <div className="flex flex-col gap-5">
-                  <p className={"text-md font-light text-[#616161]"}>
-                    Share max two points that should be highlighted in your
-                    property.
-                  </p>
-                  {noOfHighlights > 0 && (
-                    <div className="mb-8">
-                      {noOfHighlights >= 1 && <AddHighlightComponent />}
-                      {noOfHighlights >= 2 && <AddHighlightComponent />}
-                    </div>
-                  )}
-
-                  <Button
-                    onClick={() => setNoOfHighlights(noOfHighlights + 1)}
-                    disabled={noOfHighlights >= 2}
-                    className={
-                      "bg-transparent max-w-[676px] border-2 text-[#4785FD] border-[#4785FD]  font-semibold py-3 px-4  rounded-md disabled:text-[#8daae3] disabled:border-[#8daae3]"
-                    }
-                  >
-                    Add highlights
-                    <Icon className="text-[#4785FD]" icon={PlusIcon} />
-                  </Button>
-                </div> */}
-              <Button
-                className="w-2/5 md:w-1/6 h-[56px] mt-8 mr-8 border border-[#2C72F6]"
-                onClick={handleBack}
-                variant="secondary"
-              >
-                <Icon
-                  className="text-[#2C72F6] align-middle"
-                  icon={ArrowSmallLeftIcon}
-                />
-                Back
-              </Button>
-              <Button
-                className="w-3/5 md:w-1/6 h-[56px] mt-8 border border-[#2C72F6]"
-                onClick={handleNext}
-              >
-                Next
-                <Icon
-                  className="text-white align-middle"
+            <div className="grid md:grid-cols-2 gap-8 md:gap-16">
+              <div></div>
+              <div className="flex items-center flex-wrap justify-between gap-4">
+                <Button
+                  onClick={handleBack}
+                  variant="secondary"
+                  size={"xl"}
+                  className="w-full lg:max-w-[250px]"
+                >
+                  Back
+                </Button>
+                <Button
+                  className="w-full lg:max-w-[250px]"
                   icon={ArrowSmallRightIcon}
-                />
-              </Button>
+                  size={"xl"}
+                  iconPosition={"right"}
+                  onClick={handleNext}
+                  loading={generate.isLoading}
+                >
+                  Next
+                </Button>
+              </div>
             </div>
           </div>
         )}

@@ -165,22 +165,6 @@ const GeneralInfo = ({
                   <p className={"mb-2"}>Type your address</p>
                   <AddressAutocomplete onAddressChange={handleAddressChange} />
                 </div>
-                {/*<div className="mb-7">*/}
-                {/*  <div className="flex items-center gap-2 mb-7">*/}
-                {/*    <AntSwitch*/}
-                {/*      defaultChecked*/}
-                {/*      inputProps={{ "aria-label": "ant design" }}*/}
-                {/*    />*/}
-                {/*    <h4 className="text-[16px] font-bold">*/}
-                {/*      Show your exact property location on the map*/}
-                {/*    </h4>*/}
-                {/*  </div>*/}
-                {/*  <p className="text-[#616161] text-[12px]">*/}
-                {/*    Make it clear to potential customers where your location is.*/}
-                {/*    We won’t show your exact property location unless you give*/}
-                {/*    us permission to do so.*/}
-                {/*  </p>*/}
-                {/*</div>*/}
                 {showAddress && (
                   <div className="">
                     <div className="mb-7">
@@ -278,7 +262,10 @@ const GeneralInfo = ({
                   )}
                 </div>
                 <Button
-                  className="w-[247px] h-[56px] mt-8 border border-[#2C72F6]"
+                  className="min-w-[250px]"
+                  icon={ArrowSmallRightIcon}
+                  size={"xl"}
+                  iconPosition={"right"}
                   onClick={async () => {
                     const errors = validateStep1(formik.values);
                     formik.setErrors(errors);
@@ -288,14 +275,8 @@ const GeneralInfo = ({
                       setShowErros(true);
                     }
                   }}
-                  // onClick={handleNext}
-                  // disabled={!formik.values.currency || !formik.values.price}
                 >
                   Next
-                  <Icon
-                    className="text-white align-middle"
-                    icon={ArrowSmallRightIcon}
-                  />
                 </Button>
               </div>
             </div>

@@ -1,7 +1,6 @@
 import React from "react";
-import PropTypes from "prop-types";
 import { ArrowSmallRightIcon } from "@heroicons/react/24/solid";
-import { Button, Icon } from "@tremor/react";
+import { Button } from "@tremor/react";
 import Image, { StaticImageData } from "next/image";
 
 interface StepsTopInfoProps {
@@ -34,24 +33,25 @@ const StepsTopInfo: React.FC<StepsTopInfoProps> = ({
           {title}
         </h4>
         <p className="text-[14px] md:text-[16px] text-[#222] pb-10">{description}</p>
-        <div className="flex items-center justify-between gap-2.5">
+        <div className="flex items-center flex-wrap justify-between gap-4">
           {step > 0 && (
             <Button
-              className="w-2/5 h-[56px] mt-8  bg-transparent border border-[#2C72F6] text-[#2C72F6]"
+              className="w-full lg:max-w-[250px]"
+              size={"xl"}
+              variant={"secondary"}
               onClick={handleBack}
             >
               Go Back
             </Button>
           )}
           <Button
-            className="w-3/5 h-[56px] mt-8 border border-[#2C72F6]"
+            className="w-full lg:max-w-[250px]"
+            icon={ArrowSmallRightIcon}
+            size={"xl"}
+            iconPosition={"right"}
             onClick={onClick}
           >
-            Next{" "}
-            <Icon
-              className="text-white align-middle"
-              icon={ArrowSmallRightIcon}
-            />
+            Next
           </Button>
         </div>
       </div>

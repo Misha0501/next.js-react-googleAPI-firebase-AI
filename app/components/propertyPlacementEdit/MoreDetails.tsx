@@ -1,13 +1,9 @@
 import StepsTopInfo from "./StepsTopInfo";
 import property1 from "@/public/property1.png";
-import { Button, Divider, Icon, NumberInput } from "@tremor/react";
+import { Button, Divider, NumberInput } from "@tremor/react";
 import { useState } from "react";
+import { ArrowSmallRightIcon } from "@heroicons/react/24/solid";
 import {
-  ArrowSmallLeftIcon,
-  ArrowSmallRightIcon,
-} from "@heroicons/react/24/solid";
-import {
-  CreatePropertyFormikPropInterface,
   HEATING_TYPES,
   INTERIOR_TYPES,
   UPKEEP_TYPES,
@@ -17,7 +13,7 @@ import { FormHelperText } from "@mui/material";
 import { FormikProps } from "formik";
 
 interface CreatePropertyComponentPropInterface {
-  formik: FormikProps<CreatePropertyFormikPropInterface>;
+  formik: FormikProps<any>;
   handleNext: () => void;
   handleBack: () => void;
   step: number;
@@ -40,15 +36,6 @@ const MoreDetails = ({
   const check = () => {
     event?.preventDefault();
     let errors: any = {};
-    // if (!formik.values.rooms && formik.values.propertyType !== "LAND") {
-    //   errors.rooms = "Required";
-    // }
-    // if (!formik.values.bedrooms && formik.values.propertyType !== "LAND") {
-    //   errors.bedrooms = "Required";
-    // }
-    // if (!formik.values.bathrooms && formik.values.propertyType !== "LAND") {
-    //   errors.bathrooms = "Required";
-    // }
     if (!formik.values.interiorType && formik.values.propertyType !== "LAND") {
       errors.interiorType = "Required";
     }
@@ -58,39 +45,9 @@ const MoreDetails = ({
     if (!formik.values.heatingType && formik.values.propertyType !== "LAND") {
       errors.heatingType = "Required";
     }
-    // if (!formik.values.yearBuilt && formik.values.propertyType !== "LAND") {
-    //   errors.yearBuilt = "Required";
-    // }
-    // if (
-    //   !formik.values.numberOfFloorsCommon &&
-    //   formik.values.propertyType !== "LAND"
-    // ) {
-    //   errors.numberOfFloorsCommon = "Required";
-    // }
-    // if (!formik.values.floorNumber && formik.values.propertyType !== "LAND") {
-    //   errors.floorNumber = "Required";
-    // }
-    // if (!formik.values.buildingType && formik.values.propertyType !== "LAND") {
-    //   errors.buildingType = "Required";
-    // }
     if (!formik.values.totalArea) {
       errors.totalArea = "Required";
     }
-    // if (!formik.values.livingArea && formik.values.propertyType !== "LAND") {
-    //   errors.livingArea = "Required";
-    // }
-    // if (!formik.values.outsideArea && formik.values.propertyType !== "LAND") {
-    //   errors.outsideArea = "Required";
-    // }
-    // if (!formik.values.garden && formik.values.propertyType !== "LAND") {
-    //   errors.garden = "Required";
-    // }
-    // if (!formik.values.garage && formik.values.propertyType !== "LAND") {
-    //   errors.garage = "Required";
-    // }
-    // if (!formik.values.volume && formik.values.propertyType !== "LAND") {
-    //   errors.volume = "Required";
-    // }
     return errors;
   };
 
@@ -202,28 +159,6 @@ const MoreDetails = ({
                 </div>
               </>
             )}
-            {/*{formik.values.propertyType === "LAND" ? null : (*/}
-            {/*  <>*/}
-            {/*    <Divider className={"my-8 md:my-14"} />*/}
-            {/*    <div className="grid md:grid-cols-2 gap-8 md:gap-16">*/}
-            {/*      <p className={"text-2xl font-bold"}>*/}
-            {/*        Does your property has one or more of the below*/}
-            {/*        characteristics?*/}
-            {/*      </p>*/}
-            {/*      <div className="">*/}
-            {/*        <p className="mb-2">You can select multiple items</p>*/}
-            {/*        <MultiSelectRadioButton*/}
-            {/*          value={formik.values.characteristics}*/}
-            {/*          options={CHARACTERISTICS}*/}
-            {/*          onChange={(e) =>*/}
-            {/*            formik.setFieldValue("characteristics", e, true)*/}
-            {/*          }*/}
-            {/*          id="characteristics"*/}
-            {/*        />*/}
-            {/*      </div>*/}
-            {/*    </div>*/}
-            {/*  </>*/}
-            {/*)}*/}
             <Divider className={"my-8 md:my-14"} />
             <div className="grid md:grid-cols-2 gap-8 md:gap-16">
               <p className={"text-2xl font-bold"}>
@@ -272,11 +207,6 @@ const MoreDetails = ({
                           m2
                         </div>
                       </div>
-                      {/* {showError && formik.errors.livingArea && (
-                    <FormHelperText className="flex justify-end" error>
-                      {formik.errors.livingArea}
-                    </FormHelperText>
-                  )} */}
                     </div>
                     <Divider />
                     <div className="py-6">
@@ -298,11 +228,6 @@ const MoreDetails = ({
                           m2
                         </div>
                       </div>
-                      {/* {showError && formik.errors.outsideArea && (
-                    <FormHelperText className="flex justify-end" error>
-                      {formik.errors.outsideArea}
-                    </FormHelperText>
-                  )} */}
                     </div>
                     <Divider />
                     <div className="py-6">
@@ -323,11 +248,6 @@ const MoreDetails = ({
                           m2
                         </div>
                       </div>
-                      {/* {showError && formik.errors.garden && (
-                    <FormHelperText className="flex justify-end" error>
-                      {formik.errors.garden}
-                    </FormHelperText>
-                  )} */}
                     </div>
                     <Divider />
                     <div className="py-6">
@@ -348,11 +268,6 @@ const MoreDetails = ({
                           m2
                         </div>
                       </div>
-                      {/* {showError && formik.errors.garage && (
-                    <FormHelperText className="flex justify-end" error>
-                      {formik.errors.garage}
-                    </FormHelperText>
-                  )} */}
                     </div>
                     <Divider />
                     <div className="py-6">
@@ -373,11 +288,6 @@ const MoreDetails = ({
                           m3
                         </div>
                       </div>
-                      {/* {showError && formik.errors.volume && (
-                    <FormHelperText className="flex justify-end" error>
-                      {formik.errors.volume}
-                    </FormHelperText>
-                  )} */}
                     </div>
                     <Divider />
                   </>
@@ -503,7 +413,7 @@ const MoreDetails = ({
                             formik.setFieldValue(
                               "numberOfFloorsCommon",
                               e,
-                              true
+                              true,
                             )
                           }
                           error={
@@ -539,66 +449,39 @@ const MoreDetails = ({
                         </FormHelperText>
                       )}
                     </div>
-                    {/*<div className="py-6">*/}
-                    {/*  <p className={"font-bold mb-2"}>Building type</p>*/}
-                    {/*  <div>*/}
-                    {/*    <Select*/}
-                    {/*      onBlur={formik.handleBlur}*/}
-                    {/*      id="buildingType"*/}
-                    {/*      onChange={(e) =>*/}
-                    {/*        formik.setFieldValue("buildingType", e, true)*/}
-                    {/*      }*/}
-                    {/*      className={"text-sm"}*/}
-                    {/*      value={formik.values.buildingType}*/}
-                    {/*    >*/}
-                    {/*      {BUILDING_TYPE.map((item, index) => (*/}
-                    {/*        <SelectItem value={item} key={index}>*/}
-                    {/*          {item}*/}
-                    {/*        </SelectItem>*/}
-                    {/*      ))}*/}
-                    {/*    </Select>*/}
-                    {/*    {showError && formik.errors.buildingType && (*/}
-                    {/*      <FormHelperText error>*/}
-                    {/*        {formik.errors.buildingType}*/}
-                    {/*      </FormHelperText>*/}
-                    {/*    )}*/}
-                    {/*  </div>*/}
-                    {/*</div>*/}
                   </div>
                 </div>
               </>
             )}
-            <div className="flex items-center justify-between gap-2.5">
-              <Button
-                onClick={handleBack}
-                variant="secondary"
-                className="w-2/5 md:w-1/6 h-[56px] mt-20  border  border-[#2C72F6]"
-              >
-                <Icon
-                  className="text-[#2C72F6] align-middle"
-                  icon={ArrowSmallLeftIcon}
-                />
-                Back
-              </Button>
-              <Button
-                className="w-3/5 md:w-1/6 h-[56px] mt-20 border border-[#2C72F6]"
-                // onClick={check}
-                onClick={async () => {
-                  const errors = check();
-                  formik.setErrors(errors);
-                  if (Object.keys(errors).length === 0) {
-                    handleNext();
-                  } else {
-                    setShowErros(true);
-                  }
-                }}
-              >
-                Next{" "}
-                <Icon
-                  className="text-white align-middle"
+            <div className="grid md:grid-cols-2 gap-8 md:gap-16">
+              <div></div>
+              <div className="flex items-center flex-wrap justify-between gap-4 mt-10">
+                <Button
+                  onClick={handleBack}
+                  variant="secondary"
+                  size={"xl"}
+                  className="w-full lg:max-w-[250px]"
+                >
+                  Back
+                </Button>
+                <Button
+                  className="w-full lg:max-w-[250px]"
                   icon={ArrowSmallRightIcon}
-                />
-              </Button>
+                  size={"xl"}
+                  iconPosition={"right"}
+                  onClick={async () => {
+                    const errors = check();
+                    formik.setErrors(errors);
+                    if (Object.keys(errors).length === 0) {
+                      handleNext();
+                    } else {
+                      setShowErros(true);
+                    }
+                  }}
+                >
+                  Next
+                </Button>
+              </div>
             </div>
           </div>
         )}
