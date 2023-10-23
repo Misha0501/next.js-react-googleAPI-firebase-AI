@@ -470,13 +470,29 @@ export async function PUT(req: Request) {
 
     // If there is a price and currency create listing price record
     if (price && currency) {
-      await prisma.listingPrice.create({
-        data: {
+      // check if price is changed
+      const listingPrice = await prisma.listingPrice.findMany({
+        where: {
           listingId: id,
           price,
           currency,
         },
+        orderBy: {
+          id: "desc",
+        },
+        take: 1,
       });
+
+      // if price is changed create a new listing price record
+      if (listingPrice === null || listingPrice.length === 0) {
+        await prisma.listingPrice.create({
+          data: {
+            listingId: id,
+            price,
+            currency,
+          },
+        });
+      }
     }
 
     const updatedListing = await prisma.listing.update({
