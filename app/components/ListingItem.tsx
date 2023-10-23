@@ -56,7 +56,16 @@ export const ListingItem = ({
   };
 
   const getLabel = () => {
-    return "New";
+    // convert string to date
+    const date = new Date(listingItem.createdAt);
+    // get the difference between the current date and the listing date
+    const diffTime = Math.abs(new Date().getTime() - date.getTime());
+    // get the difference in days
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    // if the difference is less than 7 days return new
+    if (diffDays < 7) return "New";
+
+    return null;
   };
 
   const onEditIconClick = () => {
