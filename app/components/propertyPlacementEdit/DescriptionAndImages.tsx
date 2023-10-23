@@ -1,20 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import StepsTopInfo from "./StepsTopInfo";
 import property1 from "@/public/property1.png";
-import { Button, Divider, Icon, TextInput } from "@tremor/react";
-import {
-  ArrowSmallRightIcon,
-  ArrowSmallLeftIcon,
-} from "@heroicons/react/24/solid";
+import { Button, Divider } from "@tremor/react";
+import { ArrowSmallRightIcon } from "@heroicons/react/24/solid";
 
 import { ListingImage } from "@/types";
 import { PlacingPropertyImagesHandler } from "@/app/components/PlacingPropertyImagesHandler";
 import { useGenerateDescription } from "@/providers/GenerateDescription";
-import { CreatePropertyFormikPropInterface } from "../../lib/constants";
 import { FormikProps } from "formik";
 
 interface CreatePropertyComponentPropInterface {
-  formik: FormikProps<CreatePropertyFormikPropInterface>;
+  formik: FormikProps<any>;
   handleNext: () => void;
   handleBack: () => void;
   step: number;
@@ -30,24 +26,14 @@ function DescriptionAndImages({
 }: CreatePropertyComponentPropInterface) {
   // const { formik, handleBack, step, handleNext, isShow } = props;
   const [show, setShow] = useState(true);
-  const [textAreaWordCount, setTextAreaWordCount] = useState(0);
-  const [noOfHighlights, setNoOfHighlights] = useState(0);
   const generate = useGenerateDescription();
-
-  const handleTextAreaChange = (event: any) => {
-    const text = event.target.value;
-    // Split the text by spaces to count words
-    const words = text.trim().split(/\s+/);
-    // Update the word count in the state
-    setTextAreaWordCount(words.length);
-  };
 
   const handleImagesChange = (images: ListingImage[]) => {
     formik.setFieldValue("images", images, true);
   };
 
-  const generateDescription = () => {
-    generate.mutate({
+  const generateDescription = async () => {
+    const generatedDescription = await generate.mutateAsync({
       listingType: formik.values.listingType || null,
       propertyType: formik.values.propertyType || null,
       interiorType: formik.values.interiorType || null,
@@ -56,9 +42,7 @@ function DescriptionAndImages({
       rooms: formik.values.rooms,
       bathrooms: formik.values.bathrooms,
       bedrooms: formik.values.bedrooms,
-      // parking: formik.values.parking,      // Redundant One
       floorNumber: formik.values.floorNumber,
-      // numberOfFloorsProperty: formik.values.numberOfFloorsProperty,      // Redundant One
       numberOfFloorsCommon: formik.values.numberOfFloorsCommon,
       heatingType: formik.values.heatingType || null,
       areaLand: formik.values.totalArea,
@@ -71,13 +55,9 @@ function DescriptionAndImages({
       garage: formik.values.garage,
       garden: formik.values.garden,
     });
-  };
 
-  useEffect(() => {
-    if (generate.isSuccess) {
-      formik.setFieldValue("description", generate?.data, true);
-    }
-  }, [generate.isSuccess]);
+    await formik.setFieldValue("description", generatedDescription, true);
+  };
 
   const stepNumber = "Step 3";
   const title = "Make your space stand out!";
@@ -146,13 +126,19 @@ function DescriptionAndImages({
                 >
                   Generate
                 </Button>
+
+                {/* Show error message */}
+                {generate.isError && (
+                  <div className="text-red-500">
+                    Oops! Something went wrong. Please try generating again later.
+                  </div>
+                )}
+
                 <textarea
                   disabled={generate.isLoading}
                   onChange={(e) => {
-                    setTextAreaWordCount(e.target.value.length);
                     formik.setFieldValue("description", e.target.value);
                   }}
-                  // maxLength={4000}
                   value={formik.values.description}
                   name="description"
                   id="description"

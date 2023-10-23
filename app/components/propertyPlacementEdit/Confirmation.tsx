@@ -22,7 +22,6 @@ function Confirmation({
   formik,
   handleBack,
   step,
-  isShow,
 }: CreatePropertyComponentPropInterface) {
   const { authToken } = useAuthContext();
   const title = "Confirm your advertisement";
@@ -209,9 +208,7 @@ function Confirmation({
               <div className="detail_single_box">
                 <div className="flex justify-between">
                   <p className={"font-bold text-[18px]  mb-2"}>Asking Price</p>
-                  {/* <Icon icon={PencilSquareIcon} /> */}
                 </div>
-
                 <p className="pt-2 text-[16px]">
                   {formik.values.price} {formik.values.currency}
                 </p>
@@ -248,7 +245,7 @@ function Confirmation({
                   </div>
                   <Divider />
                 </>
-              )}}
+              )}
               <div className="detail_single_box">
                 <div className="flex justify-between">
                   <p className={"font-bold text-[18px] mb-2"}>

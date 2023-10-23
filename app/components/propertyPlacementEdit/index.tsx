@@ -2,9 +2,8 @@
 import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import Step from "@mui/material/Step";
-import { Grid, Typography } from "@mui/material";
+import { Grid } from "@mui/material";
 import StepLabel from "@mui/material/StepLabel";
-import LinearProgress from "@mui/material/LinearProgress";
 import GeneralInfo from "./GeneralInfo";
 import MoreDetails from "./MoreDetails";
 import DescriptionAndImages from "./DescriptionAndImages";
