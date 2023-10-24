@@ -6,6 +6,8 @@ import {
   HeartIcon,
   Square3Stack3DIcon,
 } from "@heroicons/react/24/outline";
+
+import { HeartIcon as HeartIconSolid } from "@heroicons/react/24/solid";
 import {
   BarChart,
   Button,
@@ -40,6 +42,15 @@ import Link from "next/link";
 import { GridIcon } from "@/public/GridIcon";
 import { formatToDayAndMonthWithName } from "@/app/lib/formatToDayAndMonthWithName";
 import { ListingDetailImages } from "@/app/components/listingDetailPage/ListingDetailImages";
+import {
+  useCreateSavedListing,
+  useDeleteSavedListing,
+  useSavedListings,
+} from "@/providers/SavedListings";
+import { SavedListing } from "@/types";
+import { toast } from "react-toastify";
+import { Modal } from "@/app/components/Modal";
+import { CircularProgress } from "@mui/material";
 
 const ListingDetail = () => {
   const { authToken } = useAuthContext();
@@ -50,13 +61,18 @@ const ListingDetail = () => {
   const listingDetail = useListingDetailPage({ id: listingId });
   const [openLightBox, setOpenLightBox] = useState(false);
   const [lightBoxImageIndex, setLightBoxImageIndex] = useState(0);
+  let [showAuthModal, setShowAuthModal] = useState(false);
+  const savedListings = useSavedListings({ authToken });
   const createRecentlyViewedListing = useCreateRecentlyViewedListing({
     authToken,
   });
+
   const [
     averagePriceNeighborhoodChartData,
     setAveragePriceNeighborhoodChartData,
   ] = useState();
+  const createSavedListing = useCreateSavedListing({ authToken });
+  const deleteSavedListing = useDeleteSavedListing({ authToken });
 
   const listing = useMemo(() => {
     if (listingDetail?.data) {
@@ -65,8 +81,45 @@ const ListingDetail = () => {
     return null;
   }, [listingDetail?.data]);
 
+  const { isListingSaved, savedListing } = useMemo(() => {
+    if (savedListings?.data?.results) {
+      const savedListing = savedListings.data.results.find(
+        (savedListing: SavedListing) => savedListing.listingId === listingId,
+      );
+
+      return {
+        isListingSaved: !!savedListing,
+        savedListing,
+      };
+    }
+
+    return {
+      isListingSaved: false,
+      savedListing: null,
+    };
+  }, [savedListings?.data, listingId]);
+
+  const savedIconIsLoading = useMemo(
+    () =>
+      listingDetail.isLoading ||
+      listingDetail.isFetching ||
+      savedListings.isLoading ||
+      savedListings.isFetching ||
+      createSavedListing.isLoading ||
+      deleteSavedListing.isLoading,
+    [
+      listingDetail.isLoading,
+      listingDetail.isFetching,
+      savedListings.isLoading,
+      savedListings.isFetching,
+      createSavedListing.isLoading,
+      deleteSavedListing.isLoading
+    ]
+  );
+
   useEffect(() => {
     if (listing?.averagePriceInNeighborhood) {
+      // @ts-ignore
       setAveragePriceNeighborhoodChartData([
         {
           name: "Average price in the neighborhood",
@@ -84,6 +137,29 @@ const ListingDetail = () => {
 
   const dataFormatter = (number: number) => {
     return "€ " + Intl.NumberFormat("eu").format(number).toString();
+  };
+
+  const handleSavedIconClick = async () => {
+    // if user is not logged in show the auth modal
+    if (!authToken) {
+      setShowAuthModal(true);
+      return;
+    }
+
+    try {
+      if (!isListingSaved) {
+        // if listings isn't saved do a post request to save it
+        await createSavedListing.mutateAsync({
+          listingId,
+        });
+      } else {
+        // if it's saved do a delete request
+        await deleteSavedListing.mutateAsync({ id: savedListing.id });
+      }
+      await savedListings.refetch();
+    } catch (error) {
+      toast.error("Oops! Something went wrong. Please try again later.");
+    }
   };
 
   let stats = useMemo(
@@ -193,20 +269,32 @@ const ListingDetail = () => {
           slides={slides}
           index={lightBoxImageIndex}
         />
-        <div className="pt-0 lg:pt-10">
+        <div className="pt-8 lg:pt-10">
           <div className="flex items-center justify-between">
-            <h1 className="capitalize font-bold text-3xl pt-8">
-              {listing?.propertyType}
-              {listing?.rooms ? ` ${listing?.rooms} ROOMS` : ""}
-              {listing?.Address?.[0]?.locality
-                ? ` IN ${listing?.Address?.[0]?.locality?.toUpperCase()}`
-                : null}
-              {listing?.listingType ? ` FOR ${listing?.listingType}` : null}
-            </h1>
+            <div className="">
+              <h1 className="capitalize font-bold text-3xl">
+                {listing?.propertyType}
+                {listing?.rooms ? ` ${listing?.rooms} ROOMS` : ""}
+                {listing?.Address?.[0]?.locality
+                  ? ` IN ${listing?.Address?.[0]?.locality?.toUpperCase()}`
+                  : null}
+                {listing?.listingType ? ` FOR ${listing?.listingType}` : null}
+              </h1>
+              <p className="pt-2 lg:px-0 text-[18px] text-[#848484] mb-3">
+                {listing?.Address?.[0]?.route}
+              </p>
+            </div>
+            <Button
+              icon={isListingSaved ? HeartIconSolid : HeartIcon}
+              variant={"secondary"}
+              loading={savedIconIsLoading}
+              className={"hidden lg:flex"}
+              onClick={handleSavedIconClick}
+            >
+              Favourite
+            </Button>
           </div>
-          <p className="pt-2 lg:px-0 text-[18px] text-[#848484] mb-3">
-            {listing?.Address?.[0]?.route}
-          </p>
+
           <div className="mt-0 lg:mt-8 lg:mb-4">
             <ListingDetailImages
               images={listing?.ListingImage || []}
@@ -297,11 +385,14 @@ const ListingDetail = () => {
                     </Link>
                   </div>
                   <div>
-                    <Icon
-                      size="sm"
-                      className="text-[#222222] border-2 border-solid border-[#222222]  rounded-full h-10 w-10 justify-center"
-                      icon={HeartIcon}
-                    />
+                    {savedIconIsLoading ? <CircularProgress size={28} /> :
+                      <Icon
+                        size="sm"
+                        onClick={handleSavedIconClick}
+                        className="text-gray-500 border border-solid border-gray-500 rounded-full h-10 w-10 justify-center hover:cursor-pointer"
+                        icon={isListingSaved ? HeartIconSolid : HeartIcon}
+                      />
+                    }
                   </div>
                 </div>
                 <Divider className="mb-0 " />
@@ -398,6 +489,14 @@ const ListingDetail = () => {
       <FloatingContactBar
         phoneNumber={contactNumber}
         onContactClick={handleContactAgentClick}
+      />
+
+      <Modal
+        title={"To save property please log in or create an account."}
+        show={showAuthModal}
+        onClose={() => setShowAuthModal(false)}
+        onCancelClick={() => setShowAuthModal(false)}
+        onSubmitClick={() => router.push("/signin")}
       />
     </div>
   );

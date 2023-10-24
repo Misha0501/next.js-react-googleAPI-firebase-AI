@@ -1,13 +1,29 @@
 import { Divider } from "@tremor/react";
 import { useState } from "react";
 
+type Prop = {
+  generalInfo: {
+    title: string;
+    value: string;
+  }[];
+  areaAndCapacity: {
+    title: string;
+    value: string;
+  }[];
+  construction: {
+    title: string;
+    value: string;
+  }[];
+  heatingType: string;
+  description: string;
+}
 const ListingDetailContent = ({
   generalInfo,
   areaAndCapacity,
   construction,
   heatingType,
   description,
-}) => {
+}: Prop) => {
   const [showMore, setShowMore] = useState(false);
   return (
     <>
