@@ -5,7 +5,7 @@ import { Listing, SavedListing } from "@/types";
  * @param listings List of listings
  * @param savedListings List of saved listings
  */
-export const getPopulatedListingsSaved = (listings: Listing[], savedListings: SavedListing[]) => {
+export const getPopulatedListingsSaved = (listings: Listing[], savedListings: SavedListing[]): Listing[] => {
     if(!listings || !listings.length) return [];
     if(!savedListings || !savedListings.length) return listings;
 

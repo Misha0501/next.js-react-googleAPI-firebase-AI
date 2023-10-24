@@ -11,13 +11,20 @@ import { useParams, useRouter } from "next/navigation";
 import { CircularProgress } from "@mui/material";
 import FloatingContactBar from "../FloatingContactBar";
 import { EnvelopeIcon, MapIcon, PhoneIcon } from "@heroicons/react/24/outline";
+import { getPopulatedListingsSaved } from "@/app/lib/listing/getPopulatedListingsSaved";
+import { useAuthContext } from "@/app/context/AuthContext";
+import { useSavedListings } from "@/providers/SavedListings";
+import { Listing } from "@/types";
 
 function UserPageMain() {
+  const { authToken } = useAuthContext();
   const params = useParams();
   const id = Number(params?.id);
   const userDetail = useUserDetail({ id });
 
   const router = useRouter();
+
+  const usersSavedListings = useSavedListings({ authToken });
 
   const company = useMemo(() => {
     if (userDetail?.data?.Company) {
@@ -37,6 +44,13 @@ function UserPageMain() {
       return userDetail?.data?.Listing;
     }
   }, [userDetail?.data]);
+
+  const populatedListings = useMemo(() => {
+    return getPopulatedListingsSaved(
+      (propertyListing as Listing[] | undefined) || [],
+      usersSavedListings?.data?.results,
+    );
+  }, [propertyListing, usersSavedListings?.data?.results]);
 
   const handleContactAgentClick = () => {
     // navigate to the contact form
@@ -159,10 +173,9 @@ function UserPageMain() {
                         <MapIcon width={15} height={15} />
                         <p className="text-md ml-2 text-[#717D96]">
                           {company?.Address?.[0]?.streetNumber}{" "}
-                          {company?.Address?.[0]?.route}, {" "}
-                          {company?.Address?.[0]?.locality}, {" "}
+                          {company?.Address?.[0]?.route},{" "}
+                          {company?.Address?.[0]?.locality},{" "}
                           {company?.Address?.[0]?.postalCode}
-
                         </p>
                       </div>
                     </div>
@@ -199,21 +212,17 @@ function UserPageMain() {
             <div id={"contactAgentForm"}>
               <ListingContactAgentForm
                 name={userDetail?.data?.displayName ?? ""}
-                emailTo={
-                  company?.email ??
-                  userDetail?.data?.email ??
-                  ""
-                }
+                emailTo={company?.email ?? userDetail?.data?.email ?? ""}
                 subject={"Someone is interested in your company!"}
               />
             </div>
           </div>
           <div id="propertiesSection" className="flex flex-col gap-12">
             <p className="font-bold text-2xl text-[#222222]">Properties</p>
-            {propertyListing?.length ? (
+            {populatedListings?.length ? (
               <div className="grid grid-cols-1 xl:grid-cols-3 gap-x-6 gap-y-10">
-                {propertyListing &&
-                  propertyListing.map((item, index) => (
+                {populatedListings &&
+                  populatedListings.map((item, index) => (
                     <ListingItem
                       listingItemInitial={item}
                       key={index}
