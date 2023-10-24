@@ -30,8 +30,8 @@ const ListingDetailContent = ({
       {description && (
         <>
           <div className="pb-6">
-            <p className="text-[24px]">Description</p>
-            <p className="text-[16px] pt-4 text-[#222222] font-light">
+            <p className="text-2xl">Description</p>
+            <p className="pt-4 text-gray-500 font-light">
               {showMore
                 ? description
                 : `${description?.substring(0, 400)} .....`}
@@ -43,51 +43,51 @@ const ListingDetailContent = ({
               Show More
             </p>
           </div>
-          <Divider />
+          <Divider className={"hidden lg:block"} />
         </>
       )}
       <div className="pb-6">
-        <p className="text-[24px]">General information</p>
+        <p className="text-2xl">General information</p>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-6 pt-8 ">
           {generalInfo.map((item, index) => (
             <div key={index} className="flex justify-between sm:border-0 border-b border-gray-200 sm:pb-0 pb-3.5">
-              <p className="text-[16px] text-[#848484]">{item.title}</p>
-              <p className="text-[16px]">{item.value || "-"}</p>
+              <p className="text-gray-500">{item.title}</p>
+              <p>{item.value || "-"}</p>
             </div>
           ))}
         </div>
       </div>
-      <Divider />
+      <Divider className={"hidden lg:block"} />
       <div className="pb-6">
-        <p className="text-[24px]">Area and Capacity</p>
+        <p className="text-2xl">Area and Capacity</p>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-6 pt-8">
           {areaAndCapacity?.map((item, index) => (
             <div key={index} className="flex justify-between sm:border-0 border-b border-gray-200 sm:pb-0 pb-3.5">
-              <p className="text-[16px] text-[#848484]">{item.title}</p>
-              <p className="text-[16px]">{item.value || "-"}</p>
+              <p className="text-gray-500">{item.title}</p>
+              <p>{item.value || "-"}</p>
             </div>
           ))}
         </div>
       </div>
-      <Divider />
+      <Divider className={"hidden lg:block"} />
       <div className="pb-6">
-        <p className="text-[24px]">Construction</p>
+        <p className="text-2xl">Construction</p>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-6 pt-8">
           {construction?.map((item, index) => (
             <div key={index} className="flex justify-between sm:border-0 border-b border-gray-200 sm:pb-0 pb-3.5">
-              <p className="text-[16px] text-[#848484]">{item.title}</p>
-              <p className="text-[16px]">{item.value || "-"}</p>
+              <p className="text-gray-500">{item.title}</p>
+              <p>{item.value || "-"}</p>
             </div>
           ))}
         </div>
       </div>
-      <Divider />
+      <Divider className={"hidden lg:block"} />
       <div className="pb-6">
-        <p className="text-[24px]">Heating</p>
+        <p className="text-2xl">Heating</p>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-6 pt-8">
           <div className="flex justify-between sm:border-0 border-b border-gray-200 sm:pb-0 pb-3.5">
-            <p className="text-[16px] text-[#848484]">Heating Type</p>
-            <p className="text-[16px]">{heatingType || "-"}</p>
+            <p className="text-gray-500">Heating Type</p>
+            <p>{heatingType || "-"}</p>
           </div>
         </div>
       </div>

@@ -395,7 +395,7 @@ const ListingDetail = () => {
                     }
                   </div>
                 </div>
-                <Divider className="mb-0 " />
+                <Divider className="mb-0 hidden lg:block" />
               </div>
               <div className="pt-10 sm:pt-16">
                 <ListingDetailContent
@@ -406,9 +406,10 @@ const ListingDetail = () => {
                   description={listing?.description}
                 />
               </div>
+              <Divider className="hidden lg:block" />
               {listing?.Address[0].latitude && (
                 <div id="mapSection">
-                  <p className="text-[24px] pb-8">View on map</p>
+                  <p className="text-2xl pb-8">View on map</p>
                   <GoogleMap
                     location={{
                       lat: parseFloat(listing?.Address[0]?.latitude),
