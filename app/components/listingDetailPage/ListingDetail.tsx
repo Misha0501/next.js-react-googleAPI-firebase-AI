@@ -46,6 +46,7 @@ const ListingDetail = () => {
   const { authToken } = useAuthContext();
   const params = useParams();
   const listingId = Number(params?.id);
+
   const [showContactWithAgent, setShowContactWithAgent] = useState(false);
   const listingDetail = useListingDetailPage({ id: listingId });
   const [openLightBox, setOpenLightBox] = useState(false);
@@ -58,21 +59,28 @@ const ListingDetail = () => {
     setAveragePriceNeighborhoodChartData,
   ] = useState();
 
+  const listing = useMemo(() => {
+    if (listingDetail?.data) {
+      return listingDetail.data;
+    }
+    return null;
+  }, [listingDetail?.data]);
+
   useEffect(() => {
-    if (listingDetail?.data?.averagePriceInNeighborhood) {
+    if (listing?.averagePriceInNeighborhood) {
       setAveragePriceNeighborhoodChartData([
         {
           name: "Average price in the neighborhood",
-          "Listing price": listingDetail?.data?.averagePriceInNeighborhood,
+          "Listing price": listing?.averagePriceInNeighborhood,
         },
         {
           name: "This listing's price",
-          "Listing price": listingDetail?.data?.price,
+          "Listing price": listing?.price,
         },
       ]);
     }
   }, [
-    listingDetail?.data?.averagePriceInNeighborhood,
+    listing?.averagePriceInNeighborhood,
     listingDetail.isSuccess,
   ]);
 
@@ -86,67 +94,67 @@ const ListingDetail = () => {
     () => [
       {
         title: "Rooms",
-        value: listingDetail?.data?.rooms,
+        value: listing?.rooms,
         icon: Square3Stack3DIcon,
       },
       {
         title: "Bedrooms",
-        value: listingDetail?.data?.bedrooms,
+        value: listing?.bedrooms,
         icon: BedIcon,
       },
       {
         title: "Square Area",
-        value: listingDetail?.data?.areaTotal,
+        value: listing?.areaTotal,
         icon: GridIcon,
       },
       {
         title: "Offered since",
         value: formatToDayAndMonthWithName(
-          listingDetail?.data?.createdAt ?? "",
+          listing?.createdAt ?? "",
         ),
         icon: ClockIcon,
       },
     ],
-    [listingDetail?.data],
+    [listing],
   );
 
   let generalInfo = useMemo(
     () => [
-      { title: "Price", value: listingDetail.data?.price },
-      { title: "Amount of Rooms", value: listingDetail.data?.rooms },
-      { title: "Offered Since", value: listingDetail.data?.createdAt },
-      { title: "Amount of bathrooms", value: listingDetail.data?.bathrooms },
-      { title: "Status", value: listingDetail.data?.active },
-      { title: "Amount of bedrooms", value: listingDetail.data?.bedrooms },
-      { title: "Interior", value: listingDetail.data?.interiorType },
-      { title: "Heating", value: listingDetail.data?.heatingType },
-      { title: "Upkeep", value: listingDetail.data?.upkeepType },
-      { title: "Parking area", value: listingDetail.data?.parking },
-      { title: "Floor", value: listingDetail.data?.floorNumber },
-      { title: "Balcony/terrace", value: listingDetail?.data?.balcony },
+      { title: "Price", value: listing?.price },
+      { title: "Amount of Rooms", value: listing?.rooms },
+      { title: "Offered Since", value: listing?.createdAt },
+      { title: "Amount of bathrooms", value: listing?.bathrooms },
+      { title: "Status", value: listing?.active },
+      { title: "Amount of bedrooms", value: listing?.bedrooms },
+      { title: "Interior", value: listing?.interiorType },
+      { title: "Heating", value: listing?.heatingType },
+      { title: "Upkeep", value: listing?.upkeepType },
+      { title: "Parking area", value: listing?.parking },
+      { title: "Floor", value: listing?.floorNumber },
+      { title: "Balcony/terrace", value: listing?.balcony },
     ],
     [listingDetail?.data],
   );
 
   let areaAndCapacity = useMemo(
     () => [
-      { title: "Total area", value: listingDetail.data?.areaTotal },
-      { title: "Outside area", value: listingDetail.data?.areaOutside },
-      { title: "Living area", value: listingDetail.data?.areaLiving },
-      { title: "Garden", value: listingDetail.data?.areaGarden },
-      { title: "Volume", value: listingDetail.data?.volume },
-      { title: "Garage", value: listingDetail.data?.areaGarage },
+      { title: "Total area", value: listing?.areaTotal },
+      { title: "Outside area", value: listing?.areaOutside },
+      { title: "Living area", value: listing?.areaLiving },
+      { title: "Garden", value: listing?.areaGarden },
+      { title: "Volume", value: listing?.volume },
+      { title: "Garage", value: listing?.areaGarage },
     ],
     [listingDetail?.data],
   );
 
   let construction = useMemo(
     () => [
-      { title: "Building type", value: listingDetail.data?.buildingType },
-      { title: "Year built", value: listingDetail.data?.constructedYear },
+      { title: "Building type", value: listing?.buildingType },
+      { title: "Year built", value: listing?.constructedYear },
       {
         title: "Number of Floor",
-        value: listingDetail.data?.numberOfFloorsProperty,
+        value: listing?.numberOfFloorsProperty,
       },
     ],
     [listingDetail?.data],
@@ -172,13 +180,13 @@ const ListingDetail = () => {
     router.push("#contactAgentForm");
   };
 
-  const slides = listingDetail?.data?.ListingImage.map((item) => ({
+  const slides = listing?.ListingImage.map((item) => ({
     src: item.url,
   }));
 
   let contactNumber =
-    listingDetail?.data?.company?.phoneNumber ??
-    listingDetail?.data?.applicationUser?.phoneNumber ??
+    listing?.company?.phoneNumber ??
+    listing?.applicationUser?.phoneNumber ??
     "";
 
   return (
@@ -194,24 +202,24 @@ const ListingDetail = () => {
         <div className="pt-0 lg:pt-10">
           <div className="flex items-center justify-between">
             <h1 className="capitalize font-bold text-3xl pt-8">
-              {listingDetail?.data?.propertyType}
-              {listingDetail?.data?.rooms
-                ? ` ${listingDetail?.data?.rooms} ROOMS`
+              {listing?.propertyType}
+              {listing?.rooms
+                ? ` ${listing?.rooms} ROOMS`
                 : ""}
-              {listingDetail?.data?.Address?.[0]?.locality
-                ? ` IN ${listingDetail?.data?.Address?.[0]?.locality?.toUpperCase()}`
+              {listing?.Address?.[0]?.locality
+                ? ` IN ${listing?.Address?.[0]?.locality?.toUpperCase()}`
                 : null}
-              {listingDetail?.data?.listingType
-                ? ` FOR ${listingDetail?.data?.listingType}`
+              {listing?.listingType
+                ? ` FOR ${listing?.listingType}`
                 : null}
             </h1>
           </div>
           <p className="pt-2 lg:px-0 text-[18px] text-[#848484] mb-3">
-            {listingDetail?.data?.Address?.[0]?.route}
+            {listing?.Address?.[0]?.route}
           </p>
-          <div className=" relative pt-0 lg:pt-8">
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-0 lg:gap-4">
-              {listingDetail?.data?.ListingImage?.[0]?.url && (
+          <div className="relative pt-0 lg:pt-8">
+            <div className={`grid grid-cols-1 lg:grid-cols-3 gap-0 lg:gap-4`}>
+              {listing?.ListingImage?.[0]?.url && (
                 <div
                   onClick={() => handleOpenLightBox(0)}
                   className="col-span-2"
@@ -223,14 +231,14 @@ const ListingDetail = () => {
                     height={230}
                     width={380}
                     sizes="100vw"
-                    src={listingDetail?.data?.ListingImage?.[0]?.url}
+                    src={listing?.ListingImage?.[0]?.url}
                     alt="property"
                     // fill={true}
                   />
                 </div>
               )}
               <div>
-                {listingDetail?.data?.ListingImage?.[1]?.url && (
+                {listing?.ListingImage?.[1]?.url && (
                   <div
                     className="hidden lg:block"
                     onClick={() => handleOpenLightBox(1)}
@@ -241,12 +249,12 @@ const ListingDetail = () => {
                       }
                       height={230}
                       width={380}
-                      src={listingDetail?.data?.ListingImage?.[1]?.url}
+                      src={listing?.ListingImage?.[1]?.url}
                       alt="property"
                     />
                   </div>
                 )}
-                {listingDetail?.data?.ListingImage?.[2]?.url && (
+                {listing?.ListingImage?.[2]?.url && (
                   <div
                     className="hidden lg:block"
                     onClick={() => handleOpenLightBox(2)}
@@ -257,7 +265,7 @@ const ListingDetail = () => {
                       }
                       height={230}
                       width={380}
-                      src={listingDetail?.data?.ListingImage?.[2]?.url}
+                      src={listing?.ListingImage?.[2]?.url}
                       alt="property"
                       // placeholder="blur" // Optional blur-up while loading
                     />
@@ -265,7 +273,7 @@ const ListingDetail = () => {
                 )}
               </div>
             </div>
-            {listingDetail?.data?.ListingImage?.[2]?.url && (
+            {listing?.ListingImage?.[2]?.url && (
               <Button
                 onClick={() => setOpenLightBox(true)}
                 className="absolute bottom-6 right-6 text-white bg-[#97B6FF]  p-3 rounded-lg text-sm border-none  justify-center max-w-sm text-center hidden lg:inline-flex"
@@ -277,7 +285,6 @@ const ListingDetail = () => {
           </div>
 
           {/* Mobile Resolution */}
-
           <div className="block lg:hidden bg-[#F2F2F2] mb-4 border-b border-[#ccc]">
             {/* <Divider /> */}
             <div className="flex justify-around py-4">
@@ -331,35 +338,35 @@ const ListingDetail = () => {
                   <div className="price_details flex justify-between">
                     <div>
                       <h2 className="text-2xl font-bold">
-                        €{listingDetail.data?.price}{" "}
+                        €{listing?.price}{" "}
                         <small className="text-[#717D96] ml-2">
-                          {listingDetail.data?.areaTotal}/m2
+                          {listing?.areaTotal}/m2
                         </small>
                       </h2>
                       <h3 className="text-[#717D96] text-xl font-bold mt-3">
-                        {listingDetail?.data?.Address[0]?.locality}
+                        {listing?.Address[0]?.locality}
                       </h3>
                       <div className="flex my-3">
                         <div className="flex items-center mr-3">
                           <WindowsIcon />
                           <p className="ml-2 text-[#717D96] text-base">
-                            {listingDetail?.data?.areaTotal} m2
+                            {listing?.areaTotal} m2
                           </p>
                         </div>
                         <div className="flex items-center">
                           <BedRoomIcon />
                           <p className="ml-2 text-[#717D96] text-base">
-                            {listingDetail?.data?.bedrooms} bedrooms
+                            {listing?.bedrooms} bedrooms
                           </p>
                         </div>
                       </div>
                       <Link
-                        href={`/users/${listingDetail?.data?.applicationUser?.id}`}
+                        href={`/users/${listing?.applicationUser?.id}`}
                       >
                         <p className="text-[#717D96] text-base">
-                          {listingDetail?.data?.company?.name
-                            ? listingDetail?.data?.company?.name
-                            : listingDetail?.data?.applicationUser?.displayName}
+                          {listing?.company?.name
+                            ? listing?.company?.name
+                            : listing?.applicationUser?.displayName}
                         </p>
                       </Link>
                     </div>
@@ -378,22 +385,22 @@ const ListingDetail = () => {
                     areaAndCapacity={areaAndCapacity}
                     generalInfo={generalInfo}
                     construction={construction}
-                    heatingType={listingDetail?.data?.heatingType}
-                    description={listingDetail?.data?.description}
+                    heatingType={listing?.heatingType}
+                    description={listing?.description}
                   />
                 </div>
-                {listingDetail?.data?.Address[0].latitude && (
+                {listing?.Address[0].latitude && (
                   <div id="mapSection">
                     <p className="text-[24px] pb-8">View on map</p>
                     <GoogleMap
                       location={{
                         lat: parseFloat(
-                          listingDetail?.data?.Address[0]?.latitude,
+                          listing?.Address[0]?.latitude,
                         ),
                         lng: parseFloat(
-                          listingDetail?.data?.Address[0]?.longitude,
+                          listing?.Address[0]?.longitude,
                         ),
-                        address: listingDetail?.data?.Address[0]?.locality,
+                        address: listing?.Address[0]?.locality,
                       }}
                     />
                     {/*<p className="text-[14] pt-8">See more results</p>*/}
@@ -410,12 +417,12 @@ const ListingDetail = () => {
                     <div id={"contactAgentForm"}>
                       <ListingContactAgentForm
                         name={
-                          listingDetail?.data?.company?.name ||
-                          listingDetail?.data?.applicationUser?.displayName
+                          listing?.company?.name ||
+                          listing?.applicationUser?.displayName
                         }
                         emailTo={
-                          listingDetail?.data?.company?.email ||
-                          listingDetail?.data?.applicationUser?.email
+                          listing?.company?.email ||
+                          listing?.applicationUser?.email
                         }
                       />
                     </div>
@@ -433,7 +440,7 @@ const ListingDetail = () => {
             <p className="font-medium text-[24px]">Price comparison graph</p>
             <Title className="pt-8">
               This graph shows the average price in the neighborhood{" "}
-              {listingDetail?.data?.Address[0]?.neighborhood} for properties
+              {listing?.Address[0]?.neighborhood} for properties
               with the same type compared to this listing.
             </Title>
             <BarChart
@@ -449,17 +456,17 @@ const ListingDetail = () => {
         </div>
       )}
 
-      {listingDetail?.data?.ListingPrice?.length > 1 && (
+      {listing?.ListingPrice?.length > 1 && (
         <div className="lg:pt-8">
           <div className="container">
             <p className="font-medium text-[24px] pt-14">Price change graph</p>
             <Title className="pt-8">
               This listing has changed its price{" "}
-              {listingDetail?.data?.ListingPrice?.length} times
+              {listing?.ListingPrice?.length} times
             </Title>
             <LineChart
               className="mt-6"
-              data={listingDetail?.data?.ListingPrice || []}
+              data={listing?.ListingPrice || []}
               index="updatedAt"
               categories={["price"]}
               colors={["emerald"]}
