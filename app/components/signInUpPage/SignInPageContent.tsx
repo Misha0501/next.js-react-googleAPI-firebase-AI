@@ -16,7 +16,7 @@ export default function SignInPageContent() {
     ui.start("#firebaseui", {
       signInOptions: [
         firebase.auth.EmailAuthProvider.PROVIDER_ID,
-        // firebase.auth.GoogleAuthProvider.PROVIDER_ID
+        firebase.auth.GoogleAuthProvider.PROVIDER_ID
       ],
       signInSuccessUrl: `/profile/myAccount`,
       // Other config options...
