@@ -53,13 +53,12 @@ export const InvitesTab = () => {
     authToken,
   });
   const deleteCompanyMembershipInvite = useDeleteCompanyMembershipInvite({
-    authToken
+    authToken,
   });
 
   const createMembership = useCreateMembership({ authToken });
   const [inviteToDelete, setInviteToDelete] =
     useState<CompanyMembershipInvite | null>(null);
-  
 
   const formik = useFormik({
     initialValues: {
@@ -151,7 +150,7 @@ export const InvitesTab = () => {
 
       await deleteCompanyMembershipInvite.mutateAsync({
         id: inviteToDelete?.id,
-      })
+      });
 
       toast.success("Invite deleted");
 
@@ -357,8 +356,11 @@ export const InvitesTab = () => {
           </div>
           {companyMembershipInvites.isSuccess &&
             companyMembershipInvites?.data &&
-            !companyMembershipInvites?.data?.length &&
-            "No invites"}
+            !companyMembershipInvites?.data?.length && (
+              <p className={"text-gray-500"}>
+                You havent received any invites yet
+              </p>
+            )}
         </div>
       </div>
       {/* Confirmation modal*/}

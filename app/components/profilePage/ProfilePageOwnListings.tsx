@@ -7,6 +7,8 @@ import { Dialog, Transition } from "@headlessui/react";
 import { useAuthContext } from "@/app/context/AuthContext";
 import { useDeleteListing } from "@/providers/Listing";
 import { toast } from "react-toastify";
+import Link from "next/link";
+import { Button } from "@tremor/react";
 
 type Props = {
   initialListings: Listing[];
@@ -32,7 +34,8 @@ export const ProfilePageOwnListings = ({ initialListings }: Props) => {
     if (!listingToDelete) return;
 
     deleteListingQuery
-      .mutateAsync({ id: listingToDelete.id }).catch((error) => {
+      .mutateAsync({ id: listingToDelete.id })
+      .catch((error) => {
         console.error(error.message);
         toast.error(error.message);
         closeModal();
@@ -60,6 +63,14 @@ export const ProfilePageOwnListings = ({ initialListings }: Props) => {
               ownerView={true}
             />
           ))}
+        {(!listings || !listings.length) && (
+          <div>
+            <p className="text-gray-500 mb-4">You haven&apos;t placed any properties yet</p>
+            <Link href={`/placeproperties`}>
+              <Button>Place a property</Button>
+            </Link>
+          </div>
+        )}
       </div>
 
       <Transition appear show={deleteConfirmationModalOpen} as={Fragment}>

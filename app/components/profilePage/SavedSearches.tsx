@@ -12,6 +12,7 @@ import {
 import { toast } from "react-toastify";
 import { Button } from "@tremor/react";
 import { CircularProgress } from "@mui/material";
+import Link from "next/link";
 
 export const SavedSearches = () => {
   const { authToken } = useAuthContext();
@@ -69,16 +70,29 @@ export const SavedSearches = () => {
       {error && <p>{error}</p>}
       {!isLoading && !error && (
         <div>
-          <div className="flex justify-between items-baseline mb-10">
-            <div className="text-xl">
-              <span className={"font-bold"}>Results: </span>{" "}
-              {savedSearchesTotal}{" "}
-              {savedSearchesTotal === 0 || savedSearchesTotal > 1
-                ? "searches"
-                : "search"}{" "}
-              saved
+          {savedSearchesTotal != 0 && (
+            <div className="flex justify-between items-baseline mb-10">
+              <div className="text-xl">
+                <span className={"font-bold"}>Results: </span>{" "}
+                {savedSearchesTotal}{" "}
+                {savedSearchesTotal === 0 || savedSearchesTotal > 1
+                  ? "searches"
+                  : "search"}{" "}
+                saved
+              </div>
             </div>
-          </div>
+          )}
+
+          {!savedSearchesTotal && (
+            <div>
+              <p className="text-gray-500 mb-4">
+                You haven&apos;t saved any search yet
+              </p>
+              <Link href={`/listings`}>
+                <Button>Browse properties</Button>
+              </Link>
+            </div>
+          )}
 
           <div className={"flex flex-col gap-12"}>
             {savedSearches &&

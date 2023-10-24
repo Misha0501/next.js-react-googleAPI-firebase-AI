@@ -15,6 +15,7 @@ import { PropertiesTab } from "@/app/components/profilePage/PropertiesTab";
 import { ProfilePageOwnListings } from "@/app/components/profilePage/ProfilePageOwnListings";
 import { useUserOwnData } from "@/providers/Users";
 import { CircularProgress } from "@mui/material";
+import { Listing } from "@/types";
 
 type Props = {
   tab: string;
@@ -32,7 +33,11 @@ export const ProfilePageMainContent = ({ tab }: Props) => {
   const router = useRouter();
   const { authToken, user } = useAuthContext();
 
-  const { data: applicationUser, isLoading, error} = useUserOwnData({ authToken });
+  const {
+    data: applicationUser,
+    isLoading,
+    error,
+  } = useUserOwnData({ authToken });
 
   const company = useMemo(() => {
     if (applicationUser?.Membership && applicationUser?.Membership.length) {
@@ -48,7 +53,12 @@ export const ProfilePageMainContent = ({ tab }: Props) => {
   };
 
   if (isLoading) return <CircularProgress />;
-  if (error) return <p className={"text-red-500"}>Oops something went wrong, please try again later</p>;
+  if (error)
+    return (
+      <p className={"text-red-500"}>
+        Oops something went wrong, please try again later
+      </p>
+    );
   return (
     <div className={""}>
       <TabGroup
@@ -83,18 +93,22 @@ export const ProfilePageMainContent = ({ tab }: Props) => {
             {company && (
               <PropertiesTab
                 company={company}
-                userListings={applicationUser?.Listing || []}
+                userListings={
+                  (applicationUser?.Listing as Listing[] | undefined) || []
+                }
               />
             )}
             {!company && (
               <ProfilePageOwnListings
-                initialListings={applicationUser?.Listing || []}
+                initialListings={
+                  (applicationUser?.Listing as Listing[] | undefined) || []
+                }
               ></ProfilePageOwnListings>
             )}
           </TabPanel>
           <TabPanel>
             <p className={"font-bold text-4xl mb-12"}>Saved items</p>
-            <SavedItemsPageTabs></SavedItemsPageTabs>
+            <SavedItemsPageTabs />
           </TabPanel>
           <TabPanel>
             <p className={"font-bold text-4xl mb-12"}>Personal details</p>
@@ -102,15 +116,15 @@ export const ProfilePageMainContent = ({ tab }: Props) => {
           </TabPanel>
           <TabPanel>
             <p className={"font-bold text-4xl mb-12"}>Company</p>
-            <CompanyTab></CompanyTab>
+            <CompanyTab />
           </TabPanel>
           <TabPanel>
             <p className={"font-bold text-4xl mb-12"}>Invites</p>
-            <InvitesTab></InvitesTab>
+            <InvitesTab />
           </TabPanel>
           <TabPanel>
             <p className={"font-bold text-4xl mb-12"}>Recently viewed</p>
-            <RecentlyViewedListings></RecentlyViewedListings>
+            <RecentlyViewedListings />
           </TabPanel>
         </TabPanels>
       </TabGroup>
