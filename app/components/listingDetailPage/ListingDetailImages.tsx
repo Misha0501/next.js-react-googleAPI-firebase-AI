@@ -15,9 +15,9 @@ export const ListingDetailImages = ({
   const listingImagesAmount = useMemo(() => images.length, [images]);
 
   return (
-    <div className="relative">
+    <div className="relative h-[60vh] max-h-[60vh]">
       <div
-        className={`grid grid-cols-1 lg:${
+        className={`h-[60vh] grid grid-cols-1 lg:${
           listingImagesAmount === 1
             ? "grid-cols-1"
             : listingImagesAmount === 2
@@ -28,7 +28,9 @@ export const ListingDetailImages = ({
         {images[0]?.url && (
           <div
             onClick={() => handleOpenLightBox(0)}
-            className={`${
+            className={`
+            h-[60vh]
+            ${
               listingImagesAmount === 1 || listingImagesAmount === 2
                 ? "col-span-1"
                 : "col-span-2"
@@ -36,7 +38,7 @@ export const ListingDetailImages = ({
           >
             <Image
               className={
-                "cursor-pointer object-cover h-full lg:h-full lg:max-h-[680px] w-full lg:rounded-lg"
+                "cursor-pointer object-cover h-full lg:h-full lg:max-h-[60vh] w-full lg:rounded-lg"
               }
               height={680}
               width={1500}
@@ -63,15 +65,15 @@ export const ListingDetailImages = ({
           </div>
         )}
         {listingImagesAmount > 2 && (
-          <div className={"flex flex-col gap-4"}>
+          <div className={"flex-col gap-4 h-[60vh] hidden lg:flex"}>
             {images[1]?.url && (
               <div
-                className="hidden lg:block h-full"
+                className="h-[30vh]"
                 onClick={() => handleOpenLightBox(1)}
               >
                 <Image
                   className={
-                    "cursor-pointer object-cover w-full rounded-lg h-full"
+                    "cursor-pointer object-cover w-full rounded-lg h-full max-h-[30vh]"
                   }
                   height={322}
                   width={492}
@@ -82,12 +84,12 @@ export const ListingDetailImages = ({
             )}
             {images[2]?.url && (
               <div
-                className="hidden lg:block h-full"
+                className="h-[30vh]"
                 onClick={() => handleOpenLightBox(2)}
               >
                 <Image
                   className={
-                    "cursor-pointer object-cover w-full rounded-lg h-full"
+                    "cursor-pointer object-cover w-full rounded-lg h-full max-h-[30vh]"
                   }
                   height={322}
                   width={492}
