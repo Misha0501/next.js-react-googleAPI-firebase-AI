@@ -30,7 +30,7 @@ import Thumbnails from "yet-another-react-lightbox/plugins/thumbnails";
 import ListingDetailContent from "./ListingDetailContent";
 import { useCreateRecentlyViewedListing } from "@/providers/RecentlyViewedListings";
 import { useAuthContext } from "@/app/context/AuthContext";
-import FloatingContactBar from "../FloatingContactBar";
+import FloatingContactBar from "./FloatingContactBar";
 import {
   BedIcon,
   BedRoomIcon,
@@ -290,6 +290,7 @@ const ListingDetail = () => {
               loading={savedIconIsLoading}
               className={"hidden lg:flex"}
               onClick={handleSavedIconClick}
+              data-testid="favouriteButton"
             >
               Favourite
             </Button>
@@ -335,14 +336,14 @@ const ListingDetail = () => {
                     key={index}
                     className="flex flex-row lg:flex-col items-center justify-between w-full sm:border-1"
                   >
-                    <p className="text-[16px] text-[#616161]">{el.title}</p>
+                    <p className="text-[#616161]">{el.title}</p>
                     <div className="flex items-center pt-2 sm:pt-4">
                       <Icon
                         className="text-[#616161]"
                         size="lg"
                         icon={el.icon}
                       />
-                      <p className="pl-2 text-[16px] text-[#616161]">
+                      <p className="pl-2 text-[#616161]">
                         {el.value || "-"}
                       </p>
                     </div>
@@ -353,7 +354,7 @@ const ListingDetail = () => {
               <div className="block lg:hidden py-2">
                 <div className="price_details flex justify-between">
                   <div>
-                    <h2 className="text-2xl font-bold">
+                    <h2 className="text-2xl font-bold" data-testid={'price'}>
                       €{listing?.price}{" "}
                       <small className="text-[#717D96] ml-2">
                         {listing?.areaTotal}/m2
@@ -411,6 +412,7 @@ const ListingDetail = () => {
                 <div id="mapSection">
                   <p className="text-2xl pb-8">View on map</p>
                   <GoogleMap
+                    data-testid={"map"}
                     location={{
                       lat: parseFloat(listing?.Address[0]?.latitude),
                       lng: parseFloat(listing?.Address[0]?.longitude),
@@ -464,6 +466,7 @@ const ListingDetail = () => {
               colors={["blue"]}
               valueFormatter={dataFormatter}
               yAxisWidth={48}
+              data-testid={"averagePriceNeighborhoodChart"}
             />
           </div>
         </div>
@@ -483,6 +486,7 @@ const ListingDetail = () => {
               index="updatedAt"
               categories={["price"]}
               colors={["emerald"]}
+              data-testid={"priceChangeGraph"}
             />
           </div>
         </div>

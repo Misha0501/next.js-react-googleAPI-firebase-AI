@@ -31,7 +31,7 @@ const ListingDetailContent = ({
         <>
           <div className="pb-6">
             <p className="text-2xl">Description</p>
-            <p className="pt-4 text-gray-500 font-light">
+            <p className="pt-4 text-gray-500 font-light" data-testid="description">
               {showMore
                 ? description
                 : `${description?.substring(0, 400)} .....`}

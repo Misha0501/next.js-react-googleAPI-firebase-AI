@@ -37,7 +37,7 @@ export const ListingAgentContactCard = ({ showForm, listing }: Props) => {
             <span className="text-2xl font-semibold">
               {getCurrencySign(listing?.currency)}
             </span>
-            <span className="text-3xl font-semibold tracking-tight">
+            <span className="text-3xl font-semibold tracking-tight" data-testid={'priceDesktop'}>
               {new Intl.NumberFormat().format(listing?.price)}
             </span>
           </div>

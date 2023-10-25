@@ -9,7 +9,7 @@ import Link from "next/link";
 import { useUserDetail } from "@/providers/Users";
 import { useParams, useRouter } from "next/navigation";
 import { CircularProgress } from "@mui/material";
-import FloatingContactBar from "../FloatingContactBar";
+import FloatingContactBar from "../listingDetailPage/FloatingContactBar";
 import { EnvelopeIcon, MapIcon, PhoneIcon } from "@heroicons/react/24/outline";
 import { getPopulatedListingsSaved } from "@/app/lib/listing/getPopulatedListingsSaved";
 import { useAuthContext } from "@/app/context/AuthContext";

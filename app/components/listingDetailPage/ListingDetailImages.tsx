@@ -107,6 +107,7 @@ export const ListingDetailImages = ({
           onClick={() => handleOpenLightBox(1)}
           className="absolute bottom-6 right-6 hidden lg:flex"
           icon={PhotoIcon}
+          data-testid={"viewAllPhotos"}
         >
           View all photos
         </Button>
