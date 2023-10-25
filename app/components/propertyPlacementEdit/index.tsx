@@ -210,9 +210,9 @@ export default function MultiForm() {
           <form>
             <div className="pt-10 pb-10">
               <Box>
-                <div className=" bg-[#F2F2F2] shadow-[0_4px_20px_0px_rgba(0,0,0,0.1)]">
+                <div className="bg-[#F2F2F2] shadow-[0_4px_20px_0px_rgba(0,0,0,0.1)]">
                   <MuiStepper
-                    className="max-w-screen-xl m-auto hidden md:flex lg:flex xl:flex 2xl:flex"
+                    className="max-w-screen-xl hidden m-auto items-stretch md:flex"
                     activeStep={activeStep}
                     orientation="horizontal"
                   >
