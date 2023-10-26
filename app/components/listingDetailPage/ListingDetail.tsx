@@ -426,11 +426,11 @@ const ListingDetail = () => {
             {listing && (
               <div className="sm:col-span-1 lg:col-span-1 lg:col-span-1">
                 <ListingAgentContactCard
-                  showForm={handleContactAgentClick}
+                  showContactForm={handleContactAgentClick}
                   listing={listing}
                 />
                 {showContactWithAgent && (
-                  <div id={"contactAgentForm"}>
+                  <div id={"contactAgentForm"} data-testid={"contactAgentForm"}>
                     <ListingContactAgentForm
                       name={
                         listing?.company?.name ||

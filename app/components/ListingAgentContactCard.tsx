@@ -5,26 +5,23 @@ import Link from "next/link";
 import { Button } from "@tremor/react";
 
 type Props = {
-  showForm: () => void;
+  showContactForm: () => void;
   listing: Listing | undefined;
 };
 
-export const ListingAgentContactCard = ({ showForm, listing }: Props) => {
+export const ListingAgentContactCard = ({ showContactForm, listing }: Props) => {
   let [agentContactState, setAgentContactState] = useState("Show Phone Number");
 
   let contactNumber =
     listing?.company?.phoneNumber ??
     listing?.applicationUser?.phoneNumber ??
     "";
-  const showContactNo = () => {
+  const showContact = () => {
     setAgentContactState(
       agentContactState !== contactNumber ? contactNumber : "Show Phone Number",
     );
   };
 
-  const showContactForm = () => {
-    showForm((prevState: boolean) => !prevState);
-  };
 
   return (
     <>
@@ -34,7 +31,7 @@ export const ListingAgentContactCard = ({ showForm, listing }: Props) => {
             Asking Price{" "}
           </p>
           <div className="flex items-baseline mb-8 text-gray-900 dark:text-white">
-            <span className="text-2xl font-semibold">
+            <span className="text-2xl font-semibold" data-testid={'priceCurrencySignDesktop'}>
               {getCurrencySign(listing?.currency)}
             </span>
             <span className="text-3xl font-semibold tracking-tight" data-testid={'priceDesktop'}>
@@ -45,16 +42,19 @@ export const ListingAgentContactCard = ({ showForm, listing }: Props) => {
             <>
               {agentContactState !== contactNumber && (
                 <Button
-                  onClick={showContactNo}
+                  onClick={showContact}
                   className="w-full"
                   variant={"secondary"}
+                  data-testid={'contactPhoneNumberButton'}
                 >
                   {agentContactState}
                 </Button>
               )}
               {agentContactState === contactNumber && (
                 <a href={`tel:${contactNumber}`}>
-                  <Button className="w-full" variant={"secondary"}>
+                  <Button className="w-full" variant={"secondary"}
+                          data-testid={'contactPhoneNumberButton'}
+                  >
                     {agentContactState}
                   </Button>
                 </a>
@@ -63,13 +63,13 @@ export const ListingAgentContactCard = ({ showForm, listing }: Props) => {
           )}
         </div>
         <div>
-          <p className="mb-6 font-light text-gray-500 dark:text-gray-400">
+          <p className="mb-6 font-light text-gray-500 dark:text-gray-400" data-testid={"listedBy"}>
             Listed by{" "}
             {listing?.company?.name ? " real estate agent" : " private owner"}
           </p>
           <div className="flex items-center space-x-4 mb-8">
             <div className="flex-1 min-w-0">
-              <Link href={`/users/${listing?.applicationUser?.id}`}>
+              <Link href={`/users/${listing?.applicationUser?.id}`} data-testid={"userName"}>
                 <p className="font-bold text-gray-900 truncate dark:text-white">
                   {listing?.applicationUser?.displayName}
                 </p>
@@ -85,6 +85,7 @@ export const ListingAgentContactCard = ({ showForm, listing }: Props) => {
             onClick={showContactForm}
             variant={"primary"}
             className={"w-full"}
+            data-testid={'contactSellerButton'}
           >
             Contact seller
           </Button>
