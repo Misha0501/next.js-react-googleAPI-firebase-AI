@@ -1,4 +1,4 @@
-import { test, expect, Page, chromium, Browser } from "@playwright/test";
+import { test, expect } from "@playwright/test";
 
 const targetUrl =
   (process.env.ENVIRONMENT_URL
@@ -6,25 +6,21 @@ const targetUrl =
     : undefined) || "http://localhost:3000/listings/1";
 
 test.describe("Listings page main properties", () => {
-  let browser: Browser;
-  let page: Page;
-
-  test.beforeAll(async () => {
-    browser = await chromium.launch();
-    page = await browser.newPage();
+  test.beforeEach(async ({ page }) => {
     await page.goto(targetUrl);
 
     // wait for page to fully load
     await page.waitForLoadState("domcontentloaded");
     await page.waitForLoadState("networkidle");
+    await page.waitForTimeout(3000);
   });
 
-  test.afterEach(async () => {
+  test.afterEach(async ({ page }) => {
     await page.screenshot({ path: "./__checks__/screenshot.jpg" });
     // await page.close();
   });
 
-  test("should display the title and description", async () => {
+  test("should display the title and description", async ({ page }) => {
     const title = await page.textContent("h1");
     expect(title).toBeTruthy();
 
@@ -32,53 +28,51 @@ test.describe("Listings page main properties", () => {
     expect(description).toBeTruthy();
   });
 
-  test("should open lightbox when clicking on photos button", async () => {
+  test("should open lightbox when clicking on photos button", async ({
+    page,
+  }) => {
     await page.getByTestId("viewAllPhotos").click();
     const lightBox = await page.$('div[role="dialog"]');
     expect(lightBox).toBeTruthy();
   });
 
-  test("should display the price", async () => {
+  test("should display the price", async ({ page }) => {
     const price = await page.getByTestId("priceDesktop").textContent();
     expect(price).toBeTruthy();
   });
 
-  test("should display the map", async () => {
+  test("should display the map", async ({ page }) => {
     const map = page.getByTestId("map");
     expect(map).toBeTruthy();
   });
 
-  test("should display the price comparison graph", async () => {
+  test("should display the price comparison graph", async ({ page }) => {
     const priceGraph = page.getByTestId("averagePriceNeighborhoodChart");
     expect(priceGraph).toBeTruthy();
   });
 
-  test("should display the price change graph", async () => {
+  test("should display the price change graph", async ({ page }) => {
     const priceGraph = page.getByTestId("priceChangeGraph");
     expect(priceGraph).toBeTruthy();
   });
 });
 
 test.describe("Listing agent contact card", () => {
-  let browser: Browser;
-  let page: Page;
-
-  test.beforeAll(async () => {
-    browser = await chromium.launch();
-    page = await browser.newPage();
+  test.beforeEach(async ({ page }) => {
     await page.goto(targetUrl);
 
     // wait for page to fully load
     await page.waitForLoadState("domcontentloaded");
     await page.waitForLoadState("networkidle");
+    await page.waitForTimeout(3000);
   });
 
-  test.afterEach(async () => {
+  test.afterEach(async ({ page }) => {
     await page.screenshot({ path: "./__checks__/screenshot.jpg" });
     // await page.close();
   });
 
-  test("should display the asking price correctly", async () => {
+  test("should display the asking price correctly", async ({ page }) => {
     const currencySign = await page.getByTestId("priceCurrencySignDesktop");
     const priceDesktop = await page.getByTestId("priceDesktop");
 
@@ -86,7 +80,7 @@ test.describe("Listing agent contact card", () => {
     expect(await priceDesktop.textContent()).toBeTruthy();
   });
 
-  test("should toggle the phone number visibility", async () => {
+  test("should toggle the phone number visibility", async ({ page }) => {
     let contactPhoneNumberButton = page.getByTestId("contactPhoneNumberButton");
     const initialBtnState = await contactPhoneNumberButton.textContent();
     expect(initialBtnState).toBe("Show Phone Number");
@@ -98,32 +92,28 @@ test.describe("Listing agent contact card", () => {
     expect(newBtnState).not.toBe("Show Phone Number");
   });
 
-  test("should display application user name and make it clickable", async () => {
-    // Create a new page instance for this test because it will navigate to a different URL
-    const testPage = await browser.newPage();
-
+  test("should display application user name and make it clickable", async ({
+    page,
+  }) => {
     // Navigate to the target URL
-    await testPage.goto(targetUrl);
+    await page.goto(targetUrl);
 
-    // Here, you'd validate the navigation happened correctly
-    const userName = testPage.getByTestId("userName");
+    const userName = page.getByTestId("userName");
 
     // Storing the current URL before clicking
-    const initialURL = testPage.url();
+    const initialURL = page.url();
 
     await userName.click();
 
     // Check if the listings page is loaded
-    await testPage.waitForURL("**/users/**");
+    await page.waitForURL("**/users/**");
 
     // Validate that the navigation happened by comparing URLs
-    const newURL = testPage.url();
+    const newURL = page.url();
     expect(newURL).not.toBe(initialURL);
-
-    expect(newURL).toContain(`/users/`);
   });
 
-  test('should have a "Contact seller" button', async () => {
+  test('should have a "Contact seller" button', async ({ page }) => {
     // Check for the "Contact seller" button and click on it
     const contactBtn = page.getByTestId("contactSellerButton");
     expect(contactBtn).toBeTruthy();
@@ -143,24 +133,22 @@ test.describe("Listing agent contact card", () => {
 });
 
 test.describe("ListingDetailContent Component", () => {
-  let browser: Browser;
-  let page: Page;
-
-  test.beforeAll(async () => {
-    browser = await chromium.launch();
-    page = await browser.newPage();
+  test.beforeEach(async ({ page }) => {
     await page.goto(targetUrl);
 
     // wait for page to fully load
     await page.waitForLoadState("domcontentloaded");
     await page.waitForLoadState("networkidle");
+    await page.waitForTimeout(3000);
   });
 
-  test.afterEach(async () => {
+  test.afterEach(async ({ page }) => {
     await page.screenshot({ path: "./__checks__/screenshot.jpg" });
   });
 
-  test('should display the initial description and expand on "Show More" click', async () => {
+  test('should display the initial description and expand on "Show More" click', async ({
+    page,
+  }) => {
     const description = page.getByTestId("description");
     // Initial description should be shortened.
     expect(await description.textContent()).toContain("...");
@@ -175,22 +163,22 @@ test.describe("ListingDetailContent Component", () => {
     expect(await description.textContent()).not.toContain("...");
   });
 
-  test("should display general information block", async () => {
+  test("should display general information block", async ({ page }) => {
     const generalInfoBlock = page.getByTestId("generalInfo");
     expect(await generalInfoBlock.textContent()).toBeTruthy();
   });
 
-  test("should display the area and capacity block", async () => {
+  test("should display the area and capacity block", async ({ page }) => {
     const areaAndCapacityBlock = page.getByTestId("areaAndCapacity");
     expect(areaAndCapacityBlock.textContent).toBeTruthy();
   });
 
-  test("should display the construction block", async () => {
+  test("should display the construction block", async ({ page }) => {
     const constructionBlock = page.getByTestId("construction");
     expect(constructionBlock.textContent).toBeTruthy();
   });
 
-  test("should display the heating block", async () => {
+  test("should display the heating block", async ({ page }) => {
     const heatingBlock = page.getByTestId("heating");
     expect(heatingBlock.textContent).toBeTruthy();
   });

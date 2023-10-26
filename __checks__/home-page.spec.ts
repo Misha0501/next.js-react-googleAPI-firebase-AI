@@ -22,7 +22,12 @@ test.describe('Search functionality', () => {
     const searchInput = page.locator('input[name="locality"]');
 
     // Press keys one by one to simulate typing in the autocomplete input
-    await searchInput.fill('Sof');
+    await searchInput.press('S');
+    await page.waitForTimeout(1000);
+    await searchInput.press('o');
+    await page.waitForTimeout(1000);
+    await searchInput.press('f');
+    await page.waitForTimeout(1000);
 
     // Wait for the autocomplete to appear
     await page.waitForSelector('.pac-container');
