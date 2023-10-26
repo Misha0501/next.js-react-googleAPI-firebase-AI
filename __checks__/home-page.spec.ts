@@ -22,7 +22,7 @@ test.describe('Search functionality', () => {
     const searchInput = page.locator('input[name="locality"]');
 
     // Press keys one by one to simulate typing in the autocomplete input
-    await searchInput.pressSequentially('Sof');
+    await searchInput.fill('Sof');
 
     // Wait for the autocomplete to appear
     await page.waitForSelector('.pac-container');
