@@ -113,8 +113,8 @@ const ListingDetail = () => {
       savedListings.isLoading,
       savedListings.isFetching,
       createSavedListing.isLoading,
-      deleteSavedListing.isLoading
-    ]
+      deleteSavedListing.isLoading,
+    ],
   );
 
   useEffect(() => {
@@ -343,9 +343,7 @@ const ListingDetail = () => {
                         size="lg"
                         icon={el.icon}
                       />
-                      <p className="pl-2 text-[#616161]">
-                        {el.value || "-"}
-                      </p>
+                      <p className="pl-2 text-[#616161]">{el.value || "-"}</p>
                     </div>
                   </div>
                 ))}
@@ -354,7 +352,7 @@ const ListingDetail = () => {
               <div className="block lg:hidden py-2">
                 <div className="price_details flex justify-between">
                   <div>
-                    <h2 className="text-2xl font-bold" data-testid={'price'}>
+                    <h2 className="text-2xl font-bold" data-testid={"price"}>
                       €{listing?.price}{" "}
                       <small className="text-[#717D96] ml-2">
                         {listing?.areaTotal}/m2
@@ -386,14 +384,16 @@ const ListingDetail = () => {
                     </Link>
                   </div>
                   <div>
-                    {savedIconIsLoading ? <CircularProgress size={28} /> :
+                    {savedIconIsLoading ? (
+                      <CircularProgress size={28} />
+                    ) : (
                       <Icon
                         size="sm"
                         onClick={handleSavedIconClick}
                         className="text-gray-500 border border-solid border-gray-500 rounded-full h-10 w-10 justify-center hover:cursor-pointer"
                         icon={isListingSaved ? HeartIconSolid : HeartIcon}
                       />
-                    }
+                    )}
                   </div>
                 </div>
                 <Divider className="mb-0 hidden lg:block" />

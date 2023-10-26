@@ -21,7 +21,7 @@ export default function EditProperty() {
             route: listingDetailPage?.data?.Address?.[0].route,
             locality: listingDetailPage?.data?.Address?.[0].locality,
             administrativeArea:
-            listingDetailPage?.data?.Address?.[0].administrativeAreaLevelOne,
+              listingDetailPage?.data?.Address?.[0].administrativeAreaLevelOne,
             postalCode: listingDetailPage?.data?.Address?.[0].postalCode,
             latitude: listingDetailPage?.data?.Address?.[0]?.latitude,
             longitude: listingDetailPage?.data?.Address?.[0].longitude,

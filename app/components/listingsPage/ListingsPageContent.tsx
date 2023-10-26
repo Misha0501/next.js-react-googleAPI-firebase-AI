@@ -80,7 +80,9 @@ export const ListingsPageContent = () => {
     }
 
     try {
-      await createSavedSearches.mutateAsync(getSavedSearchesBodyObjectFromFilters(search));
+      await createSavedSearches.mutateAsync(
+        getSavedSearchesBodyObjectFromFilters(search),
+      );
       setSavedSearchConfirmationModal(true);
       toast.success("Your search has been saved!");
     } catch (e) {

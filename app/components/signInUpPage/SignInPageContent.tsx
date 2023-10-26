@@ -8,37 +8,41 @@ import { useUpdateUser } from "@/providers/Users";
 export default function SignInPageContent() {
   // UI instance for login / signup
   const loading = useRef(null);
-  const updateUser = useUpdateUser({})
+  const updateUser = useUpdateUser({});
 
   useEffect(() => {
-    let ui = firebaseui.auth.AuthUI.getInstance() || new firebaseui.auth.AuthUI(firebaseClientAuth);
+    let ui =
+      firebaseui.auth.AuthUI.getInstance() ||
+      new firebaseui.auth.AuthUI(firebaseClientAuth);
 
     ui.start("#firebaseui", {
       signInOptions: [
         firebase.auth.EmailAuthProvider.PROVIDER_ID,
-        firebase.auth.GoogleAuthProvider.PROVIDER_ID
+        firebase.auth.GoogleAuthProvider.PROVIDER_ID,
       ],
       signInSuccessUrl: `/profile/myAccount`,
       // Other config options...
       callbacks: {
-        signInSuccessWithAuthResult: function(authResult, redirectUrl) {
+        signInSuccessWithAuthResult: function (authResult, redirectUrl) {
           // User successfully signed in.
           // Return type determines whether we continue the redirect automatically
           // or whether we leave that to developer to handle.
           const displayName = authResult.user.displayName;
           const authToken = authResult.user.accessToken;
           // Update user profile
-          updateUser.mutateAsync({ displayName, authToken }).catch(console.error)
+          updateUser
+            .mutateAsync({ displayName, authToken })
+            .catch(console.error);
           return true;
         },
-        uiShown: function() {
+        uiShown: function () {
           // The widget is rendered.
           // Hide the loader.
           if (!loading || !loading.current) return;
 
           loading.current.style.display = "none";
-        }
-      }
+        },
+      },
     });
   }, []);
 

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { RadioGroup } from "@headlessui/react";
-import { CheckCircleIcon, CheckIcon } from "@heroicons/react/24/solid";
+import { CheckCircleIcon } from "@heroicons/react/24/solid";
 import { Icon } from "@tremor/react";
 
 type PropertyPlacementRadioButtonsProps = {

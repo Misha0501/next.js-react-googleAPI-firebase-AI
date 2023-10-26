@@ -12,7 +12,7 @@ type Props = {
   searchParams: any;
   listingType: string;
   locality: string;
-}
+};
 
 export const ListingsMain = ({ searchParams, listingType, locality }: Props ) => {
   const { authToken } = useAuthContext();

@@ -8,7 +8,7 @@ type Props = {
   valuesFrom: (string | number)[];
   valuesTo: (string | number)[];
   id?: string;
-}
+};
 export const FromToFilter = ({
   initialFrom,
   initialTo,

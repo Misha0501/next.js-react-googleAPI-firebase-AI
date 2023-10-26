@@ -3,7 +3,6 @@ import { ArrowSmallRightIcon } from "@heroicons/react/24/solid";
 import {
   Button,
   Divider,
-  Icon,
   NumberInput,
   Select,
   SelectItem,

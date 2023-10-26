@@ -5,15 +5,14 @@ import {
   ref,
   uploadBytes,
 } from "firebase/storage";
-import { Button, Icon } from "@tremor/react";
+import { Button } from "@tremor/react";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { useAuthContext } from "@/app/context/AuthContext";
 import Image from "next/image";
-import { EllipsisHorizontalIcon, PlusIcon } from "@heroicons/react/24/solid";
+import { EllipsisHorizontalIcon } from "@heroicons/react/24/solid";
 import { ListingImage } from "@/types";
 import { Popover } from "@headlessui/react";
 import { useDeleteListingImage } from "@/providers/ListingImages";
-import { toast } from "react-toastify";
 import { uniqueID } from "@/app/lib/uniqueID";
 
 type PlacingPropertyImagesHandlerProps = {

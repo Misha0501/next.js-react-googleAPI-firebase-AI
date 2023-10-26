@@ -16,7 +16,7 @@ type Prop = {
   }[];
   heatingType: string;
   description: string;
-}
+};
 const ListingDetailContent = ({
   generalInfo,
   areaAndCapacity,

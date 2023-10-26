@@ -19,7 +19,9 @@ const ApplicationUserUpdateSchema = Yup.object().shape({
   phoneNumber: Yup.string()
     .min(8, "Phone number is too short")
     .max(50, "Phone number is too long"),
-  newPassword: Yup.string().min(6, "The password must be a string with at least 6 characters.").max(50, "The password must be a string of up to 50 characters."),
+  newPassword: Yup.string()
+    .min(6, "The password must be a string with at least 6 characters.")
+    .max(50, "The password must be a string of up to 50 characters."),
 });
 
 interface FormValues {

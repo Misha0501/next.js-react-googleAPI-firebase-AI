@@ -7,7 +7,7 @@ type Props = {
   onClose: () => void;
   onCancelClick?: () => void;
   onSubmitClick: () => void;
-}
+};
 export const Modal = ({
   title,
   show,

@@ -1,7 +1,6 @@
-"use client"
-import { useEffect, useState } from "react";
+"use client";
+import { useState } from "react";
 import { RadioGroup } from "@headlessui/react";
-import { CheckIcon } from "@heroicons/react/24/solid";
 
 type PropertyPlacementRadioButtonsProps = {
   options: string[];
@@ -17,14 +16,6 @@ export default function PropertyPlacementRadioButtons({
   value,
 }: PropertyPlacementRadioButtonsProps) {
   const [selectedValue, setSelectedValue] = useState<string | null>(null);
-
-
-  // useEffect(() => {
-  //   // Set the default value when the defaultValue prop changes
-  //   if (defaultValue) {
-  //     setSelectedValue(defaultValue);
-  //   }
-  // }, [defaultValue]);
 
   const handleOnChange = (value: string) => {
     setSelectedValue(value);
