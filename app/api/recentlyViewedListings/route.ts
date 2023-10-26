@@ -42,22 +42,6 @@ export async function GET(req: NextRequest) {
             take: 10
         })
 
-
-        // let items = await prisma.recentlyViewedListing.findMany({
-        //     include: {
-        //         listing: {
-        //             include: {
-        //                 ListingImage: true,
-        //                 Address: true,
-        //                 ListingPrice: true
-        //             }
-        //         }
-        //     },
-        //     where: {
-        //         applicationUserId: applicationUser.id,
-        //     },
-        // })
-
         return NextResponse.json({total: itemsCount, results: items})
     } catch (error) {
         console.error(error)
