@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import { listingSchema, listingSchemaPutRequest } from "@/app/lib/validations/listing";
+import {
+  listingSchema,
+  listingSchemaPutRequest,
+} from "@/app/lib/validations/listing";
 import { z } from "zod";
 import { ResponseError } from "@/app/lib/classes/ResponseError";
 import { getApplicationUserServer } from "@/app/lib/getApplicationUserServer";
@@ -11,7 +14,7 @@ import {
   handleAddressUpdate,
   handleImagesUpdate,
   handlePriceUpdate,
-  isUserAuthorizedToListing
+  isUserAuthorizedToListing,
 } from "@/app/api/listings/_utils";
 import { ApplicationUser } from "@prisma/client";
 
@@ -94,36 +97,7 @@ export async function POST(req: Request) {
       await getApplicationUserServer(true);
 
     const parsedValues = listingSchema.parse(await req.json());
-    const {
-      listingType,
-      interiorType,
-      propertyType,
-      upkeepType,
-      images,
-      description,
-      areaTotal,
-      areaLiving,
-      areaLand,
-      volume,
-      areaOutside,
-      areaGarage,
-      streetName,
-      houseNumber,
-      longitude,
-      latitude,
-      rooms,
-      bathrooms,
-      bedrooms,
-      parking,
-      constructedYear,
-      floorNumber,
-      numberOfFloorsProperty,
-      numberOfFloorsCommon,
-      heatingType,
-      address,
-      price,
-      currency,
-    } = parsedValues;
+    const { address, currency, price, images, ...restData } = parsedValues;
 
     // Get user's company id
     let companyId = getApplicationUserCompanyId(applicationUser);
@@ -132,32 +106,9 @@ export async function POST(req: Request) {
       data: {
         applicationUserId: applicationUser.id,
         companyId,
-        listingType,
-        interiorType,
-        propertyType,
-        upkeepType,
-        description,
-        areaTotal,
-        areaLiving,
-        areaLand,
-        volume,
-        areaOutside,
-        areaGarage,
-        streetName,
-        houseNumber,
-        longitude,
-        latitude,
-        rooms,
-        bathrooms,
-        bedrooms,
-        parking,
-        constructedYear,
-        floorNumber,
-        numberOfFloorsProperty,
-        numberOfFloorsCommon,
+        ...restData,
         price,
         currency,
-        heatingType,
         Address: {
           create: [{ ...address }],
         },
