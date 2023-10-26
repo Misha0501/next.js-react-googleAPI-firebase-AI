@@ -68,11 +68,6 @@ export default function MultiSelectRadioButton({
                           </RadioGroup.Label>
                         </div>
                       </div>
-                      {/* {checked && (
-                        <div className="shrink-0 text-white">
-                          <CheckIcon className="h-6 w-6" />
-                        </div>
-                      )} */}
                     </div>
                   </>
                 )}

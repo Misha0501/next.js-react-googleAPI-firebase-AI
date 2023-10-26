@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { RadioGroup } from "@headlessui/react";
 import { CheckCircleIcon } from "@heroicons/react/24/solid";
 import { Icon } from "@tremor/react";
@@ -17,10 +16,7 @@ export default function SingleSelectRadioButton({
   value,
   onBlur,
 }: PropertyPlacementRadioButtonsProps) {
-  const [selectedValue, setSelectedValue] = useState<string | null>(null);
-
   const handleOnChange = (value: string) => {
-    setSelectedValue(value);
     if (onChange) {
       onChange(value);
     }
@@ -70,11 +66,6 @@ export default function SingleSelectRadioButton({
                           </RadioGroup.Label>
                         </div>
                       </div>
-                      {/* {checked && (
-                        <div className="shrink-0 text-white">
-                          <CheckIcon className="h-6 w-6" />
-                        </div>
-                      )} */}
                     </div>
                   </>
                 )}

@@ -151,7 +151,6 @@ export default function MultiForm() {
           currency: "",
           price: 0 as string | number,
           rooms: undefined,
-          // rooms: undefined as number | undefined,
           bedrooms: undefined,
           bathrooms: undefined,
           totalArea: undefined,
@@ -228,7 +227,6 @@ export default function MultiForm() {
                     {formContent(activeStep, formik)}
                   </Grid>
                 </Grid>
-
                 {/*<LinearProgress*/}
                 {/*  sx={{*/}
                 {/*    height: "30px",*/}

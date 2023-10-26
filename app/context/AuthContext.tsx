@@ -3,7 +3,6 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { setCookie } from "cookies-next";
 import { onAuthStateChanged } from "firebase/auth";
 import { firebaseClientAuth } from "@/app/lib/firebase/configClient";
-import PageLoader from "next/dist/client/page-loader";
 import { Box, CircularProgress } from "@mui/material";
 
 export const AuthContext = createContext({});

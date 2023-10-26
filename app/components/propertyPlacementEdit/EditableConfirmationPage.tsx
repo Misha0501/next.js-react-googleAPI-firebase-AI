@@ -5,7 +5,7 @@ import {
   SelectItem,
   TextInput,
 } from "@tremor/react";
-import PropertyPlacementRadioButtons from "../PropertyPlacementRadioButtons";
+import PropertyPlacementRadioButtons from "./PropertyPlacementRadioButtons";
 import {
   CURRENCIES,
   HEATING_TYPES,
@@ -14,8 +14,8 @@ import {
   PROPERTY_TYPES,
   UPKEEP_TYPES,
 } from "../../lib/constants";
-import SingleSelectRadioButton from "../SingleSelectRadioButton";
-import { PlacingPropertyImagesHandler } from "@/app/components/PlacingPropertyImagesHandler";
+import SingleSelectRadioButton from "./SingleSelectRadioButton";
+import { PlacingPropertyImagesHandler } from "@/app/components/propertyPlacementEdit/PlacingPropertyImagesHandler";
 import React from "react";
 import { FormikProps } from "formik";
 

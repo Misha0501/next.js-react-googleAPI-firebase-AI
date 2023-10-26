@@ -8,7 +8,7 @@ import {
   INTERIOR_TYPES,
   UPKEEP_TYPES,
 } from "../../lib/constants";
-import SingleSelectRadioButton from "../SingleSelectRadioButton";
+import SingleSelectRadioButton from "./SingleSelectRadioButton";
 import { FormHelperText } from "@mui/material";
 import { FormikProps } from "formik";
 

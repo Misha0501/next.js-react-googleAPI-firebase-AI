@@ -1,5 +1,4 @@
 "use client";
-import { useState } from "react";
 import { RadioGroup } from "@headlessui/react";
 
 type PropertyPlacementRadioButtonsProps = {
@@ -15,10 +14,8 @@ export default function PropertyPlacementRadioButtons({
   id,
   value,
 }: PropertyPlacementRadioButtonsProps) {
-  const [selectedValue, setSelectedValue] = useState<string | null>(null);
 
   const handleOnChange = (value: string) => {
-    setSelectedValue(value);
     if (onChange) {
       onChange(value);
     }
@@ -57,11 +54,6 @@ export default function PropertyPlacementRadioButtons({
                           </RadioGroup.Label>
                         </div>
                       </div>
-                      {/* {checked && (
-                        <div className="shrink-0 text-white">
-                          <CheckIcon className="h-6 w-6" />
-                        </div>
-                      )} */}
                     </div>
                   </>
                 )}

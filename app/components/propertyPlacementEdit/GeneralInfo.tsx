@@ -12,7 +12,7 @@ import property1 from "@/public/property1.png";
 import StepsTopInfo from "./StepsTopInfo";
 import { CURRENCIES, LISTING_TYPES, PROPERTY_TYPES } from "../../lib/constants";
 import React, { useState } from "react";
-import PropertyPlacementRadioButtons from "../PropertyPlacementRadioButtons";
+import PropertyPlacementRadioButtons from "./PropertyPlacementRadioButtons";
 import { FormHelperText } from "@mui/material";
 import { AutocompleteAddress } from "@/types";
 import { AddressAutocomplete } from "@/app/components/propertyPlacementEdit/AddressAutocomplete";
@@ -74,9 +74,6 @@ const GeneralInfo = ({
     if (!formik.values.propertyType) {
       errors.propertyType = "Required";
     }
-    // if (!formik.values.address) {
-    //   errors.address = "Required";
-    // }
     if (!formik.values.currency) {
       errors.currency = "Required";
     }

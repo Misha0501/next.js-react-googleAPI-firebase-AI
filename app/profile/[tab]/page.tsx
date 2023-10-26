@@ -1,5 +1,4 @@
 import { ProfilePageMainContent } from "@/app/components/profilePage/ProfilePageMainContent";
-import { redirectToSignInIfNotLoggedInSSR } from "@/app/lib/redirectToSignInIfNotLoggedInSSR";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { firebaseAdmin } from "@/app/lib/firebase/configAdmin";
@@ -17,7 +16,7 @@ export default async function ProfilePage({ params: { tab } }: Props) {
     // user is not authenticated
     redirect('/signin');
   });
-  // the user is authenticated!
+  // the user is authenticated
 
   return (
     <div className="container mx-auto">

@@ -8,7 +8,7 @@ import {
   TextInput,
 } from "@tremor/react";
 import React, { useState } from "react";
-import { PlacingPropertyImagesHandler } from "../PlacingPropertyImagesHandler";
+import { PlacingPropertyImagesHandler } from "../propertyPlacementEdit/PlacingPropertyImagesHandler";
 import {
   BUILDING_TYPE,
   CURRENCIES,
@@ -18,9 +18,9 @@ import {
   PROPERTY_TYPES,
   UPKEEP_TYPES,
 } from "../../lib/constants";
-import SingleSelectRadioButton from "../SingleSelectRadioButton";
+import SingleSelectRadioButton from "../propertyPlacementEdit/SingleSelectRadioButton";
 import { CircularProgress, FormHelperText } from "@mui/material";
-import PropertyPlacementRadioButtons from "../PropertyPlacementRadioButtons";
+import PropertyPlacementRadioButtons from "../propertyPlacementEdit/PropertyPlacementRadioButtons";
 import { useUpdateProperty } from "@/providers/Listing";
 import { useAuthContext } from "@/app/context/AuthContext";
 import { toast } from "react-toastify";
@@ -136,7 +136,6 @@ const EditForm = ({ formik, addressId, id, loading }: any) => {
         <div className="detail_single_box">
           <div className="flex justify-between">
             <p className={"font-bold text-lg mb-2"}>Renting or Selling</p>
-            {/* <Icon icon={PencilSquareIcon} /> */}
           </div>
           <div className="max-w-lg">
             <PropertyPlacementRadioButtons
@@ -154,7 +153,6 @@ const EditForm = ({ formik, addressId, id, loading }: any) => {
         <div className="detail_single_box flex gap-2 flex-col">
           <div className="flex justify-between">
             <p className={"font-bold text-lg mb-2"}>Property type</p>
-            {/* <Icon icon={PencilSquareIcon} /> */}
           </div>
           <div className="max-w-lg">
             <Select
@@ -181,7 +179,6 @@ const EditForm = ({ formik, addressId, id, loading }: any) => {
         <div className="detail_single_box">
           <div className="flex justify-between">
             <p className={"font-bold text-lg mb-2"}>Address</p>
-            {/* <Icon icon={PencilSquareIcon} /> */}
           </div>
           <p className="font-bold text-sm mt-4 mb-2 ">House Number</p>
           <TextInput
@@ -342,7 +339,6 @@ const EditForm = ({ formik, addressId, id, loading }: any) => {
           </div>
         )}
         <Divider />
-        {/* <Icon icon={PencilSquareIcon} /> */}
         <div className="detail_single_box flex gap-4 flex-col">
           <div className="flex justify-between">
             <p className={"font-bold text-lg mb-2"}>Property dimentions</p>
@@ -464,7 +460,6 @@ const EditForm = ({ formik, addressId, id, loading }: any) => {
             <div className="detail_single_box flex gap-2 flex-col">
               <div className="flex justify-between">
                 <p className={"font-bold text-lg mb-2"}>Interior type</p>
-                {/* <Icon icon={PencilSquareIcon} /> */}
               </div>
               <div className="max-w-lg">
                 <SingleSelectRadioButton
@@ -487,7 +482,6 @@ const EditForm = ({ formik, addressId, id, loading }: any) => {
             <div className="detail_single_box flex gap-2 flex-col">
               <div className="flex justify-between">
                 <p className={"font-bold text-lg mb-2"}>Property condition</p>
-                {/* <Icon icon={PencilSquareIcon} /> */}
               </div>
               <div className="max-w-lg">
                 <SingleSelectRadioButton
@@ -507,7 +501,6 @@ const EditForm = ({ formik, addressId, id, loading }: any) => {
             <div className="detail_single_box flex gap-2 flex-col">
               <div className="flex justify-between">
                 <p className={"font-bold text-lg mb-2"}>Heating type</p>
-                {/* <Icon icon={PencilSquareIcon} /> */}
               </div>
               <div className="max-w-lg">
                 <SingleSelectRadioButton

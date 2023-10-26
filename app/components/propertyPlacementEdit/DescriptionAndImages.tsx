@@ -5,7 +5,7 @@ import { Button, Divider } from "@tremor/react";
 import { ArrowSmallRightIcon } from "@heroicons/react/24/solid";
 
 import { ListingImage } from "@/types";
-import { PlacingPropertyImagesHandler } from "@/app/components/PlacingPropertyImagesHandler";
+import { PlacingPropertyImagesHandler } from "@/app/components/propertyPlacementEdit/PlacingPropertyImagesHandler";
 import { useGenerateDescription } from "@/providers/GenerateDescription";
 import { FormikProps } from "formik";
 

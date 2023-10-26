@@ -7,7 +7,6 @@ import ReactQueryProvider from "@/app/lib/reactQuery/ReactQueryProvider";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import MobileFooter from "@/app/components/layout/MobileFooter";
-import { GoogleAutocompleteContextProvider } from "@/app/context/GoogleAutocompleteContext";
 
 const inter = Inter({ subsets: ["latin"] });
 

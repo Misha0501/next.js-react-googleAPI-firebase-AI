@@ -7,7 +7,7 @@ type Props = {
   id?: string;
 };
 export const RadioGroupCustom = ({ options, onChange, id }: Props) => {
-  const [selectedValye, setSelectedValue] = useState(null);
+  const [selectedValue, setSelectedValue] = useState(null);
 
   const handleOnChange = (value) => {
     setSelectedValue(value);
@@ -21,7 +21,7 @@ export const RadioGroupCustom = ({ options, onChange, id }: Props) => {
       {options &&
         options.map((item, index) => (
           <RadioButton
-            checked={item.value === selectedValye}
+            checked={item.value === selectedValue}
             key={index}
             label={item.label}
             id={id ? id + index : ""}

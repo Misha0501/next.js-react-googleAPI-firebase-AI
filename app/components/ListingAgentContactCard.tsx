@@ -22,7 +22,6 @@ export const ListingAgentContactCard = ({ showContactForm, listing }: Props) => 
     );
   };
 
-
   return (
     <>
       <div className=" mb-8 w-full bg-[#F2F2F2] rounded-lg shadow-md px-8 py-9">
