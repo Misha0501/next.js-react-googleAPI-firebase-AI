@@ -1,16 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
-import { ApplicationUser } from "@prisma/client";
-import {
-  listingSchema,
-  listingSchemaPutRequest,
-} from "@/app/lib/validations/listing";
+import { listingSchema, listingSchemaPutRequest } from "@/app/lib/validations/listing";
 import { z } from "zod";
 import { ResponseError } from "@/app/lib/classes/ResponseError";
 import { getApplicationUserServer } from "@/app/lib/getApplicationUserServer";
 import { prisma } from "@/app/lib/db/client";
 import { getApplicationUserCompanyId } from "@/app/lib/listing/getApplicationUserCompanyId";
-import { userAllowedManipulateListing } from "@/app/lib/listing/userAllowedManipulateListing";
-import { buildPrismaQueryConditions, extractParametersGET } from "@/app/api/listings/_utils";
+import {
+  buildPrismaQueryConditions,
+  extractParametersGET,
+  handleAddressUpdate,
+  handleImagesUpdate,
+  handlePriceUpdate,
+  isUserAuthorizedToListing
+} from "@/app/api/listings/_utils";
+import { ApplicationUser } from "@prisma/client";
 
 /**
  * GET Route to retrieve listings.
@@ -206,37 +209,8 @@ export async function PUT(req: Request) {
     const applicationUser: ApplicationUser =
       await getApplicationUserServer(true);
     const parsedValues = listingSchemaPutRequest.parse(await req.json());
-    const {
-      id,
-      listingType,
-      interiorType,
-      propertyType,
-      upkeepType,
-      images,
-      description,
-      areaTotal,
-      areaLiving,
-      areaLand,
-      volume,
-      areaOutside,
-      areaGarage,
-      streetName,
-      houseNumber,
-      longitude,
-      latitude,
-      rooms,
-      bathrooms,
-      bedrooms,
-      parking,
-      constructedYear,
-      floorNumber,
-      numberOfFloorsProperty,
-      numberOfFloorsCommon,
-      heatingType,
-      address,
-      currency,
-      price,
-    } = parsedValues;
+
+    const { id, images, address, price, currency, ...restData } = parsedValues;
 
     const listing = await prisma.listing.findUnique({
       where: {
@@ -247,124 +221,25 @@ export async function PUT(req: Request) {
     if (!listing)
       throw new ResponseError("Listing with provided id wasn't found.", 404);
 
-    // Get user's company id
-    let applicationUserCompanyId = getApplicationUserCompanyId(applicationUser);
-
-    const applicationUserId = applicationUser.id;
-
-    // Check if the user can edit the listing
-    if (
-      !userAllowedManipulateListing(
-        applicationUserId,
-        applicationUserCompanyId,
-        listing,
-      )
-    )
+    if (!isUserAuthorizedToListing(applicationUser, listing))
       throw new ResponseError(
-        "You aren't allowed to changed this property",
+        "You aren't allowed to change this property",
         401,
       );
 
-    // Update images or create new images if they don't exist
-    if (images) {
-      for (let i = 0; i < images.length; i++) {
-        let image = images[i];
+    if (images) await handleImagesUpdate(id, images);
 
-        // if no id then create an image
-        if (!image.id) {
-          await prisma.listingImage.create({
-            data: {
-              ...image,
-              listingId: id,
-            },
-          });
-        } else {
-          // else update it
-          await prisma.listingImage.update({
-            where: {
-              id: image.id,
-              listingId: id,
-            },
-            data: {
-              ...image,
-            },
-          });
-        }
-      }
-    }
-
-    // if user is changing the address
-    if (address) {
-      // else update it
-      await prisma.address.update({
-        where: {
-          id: address.id,
-          listingId: id,
-        },
-        data: {
-          ...address,
-        },
-      });
-    }
-
-    // If there is a price and currency create listing price record
-    if (price && currency) {
-      // check if price is changed
-      const listingPrice = await prisma.listingPrice.findMany({
-        where: {
-          listingId: id,
-          price,
-          currency,
-        },
-        orderBy: {
-          id: "desc",
-        },
-        take: 1,
-      });
-
-      // if price is changed create a new listing price record
-      if (listingPrice === null || listingPrice.length === 0) {
-        await prisma.listingPrice.create({
-          data: {
-            listingId: id,
-            price,
-            currency,
-          },
-        });
-      }
-    }
+    await handleAddressUpdate(id, address);
+    await handlePriceUpdate(id, price, currency);
 
     const updatedListing = await prisma.listing.update({
       where: {
         id,
       },
       data: {
-        listingType,
-        interiorType,
-        propertyType,
-        upkeepType,
-        description,
-        areaTotal,
-        areaLiving,
-        areaLand,
-        volume,
-        areaOutside,
-        areaGarage,
-        streetName,
-        houseNumber,
-        longitude,
-        latitude,
-        rooms,
-        bathrooms,
-        bedrooms,
         price,
         currency,
-        parking,
-        constructedYear,
-        floorNumber,
-        numberOfFloorsProperty,
-        numberOfFloorsCommon,
-        heatingType,
+        ...restData,
       },
       include: {
         ListingImage: true,

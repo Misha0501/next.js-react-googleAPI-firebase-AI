@@ -6,7 +6,7 @@ import { Listing } from "@/types";
  * @param applicationUserCompanyId
  * @param listing
  */
-export const userAllowedManipulateListing = (applicationUserId: number, applicationUserCompanyId: number, listing: Listing) => {
+export const userAllowedManipulateListing = (applicationUserId: number, applicationUserCompanyId: number | null, listing: Listing) => {
     if(!listing) return false;
 
     const listingOwnerId = listing.applicationUserId;

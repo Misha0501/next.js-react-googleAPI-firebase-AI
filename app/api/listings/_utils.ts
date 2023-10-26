@@ -1,11 +1,15 @@
 import { NextRequest } from "next/server";
 import { valuesFromSearchParams } from "@/app/lib/validations/valuesFromSearchParams";
-import { listingsSearchParamSchema } from "@/app/lib/validations/listing";
+import { listingSchemaPutRequest, listingsSearchParamSchema } from "@/app/lib/validations/listing";
 import {
   prismaQueryConditionsFromArray,
   prismaQueryConditionsFromMinMaxValidDateStringValue,
   prismaQueryConditionsFromMinMaxValue
 } from "@/app/lib/db";
+import { prisma } from "@/app/lib/db/client";
+import { getApplicationUserCompanyId } from "@/app/lib/listing/getApplicationUserCompanyId";
+import { userAllowedManipulateListing } from "@/app/lib/listing/userAllowedManipulateListing";
+import { ApplicationUser } from "@prisma/client";
 
 /**
  * Extract and validate parameters from the request.
@@ -21,9 +25,7 @@ export const extractParametersGET = (req: NextRequest) => {
  */
 export const buildPrismaQueryConditions = (params: any) => {
   // Extract parameters
-  let {
-    page,
-    pageSize,
+  const {
     locality,
     heatingType,
     listingType,
@@ -175,4 +177,67 @@ export const buildPrismaQueryConditions = (params: any) => {
   );
 
   return prismaQueryConditions;
+}
+
+// Extract and validate parameters from the request.
+async function extractAndUpdateParameters(req: Request) {
+  const parsedValues = await listingSchemaPutRequest.parse(await req.json());
+  return parsedValues;
+}
+
+// Check if the user is authorized to modify the listing.
+export const isUserAuthorizedToListing = (
+  applicationUser: ApplicationUser,
+  listing: any
+): boolean => {
+  const applicationUserCompanyId = getApplicationUserCompanyId(applicationUser);
+  const applicationUserId = applicationUser.id;
+  return userAllowedManipulateListing(
+    applicationUserId,
+    applicationUserCompanyId,
+    listing
+  );
+}
+
+// Update images logic
+export const handleImagesUpdate = async (id: number, images: any[]) => {
+  for (const image of images) {
+    if (!image.id) {
+      await prisma.listingImage.create({
+        data: { ...image, listingId: id },
+      });
+    } else {
+      await prisma.listingImage.update({
+        where: { id: image.id, listingId: id },
+        data: { ...image },
+      });
+    }
+  }
+}
+
+// Update address logic
+export const handleAddressUpdate = async (id: number, address: any) => {
+  if (address) {
+    await prisma.address.update({
+      where: { id: address.id, listingId: id },
+      data: { ...address },
+    });
+  }
+}
+
+// Update listing price logic
+export const handlePriceUpdate = async (id: number, price: number | undefined, currency: string | undefined) => {
+  if (price && currency) {
+    const listingPrice = await prisma.listingPrice.findMany({
+      where: { listingId: id, price, currency },
+      orderBy: { id: "desc" },
+      take: 1,
+    });
+
+    if (!listingPrice || listingPrice.length === 0) {
+      await prisma.listingPrice.create({
+        data: { listingId: id, price, currency },
+      });
+    }
+  }
 }
