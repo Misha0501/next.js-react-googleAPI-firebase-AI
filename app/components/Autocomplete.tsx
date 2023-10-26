@@ -128,7 +128,6 @@ const AutoComplete = ({
 
       <input
         className="hero__search w-full border-none pl-0 lg:pl-2 outline-none focus:outline-none text-black focus:border-none active:border-none active:outline-none"
-        // icon={MagnifyingGlassIcon}
         type={"text"}
         placeholder={"E.g: Sophia, Plovdiv, Varna"}
         ref={inputRef}
