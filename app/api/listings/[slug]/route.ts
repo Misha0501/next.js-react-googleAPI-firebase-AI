@@ -1,12 +1,16 @@
-import { z } from "zod";
 import { ResponseError } from "@/app/lib/classes/ResponseError";
 import { NextResponse } from "next/server";
 import { prisma } from "@/app/lib/db/client";
 import { getApplicationUserServer } from "@/app/lib/getApplicationUserServer";
 import { ApplicationUser } from "@prisma/client";
-import { userAllowedManipulateListing } from "@/app/lib/listing/userAllowedManipulateListing";
-import { getApplicationUserCompanyId } from "@/app/lib/listing/getApplicationUserCompanyId";
 import { getAveragePriceInNeighborhood } from "@/app/lib/listing/getAveragePriceInNeighborhood";
+import {
+    deleteListingAndAssociatedEntities,
+    ensureUserHasListingAccess,
+    handleListingErrors,
+    parseAndValidateId,
+    validateListingExistence
+} from "@/app/api/listings/_utils";
 
 /**
  * GET Route to retrieve specific listing with provided slug.
@@ -16,9 +20,7 @@ import { getAveragePriceInNeighborhood } from "@/app/lib/listing/getAveragePrice
  */
 export async function GET(request: Request, {params}: { params: { slug: number } }) {
     try {
-        const id = Number(params.slug)
-
-        if (isNaN(id)) throw new ResponseError("ID must be a valid number", 422);
+        const id = parseAndValidateId(params.slug);
 
         const listing = await prisma.listing.findUnique({
             where: {
@@ -41,22 +43,7 @@ export async function GET(request: Request, {params}: { params: { slug: number }
 
         return NextResponse.json(listing);
     } catch (error) {
-        console.error(error)
-        if (error instanceof z.ZodError) {
-            return new Response(error.message, {status: 422})
-        }
-
-        if (error instanceof ResponseError) {
-            return new Response(error.message, {status: error.status})
-        }
-
-        if (error.errorInfo && error.errorInfo.code) {
-            return new Response('Your auth token is invalid or it has expired. Get a new auth token and try again.', {status: 400})
-        }
-
-        return new Response('Something went wrong please try again later', {
-            status: 500,
-        })
+        return handleListingErrors(error);
     }
 }
 
@@ -69,67 +56,18 @@ export async function GET(request: Request, {params}: { params: { slug: number }
  */
 export async function DELETE(request: Request, {params}: { params: { slug: number } }) {
     try {
-        const id = Number(params.slug)
-
-        if (isNaN(id)) throw new ResponseError("ID must be a valid number", 422);
+        const id = parseAndValidateId(params.slug);
 
         const applicationUser: ApplicationUser = await getApplicationUserServer(true);
 
-        const applicationUserId = applicationUser.id;
-        const listing = await prisma.listing.findUnique({
-            where: {
-                id,
-                deleted: null,
-            },
-        })
+        const listing = await validateListingExistence(id);
 
-        let applicationUserCompanyId = getApplicationUserCompanyId(applicationUser);
+        ensureUserHasListingAccess(applicationUser, listing);
 
-        if (!listing) throw new ResponseError("Listing with provided id wasn't found.", 404)
+        await deleteListingAndAssociatedEntities(id);
 
-        if (!userAllowedManipulateListing(applicationUserId, applicationUserCompanyId, listing)) throw new ResponseError("You aren't allowed to changed this property", 401)
-
-        const deleteListingImages = prisma.listingImage.deleteMany({
-            where: {
-                listingId: id,
-            },
-        })
-
-        const deleteListingAddress = prisma.address.deleteMany({
-            where: {
-                listingId: id,
-            },
-        })
-
-        const deleteListingPrices = prisma.listingImage.deleteMany({
-            where: {
-                listingId: id,
-            },
-        })
-
-        const deleteListing = prisma.listing.delete({
-            where: {id}
-        })
-
-        await prisma.$transaction([deleteListingImages, deleteListingAddress, deleteListingPrices, deleteListing])
-
-        return new Response(null, {status: 204})
+        return new Response(null, { status: 204 });
     } catch (error) {
-        console.error(error)
-        if (error instanceof z.ZodError) {
-            return new Response(error.message, {status: 422})
-        }
-
-        if (error instanceof ResponseError) {
-            return new Response(error.message, {status: error.status})
-        }
-
-        if (error.errorInfo && error.errorInfo.code) {
-            return new Response('Your auth token is invalid or it has expired. Get a new auth token and try again.', {status: 400})
-        }
-
-        return new Response('Something went wrong please try again later', {
-            status: 500,
-        })
+        return handleListingErrors(error);
     }
 }

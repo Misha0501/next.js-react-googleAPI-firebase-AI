@@ -1,6 +1,6 @@
 import { NextRequest } from "next/server";
 import { valuesFromSearchParams } from "@/app/lib/validations/valuesFromSearchParams";
-import { listingSchemaPutRequest, listingsSearchParamSchema } from "@/app/lib/validations/listing";
+import { listingsSearchParamSchema } from "@/app/lib/validations/listing";
 import {
   prismaQueryConditionsFromArray,
   prismaQueryConditionsFromMinMaxValidDateStringValue,
@@ -10,6 +10,8 @@ import { prisma } from "@/app/lib/db/client";
 import { getApplicationUserCompanyId } from "@/app/lib/listing/getApplicationUserCompanyId";
 import { userAllowedManipulateListing } from "@/app/lib/listing/userAllowedManipulateListing";
 import { ApplicationUser } from "@prisma/client";
+import { ResponseError } from "@/app/lib/classes/ResponseError";
+import { z } from "zod";
 
 /**
  * Extract and validate parameters from the request.
@@ -179,26 +181,6 @@ export const buildPrismaQueryConditions = (params: any) => {
   return prismaQueryConditions;
 }
 
-// Extract and validate parameters from the request.
-async function extractAndUpdateParameters(req: Request) {
-  const parsedValues = await listingSchemaPutRequest.parse(await req.json());
-  return parsedValues;
-}
-
-// Check if the user is authorized to modify the listing.
-export const isUserAuthorizedToListing = (
-  applicationUser: ApplicationUser,
-  listing: any
-): boolean => {
-  const applicationUserCompanyId = getApplicationUserCompanyId(applicationUser);
-  const applicationUserId = applicationUser.id;
-  return userAllowedManipulateListing(
-    applicationUserId,
-    applicationUserCompanyId,
-    listing
-  );
-}
-
 // Update images logic
 export const handleImagesUpdate = async (id: number, images: any[]) => {
   for (const image of images) {
@@ -240,4 +222,67 @@ export const handlePriceUpdate = async (id: number, price: number | undefined, c
       });
     }
   }
+}
+
+export const parseAndValidateId = (slug: number): number => {
+  const id = Number(slug);
+  if (isNaN(id)) throw new ResponseError("ID must be a valid number", 422);
+  return id;
+}
+
+export const validateListingExistence = async (id: number) => {
+  const listing = await prisma.listing.findUnique({
+    where: {
+      id,
+      deleted: null,
+    },
+  });
+  if (!listing) throw new ResponseError("Listing with provided id wasn't found.", 404);
+  return listing;
+}
+
+export const ensureUserHasListingAccess = (applicationUser: ApplicationUser, listing: any) => {
+  const applicationUserId = applicationUser.id;
+  const applicationUserCompanyId = getApplicationUserCompanyId(applicationUser);
+  if (!userAllowedManipulateListing(applicationUserId, applicationUserCompanyId, listing)) {
+    throw new ResponseError("You aren't allowed to changed this property", 401);
+  }
+}
+
+export const deleteListingAndAssociatedEntities = async (id: number) => {
+  const deleteListingImages = prisma.listingImage.deleteMany({
+    where: {
+      listingId: id,
+    },
+  });
+  const deleteListingAddress = prisma.address.deleteMany({
+    where: {
+      listingId: id,
+    },
+  });
+  const deleteListingPrices = prisma.listingPrice.deleteMany({
+    where: {
+      listingId: id,
+    },
+  });
+  const deleteListing = prisma.listing.delete({
+    where: { id }
+  });
+  await prisma.$transaction([deleteListingImages, deleteListingAddress, deleteListingPrices, deleteListing]);
+}
+
+export const handleListingErrors = (error: any): Response => {
+  console.error(error);
+  if (error instanceof z.ZodError) {
+    return new Response(error.message, { status: 422 });
+  }
+  if (error instanceof ResponseError) {
+    return new Response(error.message, { status: error.status });
+  }
+  if (error.errorInfo && error.errorInfo.code) {
+    return new Response('Your auth token is invalid or it has expired. Get a new auth token and try again.', { status: 400 });
+  }
+  return new Response('Something went wrong please try again later', {
+    status: 500,
+  });
 }

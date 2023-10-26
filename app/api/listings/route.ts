@@ -1,20 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
-import {
-  listingSchema,
-  listingSchemaPutRequest,
-} from "@/app/lib/validations/listing";
-import { z } from "zod";
-import { ResponseError } from "@/app/lib/classes/ResponseError";
+import { listingSchema, listingSchemaPutRequest } from "@/app/lib/validations/listing";
 import { getApplicationUserServer } from "@/app/lib/getApplicationUserServer";
 import { prisma } from "@/app/lib/db/client";
 import { getApplicationUserCompanyId } from "@/app/lib/listing/getApplicationUserCompanyId";
 import {
   buildPrismaQueryConditions,
+  ensureUserHasListingAccess,
   extractParametersGET,
   handleAddressUpdate,
   handleImagesUpdate,
+  handleListingErrors,
   handlePriceUpdate,
-  isUserAuthorizedToListing,
+  validateListingExistence
 } from "@/app/api/listings/_utils";
 import { ApplicationUser } from "@prisma/client";
 
@@ -64,25 +61,7 @@ export async function GET(req: NextRequest) {
       results: listings,
     });
   } catch (error) {
-    console.error(error);
-    if (error instanceof z.ZodError) {
-      return new Response(error.message, { status: 422 });
-    }
-
-    if (error instanceof ResponseError) {
-      return new Response(error.message, { status: error.status });
-    }
-
-    if (error.errorInfo && error.errorInfo.code) {
-      return new Response(
-        "Your auth token is invalid or it has expired. Get a new auth token and try again.",
-        { status: 400 },
-      );
-    }
-
-    return new Response("Something went wrong please try again later", {
-      status: 500,
-    });
+    return handleListingErrors(error);
   }
 }
 
@@ -128,25 +107,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json(listing);
   } catch (error) {
-    console.error(error);
-    if (error instanceof z.ZodError) {
-      return new Response(error.message, { status: 422 });
-    }
-
-    if (error instanceof ResponseError) {
-      return new Response(error.message, { status: error.status });
-    }
-
-    if (error.errorInfo && error.errorInfo.code) {
-      return new Response(
-        "Your auth token is invalid or it has expired. Get a new auth token and try again.",
-        { status: 400 },
-      );
-    }
-
-    return new Response("Something went wrong please try again later", {
-      status: 500,
-    });
+    return handleListingErrors(error);
   }
 }
 
@@ -163,20 +124,9 @@ export async function PUT(req: Request) {
 
     const { id, images, address, price, currency, ...restData } = parsedValues;
 
-    const listing = await prisma.listing.findUnique({
-      where: {
-        id,
-        deleted: null,
-      },
-    });
-    if (!listing)
-      throw new ResponseError("Listing with provided id wasn't found.", 404);
+    const listing = await validateListingExistence(id);
 
-    if (!isUserAuthorizedToListing(applicationUser, listing))
-      throw new ResponseError(
-        "You aren't allowed to change this property",
-        401,
-      );
+    ensureUserHasListingAccess(applicationUser, listing);
 
     if (images) await handleImagesUpdate(id, images);
 
@@ -200,24 +150,6 @@ export async function PUT(req: Request) {
     });
     return NextResponse.json(updatedListing);
   } catch (error) {
-    console.error(error);
-    if (error instanceof z.ZodError) {
-      return new Response(error.message, { status: 422 });
-    }
-
-    if (error instanceof ResponseError) {
-      return new Response(error.message, { status: error.status });
-    }
-
-    if (error.errorInfo && error.errorInfo.code) {
-      return new Response(
-        "Your auth token is invalid or it has expired. Get a new auth token and try again.",
-        { status: 400 },
-      );
-    }
-
-    return new Response("Something went wrong please try again later", {
-      status: 500,
-    });
+    return handleListingErrors(error);
   }
 }
