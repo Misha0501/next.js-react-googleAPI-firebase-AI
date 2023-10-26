@@ -16,6 +16,7 @@ test.afterEach(async ({ page }) => {
   await page.screenshot({ path: "screenshot.jpg" });
 });
 
+
 test.describe('Filters values should trigger a change url and a request once selected for', () => {
   const minMaxFiltersConfigs = [
     { paramName: 'priceMin', value: 50000, locator: '#priceFilterMin', description: 'min price filter' },
