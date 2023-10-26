@@ -1,8 +1,8 @@
-import {z} from "zod";
-import {ResponseError} from "@/app/lib/classes/ResponseError";
-import {prisma} from "@/app/lib/db/client";
-import {getApplicationUserServer} from "@/app/lib/getApplicationUserServer";
-import {ApplicationUser} from '@prisma/client'
+import { ResponseError } from "@/app/lib/classes/ResponseError";
+import { getApplicationUserServer } from "@/app/lib/getApplicationUserServer";
+import { ApplicationUser } from "@prisma/client";
+import { deleteSavedListing, fetchSavedListing, validateUserAuthorization } from "@/app/api/savedListings/_utils";
+import { handleAPIError } from "@/app/lib/api/handleError";
 
 /**
  * DELETE Route to delete a saved listing.
@@ -18,38 +18,18 @@ export async function DELETE(request: Request, {params}: { params: { slug: numbe
 
         const applicationUser: ApplicationUser = await getApplicationUserServer();
 
-        const applicationUserId = applicationUser.id;
-        const savedListing = await prisma.savedListing.findUnique({
-            where: {
-                id,
-            },
-        })
+        const savedListing = await fetchSavedListing(id);
 
-        if (!savedListing) throw new ResponseError("Saved listing with provided id wasn't found.", 404)
+        if (!savedListing) {
+            throw new ResponseError("Saved listing with provided id wasn't found.", 404);
+        }
 
-        if (applicationUserId !== savedListing.applicationUserId) throw new ResponseError("You aren't allowed to changed this property", 401)
+        validateUserAuthorization(applicationUser.id, savedListing);
 
-        await prisma.savedListing.delete({
-            where: {id}
-        })
+        await deleteSavedListing(id);
 
-        return new Response(null, {status: 204})
+        return new Response(null, { status: 204 });
     } catch (error) {
-        console.error(error)
-        if (error instanceof z.ZodError) {
-            return new Response(error.message, {status: 422})
-        }
-
-        if (error instanceof ResponseError) {
-            return new Response(error.message, {status: error.status})
-        }
-
-        if (error.errorInfo && error.errorInfo.code) {
-            return new Response('Your auth token is invalid or it has expired. Get a new auth token and try again.', {status: 400})
-        }
-
-        return new Response('Something went wrong please try again later', {
-            status: 500,
-        })
+        return handleAPIError(error);
     }
 }
