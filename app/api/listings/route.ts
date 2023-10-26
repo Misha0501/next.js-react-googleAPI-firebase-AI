@@ -3,20 +3,14 @@ import { ApplicationUser } from "@prisma/client";
 import {
   listingSchema,
   listingSchemaPutRequest,
-  listingsSearchParamSchema,
 } from "@/app/lib/validations/listing";
 import { z } from "zod";
 import { ResponseError } from "@/app/lib/classes/ResponseError";
 import { getApplicationUserServer } from "@/app/lib/getApplicationUserServer";
-import { valuesFromSearchParams } from "@/app/lib/validations/valuesFromSearchParams";
-import {
-  prismaQueryConditionsFromArray,
-  prismaQueryConditionsFromMinMaxValidDateStringValue,
-  prismaQueryConditionsFromMinMaxValue,
-} from "@/app/lib/db";
 import { prisma } from "@/app/lib/db/client";
 import { getApplicationUserCompanyId } from "@/app/lib/listing/getApplicationUserCompanyId";
 import { userAllowedManipulateListing } from "@/app/lib/listing/userAllowedManipulateListing";
+import { buildPrismaQueryConditions, extractParametersGET } from "@/app/api/listings/_utils";
 
 /**
  * GET Route to retrieve listings.
@@ -26,167 +20,12 @@ import { userAllowedManipulateListing } from "@/app/lib/listing/userAllowedManip
  */
 export async function GET(req: NextRequest) {
   try {
-    const url = new URL(req.url);
+    const params = extractParametersGET(req);
 
-    const values = valuesFromSearchParams(url.searchParams);
+    let prismaQueryConditions = buildPrismaQueryConditions(params);
 
-    const parsedValues = listingsSearchParamSchema.parse(values);
-    let {
-      page,
-      pageSize,
-      locality,
-      heatingType,
-      listingType,
-      interiorType,
-      propertyType,
-      currencyType,
-      upkeepType,
-      areaTotalMin,
-      areaTotalMax,
-      areaLivingMin,
-      areaLivingMax,
-      areaLandMin,
-      areaLandMax,
-      areaOutsideMin,
-      areaOutsideMax,
-      roomsMin,
-      roomsMax,
-      bathroomsMin,
-      bathroomsMax,
-      bedroomsMin,
-      bedroomsMax,
-      parkingMin,
-      parkingMax,
-      constructedYearMin,
-      constructedYearMax,
-      listedSince,
-      priceMin,
-      priceMax,
-    } = parsedValues;
-
-    // Prisma where object that that will be field with conditions
-    let prismaQueryConditions: any = {
-      AND: [],
-    };
-
-    const heatingTypeWhereObj = prismaQueryConditionsFromArray(
-      heatingType,
-      "heatingType",
-    );
-    const listingTypeWhereObj = prismaQueryConditionsFromArray(
-      listingType,
-      "listingType",
-    );
-    const interiorTypeWhereObj = prismaQueryConditionsFromArray(
-      interiorType,
-      "interiorType",
-    );
-    const propertyTypeWhereObj = prismaQueryConditionsFromArray(
-      propertyType,
-      "propertyType",
-    );
-    const upkeepTypeWhereObj = prismaQueryConditionsFromArray(
-      upkeepType,
-      "upkeepType",
-    );
-    const currencyTypeWhereObj = prismaQueryConditionsFromArray(
-      currencyType,
-      "currencyType",
-    );
-    const areaTotalWhereObj = prismaQueryConditionsFromMinMaxValue(
-      areaTotalMin,
-      areaTotalMax,
-      "areaTotal",
-    );
-    const areaLivingWhereObj = prismaQueryConditionsFromMinMaxValue(
-      areaLivingMin,
-      areaLivingMax,
-      "areaLiving",
-    );
-    const areaLandWhereObj = prismaQueryConditionsFromMinMaxValue(
-      areaLandMin,
-      areaLandMax,
-      "areaLand",
-    );
-    const areaOutsideWhereObj = prismaQueryConditionsFromMinMaxValue(
-      areaOutsideMin,
-      areaOutsideMax,
-      "areaOutside",
-    );
-    const roomsWhereObj = prismaQueryConditionsFromMinMaxValue(
-      roomsMin,
-      roomsMax,
-      "rooms",
-    );
-    const bathroomsWhereObj = prismaQueryConditionsFromMinMaxValue(
-      bathroomsMin,
-      bathroomsMax,
-      "bathrooms",
-    );
-    const bedroomsWhereObj = prismaQueryConditionsFromMinMaxValue(
-      bedroomsMin,
-      bedroomsMax,
-      "bedrooms",
-    );
-    const parkingWhereObj = prismaQueryConditionsFromMinMaxValue(
-      parkingMin,
-      parkingMax,
-      "parking",
-    );
-    const priceWhereObj = prismaQueryConditionsFromMinMaxValue(
-      priceMin,
-      priceMax,
-      "price",
-    );
-    const constructedYearWhereObj =
-      prismaQueryConditionsFromMinMaxValidDateStringValue(
-        constructedYearMin,
-        constructedYearMax,
-        "constructedYear",
-      );
-
-    // set listed since
-    const now = new Date();
-    if (listedSince)
-      prismaQueryConditions["createdAt"] = {
-        gte: new Date(
-          now.getFullYear(),
-          now.getMonth(),
-          now.getDate() - listedSince,
-        ),
-      };
-
-    // set locality
-    if (locality) {
-      prismaQueryConditions["Address"] = {
-        some: {
-          locality: locality,
-        },
-      };
-    }
-
-    prismaQueryConditions.AND.push(
-      heatingTypeWhereObj,
-      listingTypeWhereObj,
-      interiorTypeWhereObj,
-      propertyTypeWhereObj,
-      upkeepTypeWhereObj,
-      areaTotalWhereObj,
-      areaLivingWhereObj,
-      areaLandWhereObj,
-      areaOutsideWhereObj,
-      roomsWhereObj,
-      bathroomsWhereObj,
-      bedroomsWhereObj,
-      parkingWhereObj,
-      constructedYearWhereObj,
-      priceWhereObj,
-      currencyTypeWhereObj,
-    );
-
-    // If page or pageSize are not define, use standard values
-    page = page ? page : 1;
-    pageSize = pageSize ? pageSize : 25;
+    const page = params.page || 1;
+    const pageSize = params.pageSize || 25;
 
     const offsetRecords = (page - 1) * pageSize;
 
