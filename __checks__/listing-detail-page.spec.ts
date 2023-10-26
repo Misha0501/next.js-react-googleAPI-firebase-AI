@@ -171,29 +171,26 @@ test.describe("ListingDetailContent Component", () => {
     // check that show more button is not visible
     expect(await showMoreButton.isVisible()).toBeFalsy();
 
-    expect(await description.textContent()).not.toContain("..."); // After clicking, it shouldn't be shortened.
+    // After clicking, it shouldn't be shortened.
+    expect(await description.textContent()).not.toContain("...");
   });
 
   test("should display general information block", async () => {
-    // Just an example check for the first item; you can loop through items if you have the data
     const generalInfoBlock = page.getByTestId("generalInfo");
     expect(await generalInfoBlock.textContent()).toBeTruthy();
   });
 
   test("should display the area and capacity block", async () => {
-    // You might need to add 'data-testid="areaAndCapacity"' in your JSX for this to work
     const areaAndCapacityBlock = page.getByTestId("areaAndCapacity");
     expect(areaAndCapacityBlock.textContent).toBeTruthy();
   });
 
   test("should display the construction block", async () => {
-    // You might need to add 'data-testid="construction"' in your JSX for this to work
     const constructionBlock = page.getByTestId("construction");
     expect(constructionBlock.textContent).toBeTruthy();
   });
 
   test("should display the heating block", async () => {
-    // You might need to add 'data-testid="heating"' in your JSX for this to work
     const heatingBlock = page.getByTestId("heating");
     expect(heatingBlock.textContent).toBeTruthy();
   });
