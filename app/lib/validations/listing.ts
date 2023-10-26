@@ -137,15 +137,15 @@ export const listingSchemaPutRequest = listingSchema.extend({
   address: z
     .object({
       id: z.number(),
-      streetNumber: z.string().optional(),
-      route: z.string().optional(),
-      locality: z.string().optional(),
-      postalCode: z.string().optional(),
-      neighborhood: z.string().optional(),
-      latitude: z.string().optional(),
-      longitude: z.string().optional(),
+      streetNumber: z.string().nullable().optional(),
+      route: z.string().nullable().optional(),
+      locality: z.string().nullable().optional(),
+      postalCode: z.string().nullable().optional(),
+      neighborhood: z.string().nullable().optional(),
+      latitude: z.string().nullable().optional(),
+      longitude: z.string().nullable().optional(),
       showExactLocation: z.boolean().optional(),
-      administrativeAreaLevelOne: z.string().optional(),
+      administrativeAreaLevelOne: z.string().nullable().optional(),
     })
     .optional(),
   upkeepType: z.enum(UPKEEP_TYPES).optional(),
@@ -154,7 +154,7 @@ export const listingSchemaPutRequest = listingSchema.extend({
       z.object({
         id: z.number().optional(),
         url: z.string(),
-        imagePath: z.string().optional(),
+        imagePath: z.string().nullable().optional(),
         positionInListing: z.number(),
       }),
     )
