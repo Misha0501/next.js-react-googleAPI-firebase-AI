@@ -7,6 +7,7 @@ import Link from "next/link";
 import { Button } from "@tremor/react";
 import { ListingContactAgentForm } from "@/app/components/ListingContactAgentForm";
 import { useRouter } from "next/navigation";
+import { useListigDetailContext } from "@/app/context/ListingDetailContext";
 
 type Props = {
   listing: Listing | undefined;
@@ -14,8 +15,8 @@ type Props = {
 
 export const ListingAgentContactCard = ({ listing }: Props) => {
   let [agentContactState, setAgentContactState] = useState("Show Phone Number");
-  const [showContactWithAgent, setShowContactWithAgent] = useState(false);
   const router = useRouter();
+  const {contactSellerFormVisible, setContactSellerFormVisible} = useListigDetailContext();
 
   let contactNumber =
     listing?.company?.phoneNumber ??
@@ -28,7 +29,7 @@ export const ListingAgentContactCard = ({ listing }: Props) => {
   };
 
   const handleContactAgentClick = () => {
-    setShowContactWithAgent(true);
+    setContactSellerFormVisible(true);
     // navigate to the contact form
     router.push("#contactAgentForm");
   };
@@ -101,7 +102,7 @@ export const ListingAgentContactCard = ({ listing }: Props) => {
           </Button>
         </div>
       </div>
-      {showContactWithAgent && (
+      {contactSellerFormVisible && (
         <div id={"contactAgentForm"} data-testid={"contactAgentForm"}>
           <ListingContactAgentForm
             name={

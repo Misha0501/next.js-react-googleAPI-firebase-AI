@@ -2,16 +2,29 @@
 
 import { EnvelopeIcon, PhoneIcon } from "@heroicons/react/24/outline";
 import { Button } from "@tremor/react";
+import { useListigDetailContext } from "@/app/context/ListingDetailContext";
+import { useRouter } from "next/navigation";
+import { Listing } from "@/types";
 
 type Props = {
-  phoneNumber: string;
-  // onContactClick: () => void;
+  listing: Listing;
 };
 export const FloatingContactBar = ({
-  phoneNumber,
-  // onContactClick,
+  listing,
 }: Props) => {
-  // TODO: implement onContactClick
+  const {setContactSellerFormVisible} = useListigDetailContext();
+  const router = useRouter();
+  const handleContactAgentClick = () => {
+    setContactSellerFormVisible(true);
+    // navigate to the contact form
+    router.push("#contactAgentForm");
+  };
+
+  let phoneNumber =
+    listing?.company?.phoneNumber ??
+    listing?.applicationUser?.phoneNumber ??
+    "";
+
   return (
     <div className="fixed bottom-[68px] left-0 right-0 bg-white border-t-2 lg:hidden shadow-2xl py-4">
       <div className="container flex items-center gap-4 justify-around">
@@ -26,7 +39,7 @@ export const FloatingContactBar = ({
           variant="primary"
           icon={EnvelopeIcon}
           className="w-1/2"
-          // onClick={onContactClick}
+          onClick={handleContactAgentClick}
         >
           Contact Seller
         </Button>
