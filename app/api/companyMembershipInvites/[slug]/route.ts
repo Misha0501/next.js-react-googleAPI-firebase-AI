@@ -1,8 +1,10 @@
-import {z} from "zod";
-import {ResponseError} from "@/app/lib/classes/ResponseError";
-import {prisma} from "@/app/lib/db/client";
-import {getApplicationUserServer} from "@/app/lib/getApplicationUserServer";
-import {ApplicationUser} from '@prisma/client'
+import { ResponseError } from "@/app/lib/classes/ResponseError";
+import { prisma } from "@/app/lib/db/client";
+import { getApplicationUserServer } from "@/app/lib/getApplicationUserServer";
+import { ApplicationUser } from "@prisma/client";
+import { handleAPIError } from "@/app/lib/api/handleError";
+import { getActiveCompanyMembershipInviteById } from "@/app/api/companyMembershipInvites/_utils";
+import { validateParamId } from "@/app/lib/api/validateParamId";
 
 /**
  * DELETE Route to delete an membership invite.
@@ -12,27 +14,15 @@ import {ApplicationUser} from '@prisma/client'
  */
 export async function DELETE(request: Request, {params}: { params: { slug: number } }) {
     try {
-        const id = Number(params.slug)
-
-        if (isNaN(id)) throw new ResponseError("ID must be a valid number", 422);
+        const id = validateParamId(params.slug);
 
         const applicationUser: ApplicationUser = await getApplicationUserServer();
 
-        const applicationUserId = applicationUser.id;
+        const invite = await getActiveCompanyMembershipInviteById(id);
 
-        // get the invite to check if the user is the sender
-        const invite = await prisma.companyMembershipInvite.findUnique({
-            where: {
-                id,
-                expiresAt: {
-                    gt: new Date(),
-                }
-            },
-        })
+        if (!invite) throw new ResponseError("Invite with the provided id wasn't found or it's expired.", 404);
 
-        if (!invite) throw new ResponseError("Invite with the provided id wasn't found of it's expired.", 404)
-
-        if (applicationUserId !== invite.applicationUserIdSender) throw new ResponseError("You aren't allowed to changed this property", 401)
+        if (applicationUser.id !== invite.applicationUserIdSender) throw new ResponseError("You aren't allowed to changed this property", 401);
 
         await prisma.companyMembershipInvite.delete({
             where: {id}
@@ -40,21 +30,6 @@ export async function DELETE(request: Request, {params}: { params: { slug: numbe
 
         return new Response(null, {status: 204})
     } catch (error) {
-        console.error(error)
-        if (error instanceof z.ZodError) {
-            return new Response(error.message, {status: 422})
-        }
-
-        if (error instanceof ResponseError) {
-            return new Response(error.message, {status: error.status})
-        }
-
-        if (error.errorInfo && error.errorInfo.code) {
-            return new Response('Your auth token is invalid or it has expired. Get a new auth token and try again.', {status: 400})
-        }
-
-        return new Response('Something went wrong please try again later', {
-            status: 500,
-        })
+        return handleAPIError(error)
     }
 }
