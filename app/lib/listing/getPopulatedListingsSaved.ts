@@ -1,9 +1,11 @@
 import { Listing, SavedListing } from "@/types";
 
 /**
- * Returns a list of listings with savedListingId populated
- * @param listings List of listings
- * @param savedListings List of saved listings
+ * Combines listing data with saved listings to show which listings have been saved by the user.
+ *
+ * @param {Listing[]} listings - The list of listings to be populated.
+ * @param {SavedListing[]} savedListings - The list of saved listings for the user.
+ * @returns {Listing[]} - The populated listings.
  */
 export const getPopulatedListingsSaved = (listings: Listing[], savedListings: SavedListing[]): Listing[] => {
     if(!listings || !listings.length) return [];

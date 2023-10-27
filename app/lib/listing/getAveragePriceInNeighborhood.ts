@@ -2,15 +2,16 @@ import { Listing } from "@/types";
 import { prisma } from "@/app/lib/db/client";
 
 /**
- * Get average price in neighborhood
- * @param listing Listing
- * @param excludeCurrentListing boolean
- * @returns number | null
+ * Calculates the average price of listings in the same neighborhood.
+ *
+ * @param {Listing} listing - The target listing used for comparison.
+ * @param {boolean} excludeCurrentListing - Whether to exclude the provided listing from the average calculation.
+ * @returns {Promise<number|null>} - The average price or null if not available.
  */
 export const getAveragePriceInNeighborhood = async (
   listing: Listing,
   excludeCurrentListing: boolean = false,
-) => {
+): Promise<number | null> => {
   try {
     // Get listing's neighborhood from address
     const neighborhood = listing.Address?.[0]?.neighborhood;

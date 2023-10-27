@@ -1,8 +1,10 @@
 import { ApplicationUser } from "@/types";
 
 /**
- * Get the company id of the application user
- * @param applicationUser ApplicationUser
+ * Retrieves the company ID associated with an application user from their membership details.
+ *
+ * @param {ApplicationUser} applicationUser - The application user object.
+ * @returns {number|null} - The company ID or null if not available.
  */
 export const getApplicationUserCompanyId = (applicationUser: ApplicationUser) => {
     if(!applicationUser) return null;

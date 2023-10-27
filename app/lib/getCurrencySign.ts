@@ -1,8 +1,18 @@
 import { CurrencyType } from "@/types";
 
 /**
- * Get the currency sign for a given currency
- * @param currency Currency to get the sign for
+ * Returns the corresponding currency sign for the given currency type.
+ *
+ * @param {CurrencyType | undefined} currency - The currency type for which the sign is to be returned.
+ * Supported currency types include EUR, USD, and BGN.
+ *
+ * @returns {string} The currency sign for the given currency type.
+ * If the currency type is not recognized or not provided, returns an empty string.
+ *
+ * @example
+ * const currencySign = getCurrencySign("USD"); // returns "$"
+ * const unknownCurrencySign = getCurrencySign("XYZ"); // returns ""
+ *
  */
 export const getCurrencySign = (currency: CurrencyType | undefined) => {
   if(!currency) return "";

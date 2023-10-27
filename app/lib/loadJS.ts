@@ -1,8 +1,9 @@
 /**
- * Loads a JS file dynamically
- * @param src The URL of the JS file to load
- * @param successCallback The callback to invoke when the JS file is loaded
- * @param errorCallback The callback to invoke when there's an error loading the JS file
+ * Dynamically loads a JavaScript file.
+ *
+ * @param {string} src - URL of the JavaScript file.
+ * @param {() => void} successCallback - Callback to execute when the script is successfully loaded.
+ * @param {(error: Event | string) => void} errorCallback - Callback to execute if there's an error while loading the script.
  */
 export const loadJS = (src: string, successCallback: () => void, errorCallback: (error: Event | string) => void): void => {
   const script = document.createElement('script');

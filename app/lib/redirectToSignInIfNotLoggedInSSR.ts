@@ -5,7 +5,10 @@ import {auth} from "firebase-admin";
 import DecodedIdToken = auth.DecodedIdToken;
 
 /**
- * Checks if the user is logged in if no redirects him to the login page
+ * Redirects to the sign-in page if the user is not logged in on the server-side.
+ *
+ * @returns {Promise<{decodedIdToken: DecodedIdToken, authToken: string}>} - The decoded ID token and the authentication token.
+ * @throws Will redirect to `/signin` if not authenticated or in case of an error.
  */
 export const redirectToSignInIfNotLoggedInSSR = async () => {
     try {

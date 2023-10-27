@@ -1,10 +1,10 @@
-import nodemailer from "nodemailer"
+import nodemailer, { SentMessageInfo } from "nodemailer";
 
 type EmailPayload = {
-  to: string
-  subject: string
-  html: string
-}
+  to: string;
+  subject: string;
+  html: string;
+};
 
 const smtpOptions = {
   host: process.env.SMTP_HOST || "smtp.mailtrap.io",
@@ -14,19 +14,24 @@ const smtpOptions = {
     user: process.env.SMTP_USER || "user",
     pass: process.env.SMTP_PASSWORD || "password",
   },
-}
+};
 
 /**
- * Send an email
- * @param data Email payload
+ * Sends an email with the given payload.
+ *
+ * @param {EmailPayload} data - The email payload.
+ * @returns {Promise<SentMessageInfo>} - Resolves when the email is sent.
+ * @throws Will throw an error if sending the email fails.
  */
-export const sendEmail = async (data: EmailPayload) => {
+export const sendEmail = async (
+  data: EmailPayload,
+): Promise<SentMessageInfo> => {
   const transporter = nodemailer.createTransport({
     ...smtpOptions,
-  })
+  });
 
   return await transporter.sendMail({
     from: process.env.SMTP_FROM_EMAIL,
     ...data,
-  })
-}
+  });
+};
