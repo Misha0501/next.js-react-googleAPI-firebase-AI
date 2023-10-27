@@ -68,7 +68,7 @@ export const ListingDetailContent = ({ listing }: Prop) => {
               className="pt-4 text-gray-500 font-light"
               data-testid="description"
             >
-              {formattedDescription}
+              {!showMore ? formattedDescription: listing?.description}
             </p>
             {!showMore && (
               <p

@@ -3,14 +3,17 @@ import { Listing } from "@/types";
 import { getCurrencySign } from "@/app/lib/getCurrencySign";
 import Link from "next/link";
 import { Button } from "@tremor/react";
+import { ListingContactAgentForm } from "@/app/components/ListingContactAgentForm";
+import { useRouter } from "next/navigation";
 
 type Props = {
-  showContactForm: () => void;
   listing: Listing | undefined;
 };
 
-export const ListingAgentContactCard = ({ showContactForm, listing }: Props) => {
+export const ListingAgentContactCard = ({ listing }: Props) => {
   let [agentContactState, setAgentContactState] = useState("Show Phone Number");
+  const [showContactWithAgent, setShowContactWithAgent] = useState(false);
+  const router = useRouter();
 
   let contactNumber =
     listing?.company?.phoneNumber ??
@@ -20,6 +23,12 @@ export const ListingAgentContactCard = ({ showContactForm, listing }: Props) => 
     setAgentContactState(
       agentContactState !== contactNumber ? contactNumber : "Show Phone Number",
     );
+  };
+
+  const handleContactAgentClick = () => {
+    setShowContactWithAgent(true);
+    // navigate to the contact form
+    router.push("#contactAgentForm");
   };
 
   return (
@@ -81,7 +90,7 @@ export const ListingAgentContactCard = ({ showContactForm, listing }: Props) => 
             </div>
           </div>
           <Button
-            onClick={showContactForm}
+            onClick={handleContactAgentClick}
             variant={"primary"}
             className={"w-full"}
             data-testid={'contactSellerButton'}
@@ -90,6 +99,19 @@ export const ListingAgentContactCard = ({ showContactForm, listing }: Props) => 
           </Button>
         </div>
       </div>
+      {showContactWithAgent && (
+        <div id={"contactAgentForm"} data-testid={"contactAgentForm"}>
+          <ListingContactAgentForm
+            name={
+              listing?.company?.name ||
+              listing?.applicationUser?.displayName
+            }
+            emailTo={
+              listing?.company?.email || listing?.applicationUser?.email
+            }
+          />
+        </div>
+      )}
     </>
   );
 };

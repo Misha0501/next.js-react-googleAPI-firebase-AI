@@ -1,20 +1,43 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { ListingImage } from "@/types";
 import Image from "next/image";
 import { Button } from "@tremor/react";
 import { PhotoIcon } from "@heroicons/react/24/outline";
 import { PhotosIcon, VerticaleMap } from "@/public/BedIcon";
 import Link from "next/link";
+import Lightbox from "yet-another-react-lightbox";
+import Thumbnails from "yet-another-react-lightbox/plugins/thumbnails";
+import "yet-another-react-lightbox/styles.css";
+import "yet-another-react-lightbox/plugins/thumbnails.css";
 
 type Props = {
   images: ListingImage[];
-  handleOpenLightBox: (index: number) => void;
 };
-export const ListingDetailImages = ({ images, handleOpenLightBox }: Props) => {
+export const ListingDetailImages = ({ images }: Props) => {
   const listingImagesAmount = useMemo(() => images.length, [images]);
+
+  const lightboxSlides = images?.map((item) => ({
+    src: item.url,
+  }));
+
+  const [openLightBox, setOpenLightBox] = useState(false);
+  const [lightBoxImageIndex, setLightBoxImageIndex] = useState(0);
+
+  const handleOpenLightBox = (index: number) => {
+    setLightBoxImageIndex(index);
+    setOpenLightBox(true);
+  };
 
   return (
     <>
+      <Lightbox
+        open={openLightBox}
+        close={() => setOpenLightBox(false)}
+        plugins={[Thumbnails]}
+        slides={lightboxSlides}
+        index={lightBoxImageIndex}
+      />
+
       {/* Desktop Resolution */}
       <div className="relative h-[60vh] max-h-[60vh]">
         <div
@@ -115,8 +138,7 @@ export const ListingDetailImages = ({ images, handleOpenLightBox }: Props) => {
           <div className="photos">
             <Button
               icon={PhotosIcon}
-              // TODO: Add onClick to open lightbox
-              // onClick={() => setOpenLightBox(true)}
+              onClick={() => setOpenLightBox(true)}
               className="flex gap-1 p-0 bg-transparent border-0 text-tremor-brand-textPrimary font-bold hover:bg-transparent"
             >
               Photos
