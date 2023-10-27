@@ -1,6 +1,8 @@
 import { prisma } from "@/app/lib/db/client";
 
-export const getRecentlyViewedListings = async (userId: number): Promise<any> => {
+export const getRecentlyViewedListings = async (
+  userId: number,
+): Promise<any> => {
   const itemsCount = await prisma.recentlyViewedListing.count({
     where: {
       applicationUserId: userId,
@@ -13,26 +15,29 @@ export const getRecentlyViewedListings = async (userId: number): Promise<any> =>
         include: {
           ListingImage: true,
           Address: true,
-          ListingPrice: true
-        }
-      }
+          ListingPrice: true,
+        },
+      },
     },
     where: {
       applicationUserId: userId,
     },
     orderBy: {
-      createdAt: 'desc'
+      createdAt: "desc",
     },
-    take: 10
+    take: 10,
   });
 
   return { total: itemsCount, results: items };
 };
 
-export const handleRecentlyViewedCreation = async (userId: number, listingId: number): Promise<any> => {
+export const handleRecentlyViewedCreation = async (
+  userId: number,
+  listingId: number,
+): Promise<any> => {
   const createData = {
     applicationUserId: userId,
-    listingId
+    listingId,
   };
 
   const lastResult = await prisma.recentlyViewedListing.findFirst({
@@ -40,8 +45,8 @@ export const handleRecentlyViewedCreation = async (userId: number, listingId: nu
       applicationUserId: userId,
     },
     orderBy: {
-      createdAt: 'desc'
-    }
+      createdAt: "desc",
+    },
   });
 
   if (lastResult && lastResult.listingId === listingId) {

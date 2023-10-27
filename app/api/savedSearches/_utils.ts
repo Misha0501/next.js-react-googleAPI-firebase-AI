@@ -11,7 +11,9 @@ export const fetchSavedSearchesCount = async (
   });
 };
 
-export const fetchSavedSearches = async (applicationUserId: number): Promise<any[]> => {
+export const fetchSavedSearches = async (
+  applicationUserId: number,
+): Promise<any[]> => {
   return await prisma.savedSearch.findMany({
     where: {
       applicationUserId,
@@ -27,7 +29,10 @@ export const fetchSavedSearch = async (id: number): Promise<any> => {
   });
 };
 
-export const authorizeUser = (userId: number, savedSearchUserId: number): void => {
+export const authorizeUser = (
+  userId: number,
+  savedSearchUserId: number,
+): void => {
   if (userId !== savedSearchUserId) {
     throw new ResponseError("You aren't allowed to change this property", 401);
   }
@@ -35,6 +40,6 @@ export const authorizeUser = (userId: number, savedSearchUserId: number): void =
 
 export const deleteSavedSearch = async (id: number): Promise<void> => {
   await prisma.savedSearch.delete({
-    where: {id},
+    where: { id },
   });
 };

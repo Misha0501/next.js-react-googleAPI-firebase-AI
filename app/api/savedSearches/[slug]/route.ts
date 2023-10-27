@@ -10,22 +10,28 @@ import { validateParamId } from "@/app/lib/api/validateParamId";
  * @constructor
  * @param request
  */
-export async function DELETE(request: Request, {params}: { params: { slug: number } }) {
-    try {
-        const id = validateParamId(params.slug);
-        const applicationUser = await getApplicationUserServer();
-        const savedSearch = await fetchSavedSearch(id);
+export async function DELETE(
+  request: Request,
+  { params }: { params: { slug: number } },
+) {
+  try {
+    const id = validateParamId(params.slug);
+    const applicationUser = await getApplicationUserServer();
+    const savedSearch = await fetchSavedSearch(id);
 
-        if (!savedSearch) {
-            throw new ResponseError("Saved search with provided id wasn't found.", 404);
-        }
-
-        authorizeUser(applicationUser.id, savedSearch.applicationUserId);
-
-        await deleteSavedSearch(id);
-
-        return new Response(null, {status: 204});
-    } catch (error) {
-        return handleAPIError(error);
+    if (!savedSearch) {
+      throw new ResponseError(
+        "Saved search with provided id wasn't found.",
+        404,
+      );
     }
+
+    authorizeUser(applicationUser.id, savedSearch.applicationUserId);
+
+    await deleteSavedSearch(id);
+
+    return new Response(null, { status: 204 });
+  } catch (error) {
+    return handleAPIError(error);
+  }
 }

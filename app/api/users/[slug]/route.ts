@@ -9,15 +9,18 @@ import { getApplicationUserCompanyId } from "@/app/lib/listing/getApplicationUse
  * @constructor
  * @param request
  */
-export async function GET(request: Request, {params}: { params: { slug: number } }) {
+export async function GET(
+  request: Request,
+  { params }: { params: { slug: number } },
+) {
   try {
-    const id = Number(params.slug)
+    const id = Number(params.slug);
 
     if (isNaN(id)) throw new ResponseError("ID must be a valid number", 422);
 
     // Get application user
-    const applicationUser =  await prisma.applicationUser.findUnique({
-      where: {id},
+    const applicationUser = await prisma.applicationUser.findUnique({
+      where: { id },
       include: {
         Membership: true,
         Listing: {
@@ -28,7 +31,7 @@ export async function GET(request: Request, {params}: { params: { slug: number }
           },
           where: {
             deleted: null,
-          }
+          },
         },
       },
     });
@@ -36,10 +39,10 @@ export async function GET(request: Request, {params}: { params: { slug: number }
     let applicationUserCompanyId = getApplicationUserCompanyId(applicationUser);
 
     // if applicationUserCompanyId exists get all available info about that company
-    if(applicationUserCompanyId) {
+    if (applicationUserCompanyId) {
       applicationUser.Company = await prisma.company.findUnique({
         where: {
-          id: applicationUserCompanyId
+          id: applicationUserCompanyId,
         },
         include: {
           Address: true,
@@ -51,14 +54,14 @@ export async function GET(request: Request, {params}: { params: { slug: number }
             },
             where: {
               deleted: null,
-            }
+            },
           },
         },
       });
     }
 
     // if user is part of a company then show only company's listigs
-    if(applicationUser?.Company) {
+    if (applicationUser?.Company) {
       delete applicationUser?.Listing;
     }
 
@@ -68,19 +71,22 @@ export async function GET(request: Request, {params}: { params: { slug: number }
     delete applicationUser?.providerId;
     delete applicationUser?.updatedAt;
 
-    return NextResponse.json(applicationUser)
+    return NextResponse.json(applicationUser);
   } catch (error) {
-    console.error(error)
+    console.error(error);
     if (error instanceof ResponseError) {
-      return new Response(error.message, {status: error.status})
+      return new Response(error.message, { status: error.status });
     }
 
     if (error.errorInfo && error.errorInfo.code) {
-      return new Response('Your auth token is invalid or it has expired. Get a new auth token and try again.', {status: 400})
+      return new Response(
+        "Your auth token is invalid or it has expired. Get a new auth token and try again.",
+        { status: 400 },
+      );
     }
 
-    return new Response('Something went wrong please try again later', {
+    return new Response("Something went wrong please try again later", {
       status: 500,
-    })
+    });
   }
 }

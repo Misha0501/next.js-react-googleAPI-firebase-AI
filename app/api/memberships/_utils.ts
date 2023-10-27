@@ -11,9 +11,9 @@ export const findMembership = async (userId: number): Promise<any> => {
     where: { applicationUserId: userId },
     include: {
       company: {
-        include: { Address: true }
-      }
-    }
+        include: { Address: true },
+      },
+    },
   });
 };
 
@@ -24,8 +24,13 @@ export const findMembership = async (userId: number): Promise<any> => {
  * @returns {Promise<any>} - Returns the invite details.
  * @throws {ResponseError} - Throws an error if validation fails.
  */
-export const validateMembershipInvite = async (inviteId: number, email: string): Promise<any> => {
-  const invite = await prisma.companyMembershipInvite.findUnique({ where: { id: inviteId } });
+export const validateMembershipInvite = async (
+  inviteId: number,
+  email: string,
+): Promise<any> => {
+  const invite = await prisma.companyMembershipInvite.findUnique({
+    where: { id: inviteId },
+  });
 
   if (!invite) {
     throw new ResponseError("The invite does not exist", 400);

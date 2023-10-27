@@ -19,7 +19,7 @@ export const extractParametersGET = (req: NextRequest) => {
   const url = new URL(req.url);
   const values = valuesFromSearchParams(url.searchParams);
   return listingsSearchParamSchema.parse(values);
-}
+};
 
 /**
  * Build Prisma query conditions based on provided parameters.
@@ -178,7 +178,7 @@ export const buildPrismaQueryConditions = (params: any) => {
   );
 
   return prismaQueryConditions;
-}
+};
 
 // Update images logic
 export const handleImagesUpdate = async (id: number, images: any[]) => {
@@ -194,7 +194,7 @@ export const handleImagesUpdate = async (id: number, images: any[]) => {
       });
     }
   }
-}
+};
 
 // Update address logic
 export const handleAddressUpdate = async (id: number, address: any) => {
@@ -204,10 +204,14 @@ export const handleAddressUpdate = async (id: number, address: any) => {
       data: { ...address },
     });
   }
-}
+};
 
 // Update listing price logic
-export const handlePriceUpdate = async (id: number, price: number | undefined, currency: string | undefined) => {
+export const handlePriceUpdate = async (
+  id: number,
+  price: number | undefined,
+  currency: string | undefined,
+) => {
   if (price && currency) {
     const listingPrice = await prisma.listingPrice.findMany({
       where: { listingId: id, price, currency },
@@ -221,13 +225,13 @@ export const handlePriceUpdate = async (id: number, price: number | undefined, c
       });
     }
   }
-}
+};
 
 export const parseAndValidateId = (slug: number): number => {
   const id = Number(slug);
   if (isNaN(id)) throw new ResponseError("ID must be a valid number", 422);
   return id;
-}
+};
 
 export const validateListingExistence = async (id: number) => {
   const listing = await prisma.listing.findUnique({
@@ -236,17 +240,27 @@ export const validateListingExistence = async (id: number) => {
       deleted: null,
     },
   });
-  if (!listing) throw new ResponseError("Listing with provided id wasn't found.", 404);
+  if (!listing)
+    throw new ResponseError("Listing with provided id wasn't found.", 404);
   return listing;
-}
+};
 
-export const ensureUserHasListingAccess = (applicationUser: ApplicationUser, listing: any) => {
+export const ensureUserHasListingAccess = (
+  applicationUser: ApplicationUser,
+  listing: any,
+) => {
   const applicationUserId = applicationUser.id;
   const applicationUserCompanyId = getApplicationUserCompanyId(applicationUser);
-  if (!userAllowedManipulateListing(applicationUserId, applicationUserCompanyId, listing)) {
+  if (
+    !userAllowedManipulateListing(
+      applicationUserId,
+      applicationUserCompanyId,
+      listing,
+    )
+  ) {
     throw new ResponseError("You aren't allowed to changed this property", 401);
   }
-}
+};
 
 export const deleteListingAndAssociatedEntities = async (id: number) => {
   const deleteListingImages = prisma.listingImage.deleteMany({
@@ -265,7 +279,12 @@ export const deleteListingAndAssociatedEntities = async (id: number) => {
     },
   });
   const deleteListing = prisma.listing.delete({
-    where: { id }
+    where: { id },
   });
-  await prisma.$transaction([deleteListingImages, deleteListingAddress, deleteListingPrices, deleteListing]);
-}
+  await prisma.$transaction([
+    deleteListingImages,
+    deleteListingAddress,
+    deleteListingPrices,
+    deleteListing,
+  ]);
+};

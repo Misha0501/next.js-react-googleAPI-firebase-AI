@@ -14,9 +14,9 @@ export const getSavedListings = async (userId: number): Promise<any> => {
         include: {
           ListingImage: true,
           Address: true,
-          ListingPrice: true
-        }
-      }
+          ListingPrice: true,
+        },
+      },
     },
     where: {
       applicationUserId: userId,
@@ -26,13 +26,18 @@ export const getSavedListings = async (userId: number): Promise<any> => {
   return { total: savedListingsCount, results: savedListings };
 };
 
-export const handleSavedListingCreation = async (userId: number, listingId: number): Promise<any> => {
+export const handleSavedListingCreation = async (
+  userId: number,
+  listingId: number,
+): Promise<any> => {
   const savedListingData = {
     applicationUserId: userId,
-    listingId
+    listingId,
   };
 
-  const existingSavedListing = await prisma.savedListing.findMany({ where: { ...savedListingData } });
+  const existingSavedListing = await prisma.savedListing.findMany({
+    where: { ...savedListingData },
+  });
 
   if (!existingSavedListing || !existingSavedListing.length) {
     return await prisma.savedListing.create({ data: { ...savedListingData } });
@@ -41,14 +46,16 @@ export const handleSavedListingCreation = async (userId: number, listingId: numb
   return existingSavedListing[0];
 };
 
-
 export const fetchSavedListing = async (id: number): Promise<any> => {
   return await prisma.savedListing.findUnique({
     where: { id },
   });
 };
 
-export const validateUserAuthorization = (applicationUserId: number, savedListing: any): void => {
+export const validateUserAuthorization = (
+  applicationUserId: number,
+  savedListing: any,
+): void => {
   if (applicationUserId !== savedListing.applicationUserId) {
     throw new ResponseError("You aren't allowed to change this property", 401);
   }

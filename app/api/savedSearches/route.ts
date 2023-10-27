@@ -14,13 +14,19 @@ import { fetchSavedSearches, fetchSavedSearchesCount } from "@/app/api/savedSear
  */
 export async function GET(req: NextRequest) {
   try {
-    const applicationUser: ApplicationUser = await getApplicationUserServer(true);
+    const applicationUser: ApplicationUser =
+      await getApplicationUserServer(true);
 
-    const savedSearchesCount = await fetchSavedSearchesCount(applicationUser.id);
+    const savedSearchesCount = await fetchSavedSearchesCount(
+      applicationUser.id,
+    );
 
     const savedSearches = await fetchSavedSearches(applicationUser.id);
 
-    return NextResponse.json({ total: savedSearchesCount, results: savedSearches });
+    return NextResponse.json({
+      total: savedSearchesCount,
+      results: savedSearches,
+    });
   } catch (error) {
     return handleAPIError(error);
   }

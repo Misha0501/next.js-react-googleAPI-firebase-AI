@@ -5,10 +5,7 @@ import { prisma } from "@/app/lib/db/client";
 import { ApplicationUser } from "@prisma/client";
 import { userPUTSchema } from "@/app/lib/validations/user";
 import { firebaseAdmin } from "@/app/lib/firebase/configAdmin";
-import {
-  findApplicationUserByEmail,
-  handleUserAPIUpdateError,
-} from "@/app/api/users/_utils";
+import { findApplicationUserByEmail, handleUserAPIUpdateError } from "@/app/api/users/_utils";
 import { handleAPIError } from "@/app/lib/api/handleError";
 
 /**

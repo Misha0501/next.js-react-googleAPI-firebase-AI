@@ -10,31 +10,44 @@ import { authenticateWithFirebaseIdentityToolkit, setAuthCookiesForOneDay } from
  * @constructor
  */
 export async function POST(req: Request) {
-    try {
-        const parsedValues = loginSchema.parse(await req.json());
+  try {
+    const parsedValues = loginSchema.parse(await req.json());
 
-        const {email, password} = parsedValues;
+    const { email, password } = parsedValues;
 
-        const response = await authenticateWithFirebaseIdentityToolkit(email, password);
-        const authToken = response.data.idToken;
-        const refreshToken = response.data.refreshToken;
+    const response = await authenticateWithFirebaseIdentityToolkit(
+      email,
+      password,
+    );
 
-        setAuthCookiesForOneDay(authToken, refreshToken);
+    const authToken = response.data.idToken;
+    const refreshToken = response.data.refreshToken;
 
-        return NextResponse.json({email: response.data.email, authToken, refreshToken});
+    setAuthCookiesForOneDay(authToken, refreshToken);
 
-    } catch (error) {
-        if (error instanceof z.ZodError) {
-            return new Response(error.message, {status: 422})
-        }
-
-        if (error instanceof AxiosError && error.response && error.response.status === 400) {
-            // The request was made and the server responded with a status code 400
-            return new Response("Username or password is incorrect.", {status: 400})
-        }
-
-        return new Response('Something went wrong please try again later', {
-            status: 500,
-        })
+    return NextResponse.json({
+      email: response.data.email,
+      authToken,
+      refreshToken,
+    });
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      return new Response(error.message, { status: 422 });
     }
+
+    if (
+      error instanceof AxiosError &&
+      error.response &&
+      error.response.status === 400
+    ) {
+      // The request was made and the server responded with a status code 400
+      return new Response("Username or password is incorrect.", {
+        status: 400,
+      });
+    }
+
+    return new Response("Something went wrong please try again later", {
+      status: 500,
+    });
+  }
 }

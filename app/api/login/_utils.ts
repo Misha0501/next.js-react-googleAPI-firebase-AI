@@ -15,9 +15,14 @@ const ONE_DAY = 24 * 60 * 60 * 1000;
  * @param {string} authToken - The authentication token.
  * @param {string} refreshToken - The refresh token.
  */
-export const setAuthCookiesForOneDay = (authToken: string, refreshToken: string): void => {
-  cookies().set('authToken', authToken, { expires: Date.now() + ONE_DAY });
-  cookies().set('refreshToken', refreshToken, { expires: Date.now() + ONE_DAY });
+export const setAuthCookiesForOneDay = (
+  authToken: string,
+  refreshToken: string,
+): void => {
+  cookies().set("authToken", authToken, { expires: Date.now() + ONE_DAY });
+  cookies().set("refreshToken", refreshToken, {
+    expires: Date.now() + ONE_DAY,
+  });
 };
 
 /**
@@ -26,10 +31,16 @@ export const setAuthCookiesForOneDay = (authToken: string, refreshToken: string)
  * @param {string} password - The password to authenticate.
  * @returns {Promise<FirebaseAPISignInAuthResponse>} - Returns the authentication response.
  */
-export const authenticateWithFirebaseIdentityToolkit = async (email: string, password: string): Promise<axios.AxiosResponse<FirebaseAPISignInAuthResponse>> => {
-  return await axios.post<FirebaseAPISignInAuthResponse>(`${IDENTITYTOOLKIT_URL}/v1/accounts:signInWithPassword?key=${FIREBASE_API_KEY}`, {
-    email,
-    password,
-    returnSecureToken: true
-  });
+export const authenticateWithFirebaseIdentityToolkit = async (
+  email: string,
+  password: string,
+): Promise<axios.AxiosResponse<FirebaseAPISignInAuthResponse>> => {
+  return await axios.post<FirebaseAPISignInAuthResponse>(
+    `${IDENTITYTOOLKIT_URL}/v1/accounts:signInWithPassword?key=${FIREBASE_API_KEY}`,
+    {
+      email,
+      password,
+      returnSecureToken: true,
+    },
+  );
 };

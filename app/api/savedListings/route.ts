@@ -11,15 +11,16 @@ import { getSavedListings, handleSavedListingCreation } from "@/app/api/savedLis
  * @constructor
  */
 export async function GET(req: NextRequest) {
-    try {
-        const applicationUser: ApplicationUser = await getApplicationUserServer(true);
+  try {
+    const applicationUser: ApplicationUser =
+      await getApplicationUserServer(true);
 
-        const savedListings = await getSavedListings(applicationUser.id);
+    const savedListings = await getSavedListings(applicationUser.id);
 
-        return NextResponse.json(savedListings);
-    } catch (error) {
-        return handleListingErrors(error);
-    }
+    return NextResponse.json(savedListings);
+  } catch (error) {
+    return handleListingErrors(error);
+  }
 }
 
 /**
@@ -28,15 +29,19 @@ export async function GET(req: NextRequest) {
  * @constructor
  */
 export async function POST(req: Request) {
-    try {
-        const applicationUser: ApplicationUser = await getApplicationUserServer(true);
+  try {
+    const applicationUser: ApplicationUser =
+      await getApplicationUserServer(true);
 
-        const parsedValues = savedListingsSchema.parse(await req.json());
+    const parsedValues = savedListingsSchema.parse(await req.json());
 
-        const savedListing = await handleSavedListingCreation(applicationUser.id, parsedValues.listingId);
+    const savedListing = await handleSavedListingCreation(
+      applicationUser.id,
+      parsedValues.listingId,
+    );
 
-        return NextResponse.json(savedListing);
-    } catch (error) {
-        return handleListingErrors(error);
-    }
+    return NextResponse.json(savedListing);
+  } catch (error) {
+    return handleListingErrors(error);
+  }
 }

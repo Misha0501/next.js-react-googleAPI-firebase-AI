@@ -11,15 +11,18 @@ import { getRecentlyViewedListings, handleRecentlyViewedCreation } from "@/app/a
  * @constructor
  */
 export async function GET(req: NextRequest) {
-    try {
-        const applicationUser: ApplicationUser = await getApplicationUserServer(true);
+  try {
+    const applicationUser: ApplicationUser =
+      await getApplicationUserServer(true);
 
-        const recentlyViewedListings = await getRecentlyViewedListings(applicationUser.id);
+    const recentlyViewedListings = await getRecentlyViewedListings(
+      applicationUser.id,
+    );
 
-        return NextResponse.json(recentlyViewedListings);
-    } catch (error) {
-        return handleAPIError(error)
-    }
+    return NextResponse.json(recentlyViewedListings);
+  } catch (error) {
+    return handleAPIError(error);
+  }
 }
 
 /**
@@ -28,15 +31,19 @@ export async function GET(req: NextRequest) {
  * @constructor
  */
 export async function POST(req: Request) {
-    try {
-        const applicationUser: ApplicationUser = await getApplicationUserServer(true);
+  try {
+    const applicationUser: ApplicationUser =
+      await getApplicationUserServer(true);
 
-        const parsedValues = recentlyViewedListingsSchema.parse(await req.json());
+    const parsedValues = recentlyViewedListingsSchema.parse(await req.json());
 
-        const result = await handleRecentlyViewedCreation(applicationUser.id, parsedValues.listingId);
+    const result = await handleRecentlyViewedCreation(
+      applicationUser.id,
+      parsedValues.listingId,
+    );
 
-        return NextResponse.json(result);
-    } catch (error) {
-        return handleAPIError(error)
-    }
+    return NextResponse.json(result);
+  } catch (error) {
+    return handleAPIError(error);
+  }
 }
