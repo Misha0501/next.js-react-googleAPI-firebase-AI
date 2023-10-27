@@ -7,10 +7,10 @@ import { getAveragePriceInNeighborhood } from "@/app/lib/listing/getAveragePrice
 import {
     deleteListingAndAssociatedEntities,
     ensureUserHasListingAccess,
-    parseAndValidateId,
     validateListingExistence
 } from "@/app/api/listings/_utils";
 import { handleAPIError } from "@/app/lib/api/handleError";
+import { validateParamId } from "@/app/lib/api/validateParamId";
 
 /**
  * GET Route to retrieve specific listing with provided slug.
@@ -20,7 +20,7 @@ import { handleAPIError } from "@/app/lib/api/handleError";
  */
 export async function GET(request: Request, {params}: { params: { slug: number } }) {
     try {
-        const id = parseAndValidateId(params.slug);
+        const id = validateParamId(params.slug);
 
         const listing = await prisma.listing.findUnique({
             where: {
@@ -56,7 +56,7 @@ export async function GET(request: Request, {params}: { params: { slug: number }
  */
 export async function DELETE(request: Request, {params}: { params: { slug: number } }) {
     try {
-        const id = parseAndValidateId(params.slug);
+        const id = validateParamId(params.slug);
 
         const applicationUser: ApplicationUser = await getApplicationUserServer(true);
 

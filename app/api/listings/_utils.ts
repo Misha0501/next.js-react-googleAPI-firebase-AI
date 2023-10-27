@@ -13,16 +13,22 @@ import { ApplicationUser } from "@prisma/client";
 import { ResponseError } from "@/app/lib/classes/ResponseError";
 
 /**
- * Extract and validate parameters from the request.
+ * Extracts and validates parameters from the request.
+ *
+ * @param {NextRequest} req - The request object.
+ * @returns {any} - The parsed and validated parameters.
  */
-export const extractParametersGET = (req: NextRequest) => {
+export const extractParametersGET = (req: NextRequest): any => {
   const url = new URL(req.url);
   const values = valuesFromSearchParams(url.searchParams);
   return listingsSearchParamSchema.parse(values);
 };
 
 /**
- * Build Prisma query conditions based on provided parameters.
+ * Builds Prisma query conditions based on the provided parameters.
+ *
+ * @param {any} params - The parameters to be used for creating the query conditions.
+ * @returns - The Prisma query conditions.
  */
 export const buildPrismaQueryConditions = (params: any) => {
   // Extract parameters
@@ -180,7 +186,12 @@ export const buildPrismaQueryConditions = (params: any) => {
   return prismaQueryConditions;
 };
 
-// Update images logic
+/**
+ * Handles the update of images for a listing.
+ *
+ * @param {number} id - The listing id.
+ * @param {any[]} images - Array of images to be updated.
+ */
 export const handleImagesUpdate = async (id: number, images: any[]) => {
   for (const image of images) {
     if (!image.id) {
@@ -196,7 +207,12 @@ export const handleImagesUpdate = async (id: number, images: any[]) => {
   }
 };
 
-// Update address logic
+/**
+ * Handles the update of address for a listing.
+ *
+ * @param {number} id - The listing id.
+ * @param {any} address - The address to be updated.
+ */
 export const handleAddressUpdate = async (id: number, address: any) => {
   if (address) {
     await prisma.address.update({
@@ -206,7 +222,13 @@ export const handleAddressUpdate = async (id: number, address: any) => {
   }
 };
 
-// Update listing price logic
+/**
+ * Handles the update of price for a listing.
+ *
+ * @param {number} id - The listing id.
+ * @param {number | undefined} price - The price to be updated.
+ * @param {string | undefined} currency - The currency of the price.
+ */
 export const handlePriceUpdate = async (
   id: number,
   price: number | undefined,
@@ -227,12 +249,12 @@ export const handlePriceUpdate = async (
   }
 };
 
-export const parseAndValidateId = (slug: number): number => {
-  const id = Number(slug);
-  if (isNaN(id)) throw new ResponseError("ID must be a valid number", 422);
-  return id;
-};
-
+/**
+ * Validates if a listing exists.
+ *
+ * @param {number} id - The ID of the listing.
+ * @returns - The found listing.
+ */
 export const validateListingExistence = async (id: number) => {
   const listing = await prisma.listing.findUnique({
     where: {
@@ -245,6 +267,12 @@ export const validateListingExistence = async (id: number) => {
   return listing;
 };
 
+/**
+ * Ensures that the user has access to manipulate the listing.
+ *
+ * @param {ApplicationUser} applicationUser - The application user object.
+ * @param {any} listing - The listing object.
+ */
 export const ensureUserHasListingAccess = (
   applicationUser: ApplicationUser,
   listing: any,
@@ -262,6 +290,11 @@ export const ensureUserHasListingAccess = (
   }
 };
 
+/**
+ * Deletes a listing and its associated entities (images, address, prices).
+ *
+ * @param {number} id - The ID of the listing to be deleted.
+ */
 export const deleteListingAndAssociatedEntities = async (id: number) => {
   const deleteListingImages = prisma.listingImage.deleteMany({
     where: {
