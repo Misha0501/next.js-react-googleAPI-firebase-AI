@@ -73,7 +73,9 @@ export const CompanyTab = () => {
   const handleAddressChange = (address: AutocompleteAddress) => {
     if (!address) return;
 
-    formik.setFieldValue("address", address);
+    // get previous address id
+    const addressId = formik.values.address.id;
+    formik.setFieldValue("address", { id: addressId, ...address });
     setShowAddress(true);
   };
 
@@ -87,12 +89,10 @@ export const CompanyTab = () => {
 
       await createCompany.mutateAsync(values);
       toast.success("Company created successfully");
-
     } catch (error) {
       toast.error(
-        "There was an error creating the company: " +
-        error?.message ||
-        "Something went wrong. Please try again",
+        "There was an error creating the company: " + error?.message ||
+          "Something went wrong. Please try again",
       );
     }
   };
@@ -244,7 +244,10 @@ export const CompanyTab = () => {
             </p>
           </div>
         )}
-        <Button type={"submit"} disabled={createCompany.isLoading || updateCompany.isLoading}>
+        <Button
+          type={"submit"}
+          disabled={createCompany.isLoading || updateCompany.isLoading}
+        >
           Submit
         </Button>
       </form>
