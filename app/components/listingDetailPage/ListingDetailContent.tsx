@@ -1,46 +1,74 @@
 import { Divider } from "@tremor/react";
 import { useMemo, useState } from "react";
+import { Listing } from "@/types";
 
 type Prop = {
-  generalInfo: {
-    title: string;
-    value: string;
-  }[];
-  areaAndCapacity: {
-    title: string;
-    value: string;
-  }[];
-  construction: {
-    title: string;
-    value: string;
-  }[];
-  heatingType: string;
-  description: string;
+  listing: Listing;
 };
-const ListingDetailContent = ({
-  generalInfo,
-  areaAndCapacity,
-  construction,
-  heatingType,
-  description,
-}: Prop) => {
+export const ListingDetailContent = ({ listing }: Prop) => {
   const [showMore, setShowMore] = useState(false);
 
   // format description using to show only 400 characters if it is more than 400 characters
   const formattedDescription = useMemo(() => {
-    return description?.length > 400 ? description?.slice(0, 400) + "..." : description;
-  }, [description]);
+    return listing?.description?.length > 400
+      ? listing?.description?.slice(0, 400) + "..."
+      : listing?.description;
+  }, [listing?.description]);
+
+  let generalInfo = useMemo(
+    () => [
+      { title: "Price", value: listing?.price },
+      { title: "Amount of Rooms", value: listing?.rooms },
+      { title: "Offered Since", value: listing?.createdAt },
+      { title: "Amount of bathrooms", value: listing?.bathrooms },
+      { title: "Status", value: listing?.active },
+      { title: "Amount of bedrooms", value: listing?.bedrooms },
+      { title: "Interior", value: listing?.interiorType },
+      { title: "Heating", value: listing?.heatingType },
+      { title: "Upkeep", value: listing?.upkeepType },
+      { title: "Parking area", value: listing?.parking },
+      { title: "Floor", value: listing?.floorNumber },
+      { title: "Balcony/terrace", value: listing?.balcony },
+    ],
+    [listing],
+  );
+
+  let areaAndCapacity = useMemo(
+    () => [
+      { title: "Total area", value: listing?.areaTotal },
+      { title: "Outside area", value: listing?.areaOutside },
+      { title: "Living area", value: listing?.areaLiving },
+      { title: "Garden", value: listing?.areaGarden },
+      { title: "Volume", value: listing?.volume },
+      { title: "Garage", value: listing?.areaGarage },
+    ],
+    [listing],
+  );
+
+  let construction = useMemo(
+    () => [
+      { title: "Building type", value: listing?.buildingType },
+      { title: "Year built", value: listing?.constructedYear },
+      { title: "Number of Floor", value: listing?.numberOfFloorsProperty },
+    ],
+    [listing],
+  );
+
+  if (!listing) {
+    return null;
+  }
 
   return (
     <>
-      {description && (
+      {formattedDescription && (
         <>
           <div>
             <p className="text-2xl">Description</p>
-            <p className="pt-4 text-gray-500 font-light" data-testid="description">
-              {showMore
-                ? description
-                : formattedDescription}
+            <p
+              className="pt-4 text-gray-500 font-light"
+              data-testid="description"
+            >
+              {formattedDescription}
             </p>
             {!showMore && (
               <p
@@ -49,18 +77,23 @@ const ListingDetailContent = ({
                 data-testid="showMoreBtn"
               >
                 Show More
-              </p>)
-            }
-
+              </p>
+            )}
           </div>
           <Divider className={"hidden lg:block"} />
         </>
       )}
       <div>
         <p className="text-2xl">General information</p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-6 pt-8 " data-testid={'generalInfo'}>
+        <div
+          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-6 pt-8 "
+          data-testid={"generalInfo"}
+        >
           {generalInfo.map((item, index) => (
-            <div key={index} className="flex justify-between sm:border-0 border-b border-gray-200 sm:pb-0 pb-3.5">
+            <div
+              key={index}
+              className="flex justify-between sm:border-0 border-b border-gray-200 sm:pb-0 pb-3.5"
+            >
               <p className="text-gray-500">{item.title}</p>
               <p>{item.value || "-"}</p>
             </div>
@@ -70,9 +103,15 @@ const ListingDetailContent = ({
       <Divider className={"hidden lg:block"} />
       <div>
         <p className="text-2xl">Area and Capacity</p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-6 pt-8" data-testid={'areaAndCapacity'}>
+        <div
+          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-6 pt-8"
+          data-testid={"areaAndCapacity"}
+        >
           {areaAndCapacity?.map((item, index) => (
-            <div key={index} className="flex justify-between sm:border-0 border-b border-gray-200 sm:pb-0 pb-3.5">
+            <div
+              key={index}
+              className="flex justify-between sm:border-0 border-b border-gray-200 sm:pb-0 pb-3.5"
+            >
               <p className="text-gray-500">{item.title}</p>
               <p>{item.value || "-"}</p>
             </div>
@@ -82,9 +121,15 @@ const ListingDetailContent = ({
       <Divider className={"hidden lg:block"} />
       <div>
         <p className="text-2xl">Construction</p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-6 pt-8" data-testid={'construction'}>
+        <div
+          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-6 pt-8"
+          data-testid={"construction"}
+        >
           {construction?.map((item, index) => (
-            <div key={index} className="flex justify-between sm:border-0 border-b border-gray-200 sm:pb-0 pb-3.5">
+            <div
+              key={index}
+              className="flex justify-between sm:border-0 border-b border-gray-200 sm:pb-0 pb-3.5"
+            >
               <p className="text-gray-500">{item.title}</p>
               <p>{item.value || "-"}</p>
             </div>
@@ -94,15 +139,16 @@ const ListingDetailContent = ({
       <Divider className={"hidden lg:block"} />
       <div>
         <p className="text-2xl">Heating</p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-6 pt-8" data-testid={'heating'}>
+        <div
+          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-6 pt-8"
+          data-testid={"heating"}
+        >
           <div className="flex justify-between sm:border-0 border-b border-gray-200 sm:pb-0 pb-3.5">
             <p className="text-gray-500">Heating Type</p>
-            <p>{heatingType || "-"}</p>
+            <p>{listing?.heatingType || "-"}</p>
           </div>
         </div>
       </div>
     </>
   );
 };
-
-export default ListingDetailContent;

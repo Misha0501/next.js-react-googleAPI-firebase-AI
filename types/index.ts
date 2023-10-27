@@ -40,6 +40,8 @@ export type Listing = {
   applicationUserId: number;
   applicationUser: ApplicationUser;
   areaGarage: number;
+  areaGarden: number;
+  balcony: boolean;
   areaLand: number;
   areaLiving: number;
   areaOutside: number;
@@ -78,6 +80,7 @@ export type Listing = {
   volume: number;
   savedListingId?: number;
   price: number;
+  buildingType?: BuildingType;
   currency?: CurrencyType;
 };
 
@@ -94,6 +97,7 @@ export type ListingPrice = {
 export type Address = {
   createdAt: string;
   id: number;
+  route: string;
   latitude: string;
   locality: string;
   longitude: string;

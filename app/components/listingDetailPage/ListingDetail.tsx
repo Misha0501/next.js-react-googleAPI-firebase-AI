@@ -1,56 +1,32 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import {
-  ClockIcon,
-  HeartIcon,
-  Square3Stack3DIcon,
-} from "@heroicons/react/24/outline";
-
+import { HeartIcon } from "@heroicons/react/24/outline";
 import { HeartIcon as HeartIconSolid } from "@heroicons/react/24/solid";
-import {
-  BarChart,
-  Button,
-  Divider,
-  Icon,
-  LineChart,
-  Title,
-} from "@tremor/react";
+import { BarChart, Button, Divider, LineChart, Title } from "@tremor/react";
 import { useListingDetailPage } from "@/providers/Listing";
 import { useParams, useRouter } from "next/navigation";
-
 import { ListingAgentContactCard } from "../ListingAgentContactCard";
 import { ListingContactAgentForm } from "../ListingContactAgentForm";
 import GoogleMap from "../GoogleMap";
-
 import Lightbox from "yet-another-react-lightbox";
 import "yet-another-react-lightbox/styles.css";
 import "yet-another-react-lightbox/plugins/thumbnails.css";
 import Thumbnails from "yet-another-react-lightbox/plugins/thumbnails";
-import ListingDetailContent from "./ListingDetailContent";
+import { ListingDetailContent } from "./ListingDetailContent";
 import { useCreateRecentlyViewedListing } from "@/providers/RecentlyViewedListings";
 import { useAuthContext } from "@/app/context/AuthContext";
 import FloatingContactBar from "./FloatingContactBar";
-import {
-  BedIcon,
-  BedRoomIcon,
-  PhotosIcon,
-  VerticaleMap,
-  WindowsIcon,
-} from "@/public/BedIcon";
-import Link from "next/link";
-import { GridIcon } from "@/public/GridIcon";
-import { formatToDayAndMonthWithName } from "@/app/lib/formatToDayAndMonthWithName";
 import { ListingDetailImages } from "@/app/components/listingDetailPage/ListingDetailImages";
 import {
   useCreateSavedListing,
   useDeleteSavedListing,
   useSavedListings,
 } from "@/providers/SavedListings";
-import { SavedListing } from "@/types";
+import { Listing, SavedListing } from "@/types";
 import { toast } from "react-toastify";
 import { Modal } from "@/app/components/Modal";
-import { CircularProgress } from "@mui/material";
+import { ListingMainInfo } from "@/app/components/listingDetailPage/ListingMainInfo";
 
 const ListingDetail = () => {
   const { authToken } = useAuthContext();
@@ -79,7 +55,7 @@ const ListingDetail = () => {
       return listingDetail.data;
     }
     return null;
-  }, [listingDetail?.data]);
+  }, [listingDetail?.data]) as unknown as Listing;
 
   const { isListingSaved, savedListing } = useMemo(() => {
     if (savedListings?.data?.results) {
@@ -162,74 +138,6 @@ const ListingDetail = () => {
     }
   };
 
-  let stats = useMemo(
-    () => [
-      {
-        title: "Rooms",
-        value: listing?.rooms,
-        icon: Square3Stack3DIcon,
-      },
-      {
-        title: "Bedrooms",
-        value: listing?.bedrooms,
-        icon: BedIcon,
-      },
-      {
-        title: "Square Area",
-        value: listing?.areaTotal,
-        icon: GridIcon,
-      },
-      {
-        title: "Offered since",
-        value: formatToDayAndMonthWithName(listing?.createdAt ?? ""),
-        icon: ClockIcon,
-      },
-    ],
-    [listing],
-  );
-
-  let generalInfo = useMemo(
-    () => [
-      { title: "Price", value: listing?.price },
-      { title: "Amount of Rooms", value: listing?.rooms },
-      { title: "Offered Since", value: listing?.createdAt },
-      { title: "Amount of bathrooms", value: listing?.bathrooms },
-      { title: "Status", value: listing?.active },
-      { title: "Amount of bedrooms", value: listing?.bedrooms },
-      { title: "Interior", value: listing?.interiorType },
-      { title: "Heating", value: listing?.heatingType },
-      { title: "Upkeep", value: listing?.upkeepType },
-      { title: "Parking area", value: listing?.parking },
-      { title: "Floor", value: listing?.floorNumber },
-      { title: "Balcony/terrace", value: listing?.balcony },
-    ],
-    [listingDetail?.data],
-  );
-
-  let areaAndCapacity = useMemo(
-    () => [
-      { title: "Total area", value: listing?.areaTotal },
-      { title: "Outside area", value: listing?.areaOutside },
-      { title: "Living area", value: listing?.areaLiving },
-      { title: "Garden", value: listing?.areaGarden },
-      { title: "Volume", value: listing?.volume },
-      { title: "Garage", value: listing?.areaGarage },
-    ],
-    [listingDetail?.data],
-  );
-
-  let construction = useMemo(
-    () => [
-      { title: "Building type", value: listing?.buildingType },
-      { title: "Year built", value: listing?.constructedYear },
-      {
-        title: "Number of Floor",
-        value: listing?.numberOfFloorsProperty,
-      },
-    ],
-    [listingDetail?.data],
-  );
-
   useEffect(() => {
     // Create recently viewed listing if user is logged in
     if (listingDetail.isSuccess && authToken) {
@@ -302,110 +210,12 @@ const ListingDetail = () => {
               handleOpenLightBox={handleOpenLightBox}
             />
           </div>
-
-          {/* Mobile Resolution */}
-          <div className="block lg:hidden bg-[#F2F2F2] mb-4 border-b border-[#ccc]">
-            <div className="flex justify-around py-4">
-              <div className="photos">
-                <Button
-                  icon={PhotosIcon}
-                  onClick={() => setOpenLightBox(true)}
-                  className="flex gap-1 p-0 bg-transparent border-0 text-tremor-brand-textPrimary font-bold hover:bg-transparent"
-                >
-                  Photos
-                </Button>
-              </div>
-              <div className="map">
-                <Link href={"#mapSection"}>
-                  <Button
-                    icon={VerticaleMap}
-                    className="flex gap-1 p-0 bg-transparent border-0 text-tremor-brand-textPrimary font-bold hover:bg-transparent"
-                  >
-                    Location
-                  </Button>
-                </Link>
-              </div>
-            </div>
-          </div>
           <div className="grid grid-cols-1 gap-4 xl:grid-cols-3">
             <div className="lg:col-span-2 ">
-              {/* Desktop Resolution */}
-              <div className="bg-[#f2f2f2] rounded-lg shadow-md  py-8  flex-col lg:flex-row items-center justify-between hidden lg:flex">
-                {stats?.map((el, index) => (
-                  <div
-                    key={index}
-                    className="flex flex-row lg:flex-col items-center justify-between w-full sm:border-1"
-                  >
-                    <p className="text-[#616161]">{el.title}</p>
-                    <div className="flex items-center pt-2 sm:pt-4">
-                      <Icon
-                        className="text-[#616161]"
-                        size="lg"
-                        icon={el.icon}
-                      />
-                      <p className="pl-2 text-[#616161]">{el.value || "-"}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-              {/* Mobile Resolution */}
-              <div className="block lg:hidden py-2">
-                <div className="price_details flex justify-between">
-                  <div>
-                    <h2 className="text-2xl font-bold" data-testid={"price"}>
-                      €{listing?.price}{" "}
-                      <small className="text-[#717D96] ml-2">
-                        {listing?.areaTotal}/m2
-                      </small>
-                    </h2>
-                    <h3 className="text-[#717D96] text-xl font-bold mt-3">
-                      {listing?.Address[0]?.locality}
-                    </h3>
-                    <div className="flex my-3">
-                      <div className="flex items-center mr-3">
-                        <WindowsIcon />
-                        <p className="ml-2 text-[#717D96] text-base">
-                          {listing?.areaTotal} m2
-                        </p>
-                      </div>
-                      <div className="flex items-center">
-                        <BedRoomIcon />
-                        <p className="ml-2 text-[#717D96] text-base">
-                          {listing?.bedrooms} bedrooms
-                        </p>
-                      </div>
-                    </div>
-                    <Link href={`/users/${listing?.applicationUser?.id}`}>
-                      <p className="text-[#717D96] text-base">
-                        {listing?.company?.name
-                          ? listing?.company?.name
-                          : listing?.applicationUser?.displayName}
-                      </p>
-                    </Link>
-                  </div>
-                  <div>
-                    {savedIconIsLoading ? (
-                      <CircularProgress size={28} />
-                    ) : (
-                      <Icon
-                        size="sm"
-                        onClick={handleSavedIconClick}
-                        className="text-gray-500 border border-solid border-gray-500 rounded-full h-10 w-10 justify-center hover:cursor-pointer"
-                        icon={isListingSaved ? HeartIconSolid : HeartIcon}
-                      />
-                    )}
-                  </div>
-                </div>
-                <Divider className="mb-0 hidden lg:block" />
-              </div>
+              <ListingMainInfo listing={listing} />
+
               <div className="pt-10 sm:pt-16">
-                <ListingDetailContent
-                  areaAndCapacity={areaAndCapacity}
-                  generalInfo={generalInfo}
-                  construction={construction}
-                  heatingType={listing?.heatingType}
-                  description={listing?.description}
-                />
+                <ListingDetailContent listing={listing} />
               </div>
               <Divider className="hidden lg:block" />
               {listing?.Address[0].latitude && (
@@ -419,32 +229,28 @@ const ListingDetail = () => {
                       address: listing?.Address[0]?.locality,
                     }}
                   />
-                  {/*<p className="text-[14] pt-8">See more results</p>*/}
                 </div>
               )}
             </div>
-            {listing && (
-              <div className="sm:col-span-1 lg:col-span-1 lg:col-span-1">
-                <ListingAgentContactCard
-                  showContactForm={handleContactAgentClick}
-                  listing={listing}
-                />
-                {showContactWithAgent && (
-                  <div id={"contactAgentForm"} data-testid={"contactAgentForm"}>
-                    <ListingContactAgentForm
-                      name={
-                        listing?.company?.name ||
-                        listing?.applicationUser?.displayName
-                      }
-                      emailTo={
-                        listing?.company?.email ||
-                        listing?.applicationUser?.email
-                      }
-                    />
-                  </div>
-                )}
-              </div>
-            )}
+            <div className="sm:col-span-1 lg:col-span-1 lg:col-span-1">
+              <ListingAgentContactCard
+                showContactForm={handleContactAgentClick}
+                listing={listing}
+              />
+              {showContactWithAgent && (
+                <div id={"contactAgentForm"} data-testid={"contactAgentForm"}>
+                  <ListingContactAgentForm
+                    name={
+                      listing?.company?.name ||
+                      listing?.applicationUser?.displayName
+                    }
+                    emailTo={
+                      listing?.company?.email || listing?.applicationUser?.email
+                    }
+                  />
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
