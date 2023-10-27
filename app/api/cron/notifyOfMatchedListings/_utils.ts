@@ -1,4 +1,36 @@
+import { prisma } from "@/app/lib/db/client";
 import { Listing, MatchedListingsAndSearches, SavedSearch } from "@/types";
+import { sendEmail } from "@/app/lib/email";
+
+/**
+ * Fetch saved searches including the application user.
+ * @returns {Promise<any[]>} - Returns saved searches with application user.
+ */
+export const getSavedSearchesWithUser = async (): Promise<any[]> => {
+  return await prisma.savedSearch.findMany({
+    include: {
+      applicationUser: true,
+    },
+  });
+};
+
+/**
+ * Fetch listings created in the last 24 hours.
+ * @returns {Promise<any[]>} - Returns listings from the last 24 hours with address.
+ */
+export const getListingsFromLastDay = async (): Promise<any[]> => {
+  return await prisma.listing.findMany({
+    where: {
+      createdAt: {
+        gte: new Date(Date.now() - 24 * 60 * 60 * 1000),
+      },
+    },
+    include: {
+      Address: true,
+    },
+  });
+};
+
 
 /**
  * Matches listings to saved searches
@@ -10,8 +42,8 @@ export const getMatchedListingsAndSearches = (savedSearches: SavedSearch[], list
   let results: MatchedListingsAndSearches[] = []; //
 
   // Check if any of the listings match any of saved searches and send notification
-  for (let i = 0; i < listings.length; i++) {
-    const listing: Listing = listings[i];
+  for (const element of listings) {
+    const listing: Listing = element;
 
     const matchedSearches = savedSearches.filter((search: SavedSearch) => {
       return (
@@ -49,3 +81,45 @@ export const getMatchedListingsAndSearches = (savedSearches: SavedSearch[], list
 
   return results;
 };
+
+/**
+ * Sends emails to users with matched listings/saved searches
+ * @param matchedListingsAndSearches Matched listings and saved searches
+ */
+export const sendEmailsToMatchedListingsSearches = async (matchedListingsAndSearches: MatchedListingsAndSearches[]) => {
+  // Send emails to users with matched listings/saved searches
+  for (const element of matchedListingsAndSearches) {
+    const matchedListing = element.listing;
+    const matchedSearches = element.matchedSearches;
+
+    for (const element of matchedSearches) {
+      const matchedSearch = element;
+      const applicationUser = matchedSearch.applicationUser;
+      if(!applicationUser) continue;
+
+      try {
+        // Send email to user with matched listing and a link to the listing
+        await sendEmail({
+          to: applicationUser.email,
+          subject: "A property is placed that matches your saved search!",
+          html: `
+            <h1>Hi there!</h1>
+            <p>A property that matches your saved search has been posted!</p>
+            <p>View the property via the below link:</p>
+            <a href="http://localhost:3000/listings/${matchedListing.id}">View listing</a>
+          `
+        });
+
+        // Save notification to the database
+        await prisma.sentNotificationSavedSearch.create({
+          data: {
+            savedSearchId: matchedSearch.id,
+            listingId: matchedListing.id
+          }
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  }
+}
