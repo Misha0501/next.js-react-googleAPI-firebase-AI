@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState } from "react";
 import { Listing } from "@/types";
 import { getCurrencySign } from "@/app/lib/getCurrencySign";

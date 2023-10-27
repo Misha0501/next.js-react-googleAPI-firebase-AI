@@ -1,3 +1,5 @@
+"use client";
+
 import { LineChart, Title } from "@tremor/react";
 import { ListingPrice } from "@/types";
 

@@ -1,3 +1,5 @@
+"use client";
+
 import { Address } from "@/types";
 import GoogleMap from "@/app/components/GoogleMap";
 

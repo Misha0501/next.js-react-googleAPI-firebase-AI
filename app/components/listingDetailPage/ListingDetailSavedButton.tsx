@@ -1,9 +1,15 @@
-import { Listing, SavedListing } from "@/types";
+"use client";
+
+import { SavedListing } from "@/types";
 import { Button } from "@tremor/react";
 import { HeartIcon as HeartIconSolid } from "@heroicons/react/24/solid";
 import { HeartIcon } from "@heroicons/react/24/outline";
 import { useMemo, useState } from "react";
-import { useCreateSavedListing, useDeleteSavedListing, useSavedListings } from "@/providers/SavedListings";
+import {
+  useCreateSavedListing,
+  useDeleteSavedListing,
+  useSavedListings,
+} from "@/providers/SavedListings";
 import { useAuthContext } from "@/app/context/AuthContext";
 import { toast } from "react-toastify";
 import { Modal } from "@/app/components/Modal";
@@ -40,7 +46,6 @@ export const ListingDetailSavedButton = ({ listingId }: Prop) => {
     };
   }, [savedListings?.data, listingId]);
 
-
   const savedIconIsLoading = useMemo(
     () =>
       savedListings.isLoading ||
@@ -54,7 +59,6 @@ export const ListingDetailSavedButton = ({ listingId }: Prop) => {
       deleteSavedListing.isLoading,
     ],
   );
-
 
   const handleSavedIconClick = async () => {
     // if user is not logged in show the auth modal
@@ -99,6 +103,5 @@ export const ListingDetailSavedButton = ({ listingId }: Prop) => {
         onSubmitClick={() => router.push("/signin")}
       />
     </>
-
   );
 };

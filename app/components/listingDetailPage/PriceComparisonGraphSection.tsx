@@ -1,3 +1,5 @@
+"use client";
+
 import { BarChart, Title } from "@tremor/react";
 import { useEffect, useState } from "react";
 import { Listing } from "@/types";

@@ -1,5 +1,4 @@
-import { Divider, Icon } from "@tremor/react";
-import { useMemo } from "react";
+import { Divider } from "@tremor/react";
 import { Listing } from "@/types";
 import { ClockIcon, Square3Stack3DIcon } from "@heroicons/react/24/outline";
 import { BedIcon, BedRoomIcon, WindowsIcon } from "@/public/BedIcon";
@@ -12,31 +11,28 @@ type Prop = {
 };
 
 export const ListingMainInfo = ({ listing }: Prop) => {
-  let stats = useMemo(
-    () => [
+  let stats = [
       {
         title: "Rooms",
         value: listing?.rooms,
-        icon: Square3Stack3DIcon,
+        icon: <Square3Stack3DIcon className="text-[#848484] h-7 w-7"/>,
       },
       {
         title: "Bedrooms",
         value: listing?.bedrooms,
-        icon: BedIcon,
+        icon: <BedIcon className="text-[#848484] h-7 w-7"/>,
       },
       {
         title: "Square Area",
         value: listing?.areaTotal,
-        icon: GridIcon,
+        icon: <GridIcon className="text-[#848484] h-7 w-7"/>,
       },
       {
         title: "Offered since",
         value: formatToDayAndMonthWithName(listing?.createdAt ?? ""),
-        icon: ClockIcon,
+        icon: <ClockIcon className="text-[#848484] h-7 w-7"/>,
       },
-    ],
-    [listing],
-  );
+    ]
 
   if (!listing) return null;
 
@@ -50,7 +46,8 @@ export const ListingMainInfo = ({ listing }: Prop) => {
           >
             <p className="text-gray-600">{el.title}</p>
             <div className="flex items-center pt-2 sm:pt-4">
-              <Icon className="text-gray-600" size="lg" icon={el.icon} />
+              {/*<Square3Stack3DIcon className="text-gray-600 h-6 w-6"/>*/}
+              {el.icon}
               <p className="pl-2 text-gray-600">{el.value || "-"}</p>
             </div>
           </div>

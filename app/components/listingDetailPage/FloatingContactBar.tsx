@@ -1,14 +1,17 @@
+"use client";
+
 import { EnvelopeIcon, PhoneIcon } from "@heroicons/react/24/outline";
 import { Button } from "@tremor/react";
 
 type Props = {
   phoneNumber: string;
-  onContactClick: () => void;
+  // onContactClick: () => void;
 };
 export const FloatingContactBar = ({
   phoneNumber,
-  onContactClick,
+  // onContactClick,
 }: Props) => {
+  // TODO: implement onContactClick
   return (
     <div className="fixed bottom-[68px] left-0 right-0 bg-white border-t-2 lg:hidden shadow-2xl py-4">
       <div className="container flex items-center gap-4 justify-around">
@@ -23,7 +26,7 @@ export const FloatingContactBar = ({
           variant="primary"
           icon={EnvelopeIcon}
           className="w-1/2"
-          onClick={onContactClick}
+          // onClick={onContactClick}
         >
           Contact Seller
         </Button>

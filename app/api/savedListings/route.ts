@@ -2,8 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { ApplicationUser } from "@prisma/client";
 import { getApplicationUserServer } from "@/app/lib/getApplicationUserServer";
 import { savedListingsSchema } from "@/app/lib/validations/savedListings";
-import { handleListingErrors } from "@/app/api/listings/_utils";
 import { getSavedListings, handleSavedListingCreation } from "@/app/api/savedListings/_utils";
+import { handleAPIError } from "@/app/lib/api/handleError";
 
 /**
  * GET saved listings of the user
@@ -19,7 +19,7 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json(savedListings);
   } catch (error) {
-    return handleListingErrors(error);
+    return handleAPIError(error);
   }
 }
 
@@ -42,6 +42,6 @@ export async function POST(req: Request) {
 
     return NextResponse.json(savedListing);
   } catch (error) {
-    return handleListingErrors(error);
+    return handleAPIError(error);
   }
 }

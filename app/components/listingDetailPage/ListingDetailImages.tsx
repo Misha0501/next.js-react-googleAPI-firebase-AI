@@ -1,3 +1,5 @@
+"use client";
+
 import { useMemo, useState } from "react";
 import { ListingImage } from "@/types";
 import Image from "next/image";
@@ -14,7 +16,7 @@ type Props = {
   images: ListingImage[];
 };
 export const ListingDetailImages = ({ images }: Props) => {
-  const listingImagesAmount = useMemo(() => images.length, [images]);
+  const listingImagesAmount = useMemo(() => images?.length, [images]);
 
   const lightboxSlides = images?.map((item) => ({
     src: item.url,
@@ -27,6 +29,8 @@ export const ListingDetailImages = ({ images }: Props) => {
     setLightBoxImageIndex(index);
     setOpenLightBox(true);
   };
+
+  if (!images?.length) return null;
 
   return (
     <>

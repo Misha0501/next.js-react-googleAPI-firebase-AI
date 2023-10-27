@@ -1,3 +1,5 @@
+"use client";
+
 import { Divider } from "@tremor/react";
 import { useMemo, useState } from "react";
 import { Listing } from "@/types";
