@@ -1,6 +1,12 @@
 import { prisma } from "@/app/lib/db/client";
 import { handleAPIError } from "@/app/lib/api/handleError";
 
+/**
+ * Finds an application user by their email and includes related records.
+ *
+ * @param {string} email - The email of the user.
+ * @returns {Promise<any>} - The application user along with related entities such as Membership, Invoice, Listing, SavedListing, and SavedSearch.
+ */
 export const findApplicationUserByEmail = async (
   email: string,
 ): Promise<any> => {
@@ -42,10 +48,16 @@ export const findApplicationUserByEmail = async (
   });
 };
 
+/**
+ * Handles errors that arise during user API update operations.
+ * Returns appropriate response based on the error.
+ *
+ * @param {any} error - The error object thrown during the user API update.
+ * @returns {Response} - The constructed response object based on the error.
+ */
 export const handleUserAPIUpdateError = (error: any): Response => {
-  console.error(error);
-
   if (error.errorInfo && error.errorInfo.code) {
+    console.error(error);
     if (error.errorInfo.code === "auth/invalid-phone-number") {
       return new Response(
         "Invalid phone number. Example of valid phone number: +35923443234",
