@@ -11,7 +11,6 @@ import { getApplicationUserCompanyId } from "@/app/lib/listing/getApplicationUse
 import { userAllowedManipulateListing } from "@/app/lib/listing/userAllowedManipulateListing";
 import { ApplicationUser } from "@prisma/client";
 import { ResponseError } from "@/app/lib/classes/ResponseError";
-import { z } from "zod";
 
 /**
  * Extract and validate parameters from the request.

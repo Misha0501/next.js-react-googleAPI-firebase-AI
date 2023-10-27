@@ -2,7 +2,7 @@ import { ResponseError } from "@/app/lib/classes/ResponseError";
 import { getApplicationUserServer } from "@/app/lib/getApplicationUserServer";
 import { handleAPIError } from "@/app/lib/api/handleError";
 import { authorizeUser, deleteSavedSearch, fetchSavedSearch } from "@/app/api/savedSearches/_utils";
-import { parseAndValidateParamId } from "@/app/lib/api/parseAndValidateId";
+import { validateParamId } from "@/app/lib/api/validateParamId";
 
 /**
  * DELETE Route to delete a saved search.
@@ -12,7 +12,7 @@ import { parseAndValidateParamId } from "@/app/lib/api/parseAndValidateId";
  */
 export async function DELETE(request: Request, {params}: { params: { slug: number } }) {
     try {
-        const id = parseAndValidateParamId(params.slug);
+        const id = validateParamId(params.slug);
         const applicationUser = await getApplicationUserServer();
         const savedSearch = await fetchSavedSearch(id);
 

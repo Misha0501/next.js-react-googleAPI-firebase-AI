@@ -19,14 +19,6 @@ export const fetchSavedSearches = async (applicationUserId: number): Promise<any
   });
 };
 
-export const validateParamID = (slug: number): number => {
-  const id = Number(slug);
-  if (isNaN(id)) {
-    throw new ResponseError("ID must be a valid number", 422);
-  }
-  return id;
-};
-
 export const fetchSavedSearch = async (id: number): Promise<any> => {
   return await prisma.savedSearch.findUnique({
     where: {

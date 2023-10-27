@@ -4,9 +4,9 @@ import {
   deleteImageFromDB,
   ensureListingAndUserPermissions,
   fetchImageById,
-  validateId,
 } from "@/app/api/images/[slug]/_utils";
 import { handleAPIError } from "@/app/lib/api/handleError";
+import { validateParamId } from "@/app/lib/api/validateParamId";
 
 /**
  * DELETE Route to delete a listing.
@@ -25,7 +25,7 @@ export async function DELETE(
   },
 ) {
   try {
-    const id = validateId(params.slug);
+    const id = validateParamId(params.slug);
 
     const applicationUser: ApplicationUser = await getApplicationUserServer();
 
