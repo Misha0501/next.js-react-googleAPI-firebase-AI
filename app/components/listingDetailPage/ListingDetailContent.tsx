@@ -59,7 +59,7 @@ export const ListingDetailContent = ({ listing }: Prop) => {
   }
 
   return (
-    <>
+    <div className="pt-10 sm:pt-16">
       {formattedDescription && (
         <>
           <div>
@@ -149,6 +149,6 @@ export const ListingDetailContent = ({ listing }: Prop) => {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };

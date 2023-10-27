@@ -3,12 +3,11 @@
 import { useEffect, useMemo, useState } from "react";
 import { HeartIcon } from "@heroicons/react/24/outline";
 import { HeartIcon as HeartIconSolid } from "@heroicons/react/24/solid";
-import { BarChart, Button, Divider, LineChart, Title } from "@tremor/react";
+import { Button, Divider } from "@tremor/react";
 import { useListingDetailPage } from "@/providers/Listing";
 import { useParams, useRouter } from "next/navigation";
 import { ListingAgentContactCard } from "../ListingAgentContactCard";
 import { ListingContactAgentForm } from "../ListingContactAgentForm";
-import GoogleMap from "../GoogleMap";
 import Lightbox from "yet-another-react-lightbox";
 import "yet-another-react-lightbox/styles.css";
 import "yet-another-react-lightbox/plugins/thumbnails.css";
@@ -27,6 +26,9 @@ import { Listing, SavedListing } from "@/types";
 import { toast } from "react-toastify";
 import { Modal } from "@/app/components/Modal";
 import { ListingMainInfo } from "@/app/components/listingDetailPage/ListingMainInfo";
+import { PriceComparisonGraphSection } from "@/app/components/listingDetailPage/PriceComparisonGraphSection";
+import { PriceChangeGraphSection } from "@/app/components/listingDetailPage/PriceChangeGraphSection";
+import { MapsSection } from "@/app/components/listingDetailPage/MapsSection";
 
 const ListingDetail = () => {
   const { authToken } = useAuthContext();
@@ -43,10 +45,6 @@ const ListingDetail = () => {
     authToken,
   });
 
-  const [
-    averagePriceNeighborhoodChartData,
-    setAveragePriceNeighborhoodChartData,
-  ] = useState();
   const createSavedListing = useCreateSavedListing({ authToken });
   const deleteSavedListing = useDeleteSavedListing({ authToken });
 
@@ -93,27 +91,7 @@ const ListingDetail = () => {
     ],
   );
 
-  useEffect(() => {
-    if (listing?.averagePriceInNeighborhood) {
-      // @ts-ignore
-      setAveragePriceNeighborhoodChartData([
-        {
-          name: "Average price in the neighborhood",
-          "Listing price": listing?.averagePriceInNeighborhood,
-        },
-        {
-          name: "This listing's price",
-          "Listing price": listing?.price,
-        },
-      ]);
-    }
-  }, [listing?.averagePriceInNeighborhood, listingDetail.isSuccess]);
-
   const router = useRouter();
-
-  const dataFormatter = (number: number) => {
-    return "€ " + Intl.NumberFormat("eu").format(number).toString();
-  };
 
   const handleSavedIconClick = async () => {
     // if user is not logged in show the auth modal
@@ -158,7 +136,7 @@ const ListingDetail = () => {
     router.push("#contactAgentForm");
   };
 
-  const slides = listing?.ListingImage.map((item) => ({
+  const LightboxSlides = listing?.ListingImage.map((item) => ({
     src: item.url,
   }));
 
@@ -174,7 +152,7 @@ const ListingDetail = () => {
           open={openLightBox}
           close={() => setOpenLightBox(false)}
           plugins={[Thumbnails]}
-          slides={slides}
+          slides={LightboxSlides}
           index={lightBoxImageIndex}
         />
         <div className="pt-8 lg:pt-10">
@@ -210,29 +188,19 @@ const ListingDetail = () => {
               handleOpenLightBox={handleOpenLightBox}
             />
           </div>
+
           <div className="grid grid-cols-1 gap-4 xl:grid-cols-3">
             <div className="lg:col-span-2 ">
               <ListingMainInfo listing={listing} />
 
-              <div className="pt-10 sm:pt-16">
-                <ListingDetailContent listing={listing} />
-              </div>
+              <ListingDetailContent listing={listing} />
+
               <Divider className="hidden lg:block" />
-              {listing?.Address[0].latitude && (
-                <div id="mapSection">
-                  <p className="text-2xl pb-8">View on map</p>
-                  <GoogleMap
-                    data-testid={"map"}
-                    location={{
-                      lat: parseFloat(listing?.Address[0]?.latitude),
-                      lng: parseFloat(listing?.Address[0]?.longitude),
-                      address: listing?.Address[0]?.locality,
-                    }}
-                  />
-                </div>
-              )}
+
+              <MapsSection address={listing?.Address?.[0]} />
             </div>
-            <div className="sm:col-span-1 lg:col-span-1 lg:col-span-1">
+
+            <div className="col-span-1 lg:col-span-1">
               <ListingAgentContactCard
                 showContactForm={handleContactAgentClick}
                 listing={listing}
@@ -255,48 +223,10 @@ const ListingDetail = () => {
         </div>
       </div>
 
-      {averagePriceNeighborhoodChartData && (
-        <div className={"py-12"}>
-          <div className="container">
-            <p className="font-medium text-[24px]">Price comparison graph</p>
-            <Title className="pt-8">
-              This graph shows the average price in the neighborhood{" "}
-              {listing?.Address[0]?.neighborhood} for properties with the same
-              type compared to this listing.
-            </Title>
-            <BarChart
-              className="mt-6"
-              data={averagePriceNeighborhoodChartData}
-              index="name"
-              categories={["Listing price"]}
-              colors={["blue"]}
-              valueFormatter={dataFormatter}
-              yAxisWidth={48}
-              data-testid={"averagePriceNeighborhoodChart"}
-            />
-          </div>
-        </div>
-      )}
+      <PriceComparisonGraphSection listing={listing} />
 
-      {listing?.ListingPrice?.length > 1 && (
-        <div className="lg:pt-8">
-          <div className="container">
-            <p className="font-medium text-[24px] pt-14">Price change graph</p>
-            <Title className="pt-8">
-              This listing has changed its price {listing?.ListingPrice?.length}{" "}
-              times
-            </Title>
-            <LineChart
-              className="mt-6"
-              data={listing?.ListingPrice || []}
-              index="updatedAt"
-              categories={["price"]}
-              colors={["emerald"]}
-              data-testid={"priceChangeGraph"}
-            />
-          </div>
-        </div>
-      )}
+      <PriceChangeGraphSection listingPriceArray={listing?.ListingPrice} />
+
       <FloatingContactBar
         phoneNumber={contactNumber}
         onContactClick={handleContactAgentClick}

@@ -1,5 +1,3 @@
-"use client";
-
 import GoogleMapReact from "google-map-react";
 import { MapPinIcon } from "@heroicons/react/24/solid";
 
