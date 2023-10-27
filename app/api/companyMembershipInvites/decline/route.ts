@@ -24,17 +24,23 @@ export async function POST(req: NextRequest) {
     const { companyMembershipInviteId } = parsedValues;
 
     if (await userHasMembership(applicationUser.id)) {
-      return new Response("You are already a member of a company", { status: 400 });
+      return new Response("You are already a member of a company", {
+        status: 400,
+      });
     }
 
-    const companyMembershipInvite = await getActiveCompanyMembershipInviteById(companyMembershipInviteId);
+    const companyMembershipInvite = await getActiveCompanyMembershipInviteById(
+      companyMembershipInviteId,
+    );
 
     if (!companyMembershipInvite) {
       return new Response("The invite does not exist", { status: 400 });
     }
 
     if (!isUserReceiverOfInvite(companyMembershipInvite, applicationUser)) {
-      return new Response("You are not the receiver of the invite", { status: 400 });
+      return new Response("You are not the receiver of the invite", {
+        status: 400,
+      });
     }
 
     // set the decline field of the invite to the current date
@@ -52,6 +58,6 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json(updatedMembershipInvite);
   } catch (error) {
-    return handleAPIError(error)
+    return handleAPIError(error);
   }
 }

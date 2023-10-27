@@ -1,10 +1,6 @@
 import { getApplicationUserServer } from "@/app/lib/getApplicationUserServer";
 import { ApplicationUser } from "@prisma/client";
-import {
-  deleteImageFromDB,
-  ensureListingAndUserPermissions,
-  fetchImageById,
-} from "@/app/api/images/[slug]/_utils";
+import { deleteImageFromDB, ensureListingAndUserPermissions, fetchImageById } from "@/app/api/images/[slug]/_utils";
 import { handleAPIError } from "@/app/lib/api/handleError";
 import { validateParamId } from "@/app/lib/api/validateParamId";
 
@@ -36,7 +32,6 @@ export async function DELETE(
     await deleteImageFromDB(id);
 
     return new Response(null, { status: 204 });
-
   } catch (error) {
     return handleAPIError(error);
   }

@@ -30,12 +30,12 @@ export const createEmailHTMLContent = (
   phoneNumber: string | undefined,
   email: string,
   subject: string,
-  message: string
+  message: string,
 ): string => {
   return `
         <h1>Hi there!</h1>
         <p>You have a new message from ${name}.</p>
-        <p>Phone number: ${phoneNumber ?? '-'}</p>
+        <p>Phone number: ${phoneNumber ?? "-"}</p>
         <p>Email: ${email}</p>
         <p>Subject: ${subject}</p>
         <p>Message:</p>

@@ -13,4 +13,3 @@ export const userHasMembership = async (userId: number): Promise<boolean> => {
   });
   return !!membership;
 };
-

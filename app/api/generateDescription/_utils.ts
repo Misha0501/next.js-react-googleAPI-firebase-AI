@@ -18,7 +18,9 @@ export const generateUserMessageContent = (parsedValues: any): string => {
  * @param {string} userMessageContent - The user message content for OpenAI API.
  * @returns {Promise<any>} - Returns the completion result.
  */
-export const getOpenAICompletion = async (userMessageContent: string): Promise<ChatCompletion> => {
+export const getOpenAICompletion = async (
+  userMessageContent: string,
+): Promise<ChatCompletion> => {
   return openAI.chat.completions.create({
     model: "gpt-3.5-turbo",
     temperature: 0.8,
@@ -43,7 +45,15 @@ export const getOpenAICompletion = async (userMessageContent: string): Promise<C
  * @throws Will throw an error if the response is invalid.
  */
 export const validateOpenAIResponse = (completion: ChatCompletion): void => {
-  if (!completion || !completion.choices || !completion.choices[0] || !completion.choices[0].message) {
-    throw new ResponseError("Something went wrong, please try again later.", 500);
+  if (
+    !completion ||
+    !completion.choices ||
+    !completion.choices[0] ||
+    !completion.choices[0].message
+  ) {
+    throw new ResponseError(
+      "Something went wrong, please try again later.",
+      500,
+    );
   }
 };

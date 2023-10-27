@@ -19,16 +19,29 @@ export const fetchImageById = async (id: number) => {
   return { image, listingId };
 };
 
-export const ensureListingAndUserPermissions = async (applicationUser: ApplicationUser, listingId: number) => {
+export const ensureListingAndUserPermissions = async (
+  applicationUser: ApplicationUser,
+  listingId: number,
+) => {
   const listing = await prisma.listing.findUnique({
     where: {
       id: listingId,
       deleted: null,
     },
   });
-  if (!listing) throw new ResponseError("Listing with provided image id wasn't found.", 404);
+  if (!listing)
+    throw new ResponseError(
+      "Listing with provided image id wasn't found.",
+      404,
+    );
   const applicationUserCompanyId = getApplicationUserCompanyId(applicationUser);
-  if (!userAllowedManipulateListing(applicationUser.id, applicationUserCompanyId, listing)) {
+  if (
+    !userAllowedManipulateListing(
+      applicationUser.id,
+      applicationUserCompanyId,
+      listing,
+    )
+  ) {
     throw new ResponseError("You aren't allowed to changed this property", 401);
   }
 };
@@ -38,4 +51,3 @@ export const deleteImageFromDB = async (id: number) => {
     where: { id },
   });
 };
-

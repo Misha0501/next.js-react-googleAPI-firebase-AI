@@ -12,24 +12,35 @@ import { validateParamId } from "@/app/lib/api/validateParamId";
  * @constructor
  * @param request
  */
-export async function DELETE(request: Request, {params}: { params: { slug: number } }) {
-    try {
-        const id = validateParamId(params.slug);
+export async function DELETE(
+  request: Request,
+  { params }: { params: { slug: number } },
+) {
+  try {
+    const id = validateParamId(params.slug);
 
-        const applicationUser: ApplicationUser = await getApplicationUserServer();
+    const applicationUser: ApplicationUser = await getApplicationUserServer();
 
-        const invite = await getActiveCompanyMembershipInviteById(id);
+    const invite = await getActiveCompanyMembershipInviteById(id);
 
-        if (!invite) throw new ResponseError("Invite with the provided id wasn't found or it's expired.", 404);
+    if (!invite)
+      throw new ResponseError(
+        "Invite with the provided id wasn't found or it's expired.",
+        404,
+      );
 
-        if (applicationUser.id !== invite.applicationUserIdSender) throw new ResponseError("You aren't allowed to changed this property", 401);
+    if (applicationUser.id !== invite.applicationUserIdSender)
+      throw new ResponseError(
+        "You aren't allowed to changed this property",
+        401,
+      );
 
-        await prisma.companyMembershipInvite.delete({
-            where: {id}
-        })
+    await prisma.companyMembershipInvite.delete({
+      where: { id },
+    });
 
-        return new Response(null, {status: 204})
-    } catch (error) {
-        return handleAPIError(error)
-    }
+    return new Response(null, { status: 204 });
+  } catch (error) {
+    return handleAPIError(error);
+  }
 }

@@ -31,13 +31,15 @@ export const getListingsFromLastDay = async (): Promise<any[]> => {
   });
 };
 
-
 /**
  * Matches listings to saved searches
  * @param savedSearches Saved searches to match listings to
  * @param listings Listings to match to saved searches
  */
-export const getMatchedListingsAndSearches = (savedSearches: SavedSearch[], listings: Listing[]): MatchedListingsAndSearches[] => {
+export const getMatchedListingsAndSearches = (
+  savedSearches: SavedSearch[],
+  listings: Listing[],
+): MatchedListingsAndSearches[] => {
   // Results which consist of matched listings and saved searches
   let results: MatchedListingsAndSearches[] = []; //
 
@@ -86,7 +88,9 @@ export const getMatchedListingsAndSearches = (savedSearches: SavedSearch[], list
  * Sends emails to users with matched listings/saved searches
  * @param matchedListingsAndSearches Matched listings and saved searches
  */
-export const sendEmailsToMatchedListingsSearches = async (matchedListingsAndSearches: MatchedListingsAndSearches[]) => {
+export const sendEmailsToMatchedListingsSearches = async (
+  matchedListingsAndSearches: MatchedListingsAndSearches[],
+) => {
   // Send emails to users with matched listings/saved searches
   for (const element of matchedListingsAndSearches) {
     const matchedListing = element.listing;
@@ -95,7 +99,7 @@ export const sendEmailsToMatchedListingsSearches = async (matchedListingsAndSear
     for (const element of matchedSearches) {
       const matchedSearch = element;
       const applicationUser = matchedSearch.applicationUser;
-      if(!applicationUser) continue;
+      if (!applicationUser) continue;
 
       try {
         // Send email to user with matched listing and a link to the listing
@@ -107,19 +111,19 @@ export const sendEmailsToMatchedListingsSearches = async (matchedListingsAndSear
             <p>A property that matches your saved search has been posted!</p>
             <p>View the property via the below link:</p>
             <a href="http://localhost:3000/listings/${matchedListing.id}">View listing</a>
-          `
+          `,
         });
 
         // Save notification to the database
         await prisma.sentNotificationSavedSearch.create({
           data: {
             savedSearchId: matchedSearch.id,
-            listingId: matchedListing.id
-          }
+            listingId: matchedListing.id,
+          },
         });
       } catch (error) {
         console.error(error);
       }
     }
   }
-}
+};

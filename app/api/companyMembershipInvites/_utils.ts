@@ -6,7 +6,9 @@ import { ApplicationUser, CompanyMembershipInvite, Membership } from "@/types";
  * @param {number} userId - The ID of the user.
  * @returns {Promise<Membership | null>} - Returns the active membership or null.
  */
-export const getActiveMembership = async (userId: number): Promise<Membership | null> => {
+export const getActiveMembership = async (
+  userId: number,
+): Promise<Membership | null> => {
   return await prisma.membership.findUnique({
     where: {
       applicationUserId: userId,
@@ -15,14 +17,16 @@ export const getActiveMembership = async (userId: number): Promise<Membership | 
   });
 };
 
-
 /**
  * Gets the invites based on membership status.
  * @param {ApplicationUser} user - The user object.
  * @param {boolean} receivedInvites - Flag to determine if we want received invites or sent invites.
  * @returns {Promise<Invite[]>} - Returns the invites.
  */
-export const getCompanyMembershipInvitesByStatus = async (user: ApplicationUser, receivedInvites: boolean): Promise<CompanyMembershipInvite[]> => {
+export const getCompanyMembershipInvitesByStatus = async (
+  user: ApplicationUser,
+  receivedInvites: boolean,
+): Promise<CompanyMembershipInvite[]> => {
   if (receivedInvites) {
     return await prisma.companyMembershipInvite.findMany({
       where: {
@@ -59,7 +63,9 @@ export const getCompanyMembershipInvitesByStatus = async (user: ApplicationUser,
  * @param {string} email - The email of the user.
  * @returns {Promise<ApplicationUser | null>} - Returns the user or null.
  */
-export const getUserByEmail = async (email: string): Promise<ApplicationUser | null> => {
+export const getUserByEmail = async (
+  email: string,
+): Promise<ApplicationUser | null> => {
   return await prisma.applicationUser.findUnique({
     where: {
       email: email,
@@ -72,7 +78,9 @@ export const getUserByEmail = async (email: string): Promise<ApplicationUser | n
  * @param {number} userId - The ID of the user.
  * @returns {Promise<boolean>} - Returns true if the user is a member, otherwise false.
  */
-export const isUserAMemberOfAnyCompany = async (userId: number): Promise<boolean> => {
+export const isUserAMemberOfAnyCompany = async (
+  userId: number,
+): Promise<boolean> => {
   const membership = await prisma.membership.findUnique({
     where: {
       applicationUserId: userId,
@@ -89,7 +97,11 @@ export const isUserAMemberOfAnyCompany = async (userId: number): Promise<boolean
  * @param {number} companyId - The ID of the company.
  * @returns {Promise<boolean>} - Returns true if an invite exists, otherwise false.
  */
-export const hasUserSentInvite = async (senderId: number, receiverEmail: string, companyId: number): Promise<boolean> => {
+export const hasUserSentInvite = async (
+  senderId: number,
+  receiverEmail: string,
+  companyId: number,
+): Promise<boolean> => {
   const invite = await prisma.companyMembershipInvite.findFirst({
     where: {
       applicationUserIdSender: senderId,
@@ -115,13 +127,15 @@ export const userHasMembership = async (userId: number): Promise<boolean> => {
  * @param {number} inviteId - The ID of the invite.
  * @returns {Promise<CompanyMembershipInvite | null>} - Returns the invite or null.
  */
-export const getActiveCompanyMembershipInviteById = async (inviteId: number): Promise<CompanyMembershipInvite | null> => {
+export const getActiveCompanyMembershipInviteById = async (
+  inviteId: number,
+): Promise<CompanyMembershipInvite | null> => {
   return await prisma.companyMembershipInvite.findUnique({
     where: {
       id: inviteId,
       expiresAt: {
         gt: new Date(),
-      }
+      },
     },
   });
 };
@@ -132,6 +146,9 @@ export const getActiveCompanyMembershipInviteById = async (inviteId: number): Pr
  * @param {ApplicationUser} user - The user object.
  * @returns {boolean} - Returns true if the user is the receiver, otherwise false.
  */
-export const isUserReceiverOfInvite = (invite: CompanyMembershipInvite, user: ApplicationUser): boolean => {
+export const isUserReceiverOfInvite = (
+  invite: CompanyMembershipInvite,
+  user: ApplicationUser,
+): boolean => {
   return invite.applicationUserEmailReceiver === user?.email;
 };

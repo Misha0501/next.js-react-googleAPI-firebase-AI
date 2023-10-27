@@ -1,5 +1,5 @@
-import {NextResponse} from 'next/server'
-import {prisma} from "@/app/lib/db/client";
+import { NextResponse } from "next/server";
+import { prisma } from "@/app/lib/db/client";
 
 /**
  * POST Route to register new users. it's only invoked be Google functions

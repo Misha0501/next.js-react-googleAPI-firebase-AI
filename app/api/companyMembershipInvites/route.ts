@@ -7,7 +7,9 @@ import { handleAPIError } from "@/app/lib/api/handleError";
 import {
   getActiveMembership,
   getCompanyMembershipInvitesByStatus,
-  getUserByEmail, hasUserSentInvite, isUserAMemberOfAnyCompany
+  getUserByEmail,
+  hasUserSentInvite,
+  isUserAMemberOfAnyCompany
 } from "@/app/api/companyMembershipInvites/_utils";
 
 /**
@@ -22,7 +24,10 @@ export async function GET(req: NextRequest) {
 
     const membership = await getActiveMembership(applicationUser.id);
 
-    const invites = await getCompanyMembershipInvitesByStatus(applicationUser, !membership);
+    const invites = await getCompanyMembershipInvitesByStatus(
+      applicationUser,
+      !membership,
+    );
 
     return NextResponse.json(invites);
   } catch (error) {
@@ -49,18 +54,32 @@ export async function POST(req: Request) {
       return new Response("You are not a member of a company", { status: 400 });
     }
 
-    const applicationUserReceiver = await getUserByEmail(applicationUserEmailReceiver);
+    const applicationUserReceiver = await getUserByEmail(
+      applicationUserEmailReceiver,
+    );
 
     if (!applicationUserReceiver) {
-      return new Response("The user you want to invite does not exist", { status: 400 });
+      return new Response("The user you want to invite does not exist", {
+        status: 400,
+      });
     }
 
     if (await isUserAMemberOfAnyCompany(applicationUserReceiver.id)) {
-      return new Response("The user is already a member of a company", { status: 400 });
+      return new Response("The user is already a member of a company", {
+        status: 400,
+      });
     }
 
-    if (await hasUserSentInvite(applicationUser.id, applicationUserEmailReceiver, membership.companyId)) {
-      return new Response("You have already sent an invite to this user", { status: 400 });
+    if (
+      await hasUserSentInvite(
+        applicationUser.id,
+        applicationUserEmailReceiver,
+        membership.companyId,
+      )
+    ) {
+      return new Response("You have already sent an invite to this user", {
+        status: 400,
+      });
     }
 
     const sevenDaysFromNow = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
