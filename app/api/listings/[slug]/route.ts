@@ -7,10 +7,10 @@ import { getAveragePriceInNeighborhood } from "@/app/lib/listing/getAveragePrice
 import {
     deleteListingAndAssociatedEntities,
     ensureUserHasListingAccess,
-    handleListingErrors,
     parseAndValidateId,
     validateListingExistence
 } from "@/app/api/listings/_utils";
+import { handleAPIError } from "@/app/lib/api/handleError";
 
 /**
  * GET Route to retrieve specific listing with provided slug.
@@ -43,7 +43,7 @@ export async function GET(request: Request, {params}: { params: { slug: number }
 
         return NextResponse.json(listing);
     } catch (error) {
-        return handleListingErrors(error);
+        return handleAPIError(error);
     }
 }
 
@@ -68,6 +68,6 @@ export async function DELETE(request: Request, {params}: { params: { slug: numbe
 
         return new Response(null, { status: 204 });
     } catch (error) {
-        return handleListingErrors(error);
+        return handleAPIError(error);
     }
 }

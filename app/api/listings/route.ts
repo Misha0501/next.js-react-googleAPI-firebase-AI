@@ -9,11 +9,11 @@ import {
   extractParametersGET,
   handleAddressUpdate,
   handleImagesUpdate,
-  handleListingErrors,
   handlePriceUpdate,
   validateListingExistence
 } from "@/app/api/listings/_utils";
 import { ApplicationUser } from "@prisma/client";
+import { handleAPIError } from "@/app/lib/api/handleError";
 
 /**
  * GET Route to retrieve listings.
@@ -61,7 +61,7 @@ export async function GET(req: NextRequest) {
       results: listings,
     });
   } catch (error) {
-    return handleListingErrors(error);
+    return handleAPIError(error);
   }
 }
 
@@ -107,7 +107,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json(listing);
   } catch (error) {
-    return handleListingErrors(error);
+    return handleAPIError(error);
   }
 }
 
@@ -150,6 +150,6 @@ export async function PUT(req: Request) {
     });
     return NextResponse.json(updatedListing);
   } catch (error) {
-    return handleListingErrors(error);
+    return handleAPIError(error);
   }
 }
