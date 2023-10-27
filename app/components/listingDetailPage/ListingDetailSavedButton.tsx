@@ -1,7 +1,7 @@
 "use client";
 
 import { SavedListing } from "@/types";
-import { Button } from "@tremor/react";
+import { Button, Icon } from "@tremor/react";
 import { HeartIcon as HeartIconSolid } from "@heroicons/react/24/solid";
 import { HeartIcon } from "@heroicons/react/24/outline";
 import { useMemo, useState } from "react";
@@ -14,12 +14,17 @@ import { useAuthContext } from "@/app/context/AuthContext";
 import { toast } from "react-toastify";
 import { Modal } from "@/app/components/Modal";
 import { useRouter } from "next/navigation";
+import { CircularProgress } from "@mui/material";
 
 type Prop = {
   listingId: number;
+  showOnDesktop?: boolean;
 };
 
-export const ListingDetailSavedButton = ({ listingId }: Prop) => {
+export const ListingDetailSavedButton = ({
+  listingId,
+  showOnDesktop = false,
+}: Prop) => {
   const { authToken } = useAuthContext();
   let [showAuthModal, setShowAuthModal] = useState(false);
   const savedListings = useSavedListings({ authToken });
@@ -84,16 +89,33 @@ export const ListingDetailSavedButton = ({ listingId }: Prop) => {
   };
   return (
     <>
-      <Button
-        icon={isListingSaved ? HeartIconSolid : HeartIcon}
-        variant={"secondary"}
-        loading={savedIconIsLoading}
-        className={"hidden lg:flex"}
-        onClick={handleSavedIconClick}
-        data-testid="favouriteButton"
-      >
-        Favourite
-      </Button>
+      {showOnDesktop && (
+        <Button
+          icon={isListingSaved ? HeartIconSolid : HeartIcon}
+          variant={"secondary"}
+          loading={savedIconIsLoading}
+          className={"hidden lg:flex"}
+          onClick={handleSavedIconClick}
+          data-testid="favouriteButton"
+        >
+          Favourite
+        </Button>
+      )}
+
+      {!showOnDesktop && (
+        <div>
+          {savedIconIsLoading ? (
+            <CircularProgress size={28} />
+          ) : (
+            <Icon
+              size="sm"
+              onClick={handleSavedIconClick}
+              className="text-gray-500 border border-solid border-gray-500 rounded-full h-10 w-10 justify-center hover:cursor-pointer"
+              icon={isListingSaved ? HeartIconSolid : HeartIcon}
+            />
+          )}
+        </div>
+      )}
 
       <Modal
         title={"To save property please log in or create an account."}

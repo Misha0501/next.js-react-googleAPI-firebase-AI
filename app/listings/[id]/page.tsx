@@ -31,6 +31,7 @@ async function ListingPage({ params: { id } }: Props) {
 
   const listing = await response.json();
 
+  // TODO: handle 404
   // if (!listing) return notFound();
 
   return (
@@ -42,7 +43,7 @@ async function ListingPage({ params: { id } }: Props) {
               <ListingTitleSection listing={listing} />
 
               <div>
-                <ListingDetailSavedButton listingId={listingId} />
+                <ListingDetailSavedButton listingId={listingId} showOnDesktop={true}/>
               </div>
             </div>
 

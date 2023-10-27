@@ -5,6 +5,7 @@ import { BedIcon, BedRoomIcon, WindowsIcon } from "@/public/BedIcon";
 import { GridIcon } from "@/public/GridIcon";
 import { formatToDayAndMonthWithName } from "@/app/lib/formatToDayAndMonthWithName";
 import Link from "next/link";
+import { ListingDetailSavedButton } from "@/app/components/listingDetailPage/ListingDetailSavedButton";
 
 type Prop = {
   listing: Listing;
@@ -12,27 +13,27 @@ type Prop = {
 
 export const ListingMainInfo = ({ listing }: Prop) => {
   let stats = [
-      {
-        title: "Rooms",
-        value: listing?.rooms,
-        icon: <Square3Stack3DIcon className="text-[#848484] h-7 w-7"/>,
-      },
-      {
-        title: "Bedrooms",
-        value: listing?.bedrooms,
-        icon: <BedIcon className="text-[#848484] h-7 w-7"/>,
-      },
-      {
-        title: "Square Area",
-        value: listing?.areaTotal,
-        icon: <GridIcon className="text-[#848484] h-7 w-7"/>,
-      },
-      {
-        title: "Offered since",
-        value: formatToDayAndMonthWithName(listing?.createdAt ?? ""),
-        icon: <ClockIcon className="text-[#848484] h-7 w-7"/>,
-      },
-    ]
+    {
+      title: "Rooms",
+      value: listing?.rooms,
+      icon: <Square3Stack3DIcon className="text-[#848484] h-7 w-7" />,
+    },
+    {
+      title: "Bedrooms",
+      value: listing?.bedrooms,
+      icon: <BedIcon className="text-[#848484] h-7 w-7" />,
+    },
+    {
+      title: "Square Area",
+      value: listing?.areaTotal,
+      icon: <GridIcon className="text-[#848484] h-7 w-7" />,
+    },
+    {
+      title: "Offered since",
+      value: formatToDayAndMonthWithName(listing?.createdAt ?? ""),
+      icon: <ClockIcon className="text-[#848484] h-7 w-7" />,
+    },
+  ];
 
   if (!listing) return null;
 
@@ -46,7 +47,6 @@ export const ListingMainInfo = ({ listing }: Prop) => {
           >
             <p className="text-gray-600">{el.title}</p>
             <div className="flex items-center pt-2 sm:pt-4">
-              {/*<Square3Stack3DIcon className="text-gray-600 h-6 w-6"/>*/}
               {el.icon}
               <p className="pl-2 text-gray-600">{el.value || "-"}</p>
             </div>
@@ -87,19 +87,10 @@ export const ListingMainInfo = ({ listing }: Prop) => {
               </p>
             </Link>
           </div>
-          <div>
-            {/*// TODO: handle saved icon!*/}
-            {/*{savedIconIsLoading ? (*/}
-            {/*  <CircularProgress size={28} />*/}
-            {/*) : (*/}
-            {/*  <Icon*/}
-            {/*    size="sm"*/}
-            {/*    onClick={handleSavedIconClick}*/}
-            {/*    className="text-gray-500 border border-solid border-gray-500 rounded-full h-10 w-10 justify-center hover:cursor-pointer"*/}
-            {/*    icon={isListingSaved ? HeartIconSolid : HeartIcon}*/}
-            {/*  />*/}
-            {/*)}*/}
-          </div>
+          <ListingDetailSavedButton
+            listingId={listing?.id}
+            showOnDesktop={false}
+          />
         </div>
         <Divider className="mb-0 hidden lg:block" />
       </div>
