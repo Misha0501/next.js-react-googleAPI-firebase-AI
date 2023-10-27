@@ -1,8 +1,18 @@
 import { useEffect, useState } from 'react';
 import { loadJS } from "@/app/lib/loadJS";
 
-let googleInstance;
+let googleInstance: any;
 
+/**
+ * Custom React hook to use Google Places.
+ * It checks if the Google Places library is already loaded.
+ * If not, it attempts to dynamically load it.
+ *
+ * @returns {Array} -
+ * - The first item is the Google Places instance or `undefined` if it's not loaded.
+ * - The second item is a `loading` boolean which is `true` if the library is still loading.
+ * - The third item is an error message string or `null` if there's no error.
+ */
 export const useGooglePlaces = (): [any | undefined, boolean, string | null] => {
   const [google, setGoogle] = useState<any>(googleInstance);
   const [loading, setLoading] = useState(!googleInstance);
