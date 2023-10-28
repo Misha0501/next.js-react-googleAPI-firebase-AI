@@ -11,7 +11,7 @@ export const MapsSection = ({ address }: Prop) => {
   if (!address?.latitude) return null;
 
   return (
-    <div id="mapSection">
+    <div id="mapSection" className={"py-8"}>
       <p className="text-2xl pb-8">View on map</p>
       <GoogleMap
         data-testid={"map"}

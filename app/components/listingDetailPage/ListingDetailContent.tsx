@@ -61,10 +61,10 @@ export const ListingDetailContent = ({ listing }: Prop) => {
   }
 
   return (
-    <div className="pt-10 sm:pt-16">
+    <div className="lg:pt-12">
       {formattedDescription && (
         <>
-          <div>
+          <div className={"py-8 lg:py-0"}>
             <p className="text-2xl">Description</p>
             <p
               className="pt-4 text-gray-500 font-light"
@@ -85,10 +85,10 @@ export const ListingDetailContent = ({ listing }: Prop) => {
           <Divider className={"hidden lg:block"} />
         </>
       )}
-      <div>
-        <p className="text-2xl">General information</p>
+      <div className={"pb-8 lg:pb-0"}>
+      <p className="text-2xl">General information</p>
         <div
-          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-6 pt-8 "
+          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-6 pt-5 "
           data-testid={"generalInfo"}
         >
           {generalInfo.map((item, index) => (
@@ -103,10 +103,10 @@ export const ListingDetailContent = ({ listing }: Prop) => {
         </div>
       </div>
       <Divider className={"hidden lg:block"} />
-      <div>
-        <p className="text-2xl">Area and Capacity</p>
+      <div className={"pb-8 lg:pb-0"}>
+      <p className="text-2xl">Area and Capacity</p>
         <div
-          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-6 pt-8"
+          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-6 pt-5"
           data-testid={"areaAndCapacity"}
         >
           {areaAndCapacity?.map((item, index) => (
@@ -121,10 +121,10 @@ export const ListingDetailContent = ({ listing }: Prop) => {
         </div>
       </div>
       <Divider className={"hidden lg:block"} />
-      <div>
-        <p className="text-2xl">Construction</p>
+      <div className={"pb-8 lg:pb-0"}>
+      <p className="text-2xl">Construction</p>
         <div
-          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-6 pt-8"
+          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-6 pt-5"
           data-testid={"construction"}
         >
           {construction?.map((item, index) => (
@@ -139,10 +139,10 @@ export const ListingDetailContent = ({ listing }: Prop) => {
         </div>
       </div>
       <Divider className={"hidden lg:block"} />
-      <div>
-        <p className="text-2xl">Heating</p>
+      <div className={"pb-8 lg:pb-0"}>
+      <p className="text-2xl">Heating</p>
         <div
-          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-6 pt-8"
+          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-6 pt-4"
           data-testid={"heating"}
         >
           <div className="flex justify-between sm:border-0 border-b border-gray-200 sm:pb-0 pb-3.5">
