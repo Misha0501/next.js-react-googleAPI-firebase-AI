@@ -8,7 +8,7 @@ type Prop = {
 };
 
 export const PriceChangeGraphSection = ({ listingPriceArray }: Prop) => {
-  if (!listingPriceArray?.length) return null;
+  if (!listingPriceArray?.length || !(listingPriceArray?.length - 1) ) return null;
 
   return (
     <div className="lg:pt-8">

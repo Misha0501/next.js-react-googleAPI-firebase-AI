@@ -85,7 +85,7 @@ async function ListingPage({ params: { id } }: Props) {
 
         <PriceComparisonGraphSection listing={listing} />
 
-        <PriceChangeGraphSection listingPriceArray={listing?.ListingPrice} />
+        <PriceChangeGraphSection listingPriceArray={listing?.ListingPrice ?? []} />
 
         <FloatingContactBar listing={listing} />
 
