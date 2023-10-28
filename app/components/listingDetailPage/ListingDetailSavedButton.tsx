@@ -80,7 +80,7 @@ export const ListingDetailSavedButton = ({
         });
       } else {
         // if it's saved do a delete request
-        await deleteSavedListing.mutateAsync({ id: savedListing.id });
+        await deleteSavedListing.mutateAsync({ id: savedListing!.id });
       }
       await savedListings.refetch();
     } catch (error) {

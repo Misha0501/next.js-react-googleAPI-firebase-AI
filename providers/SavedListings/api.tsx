@@ -1,5 +1,10 @@
 import service from "../../services";
-export async function savedListings(props?: any): Promise<any> {
+import { SavedListingsProvider } from "@/providers/SavedListings/types";
+import { SavedListing } from "@/types";
+
+export async function savedListings(
+  props?: any,
+): Promise<SavedListingsProvider.ReadResponse> {
   return service({
     method: "GET",
     url: `/api/savedListings`,
@@ -10,10 +15,7 @@ export async function savedListings(props?: any): Promise<any> {
   });
 }
 
-export async function create(
-  props: any,
-  authToken?: string
-){
+export async function create(props: any): Promise<SavedListing> {
   return service({
     method: "POST",
     url: `/api/savedListings`,
@@ -25,7 +27,7 @@ export async function create(
   });
 }
 
-export async function deleteItem(props: any) {
+export async function deleteItem(props: any): Promise<null> {
   return service({
     method: "DELETE",
     parseJSON: false,

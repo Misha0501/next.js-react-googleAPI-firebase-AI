@@ -14,7 +14,6 @@ export function useSavedSearches(
 export function useCreateSavedSearches(
   props: any
 ){
-  // const queryClient = useQueryClient();
   return useMutation((payload) => api.create({ ...props, data: payload }), {
     mutationKey: `${KEY} | Create`,
     retry: 0

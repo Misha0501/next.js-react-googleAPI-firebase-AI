@@ -1,13 +1,12 @@
 import {
-  UseMutationResult,
-  UseQueryResult,
   useMutation,
+  UseMutationResult,
   useQuery,
   useQueryClient,
+  UseQueryResult,
 } from "react-query";
 import * as api from "./api";
 import { Poperty } from "./types";
-import { Listing } from "@/types";
 
 const KEY = "PropertyListing";
 
@@ -47,9 +46,7 @@ export function useCreateProperty(
   props: Poperty.CreateProps
 ): UseMutationResult<
   Poperty.CreateResponse,
-  {
-    message?: string;
-  },
+  null,
   Poperty.CreateMutationPayload
 > {
   const queryClient = useQueryClient();
@@ -64,9 +61,7 @@ export function useUpdateProperty(
   props: Poperty.UpdatePropertyProp
 ): UseMutationResult<
   Poperty.UpdatePropertyResponse,
-  {
-    message?: string;
-  },
+  null,
   Poperty.UpdatePropertyMutationPayload
 > {
   const queryClient = useQueryClient();

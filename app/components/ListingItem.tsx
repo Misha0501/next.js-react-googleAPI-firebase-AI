@@ -97,7 +97,7 @@ export const ListingItem = ({
         if (!listingItem.savedListingId) return;
         await deleteSavedListing.mutateAsync({ id: listingItem.savedListingId });
 
-        setListingItem({ ...listingItem, savedListingId: null });
+        setListingItem({ ...listingItem, savedListingId: undefined });
       }
     } catch (error) {
       toast.error("Oops! Something went wrong. Please try again later.");

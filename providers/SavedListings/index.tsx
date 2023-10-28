@@ -1,49 +1,44 @@
-import { useMutation, UseMutationResult, useQuery, UseQueryResult } from "react-query";
+import {
+  useMutation,
+  UseMutationResult,
+  useQuery,
+  UseQueryResult,
+} from "react-query";
 import * as api from "./api";
-import { RecentlyViewedListing, SavedListing } from "@/types";
+import { SavedListingsProvider } from "@/providers/SavedListings/types";
+import { SavedListing } from "@/types";
 
 const KEY = "SavedListings";
 
-// RecentlyViewed Listings
+// Saved listings results
 export function useSavedListings(
-  props: SavedListing
-): UseQueryResult<any> {
+  props: any,
+): UseQueryResult<SavedListingsProvider.ReadResponse> {
   return useQuery(`${KEY} | Items`, () => api.savedListings(props), {
-    retry: 0
+    retry: 0,
   });
 }
 
 // Create
 export function useCreateSavedListing(
-  props: SavedListing
+  props: any,
 ): UseMutationResult<
   SavedListing,
-  {
-    listingId?: number;
-  },
-  SavedListing
+  any,
+  SavedListingsProvider.CreateMutationPayload
 > {
-  // const queryClient = useQueryClient();
   return useMutation((payload) => api.create({ ...props, data: payload }), {
     mutationKey: `${KEY} | Create`,
-    retry: 0
+    retry: 0,
   });
 }
 
-
-
 // Delete
 export function useDeleteSavedListing(
-  props: SavedListing
-): UseMutationResult<
-  SavedListing,
-  {
-    listingId?: number;
-  },
-  SavedListing
-> {
+  props: any,
+): UseMutationResult<null, any, SavedListingsProvider.DeleteMutationPayload> {
   return useMutation((payload) => api.deleteItem({ ...props, data: payload }), {
     mutationKey: `${KEY} | Delete`,
-    retry: 0
+    retry: 0,
   });
 }

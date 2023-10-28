@@ -7,6 +7,7 @@
  * throw new ResponseError('Not found', 404);
  */
 export class ResponseError extends Error {
+  status: number;
   /**
    * Creates a new ResponseError instance.
    *
