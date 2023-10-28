@@ -15,7 +15,7 @@ interface ContextProps {
 
 const ListingDetailContext = createContext<ContextProps>({
   contactSellerFormVisible: false,
-  setContactSellerFormVisible: () => {},
+  setContactSellerFormVisible: () => false,
 });
 
 // @ts-ignore
