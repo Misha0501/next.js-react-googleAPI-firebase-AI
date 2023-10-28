@@ -1,10 +1,10 @@
-import { User } from "firebase/auth";
 import service from "../../services";
-import { Users } from "./types";
+import { ApplicationUserProvider } from "./types";
+import { ApplicationUser } from "@/types";
 
 export async function userDetail(
-  props?: Users.DetailAPIPayload
-): Promise<Users.DetailResponse> {
+  props?: ApplicationUserProvider.GetAPIPayload,
+): Promise<ApplicationUserProvider.DetailResponse> {
   return service({
     method: "GET",
     url: `/api/users/${props?.id}`,
@@ -12,29 +12,26 @@ export async function userDetail(
 }
 
 export async function userOwnData(
-  props?: Users.DetailAPIPayload
-): Promise<Users.DetailResponse> {
+  props?: ApplicationUserProvider.GetAPIPayload
+): Promise<ApplicationUserProvider.DetailResponse> {
   return service({
     method: "GET",
     url: `/api/users`,
     headers: {
-      //@ts-ignore
-      Authorization: props.authToken,
+      Authorization: props?.authToken,
     },
   });
 }
 
 export async function update(
-  props: any,
-) {
+  props?: ApplicationUserProvider.UpdateProps,
+): Promise<ApplicationUser> {
   return service({
     method: "PUT",
     url: `/api/users`,
-    body: props.data,
+    body: props?.data,
     headers: {
-      //@ts-ignore
-      Authorization: props.authToken || props.data.authToken,
+      Authorization: props?.authToken || props?.data?.authToken,
     },
   });
 }
-
