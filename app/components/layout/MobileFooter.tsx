@@ -22,14 +22,14 @@ const MOBILE_NAV_ITEMS = [
     link: "/",
   },
   {
+    title: "Listings",
+    icon: <ListBulletIcon />,
+    link: "/listings",
+  },
+  {
     title: "Favourites",
     icon: <HeartIcon />,
     link: "/profile/saved",
-  },
-  {
-    title: "Saved",
-    icon: <ListBulletIcon />,
-    link: "/listings",
   },
   {
     title: "Profile",
