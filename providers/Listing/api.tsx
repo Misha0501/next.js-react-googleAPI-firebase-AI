@@ -1,9 +1,10 @@
-import { useAuthContext } from "@/app/context/AuthContext";
 import service from "../../services";
-import { Poperty } from "./types";
-import { useMutation } from "react-query";
+import { Listing } from "@/types";
+import { ListingProvider } from "@/providers/Listing/types";
 
-export async function listing(props?: Poperty.ListingAPIPayload): Promise<any> {
+export async function listing(
+  props?: ListingProvider.ListingAPIPayload,
+): Promise<any> {
   return service({
     method: "GET",
     url: `/api/listings`,
@@ -12,8 +13,8 @@ export async function listing(props?: Poperty.ListingAPIPayload): Promise<any> {
 }
 
 export async function listingDetailPage(
-  props?: Poperty.listingDetailPageAPIPayload
-): Promise<Poperty.listingDetailPageResponse> {
+  props?: any
+): Promise<Listing> {
   return service({
     method: "GET",
     url: `/api/listings/${props?.id}`,
@@ -21,9 +22,8 @@ export async function listingDetailPage(
 }
 
 export async function create(
-  props: Poperty.CreateAPIPayload,
-  authToken?: string
-): Promise<Poperty.CreateResponse> {
+  props: ListingProvider.CreateAPIPayload,
+): Promise<ListingProvider.CreateResponse> {
   return service({
     method: "POST",
     url: `/api/listings`,
@@ -36,9 +36,8 @@ export async function create(
 }
 
 export async function updateProperty(
-  props: Poperty.PutAPIPayload,
-  authToken?: string
-): Promise<Poperty.UpdatePropertyResponse> {
+  props: ListingProvider.PutAPIPayload,
+): Promise<Listing> {
   return service({
     method: "PUT",
     url: `/api/listings`,

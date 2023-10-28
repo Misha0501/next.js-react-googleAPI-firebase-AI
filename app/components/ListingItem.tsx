@@ -26,7 +26,7 @@ import { toast } from "react-toastify";
 type ListingItemProps = {
   listingItemInitial: Listing;
   isLoadingSavedListings: boolean;
-  ownerView: boolean;
+  ownerView?: boolean;
   onEditIconClick?: (listingItem: Listing) => void;
   onDeleteIconClick?: (listingItem: Listing) => void;
   onStateChanged?: (listingItem: Listing) => void;
@@ -36,7 +36,7 @@ type ListingItemProps = {
 export const ListingItem = ({
   listingItemInitial,
   isLoadingSavedListings = false,
-  ownerView,
+  ownerView = false,
   onDeleteIconClick,
   onStateChanged,
   isLoading,

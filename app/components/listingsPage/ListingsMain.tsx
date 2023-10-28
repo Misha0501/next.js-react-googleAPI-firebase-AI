@@ -83,7 +83,7 @@ export const ListingsMain = ({ searchParams, listingType, locality }: Props ) =>
     return Math.ceil(listingsData.total / pageSize);
   }, [listingsData, pageSize]);
 
-  const populatedListings = useMemo(() => {
+  const populatedListings: Listing[] = useMemo(() => {
     if (!savedListings?.length) return listings;
     if (!listings?.length) return [];
 
@@ -144,7 +144,7 @@ export const ListingsMain = ({ searchParams, listingType, locality }: Props ) =>
       </div>
       <div className={"grid grid-cols-1 gap-8 md:grid-cols-2 lg:gap-16 mb-12"}>
         {populatedListings.map((item, index) => (
-          <ListingItem listingItemInitial={item} key={index} isLoadingSavedListings={savedListingsIsLoading}/>
+          <ListingItem listingItemInitial={item} key={item.id} isLoadingSavedListings={savedListingsIsLoading}/>
         ))}
       </div>
       <Pagination
