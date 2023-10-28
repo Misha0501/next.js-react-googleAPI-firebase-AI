@@ -24,7 +24,6 @@ function DescriptionAndImages({
   handleNext,
   isShow,
 }: CreatePropertyComponentPropInterface) {
-  // const { formik, handleBack, step, handleNext, isShow } = props;
   const [show, setShow] = useState(true);
   const generate = useGenerateDescription();
 

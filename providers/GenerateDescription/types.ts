@@ -1,6 +1,5 @@
 export namespace Description {
   export type CreateProps = {};
-  export type CreateResponse = {};
   export type CreateMutationPayload = {
     listingType: string | null;
     streetNumber?: number | string;
