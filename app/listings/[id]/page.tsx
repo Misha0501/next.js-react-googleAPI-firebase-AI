@@ -13,6 +13,7 @@ import { ListingDetailRecentlyViewedFunctionality } from "@/app/components/listi
 import { ListigDetailContextProvider } from "@/app/context/ListingDetailContext";
 import { getFetchUrl } from "@/app/lib/getFetchUrl";
 import { notFound } from "next/navigation";
+import { ResponseError } from "@/app/lib/classes/ResponseError";
 
 export const revalidate = 300;
 
@@ -24,16 +25,16 @@ type Props = {
 
 async function ListingPage({ params: { id } }: Props) {
   const listingId = Number(id);
-
   let listing = null;
+
   try {
     // fetch listing
     const response = await fetch(getFetchUrl(`/api/listings/${listingId}`));
 
     if (!response.ok) {
       if (response.status === 404) {
-        notFound();
-        throw new Error("404 Not Found - Listing not found");
+        console.log("404 Not Found - Listing not found");
+        throw new ResponseError("Listing not found", 404)
       }
 
       throw new Error("Data fetch failed");
@@ -42,7 +43,13 @@ async function ListingPage({ params: { id } }: Props) {
     listing = await response.json();
 
   } catch (error) {
-    console.error(error);
+    console.log(error);
+    if (error instanceof ResponseError) {
+      if(error.status === 404) {
+        return notFound();
+      }
+    }
+
     return <div className={"text-red-500 container text-center font-bold"}>Oops an error occurred. Please try again later..</div>;
   }
   return (
