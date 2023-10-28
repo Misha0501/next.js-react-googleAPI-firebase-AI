@@ -37,7 +37,7 @@ export namespace ListingProvider {
 
   //UPDATE Property
   export type UpdatePropertyProp = {
-    authToken: string;
+    authToken?: string | null;
   };
   export interface PutAPIPayload extends UpdatePropertyProp {
     data: Listing;
