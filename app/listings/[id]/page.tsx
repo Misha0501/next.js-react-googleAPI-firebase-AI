@@ -11,6 +11,8 @@ import { PriceChangeGraphSection } from "@/app/components/listingDetailPage/Pric
 import FloatingContactBar from "@/app/components/listingDetailPage/FloatingContactBar";
 import { ListingDetailRecentlyViewedFunctionality } from "@/app/components/listingDetailPage/ListingDetailRecentlyViewedFunctionality";
 import { ListigDetailContextProvider } from "@/app/context/ListingDetailContext";
+import { getFetchUrl } from "@/app/lib/getFetchUrl";
+import { notFound } from "next/navigation";
 
 export const revalidate = 300;
 
@@ -23,17 +25,26 @@ type Props = {
 async function ListingPage({ params: { id } }: Props) {
   const listingId = Number(id);
 
-  // fetch listing detail
-  const response = await fetch(
-    `http://localhost:3000/api/listings/${listingId}`,
-  )
+  let listing = null;
+  try {
+    // fetch listing
+    const response = await fetch(getFetchUrl(`/api/listings/${listingId}`));
 
+    if (!response.ok) {
+      if (response.status === 404) {
+        notFound();
+        throw new Error("404 Not Found - Listing not found");
+      }
 
-  const listing = await response.json();
+      throw new Error("Data fetch failed");
+    }
 
-  // TODO: handle 404
-  // if (!listing) return notFound();
+    listing = await response.json();
 
+  } catch (error) {
+    console.error(error);
+    return <div className={"text-red-500 container text-center font-bold"}>Oops an error occurred. Please try again later..</div>;
+  }
   return (
     <ListigDetailContextProvider>
       <div className="pb-32 lg:pb-10">
@@ -43,7 +54,10 @@ async function ListingPage({ params: { id } }: Props) {
               <ListingTitleSection listing={listing} />
 
               <div>
-                <ListingDetailSavedButton listingId={listingId} showOnDesktop={true}/>
+                <ListingDetailSavedButton
+                  listingId={listingId}
+                  showOnDesktop={true}
+                />
               </div>
             </div>
 
@@ -73,9 +87,7 @@ async function ListingPage({ params: { id } }: Props) {
 
         <PriceChangeGraphSection listingPriceArray={listing?.ListingPrice} />
 
-        <FloatingContactBar
-          listing={listing}
-        />
+        <FloatingContactBar listing={listing} />
 
         <ListingDetailRecentlyViewedFunctionality listingId={listingId} />
       </div>

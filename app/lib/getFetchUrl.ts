@@ -16,16 +16,21 @@
  * // If called server-side in development, returns "http://localhost:3000/api/users"
  *
  */
-export const getFetchUrl = (route: string) => {
-    if (typeof window === 'undefined') {
-        // server-side, fallback to the environment variables or localhost
-        return `${
-          process.env.NODE_ENV === "production"
-            ? `https://${process.env.NEXT_PUBLIC_API_URL || process.env.VERCEL_URL || process.env.NEXT_PUBLIC_VERCEL_URL || 'http://localhost:3000'}`
-            : "http://localhost:3000"
-        }${route}`;
-    }
+export const getFetchUrl = (route: string): string => {
+  if (typeof window === "undefined") {
+    // server-side, fallback to the environment variables or localhost
+    return `${
+      process.env.NODE_ENV === "production"
+        ? `https://${
+            process.env.API_URL ??
+            process.env.VERCEL_URL ??
+            process.env.NEXT_PUBLIC_VERCEL_URL ??
+            "localhost:3000"
+          }`
+        : "http://localhost:3000"
+    }${route}`;
+  }
 
-    // client-side, use current website's base URL
-    return `${window.location.origin}${route}`;
+  // client-side, use current website's base URL
+  return `${window.location.origin}${route}`;
 };
