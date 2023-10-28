@@ -9,7 +9,7 @@ import {
 import { prisma } from "@/app/lib/db/client";
 import { getApplicationUserCompanyId } from "@/app/lib/listing/getApplicationUserCompanyId";
 import { userAllowedManipulateListing } from "@/app/lib/listing/userAllowedManipulateListing";
-import { ApplicationUser } from "@prisma/client";
+import { ApplicationUser } from "@/types";
 import { ResponseError } from "@/app/lib/classes/ResponseError";
 
 /**

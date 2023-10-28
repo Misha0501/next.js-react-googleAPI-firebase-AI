@@ -1,5 +1,5 @@
 import { getApplicationUserServer } from "@/app/lib/getApplicationUserServer";
-import { ApplicationUser } from "@prisma/client";
+import { ApplicationUser } from "@/types";
 import { deleteImageFromDB, ensureListingAndUserPermissions, fetchImageById } from "@/app/api/images/[slug]/_utils";
 import { handleAPIError } from "@/app/lib/api/handleError";
 import { validateParamId } from "@/app/lib/api/validateParamId";

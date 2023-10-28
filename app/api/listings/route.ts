@@ -12,7 +12,7 @@ import {
   handlePriceUpdate,
   validateListingExistence
 } from "@/app/api/listings/_utils";
-import { ApplicationUser } from "@prisma/client";
+import { ApplicationUser } from "@/types";
 import { handleAPIError } from "@/app/lib/api/handleError";
 
 /**

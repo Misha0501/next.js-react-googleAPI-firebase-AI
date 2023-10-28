@@ -1,7 +1,7 @@
 import { DecodedIdToken } from "firebase-admin/lib/auth/token-verifier";
 import { getDecodedIdToken } from "@/app/lib/getDecodedIdToken";
-import { ApplicationUser } from "@prisma/client";
 import { prisma } from "@/app/lib/db/client";
+import { ApplicationUser } from "@/types";
 
 /**
  * Fetches an application user from the server.

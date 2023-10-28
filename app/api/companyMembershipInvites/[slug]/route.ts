@@ -1,10 +1,10 @@
 import { ResponseError } from "@/app/lib/classes/ResponseError";
 import { prisma } from "@/app/lib/db/client";
 import { getApplicationUserServer } from "@/app/lib/getApplicationUserServer";
-import { ApplicationUser } from "@prisma/client";
 import { handleAPIError } from "@/app/lib/api/handleError";
 import { getActiveCompanyMembershipInviteById } from "@/app/api/companyMembershipInvites/_utils";
 import { validateParamId } from "@/app/lib/api/validateParamId";
+import { ApplicationUser } from "@/types";
 
 /**
  * DELETE Route to delete an membership invite.

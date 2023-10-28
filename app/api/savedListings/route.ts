@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { ApplicationUser } from "@prisma/client";
+import { ApplicationUser } from "@/types";
 import { getApplicationUserServer } from "@/app/lib/getApplicationUserServer";
 import { savedListingsSchema } from "@/app/lib/validations/savedListings";
 import { getSavedListings, handleSavedListingCreation } from "@/app/api/savedListings/_utils";

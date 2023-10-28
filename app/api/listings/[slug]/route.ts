@@ -2,7 +2,7 @@ import { ResponseError } from "@/app/lib/classes/ResponseError";
 import { NextResponse } from "next/server";
 import { prisma } from "@/app/lib/db/client";
 import { getApplicationUserServer } from "@/app/lib/getApplicationUserServer";
-import { ApplicationUser } from "@prisma/client";
+import { ApplicationUser } from "@/types";
 import { getAveragePriceInNeighborhood } from "@/app/lib/listing/getAveragePriceInNeighborhood";
 import {
     deleteListingAndAssociatedEntities,

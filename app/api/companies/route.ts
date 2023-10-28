@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { ApplicationUser, Prisma } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 import { ResponseError } from "@/app/lib/classes/ResponseError";
 import { getApplicationUserServer } from "@/app/lib/getApplicationUserServer";
 import { prisma } from "@/app/lib/db/client";
@@ -7,6 +7,7 @@ import { companyPUTSchema, companySchema } from "@/app/lib/validations/company";
 import { getApplicationUserCompanyId } from "@/app/lib/listing/getApplicationUserCompanyId";
 import { handleAPIError } from "@/app/lib/api/handleError";
 import { userHasMembership } from "@/app/api/companies/_utils";
+import { ApplicationUser } from "@/types";
 
 /**
  * POST Route to create a new company.

@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { getApplicationUserServer } from "@/app/lib/getApplicationUserServer";
 import { getDecodedIdToken } from "@/app/lib/getDecodedIdToken";
 import { prisma } from "@/app/lib/db/client";
-import { ApplicationUser } from "@prisma/client";
+import { ApplicationUser } from "@/types";
 import { userPUTSchema } from "@/app/lib/validations/user";
 import { firebaseAdmin } from "@/app/lib/firebase/configAdmin";
 import { findApplicationUserByEmail, handleUserAPIUpdateError } from "@/app/api/users/_utils";
