@@ -9,6 +9,7 @@ import {
 } from "@/app/api/cron/notifyOfMatchedListings/_utils";
 
 export const dynamic = "force-dynamic"; // Force dynamic (server) route instead of static page
+export const maxDuration = 300;
 
 export async function GET(request: Request) {
   try {
