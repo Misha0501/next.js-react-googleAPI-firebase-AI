@@ -8,6 +8,7 @@ import {
 } from "@/app/api/generateDescription/_utils";
 import { handleAPIError } from "@/app/lib/api/handleError";
 
+export const maxDuration = 120;
 export async function POST(request: Request) {
   try {
     const parsedValues = openAISchema.parse(await request.json());
