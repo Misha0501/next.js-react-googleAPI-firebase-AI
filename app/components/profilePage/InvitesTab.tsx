@@ -74,13 +74,13 @@ export const InvitesTab = () => {
     try {
       setShowModal(false);
       setInviteToDecline(null);
-      const response = await declineCompanyMembershipInvite.mutateAsync({
+      await declineCompanyMembershipInvite.mutateAsync({
         companyMembershipInviteId: inviteToDecline?.id,
       });
 
       companyMembershipInvites.refetch().catch(console.error);
       toast.success("Invite declined");
-    } catch (error) {
+    } catch (error: any) {
       toast.error(
         error.message || "Something went wrong. Please try again later.",
       );
@@ -92,7 +92,7 @@ export const InvitesTab = () => {
       const response = await createCompanyMembershipInvite.mutateAsync(values);
       companyMembershipInvites.refetch().catch(console.error);
       toast.success("Invite sent");
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
       toast.error(
         error.message || "Something went wrong. Please try again later.",
@@ -135,10 +135,10 @@ export const InvitesTab = () => {
       toast.success("Invite accepted");
       await companyMembershipInvites.refetch().catch(console.error);
       await companyMemberships.refetch().catch(console.error);
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
       toast.error(
-        error.message || "Something went wrong. Please try again later.",
+        error?.message || "Something went wrong. Please try again later.",
       );
     }
   };
@@ -157,7 +157,7 @@ export const InvitesTab = () => {
       await companyMembershipInvites.refetch().catch(console.error);
     } catch (error) {
       toast.error(
-        error.message || "Something went wrong. Please try again later.",
+        error?.message || "Something went wrong. Please try again later.",
       );
     }
   };

@@ -44,10 +44,6 @@ export default function MultiForm() {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
-  const handleReset = () => {
-    setActiveStep(0);
-  };
-
   interface CreatePropertyFormikPropInterface {
     listingType: string;
     propertyType: string;

@@ -9,7 +9,7 @@ import { HeartIcon as HeartIconOutline } from "@heroicons/react/24/outline";
 import { Listing } from "@/types";
 import { useRouter } from "next/navigation";
 import { GridIcon } from "@/public/GridIcon";
-import { BedIcon } from "@/public/BedIcon";
+import { Icons } from "@/public/Icons";
 import { useAuthContext } from "@/app/context/AuthContext";
 import { useEffect, useState } from "react";
 import { CircularProgress, Skeleton } from "@mui/material";
@@ -197,7 +197,7 @@ export const ListingItem = ({
                 )}
                 {listingItem?.bedrooms && (
                   <div className="flex items-center gap-2 mb-4">
-                    <BedIcon />
+                    <Icons />
                     <span className={"text-gray-500"}>
                       {listingItem?.bedrooms}
                     </span>

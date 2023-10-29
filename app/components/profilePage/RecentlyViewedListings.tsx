@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useAuthContext } from "@/app/context/AuthContext";
-import { RecentlyViewedListing } from "@/types";
+import { Listing, RecentlyViewedListing } from "@/types";
 import { ListingItem } from "@/app/components/ListingItem";
 import { useRecentlyViewedListings } from "@/providers/RecentlyViewedListings";
 import { useSavedListings } from "@/providers/SavedListings";
@@ -14,7 +14,7 @@ export const RecentlyViewedListings = () => {
   const [recentlyViewedListings, setRecentlyViewedListings] = useState<
     RecentlyViewedListing[]
   >([]);
-  const [populatedListings, setPopulatedListings] = useState([]);
+  const [populatedListings, setPopulatedListings] = useState<Listing[]>([]);
   const recentlyViewedListingsResponse = useRecentlyViewedListings({
     authToken,
   });

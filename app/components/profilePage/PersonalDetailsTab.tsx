@@ -32,7 +32,7 @@ interface FormValues {
 
 export const PersonalDetailsTab = () => {
   const { authToken } = useAuthContext();
-  const [personalDetails, setPersonalDetails] = useState({
+  const [personalDetails, setPersonalDetails] = useState<any>({
     displayName: "",
     phoneNumber: "",
     newPassword: "",
@@ -62,7 +62,7 @@ export const PersonalDetailsTab = () => {
       }
 
       return;
-    } catch (error) {
+    } catch (error: any) {
       toast.error(error?.message || "Something went wrong. Please try again");
     }
   };
@@ -129,7 +129,7 @@ export const PersonalDetailsTab = () => {
             }}
             errorMessage={
               formik.errors.newPassword && formik.touched.newPassword
-                ? formik.errors.newPassword
+                ? formik.errors.newPassword || ''
                 : undefined
             }
             error={

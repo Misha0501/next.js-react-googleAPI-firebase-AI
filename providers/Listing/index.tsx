@@ -44,7 +44,7 @@ export function useListingDetailPage(props: any): UseQueryResult<Listing, any> {
 export function useCreateProperty(
   props: ListingProvider.CreateProps,
 ): UseMutationResult<
-  ListingProvider.CreateResponse,
+  Listing,
   null,
   ListingProvider.CreateMutationPayload
 > {

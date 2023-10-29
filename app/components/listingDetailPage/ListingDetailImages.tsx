@@ -5,7 +5,7 @@ import { ListingImage } from "@/types";
 import Image from "next/image";
 import { Button } from "@tremor/react";
 import { PhotoIcon } from "@heroicons/react/24/outline";
-import { PhotosIcon, VerticaleMap } from "@/public/BedIcon";
+import { PhotosIcon, VerticaleMap } from "@/public/Icons";
 import Link from "next/link";
 import Lightbox from "yet-another-react-lightbox";
 import Thumbnails from "yet-another-react-lightbox/plugins/thumbnails";

@@ -6,7 +6,7 @@ const KEY = "companyMemberships";
 
 // RecentlyViewed Listings
 export function useCompanyMemberships(
-  props: SavedListing
+  props: any
 ): UseQueryResult<any> {
   return useQuery(`${KEY} | Items`, () => api.companyMemberships(props), {
     retry: 0
@@ -17,7 +17,6 @@ export function useCompanyMemberships(
 export function useCreateMembership(
   props: any
 ) {
-  // const queryClient = useQueryClient();
   return useMutation((payload) => api.create({ ...props, data: payload }), {
     mutationKey: `${KEY} | Create`,
     retry: 0

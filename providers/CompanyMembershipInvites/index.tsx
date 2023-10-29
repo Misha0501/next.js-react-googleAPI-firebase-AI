@@ -1,12 +1,12 @@
-import { useMutation, UseMutationResult, useQuery, UseQueryResult } from "react-query";
+import { useMutation, useQuery, UseQueryResult } from "react-query";
 import * as api from "./api";
-import { RecentlyViewedListing, SavedListing } from "@/types";
+import { CompanyMembershipInvite } from "@/types";
 
 const KEY = "CompanyMembershipInvites";
 
 export function useCompanyMembershipInvites(
   props: any
-) {
+): UseQueryResult<CompanyMembershipInvite[], any> {
   return useQuery(`${KEY} | Items`, () => api.companyMembershipInvites(props), {
     retry: 0
   });

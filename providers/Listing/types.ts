@@ -1,4 +1,4 @@
-import { Listing } from "@/types";
+import { Address, Listing, ListingImage } from "@/types";
 
 export namespace ListingProvider {
   export type ListingsProps = {
@@ -30,7 +30,15 @@ export namespace ListingProvider {
 
   export type CreateResponse = {};
 
-  export type CreateMutationPayload = Listing;
+  export type CreateMutationPayload = Partial<Listing> & {
+    outsideArea?: string
+    garden?: string
+    garage?: string
+    yearBuilt?: string
+    characteristics?: string[]
+    address?: Partial<Address>
+    images?: Partial<ListingImage>[]
+  }
   export interface CreateAPIPayload extends CreateProps {
     data: CreateMutationPayload;
   }

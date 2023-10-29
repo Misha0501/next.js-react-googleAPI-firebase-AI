@@ -27,7 +27,6 @@ const MoreDetails = ({
   handleNext,
   isShow,
 }: CreatePropertyComponentPropInterface) => {
-  // const { formik, handleBack, step, handleNext, isShow } = props;
   const [show, setShow] = useState(true);
   const [showError, setShowErros] = useState(false);
   const title = "Tell Us More About Your Property";

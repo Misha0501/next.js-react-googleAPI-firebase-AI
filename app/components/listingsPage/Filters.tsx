@@ -38,28 +38,6 @@ export function Filters({ onParamsChange, listingType }: any) {
     bedroomRange: { min: undefined, max: undefined }, // Bedrooms filter
     listedSince: undefined, // Listed since filter
   });
-  const removeUndefinedAndNoMaxValues = (filters: any) => {
-    // set max value in all filterValues properties to undefined if it's set to NO_MAX
-    const result: any = {};
-    Object.keys(filters).forEach((key) => {
-      if (filters[key] !== undefined) {
-        result[key] = filters[key];
-      }
-
-      // remove undefined children from params[key]
-      if (typeof result[key] === "object") {
-        Object.keys(result[key]).forEach((childKey) => {
-          const child = result[key][childKey];
-
-          if (child === NO_MAX) {
-            result[key][childKey] = undefined;
-          }
-        });
-      }
-    });
-
-    return result;
-  };
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const setQueryParams = (queryParams: any) => {

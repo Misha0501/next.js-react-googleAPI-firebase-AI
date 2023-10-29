@@ -46,7 +46,7 @@ export const SavedListings = () => {
             <div className="text-xl">
               <span className={"font-bold"}>Results: </span>{" "}
               {savedListingsData?.total}{" "}
-              {savedListingsData?.total === 0 || savedListingsData?.total > 1
+              {savedListingsData?.total === 0 || savedListingsData!.total > 1
                 ? "properties"
                 : "property"}{" "}
               saved

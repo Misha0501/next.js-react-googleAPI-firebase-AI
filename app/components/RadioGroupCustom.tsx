@@ -9,7 +9,7 @@ type Props = {
 export const RadioGroupCustom = ({ options, onChange, id }: Props) => {
   const [selectedValue, setSelectedValue] = useState(null);
 
-  const handleOnChange = (value) => {
+  const handleOnChange = (value: any) => {
     setSelectedValue(value);
     if (onChange) {
       onChange(value);

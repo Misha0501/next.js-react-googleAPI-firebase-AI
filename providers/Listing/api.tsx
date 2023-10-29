@@ -23,7 +23,7 @@ export async function listingDetailPage(
 
 export async function create(
   props: ListingProvider.CreateAPIPayload,
-): Promise<ListingProvider.CreateResponse> {
+): Promise<Listing> {
   return service({
     method: "POST",
     url: `/api/listings`,

@@ -1,7 +1,7 @@
 /**
  * This is a generic service that can be used to make API calls.
  */
-
+// @ts-ignore
 import omit from "lodash/omit";
 import qs from "query-string";
 import { getFetchUrl } from "@/app/lib/getFetchUrl";

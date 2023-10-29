@@ -90,8 +90,8 @@ export const CompanyTab = () => {
       await createCompany.mutateAsync(values);
       toast.success("Company created successfully");
     } catch (error) {
-      toast.error(
-        "There was an error creating the company: " + error?.message ||
+      // @ts-ignore
+      toast.error("There was an error creating the company: " + error?.message ||
           "Something went wrong. Please try again",
       );
     }

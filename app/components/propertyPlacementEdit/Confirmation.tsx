@@ -34,7 +34,6 @@ function Confirmation({
   const [createdProperty, setCreatedProperty] = useState<Listing | null>(null);
 
   function confirmBtnHandler() {
-    // formik.handleSubmit;
     createProperty.mutate({
       listingType: formik?.values?.listingType || null,
       propertyType: formik?.values?.propertyType || null,

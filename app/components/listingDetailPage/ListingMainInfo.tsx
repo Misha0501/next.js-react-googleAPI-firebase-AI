@@ -1,7 +1,7 @@
 import { Divider } from "@tremor/react";
 import { Listing } from "@/types";
 import { ClockIcon, Square3Stack3DIcon } from "@heroicons/react/24/outline";
-import { BedIcon, BedRoomIcon, WindowsIcon } from "@/public/BedIcon";
+import { Icons, BedRoomIcon, WindowsIcon } from "@/public/Icons";
 import { GridIcon } from "@/public/GridIcon";
 import { formatToDayAndMonthWithName } from "@/app/lib/formatToDayAndMonthWithName";
 import Link from "next/link";
@@ -21,7 +21,7 @@ export const ListingMainInfo = ({ listing }: Prop) => {
     {
       title: "Bedrooms",
       value: listing?.bedrooms,
-      icon: <BedIcon />,
+      icon: <Icons />,
     },
     {
       title: "Square Area",
