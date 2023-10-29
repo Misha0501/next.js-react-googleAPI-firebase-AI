@@ -10,9 +10,13 @@ type Prop = {
 export const ListingDetailContent = ({ listing }: Prop) => {
   const [showMore, setShowMore] = useState(false);
 
+  const hasLongDescription = useMemo(() => {
+    return listing?.description?.length > 400;
+  } , [listing?.description]);
+
   // format description using to show only 400 characters if it is more than 400 characters
   const formattedDescription = useMemo(() => {
-    return listing?.description?.length > 400
+    return hasLongDescription
       ? listing?.description?.slice(0, 400) + "..."
       : listing?.description;
   }, [listing?.description]);
@@ -72,7 +76,7 @@ export const ListingDetailContent = ({ listing }: Prop) => {
             >
               {!showMore ? formattedDescription: listing?.description}
             </p>
-            {!showMore && (
+            {!showMore && hasLongDescription && (
               <p
                 className="pt-4 font-bold underline cursor-pointer"
                 onClick={() => setShowMore(!showMore)}

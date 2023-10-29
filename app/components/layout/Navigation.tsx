@@ -25,7 +25,7 @@ export const Navigation = () => {
 
   return (
     <>
-      <Disclosure as="nav" className="py-3 sm:py-4 duration-1000 border-b-2">
+      <Disclosure as="nav" className="py-3 sm:py-4 duration-1000 border-b-2" id="main-navigation">
         {({ open, close }) => (
           <>
             <div className="container">
