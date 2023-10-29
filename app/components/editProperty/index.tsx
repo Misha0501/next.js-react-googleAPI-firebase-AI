@@ -17,7 +17,7 @@ export default function EditProperty() {
           initialValues={{
             listingType: listingDetailPage?.data?.listingType,
             propertyType: listingDetailPage?.data?.propertyType,
-            streetNumber: listingDetailPage?.data?.Address?.[0].streetNumber,
+            streetNumber: listingDetailPage?.data?.Address?.[0].route,
             route: listingDetailPage?.data?.Address?.[0].route,
             locality: listingDetailPage?.data?.Address?.[0].locality,
             administrativeArea:

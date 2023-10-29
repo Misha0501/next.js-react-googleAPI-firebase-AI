@@ -22,7 +22,7 @@ export const FromToFilter = ({
     <div className="flex justify-center items-center gap-6">
       <Select value={initialFrom} onValueChange={onChangeFrom} id={id ? id + 'Min' : ''}>
         {valuesFrom.map((item, index) => (
-          <SelectItem value={item} key={index}>
+          <SelectItem value={item as string} key={index}>
             {item}
           </SelectItem>
         ))}
@@ -35,7 +35,7 @@ export const FromToFilter = ({
         id={id ? id + 'Max' : ''}
       >
         {valuesTo.map((item, index) => (
-          <SelectItem value={item} key={index}>
+          <SelectItem value={item as string} key={index}>
             {item}
           </SelectItem>
         ))}

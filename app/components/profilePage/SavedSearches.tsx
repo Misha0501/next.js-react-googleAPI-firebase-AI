@@ -53,7 +53,7 @@ export const SavedSearches = () => {
     closeModal();
 
     await deleteSavedSearch
-      .mutateAsync({ id: searchToDelete.id })
+      .mutateAsync({ id: searchToDelete!.id })
       .catch((error) => {
         toast.error("Oops! Something went wrong. Please try again later.");
       });
@@ -67,7 +67,7 @@ export const SavedSearches = () => {
     <div className="mt-10 w-full">
       {deleteSavedSearch.isLoading && <CircularProgress />}
       {isLoading && <CircularProgress />}
-      {error && <p>{error}</p>}
+      {error ? (<p className={"text-red-500"}>Oops there was an error</p>) : null}
       {!isLoading && !error && (
         <div>
           {savedSearchesTotal != 0 && (

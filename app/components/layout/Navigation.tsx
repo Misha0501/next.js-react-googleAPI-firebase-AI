@@ -10,7 +10,7 @@ import { Disclosure } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 
 export const Navigation = () => {
-  const [user, setUser] = useState();
+  const [user, setUser] = useState<any>();
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(firebaseClientAuth, async (user) => {

@@ -28,8 +28,8 @@ export const AddressAutocomplete = ({
   const [inputValue, setInputValue] = useState(initialValue || "");
   const firstUpdate = useRef(true);
 
-  const autoCompleteRef = useRef();
-  const inputRef = useRef();
+  const autoCompleteRef = useRef<any>();
+  const inputRef = useRef<HTMLInputElement>(null);
   const options = useMemo(() => ({
     componentRestrictions: { country: "bg" },
     fields: ["address_components", "geometry", "name"],
@@ -54,7 +54,7 @@ export const AddressAutocomplete = ({
     }
   }, [address]);
 
-  const placeChanged = (e) => {
+  const placeChanged = () => {
     // Get the place details from the autocomplete object.
     const place = autoCompleteRef.current.getPlace();
     if (!place || !place.address_components) return;
@@ -70,6 +70,7 @@ export const AddressAutocomplete = ({
     // and then fill-in the corresponding field on the form.
     // place.address_components are google.maps.GeocoderAddressComponent objects
     // which are documented at http://goo.gle/3l5i5Mr
+    // @ts-ignore
     for (const component of place.address_components as google.maps.GeocoderAddressComponent[]) {
       const componentType = component.types[0];
 

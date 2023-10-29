@@ -47,15 +47,10 @@ function UserPageMain() {
 
   const populatedListings = useMemo(() => {
     return getPopulatedListingsSaved(
-      (propertyListing as Listing[] | undefined) || [],
-      usersSavedListings?.data?.results,
+      (propertyListing as Listing[] | undefined) ?? [],
+      usersSavedListings?.data?.results ?? [],
     );
   }, [propertyListing, usersSavedListings?.data?.results]);
-
-  const handleContactAgentClick = () => {
-    // navigate to the contact form
-    router.push("#contactAgentForm");
-  };
 
   return (
     <div className="pt-8 pb-32 lg:pt-10">
@@ -238,8 +233,7 @@ function UserPageMain() {
             )}
           </div>
           <FloatingContactBar
-            phoneNumber={contactNumber}
-            onContactClick={handleContactAgentClick}
+            initialPhoneNumber={contactNumber}
           />
         </>
       )}

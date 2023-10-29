@@ -7,10 +7,12 @@ import { useRouter } from "next/navigation";
 import { Listing } from "@/types";
 
 type Props = {
-  listing: Listing;
+  listing?: Listing;
+  initialPhoneNumber?: string;
 };
 export const FloatingContactBar = ({
   listing,
+  initialPhoneNumber,
 }: Props) => {
   const {setContactSellerFormVisible} = useListigDetailContext();
   const router = useRouter();
@@ -21,6 +23,7 @@ export const FloatingContactBar = ({
   };
 
   let phoneNumber =
+    initialPhoneNumber ??
     listing?.company?.phoneNumber ??
     listing?.applicationUser?.phoneNumber ??
     "";

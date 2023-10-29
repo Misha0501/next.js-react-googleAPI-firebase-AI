@@ -5,7 +5,6 @@ export async function savedSearches(props?: any): Promise<any> {
     method: "GET",
     url: `/api/savedSearches`,
     headers: {
-      //@ts-ignore
       Authorization: props.authToken,
     },
   });
@@ -20,7 +19,6 @@ export async function create(
     url: `/api/savedSearches`,
     body: props.data,
     headers: {
-      //@ts-ignore
       Authorization: props.authToken,
     },
   });
@@ -33,7 +31,6 @@ export async function deleteItem(props: any) {
     url: `/api/savedSearches/${props.data.id}`,
     body: props.data,
     headers: {
-      //@ts-ignore
       Authorization: props.authToken,
     },
   });

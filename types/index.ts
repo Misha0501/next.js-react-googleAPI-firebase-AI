@@ -104,6 +104,8 @@ export type Address = {
   neighborhood: string;
   postalCode: string;
   showExactLocation: boolean;
+  administrativeAreaLevelOne: string;
+  streetNumber: string;
   streetName: string;
   updatedAt: string;
   listingId: number;

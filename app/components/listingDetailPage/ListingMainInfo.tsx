@@ -21,12 +21,12 @@ export const ListingMainInfo = ({ listing }: Prop) => {
     {
       title: "Bedrooms",
       value: listing?.bedrooms,
-      icon: <BedIcon className="text-[#848484] h-7 w-7" />,
+      icon: <BedIcon />,
     },
     {
       title: "Square Area",
       value: listing?.areaTotal,
-      icon: <GridIcon className="text-[#848484] h-7 w-7" />,
+      icon: <GridIcon />,
     },
     {
       title: "Offered since",

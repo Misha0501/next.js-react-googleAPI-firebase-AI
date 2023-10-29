@@ -7,7 +7,7 @@ import { useUpdateUser } from "@/providers/Users";
 
 export default function SignInPageContent() {
   // UI instance for login / signup
-  const loading = useRef(null);
+  const loading = useRef<HTMLDivElement>(null);
   const updateUser = useUpdateUser({});
 
   useEffect(() => {

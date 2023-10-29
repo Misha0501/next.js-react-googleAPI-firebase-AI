@@ -1,11 +1,6 @@
 import { ListingsPageContent } from "@/app/components/listingsPage/ListingsPageContent";
 
-type ListingsPageProps = {
-  params?: { slug: string };
-  searchParams?: { [key: string]: string | string[] | undefined };
-};
-
-export default function Listings({ searchParams, params }: ListingsPageProps) {
+export default function Listings() {
   return (
     <>
       <ListingsPageContent/>

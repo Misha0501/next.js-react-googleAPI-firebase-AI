@@ -23,7 +23,6 @@ export function useCreateRecentlyViewedListing(
   },
   RecentlyViewedListing
 > {
-  // const queryClient = useQueryClient();
   return useMutation((payload) => api.create({ ...props, data: payload }), {
     mutationKey: `${KEY} | Create`,
     retry: 0

@@ -5,7 +5,6 @@ export async function companyMembershipInvites(props?: any): Promise<any> {
     method: "GET",
     url: `/api/companyMembershipInvites`,
     headers: {
-      //@ts-ignore
       Authorization: props.authToken,
     },
   });
@@ -17,7 +16,6 @@ export async function create(props: any, authToken?: string) {
     url: `/api/companyMembershipInvites`,
     body: props.data,
     headers: {
-      //@ts-ignore
       Authorization: props.authToken,
     },
   });
@@ -29,7 +27,6 @@ export async function decline(props: any, authToken?: string) {
     url: `/api/companyMembershipInvites/decline`,
     body: props.data,
     headers: {
-      //@ts-ignore
       Authorization: props.authToken,
     },
   });
@@ -42,7 +39,6 @@ export async function deleteItem(props: any) {
     url: `/api/companyMembershipInvites/${props.data.id}`,
     body: props.data,
     headers: {
-      //@ts-ignore
       Authorization: props.authToken,
     },
   });
