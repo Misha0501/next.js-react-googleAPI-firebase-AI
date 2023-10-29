@@ -53,7 +53,7 @@ export function HomeHeroHeaderSearch() {
     setListingTypeSelected(listingTypeSelectedIndex === 0 ? "SELL" : "RENT");
   }, [listingTypeSelectedIndex]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: any) => {
     e.preventDefault();
     const url = `/listings?listingType=${listingTypeSelected}${
       selectedLocality ? `&locality=${selectedLocality}` : ""
