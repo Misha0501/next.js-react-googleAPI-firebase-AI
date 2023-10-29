@@ -10,12 +10,12 @@ import {
 
 export const savedFiltersSchema = z.object({
     locality: z.string().optional(),
-    heatingType: z.enum(HEATING_TYPES).array().optional(),
-    listingType: z.enum(LISTING_TYPES).optional(),
-    currencyType: z.enum(CURRENCIES).array().optional(),
-    interiorType: z.enum(INTERIOR_TYPES).array().optional(),
-    propertyType: z.enum(PROPERTY_TYPES).array().optional(),
-    upkeepType: z.enum(UPKEEP_TYPES).optional(),
+    heatingType: z.enum(HEATING_TYPES as any).array().optional(),
+    listingType: z.enum(LISTING_TYPES as any).optional(),
+    currencyType: z.enum(CURRENCIES as any).array().optional(),
+    interiorType: z.enum(INTERIOR_TYPES as any).array().optional(),
+    propertyType: z.enum(PROPERTY_TYPES as any).array().optional(),
+    upkeepType: z.enum(UPKEEP_TYPES as any).optional(),
     priceMin: z.number().min(0).max(1000000000).optional(),
     priceMax: z.number().min(0).max(1000000000).optional(),
     areaTotalMin: z.number().min(0).max(1000000).optional(),

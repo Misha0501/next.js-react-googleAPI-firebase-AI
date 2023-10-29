@@ -31,14 +31,14 @@ export namespace ListingProvider {
   export type CreateResponse = {};
 
   export type CreateMutationPayload = Partial<Listing> & {
-    outsideArea?: string
-    garden?: string
-    garage?: string
-    yearBuilt?: string
-    characteristics?: string[]
-    address?: Partial<Address>
-    images?: Partial<ListingImage>[]
-  }
+    outsideArea?: string;
+    garden?: string;
+    garage?: string;
+    yearBuilt?: string;
+    characteristics?: string[];
+    address?: Partial<Address>;
+    images?: Partial<ListingImage>[];
+  };
   export interface CreateAPIPayload extends CreateProps {
     data: CreateMutationPayload;
   }

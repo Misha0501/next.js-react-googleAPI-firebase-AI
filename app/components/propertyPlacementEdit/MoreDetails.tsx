@@ -13,7 +13,7 @@ import { FormHelperText } from "@mui/material";
 import { FormikProps } from "formik";
 
 interface CreatePropertyComponentPropInterface {
-  formik: FormikProps<any>;
+  formik: any;
   handleNext: () => void;
   handleBack: () => void;
   step: number;

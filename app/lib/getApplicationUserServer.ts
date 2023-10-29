@@ -1,5 +1,3 @@
-// @ts-ignore
-import { DecodedIdToken } from "firebase-admin/lib/auth/token-verifier";
 import { getDecodedIdToken } from "@/app/lib/getDecodedIdToken";
 import { prisma } from "@/app/lib/db/client";
 import { ApplicationUser } from "@/types";
@@ -14,7 +12,7 @@ import { ApplicationUser } from "@/types";
 export const getApplicationUserServer = async (
   includeCompanyMembership: boolean = false,
 ): Promise<ApplicationUser> => {
-  const decodedToken: DecodedIdToken = await getDecodedIdToken();
+  const decodedToken = await getDecodedIdToken();
 
   let prismaQuery = {
     where: { email: decodedToken.email },

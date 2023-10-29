@@ -16,10 +16,9 @@ import PropertyPlacementRadioButtons from "./PropertyPlacementRadioButtons";
 import { FormHelperText } from "@mui/material";
 import { AutocompleteAddress } from "@/types";
 import { AddressAutocomplete } from "@/app/components/propertyPlacementEdit/AddressAutocomplete";
-import { FormikProps } from "formik";
 
 interface CreatePropertyComponentPropInterface {
-  formik: FormikProps<any>;
+  formik: any;
   handleNext: () => void;
   step: number;
   isShow: boolean;
@@ -121,7 +120,7 @@ const GeneralInfo = ({
                 />
                 {formik.touched.listingType && formik.errors.listingType && (
                   <FormHelperText error>
-                    {formik.errors.listingType}
+                    {formik?.errors?.listingType}
                   </FormHelperText>
                 )}
               </div>
@@ -263,7 +262,7 @@ const GeneralInfo = ({
                   size={"xl"}
                   iconPosition={"right"}
                   onClick={async () => {
-                    const errors = validateStep1(formik.values);
+                    const errors = validateStep1();
                     formik.setErrors(errors);
                     if (Object.keys(errors).length === 0) {
                       handleNext();

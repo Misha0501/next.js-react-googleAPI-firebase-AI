@@ -1,6 +1,5 @@
 import {firebaseAdmin} from "@/app/lib/firebase/configAdmin";
 import {cookies, headers} from "next/headers";
-import {DecodedIdToken} from "firebase-admin/lib/auth/token-verifier";
 import {ResponseError} from "@/app/lib/classes/ResponseError";
 
 /**
@@ -20,7 +19,7 @@ import {ResponseError} from "@/app/lib/classes/ResponseError";
  * }
  */
 
-export const getDecodedIdToken = async (): Promise<DecodedIdToken> => {
+export const getDecodedIdToken = async () => {
     const headersList = headers()
     const headerAuthorizationToken = headersList.get('Authorization')
 
@@ -30,6 +29,6 @@ export const getDecodedIdToken = async (): Promise<DecodedIdToken> => {
     if(!headerAuthorizationToken && !cookiesAuthToken) {
         throw new ResponseError("User is not authenticated.", 401)
     }
-    
-    return firebaseAdmin.auth().verifyIdToken(cookiesAuthToken || headerAuthorizationToken)
+
+    return firebaseAdmin.auth().verifyIdToken(cookiesAuthToken || headerAuthorizationToken || '');
 }

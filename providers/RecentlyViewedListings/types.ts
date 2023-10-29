@@ -10,7 +10,12 @@ export namespace RecentlyViewedListingsProvider {
     results: RecentlyViewedListing[];
   };
 
-  export type CreateProps = GetProps & {
+  export type CreateProps = {
+    authToken?: string | null;
+    listingId?: number;
+  };
+
+  export type CreateMutationPayload = {
     listingId: number;
   };
 }

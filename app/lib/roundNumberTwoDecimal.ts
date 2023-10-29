@@ -5,5 +5,5 @@
  * @returns {number} - The rounded number.
  */
 export const roundNumberTwoDecimal = (number: number) => {
-  return +(Math.round(number + "e+2") + "e-2");
+  return +(Math.round(Number(number + "e+2")) + "e-2");
 };

@@ -159,8 +159,6 @@ const testCheckboxSelection = async (
   checkboxLocatorId: string,
   page: Page
 ) => {
-  // TODO: check for the right request to be made
-
   // Click the checkbox within the parent component
   await page.locator(`${parentComponentId} ${checkboxLocatorId}`).click();
 

@@ -29,7 +29,7 @@ export const PlacingPropertyImagesHandler = ({
 
   const [error, setError] = useState("");
 
-  const hiddenFileInput = useRef(null);
+  const hiddenFileInput = useRef<HTMLInputElement>(null);
 
   const deleteListingImage = useDeleteListingImage({ authToken });
 

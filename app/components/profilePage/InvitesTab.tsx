@@ -34,7 +34,7 @@ interface FormValues {
 }
 
 export const InvitesTab = () => {
-  const { authToken, user } = useAuthContext();
+  const { authToken } = useAuthContext();
   const companyMemberships = useCompanyMemberships({ authToken });
   const companyMembershipInvites = useCompanyMembershipInvites({
     authToken,
@@ -56,7 +56,7 @@ export const InvitesTab = () => {
     authToken,
   });
 
-  const createMembership = useCreateMembership({ authToken });
+  const createMembership = useCreateMembership({ authToken: authToken ?? "" });
   const [inviteToDelete, setInviteToDelete] =
     useState<CompanyMembershipInvite | null>(null);
 
@@ -89,7 +89,7 @@ export const InvitesTab = () => {
 
   const handleFormSubmit = async (values: FormValues) => {
     try {
-      const response = await createCompanyMembershipInvite.mutateAsync(values);
+      await createCompanyMembershipInvite.mutateAsync(values);
       companyMembershipInvites.refetch().catch(console.error);
       toast.success("Invite sent");
     } catch (error: any) {
@@ -104,11 +104,6 @@ export const InvitesTab = () => {
     setInviteToDecline(null);
     setShowModal(false);
   };
-
-  useEffect(() => {
-    if (companyMembershipInvites.isSuccess && companyMembershipInvites?.data) {
-    }
-  }, [companyMembershipInvites.data, companyMembershipInvites.isSuccess]);
 
   useEffect(() => {
     if (!companyMemberships.isSuccess || !companyMemberships.data) return;
@@ -155,7 +150,7 @@ export const InvitesTab = () => {
       toast.success("Invite deleted");
 
       await companyMembershipInvites.refetch().catch(console.error);
-    } catch (error) {
+    } catch (error: any) {
       toast.error(
         error?.message || "Something went wrong. Please try again later.",
       );
@@ -222,6 +217,7 @@ export const InvitesTab = () => {
             </div>
             {createCompanyMembershipInvite.isError && (
               <div className="text-red-500 text-sm mb-7">
+                {/* @ts-ignore */}
                 {createCompanyMembershipInvite.error?.message}
               </div>
             )}

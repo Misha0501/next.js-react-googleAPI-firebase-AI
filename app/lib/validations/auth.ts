@@ -7,7 +7,3 @@ export const loginSchema = z.object({
   password: z
     .string()
 })
-
-export const sessionLoginSchema = z.object({
-  idToken: z.string(),
-})

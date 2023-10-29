@@ -18,7 +18,7 @@ export async function GET(req: Request) {
     const decodedToken = await getDecodedIdToken();
 
     const applicationUser = await findApplicationUserByEmail(
-      decodedToken.email,
+      decodedToken.email || "",
     );
 
     return NextResponse.json(applicationUser);

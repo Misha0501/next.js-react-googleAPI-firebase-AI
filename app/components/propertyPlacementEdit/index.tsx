@@ -220,28 +220,9 @@ export default function MultiForm() {
                 </div>
                 <Grid container>
                   <Grid item xs={12} sx={{ padding: "20px" }}>
-                    {formContent(activeStep, formik)}
+                    {formContent(activeStep, formik as any)}
                   </Grid>
                 </Grid>
-                {/*<LinearProgress*/}
-                {/*  sx={{*/}
-                {/*    height: "30px",*/}
-                {/*    marginTop: "30px",*/}
-                {/*    backgroundColor: "#F2F2F2",*/}
-                {/*    color: "#97B6FF",*/}
-                {/*  }}*/}
-                {/*  variant="determinate"*/}
-                {/*  value={activeStep == 3 ? 100 : (activeStep / 4) * 100}*/}
-                {/*  aria-label="hell"*/}
-                {/*/>*/}
-                {/*<Typography*/}
-                {/*  fontWeight="semi-bold"*/}
-                {/*  fontSize="16px"*/}
-                {/*  textAlign="center"*/}
-                {/*  sx={{ mt: "5px" }}*/}
-                {/*>*/}
-                {/*  {activeStep == 3 ? 100 : (activeStep / 4) * 100}%*/}
-                {/*</Typography>*/}
               </Box>
             </div>
           </form>

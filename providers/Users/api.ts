@@ -3,7 +3,7 @@ import { ApplicationUserProvider } from "./types";
 import { ApplicationUser } from "@/types";
 
 export async function userDetail(
-  props?: ApplicationUserProvider.GetAPIPayload,
+  props?: any,
 ): Promise<ApplicationUserProvider.DetailResponse> {
   return service({
     method: "GET",
@@ -12,7 +12,7 @@ export async function userDetail(
 }
 
 export async function userOwnData(
-  props?: ApplicationUserProvider.GetAPIPayload
+  props?: any
 ): Promise<ApplicationUserProvider.DetailResponse> {
   return service({
     method: "GET",
@@ -24,7 +24,7 @@ export async function userOwnData(
 }
 
 export async function update(
-  props?: ApplicationUserProvider.UpdateProps,
+  props?: any,
 ): Promise<ApplicationUser> {
   return service({
     method: "PUT",

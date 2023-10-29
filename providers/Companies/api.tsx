@@ -1,9 +1,6 @@
 import service from "@/services";
 
-export async function create(
-  props: any,
-  authToken?: string
-) {
+export async function create(props: any, authToken?: string) {
   return service({
     method: "POST",
     url: `/api/companies`,

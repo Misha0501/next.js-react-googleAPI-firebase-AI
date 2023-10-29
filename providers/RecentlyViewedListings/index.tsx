@@ -1,4 +1,9 @@
-import { useMutation, UseMutationResult, useQuery, UseQueryResult } from "react-query";
+import {
+  useMutation,
+  UseMutationResult,
+  useQuery,
+  UseQueryResult,
+} from "react-query";
 import * as api from "./api";
 import { RecentlyViewedListing } from "@/types";
 import { RecentlyViewedListingsProvider } from "@/providers/RecentlyViewedListings/types";
@@ -20,7 +25,7 @@ export function useCreateRecentlyViewedListing(
 ): UseMutationResult<
   RecentlyViewedListing,
   any,
-  RecentlyViewedListingsProvider.CreateProps
+  RecentlyViewedListingsProvider.CreateMutationPayload
 > {
   return useMutation((payload) => api.create({ ...props, data: payload }), {
     mutationKey: `${KEY} | Create`,

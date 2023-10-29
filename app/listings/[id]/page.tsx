@@ -33,7 +33,6 @@ async function ListingPage({ params: { id } }: Props) {
 
     if (!response.ok) {
       if (response.status === 404) {
-        console.log("404 Not Found - Listing not found");
         throw new ResponseError("Listing not found", 404)
       }
 
@@ -43,7 +42,7 @@ async function ListingPage({ params: { id } }: Props) {
     listing = await response.json();
 
   } catch (error) {
-    console.log(error);
+    console.error(error);
     if (error instanceof ResponseError) {
       if(error.status === 404) {
         return notFound();
