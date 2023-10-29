@@ -33,7 +33,7 @@ const EditForm = ({ formik, addressId, id, loading }: any) => {
   const router = useRouter();
 
   async function submitHandler() {
-    event.preventDefault();
+    event?.preventDefault();
 
     let values: any = {
       id: id,
@@ -93,7 +93,8 @@ const EditForm = ({ formik, addressId, id, loading }: any) => {
   }
 
   const validateForm = () => {
-    event.preventDefault();
+    event?.preventDefault();
+
     let errors: any = {};
     if (!formik.values.listingType) {
       errors.listingType = "Required";
@@ -639,7 +640,6 @@ const EditForm = ({ formik, addressId, id, loading }: any) => {
       </div>
       <Button
         type="submit"
-        // disabled={isEqual(formik.values, formik.initialValues)}
         onClick={async () => {
           const errors = validateForm();
           formik.setErrors(errors);

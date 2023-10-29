@@ -95,6 +95,7 @@ export async function POST(req: Request) {
           create: [{ currency, price }],
         },
         ListingImage: {
+          // @ts-ignore
           create: [...images],
         },
       },

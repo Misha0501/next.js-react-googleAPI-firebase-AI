@@ -12,12 +12,12 @@ const tenYearsFromNow = new Date();
 tenYearsFromNow.setFullYear(tenYearsFromNow.getFullYear() + 10);
 
 export const listingSchema = z.object({
-  listingType: z.enum(LISTING_TYPES),
-  interiorType: z.enum(INTERIOR_TYPES).optional().nullable(),
-  propertyType: z.enum(PROPERTY_TYPES).optional().nullable(),
-  upkeepType: z.enum(UPKEEP_TYPES).optional().nullable(),
+  listingType: z.enum(LISTING_TYPES as any),
+  interiorType: z.enum(INTERIOR_TYPES as any).optional().nullable(),
+  propertyType: z.enum(PROPERTY_TYPES as any).optional().nullable(),
+  upkeepType: z.enum(UPKEEP_TYPES as any).optional().nullable(),
   price: z.number().min(0),
-  currency: z.enum(CURRENCIES).optional().nullable(),
+  currency: z.enum(CURRENCIES as any).optional().nullable(),
   address: z
     .object({
       streetNumber: z.string().optional(),
@@ -124,16 +124,16 @@ export const listingSchema = z.object({
   floorNumber: z.number().optional().nullable(),
   numberOfFloorsProperty: z.number().optional().nullable(),
   numberOfFloorsCommon: z.number().optional().nullable(),
-  heatingType: z.enum(HEATING_TYPES).optional().nullable(),
+  heatingType: z.enum(HEATING_TYPES as any).optional().nullable(),
 });
 
 export const listingSchemaPutRequest = listingSchema.extend({
   id: z.number(),
-  listingType: z.enum(LISTING_TYPES).optional(),
-  interiorType: z.enum(INTERIOR_TYPES).optional(),
-  propertyType: z.enum(PROPERTY_TYPES).optional(),
+  listingType: z.enum(LISTING_TYPES as any).optional(),
+  interiorType: z.enum(INTERIOR_TYPES as any).optional(),
+  propertyType: z.enum(PROPERTY_TYPES as any).optional(),
   price: z.number().min(0).optional(),
-  currency: z.enum(CURRENCIES).optional(),
+  currency: z.enum(CURRENCIES as any).optional(),
   address: z
     .object({
       id: z.number(),
@@ -148,7 +148,7 @@ export const listingSchemaPutRequest = listingSchema.extend({
       administrativeAreaLevelOne: z.string().nullable().optional(),
     })
     .optional(),
-  upkeepType: z.enum(UPKEEP_TYPES).optional(),
+  upkeepType: z.enum(UPKEEP_TYPES as any).optional(),
   images: z
     .array(
       z.object({
@@ -179,7 +179,7 @@ export const listingsSearchParamSchema = z.object({
     .max(HEATING_TYPES.length)
     .refine(
       (userInputArray) =>
-        userInputArray.every((el) => HEATING_TYPES.includes(el)),
+        userInputArray.every((el) => HEATING_TYPES.includes(el as any)),
       (val) => ({
         message: `Invalid heating type input: ${val}. Allowed values: ${HEATING_TYPES}`,
       }),
@@ -190,7 +190,7 @@ export const listingsSearchParamSchema = z.object({
         .max(CURRENCIES.length)
         .refine(
             (userInputArray) =>
-                userInputArray.every((el) => CURRENCIES.includes(el)),
+                userInputArray.every((el) => CURRENCIES.includes(el as any)),
             (val) => ({
                 message: `Invalid listing type input: ${val}. Allowed values: ${CURRENCIES}`,
             }),
@@ -201,7 +201,7 @@ export const listingsSearchParamSchema = z.object({
     .max(LISTING_TYPES.length)
     .refine(
       (userInputArray) =>
-        userInputArray.every((el) => LISTING_TYPES.includes(el)),
+        userInputArray.every((el) => LISTING_TYPES.includes(el as any)),
       (val) => ({
         message: `Invalid listing type input: ${val}. Allowed values: ${LISTING_TYPES}`,
       }),
@@ -212,7 +212,7 @@ export const listingsSearchParamSchema = z.object({
     .max(INTERIOR_TYPES.length)
     .refine(
       (userInputArray) =>
-        userInputArray.every((el) => INTERIOR_TYPES.includes(el)),
+        userInputArray.every((el) => INTERIOR_TYPES.includes(el as any)),
       (val) => ({
         message: `Invalid interior type input: ${val}. Allowed values: ${INTERIOR_TYPES}`,
       }),
@@ -223,7 +223,7 @@ export const listingsSearchParamSchema = z.object({
       .max(PROPERTY_TYPES.length)
       .refine(
           (userInputArray) =>
-              userInputArray.every((el) => PROPERTY_TYPES.includes(el)),
+              userInputArray.every((el) => PROPERTY_TYPES.includes(el as any)),
           (val) => ({
               message: `Invalid interior type input: ${val}. Allowed values: ${PROPERTY_TYPES}`,
           }),
@@ -234,7 +234,7 @@ export const listingsSearchParamSchema = z.object({
     .max(UPKEEP_TYPES.length)
     .refine(
       (userInputArray) =>
-        userInputArray.every((el) => UPKEEP_TYPES.includes(el)),
+        userInputArray.every((el) => UPKEEP_TYPES.includes(el as any)),
       (val) => ({
         message: `Invalid upkeep type input: ${val}. Allowed values: ${UPKEEP_TYPES}`,
       }),

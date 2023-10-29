@@ -12,11 +12,10 @@ export const PriceComparisonGraphSection = ({ listing }: Prop) => {
   const [
     averagePriceNeighborhoodChartData,
     setAveragePriceNeighborhoodChartData,
-  ] = useState();
+  ] = useState<any[]>([]);
 
   useEffect(() => {
     if (listing?.averagePriceInNeighborhood) {
-      // @ts-ignore
       setAveragePriceNeighborhoodChartData([
         {
           name: "Average price in the neighborhood",

@@ -12,12 +12,13 @@ import Link from "next/link";
 import { useCreateSavedSearches } from "@/providers/SavedSearaches";
 import { toast } from "react-toastify";
 import { Modal } from "@/app/components/Modal";
+import { ListingType } from "@/types";
 
 export const ListingsPageContent = () => {
   const { authToken } = useAuthContext();
   const param = useSearchParams();
   const [search, setSearch] = useState(null);
-  const [listingType, setListingType] = useState(undefined);
+  const [listingType, setListingType] = useState<ListingType>('SELL');
   const [locality, setLocality] = useState(param.get("locality") || "");
   const createSavedSearches = useCreateSavedSearches({ authToken });
   let [showAuthModal, setShowAuthModal] = useState(false);
@@ -27,7 +28,7 @@ export const ListingsPageContent = () => {
   let [savedSearchError, setSavedSearchError] = useState("");
   const router = useRouter();
 
-  const onParamsChange = useCallback((data) => {
+  const onParamsChange = useCallback((data: any) => {
     setSearch(data);
   }, []);
 
@@ -38,7 +39,7 @@ export const ListingsPageContent = () => {
   const [showFiltersMobile, setShowFiltersMobile] = useState(false);
 
   // Create a proper saved search object from the filter values
-  const getSavedSearchesBodyObjectFromFilters = (filterValues) => {
+  const getSavedSearchesBodyObjectFromFilters = (filterValues: any) => {
     return {
       priceMin: filterValues?.priceRange.min,
       priceMax:

@@ -27,7 +27,7 @@ export async function DELETE(
 
     const { listingId } = await fetchImageById(id);
 
-    await ensureListingAndUserPermissions(applicationUser, listingId);
+    await ensureListingAndUserPermissions(applicationUser, listingId!);
 
     await deleteImageFromDB(id);
 
