@@ -24,7 +24,6 @@ export const PROPERTY_TYPES: PropertyType[] = [
 export const BUILDING_TYPE: BuildingType[] = ["New building", "Old building"];
 export const CHARACTERISTICS: Characteristics[] = [
   "Balcony",
-  "Garden",
   "Renewable energy",
   "Lying / sitting bath",
   "Swimming pool",

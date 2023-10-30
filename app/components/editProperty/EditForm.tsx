@@ -46,14 +46,13 @@ const EditForm = ({ formik, addressId, id, loading }: any) => {
       bathrooms: formik?.values?.bathrooms,
       areaTotal: formik?.values?.totalArea,
       areaLiving: formik?.values?.livingArea,
-      outsideArea: formik.values?.outsideArea,
-      garden: formik?.values?.garden,
-      garage: formik?.values?.garage,
+      areaOutside: formik.values?.areaOutside,
+      areaGarage: formik?.values?.areaGarage,
       volume: formik?.values?.volume,
       interiorType: formik?.values?.interiortype || null,
       upkeepType: formik?.values?.upkeeptype || null,
       heatingType: formik?.values?.heatingtype || null,
-      yearBuilt: formik?.values?.yearBuilt,
+      constructedYear: formik?.values?.constructedYear,
       numberOfFloorsCommon: formik?.values?.numberOfFloorsCommon,
       floorNumber: formik?.values?.floorNumber,
       buildingtype: formik?.values?.buildingtype || null,
@@ -391,31 +390,15 @@ const EditForm = ({ formik, addressId, id, loading }: any) => {
                   <NumberInput
                     enableStepper={false}
                     className={"w-min border-[#97B6FF]"}
-                    name="outsideArea"
-                    id="outsideArea"
+                    name="areaOutside"
+                    id="areaOutside"
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     error={
-                      !!formik.touched.outsideArea &&
-                      !!formik.errors.outsideArea
+                      !!formik.touched.areaOutside &&
+                      !!formik.errors.areaOutside
                     }
-                    value={formik.values.outsideArea}
-                  />
-                  m2
-                </div>
-              </div>
-              <div className="flex gap-1 flex-col">
-                <span className="mb-2 font-bold text-sm">Garden</span>
-                <div className="flex items-center gap-2">
-                  <NumberInput
-                    enableStepper={false}
-                    className={"w-min border-[#97B6FF]"}
-                    name="garden"
-                    id="garden"
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    error={!!formik.touched.garden && !!formik.errors.garden}
-                    value={formik.values.garden}
+                    value={formik.values.areaOutside}
                   />
                   m2
                 </div>
@@ -426,12 +409,12 @@ const EditForm = ({ formik, addressId, id, loading }: any) => {
                   <NumberInput
                     enableStepper={false}
                     className={"w-min border-[#97B6FF]"}
-                    name="garage"
-                    id="garage"
+                    name="areaGarage"
+                    id="areaGarage"
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    error={!!formik.touched.garage && !!formik.errors.garage}
-                    value={formik.values.garage}
+                    error={!!formik.touched.areaGarage && !!formik.errors.areaGarage}
+                    value={formik.values.areaGarage}
                   />
                   m2
                 </div>
@@ -531,15 +514,15 @@ const EditForm = ({ formik, addressId, id, loading }: any) => {
                   min={2010}
                   max={2040}
                   onBlur={formik.handleBlur}
-                  name="yearBuilt"
-                  id="yearBuilt"
+                  name="constructedYear"
+                  id="constructedYear"
                   onValueChange={(e) =>
-                    formik.setFieldValue("yearBuilt", e, true)
+                    formik.setFieldValue("constructedYear", e, true)
                   }
                   error={Boolean(
-                    formik.touched.yearBuilt && formik.errors.yearBuilt,
+                    formik.touched.constructedYear && formik.errors.constructedYear,
                   )}
-                  value={formik.values.yearBuilt}
+                  value={formik.values.constructedYear}
                 />
               </div>
               <div className="flex flex-col gap-1">
@@ -550,6 +533,7 @@ const EditForm = ({ formik, addressId, id, loading }: any) => {
                   className={"w-min border-[#97B6FF]"}
                   name="numberOfFloorsCommon"
                   id="numberOfFloorsCommon"
+                  min={0}
                   onBlur={formik.handleBlur}
                   onValueChange={(e) =>
                     formik.setFieldValue("numberOfFloorsCommon", e, true)
@@ -568,6 +552,7 @@ const EditForm = ({ formik, addressId, id, loading }: any) => {
                 <NumberInput
                   className={"w-min border-[#97B6FF]"}
                   name="floorNumber"
+                  min={0}
                   id="floorNumber"
                   onValueChange={(e) =>
                     formik.setFieldValue("floorNumber", e, true)
@@ -578,27 +563,6 @@ const EditForm = ({ formik, addressId, id, loading }: any) => {
                   )}
                   value={formik.values.floorNumber}
                 />
-              </div>
-            </div>
-            <Divider />
-            <div className="flex flex-col gap-2">
-              <span className="mb-2 font-bold text-lg">Building type</span>
-              <div className="max-w-sm">
-                <Select
-                  onBlur={formik.handleBlur}
-                  value={formik.values.buildingtype}
-                  id="buildingtype"
-                  onChange={(e) =>
-                    formik.setFieldValue("buildingtype", e, true)
-                  }
-                  className={"text-sm"}
-                >
-                  {BUILDING_TYPE.map((item, index) => (
-                    <SelectItem value={item} key={index}>
-                      {item}
-                    </SelectItem>
-                  ))}
-                </Select>
               </div>
             </div>
           </>

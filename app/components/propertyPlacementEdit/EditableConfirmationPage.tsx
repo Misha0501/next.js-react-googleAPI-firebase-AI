@@ -213,6 +213,21 @@ function EditableConfirmationPage({
               onBlur={formik.handleBlur}
             />
           </div>
+          <div className="flex gap-1 flex-col">
+            <span className="mb-2 font-bold text-sm">Parking places</span>
+            <NumberInput
+              className={"w-min"}
+              name="parking"
+              min={0}
+              id="parking"
+              onValueChange={(e) => formik.setFieldValue("parking", e, true)}
+              error={Boolean(
+                formik.touched.parking && formik.errors.parking,
+              )}
+              value={formik.values.parking}
+              onBlur={formik.handleBlur}
+            />
+          </div>
         </div>
       )}
       <Divider />
@@ -267,31 +282,14 @@ function EditableConfirmationPage({
                   enableStepper={false}
                   placeholder="0"
                   className={"w-min border-[#97B6FF]"}
-                  name="outsideArea"
-                  id="outsideArea"
+                  name="areaOutside"
+                  id="areaOutside"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   error={
-                    !!formik.touched.outsideArea && !!formik.errors.outsideArea
+                    !!formik.touched.areaOutside && !!formik.errors.areaOutside
                   }
-                  value={formik.values.outsideArea}
-                />
-                m2
-              </div>
-            </div>
-            <div className="flex gap-1 flex-col">
-              <span className="mb-2 font-bold text-sm">Garden</span>
-              <div className="flex items-center gap-2">
-                <NumberInput
-                  enableStepper={false}
-                  placeholder="0"
-                  className={"w-min border-[#97B6FF]"}
-                  name="garden"
-                  id="garden"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  error={!!formik.touched.garden && !!formik.errors.garden}
-                  value={formik.values.garden}
+                  value={formik.values.areaOutside}
                 />
                 m2
               </div>
@@ -303,11 +301,11 @@ function EditableConfirmationPage({
                   enableStepper={false}
                   placeholder="0"
                   className={"w-min border-[#97B6FF]"}
-                  name="garage"
-                  id="garage"
+                  name="areaGarage"
+                  id="areaGarage"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  error={!!formik.touched.garage && !!formik.errors.garage}
+                  error={!!formik.touched.areaGarage && !!formik.errors.areaGarage}
                   value={formik.values.garage}
                 />
                 m2
@@ -396,15 +394,15 @@ function EditableConfirmationPage({
                 min={2010}
                 max={2040}
                 onBlur={formik.handleBlur}
-                name="yearBuilt"
-                id="yearBuilt"
+                name="constructedYear"
+                id="constructedYear"
                 onValueChange={(e) =>
-                  formik.setFieldValue("yearBuilt", e, true)
+                  formik.setFieldValue("constructedYear", e, true)
                 }
                 error={Boolean(
-                  formik.touched.yearBuilt && formik.errors.yearBuilt,
+                  formik.touched.constructedYear && formik.errors.constructedYear,
                 )}
-                value={formik.values.yearBuilt}
+                value={formik.values.constructedYear}
               />
             </div>
             <div className="flex flex-col gap-1">
@@ -414,6 +412,7 @@ function EditableConfirmationPage({
               <NumberInput
                 className={"w-min border-[#97B6FF]"}
                 name="numberOfFloorsCommon"
+                min={0}
                 id="numberOfFloorsCommon"
                 onBlur={formik.handleBlur}
                 onValueChange={(e) =>
@@ -433,6 +432,7 @@ function EditableConfirmationPage({
               <NumberInput
                 className={"w-min border-[#97B6FF]"}
                 name="floorNumber"
+                min={0}
                 id="floorNumber"
                 onValueChange={(e) =>
                   formik.setFieldValue("floorNumber", e, true)

@@ -81,6 +81,10 @@ export async function POST(req: Request) {
     // Get user's company id
     let companyId = getApplicationUserCompanyId(applicationUser);
 
+    // active until 30 days from now
+    const activeUntil = new Date();
+    activeUntil.setDate(activeUntil.getDate() + 30);
+
     const listing = await prisma.listing.create({
       data: {
         applicationUserId: applicationUser.id,
@@ -88,6 +92,8 @@ export async function POST(req: Request) {
         ...restData,
         price,
         currency,
+        active: true,
+        activeUntil: activeUntil,
         Address: {
           create: [{ ...address }],
         },

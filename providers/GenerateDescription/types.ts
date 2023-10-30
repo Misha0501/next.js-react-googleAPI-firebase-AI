@@ -19,11 +19,10 @@ export namespace Description {
     areaLiving?: string | number;
     areaTotal?: string | number;
     upkeepType?: string | null;
-    yearBuilt?: string | number;
+    constructedYear?: string | number;
     buildingType?: string | null;
-    outsideArea?: string | number;
-    garage?: string | number;
-    garden?: string | number;
+    areaOutside?: string | number;
+    areaGarage?: string | number;
   };
   export interface CreateAPIPayload extends CreateProps {
     data: CreateMutationPayload;

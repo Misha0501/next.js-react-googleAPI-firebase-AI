@@ -50,6 +50,8 @@ const MoreDetails = ({
     return errors;
   };
 
+  const tenYearsFromNow = new Date().getFullYear() + 10
+
   return (
     <>
       <div className="max-w-screen-xl m-auto">
@@ -83,7 +85,7 @@ const MoreDetails = ({
                 <Divider />
                 <div className="grid md:grid-cols-2 gap-8 md:gap-16">
                   <p className={"text-2xl font-bold"}>
-                    What is the number of rooms
+                    Basic information
                   </p>
                   <div className="">
                     <div className="pb-8 border-b">
@@ -154,6 +156,28 @@ const MoreDetails = ({
                         </FormHelperText>
                       )}
                     </div>
+                    <div className="py-6 border-b">
+                      <div className="flex justify-between items-center">
+                        <span>Parking places</span>
+                        <NumberInput
+                          placeholder="0"
+                          className={"w-min"}
+                          name="parking"
+                          id="parking"
+                          onValueChange={(e) =>
+                            formik.setFieldValue("parking", e, true)
+                          }
+                          error={!!formik.errors.parking && showError}
+                          value={formik.values.parking}
+                          onBlur={formik.handleBlur}
+                        />
+                      </div>
+                      {formik.touched.parking && formik.errors.parking && (
+                        <FormHelperText error>
+                          {formik.errors.parking}
+                        </FormHelperText>
+                      )}
+                    </div>
                   </div>
                 </div>
               </>
@@ -217,32 +241,12 @@ const MoreDetails = ({
                             placeholder="0"
                             className={"w-min "}
                             min={0}
-                            name="outsideArea"
-                            id="outsideArea"
+                            name="areaOutside"
+                            id="areaOutside"
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
-                            error={showError && !!formik.errors.outsideArea}
-                            value={formik.values.outsideArea}
-                          />
-                          m2
-                        </div>
-                      </div>
-                    </div>
-                    <Divider />
-                    <div className="py-6">
-                      <div className="flex justify-between items-center">
-                        <span>Garden</span>
-                        <div className="flex items-center gap-2">
-                          <NumberInput
-                            enableStepper={false}
-                            placeholder="0"
-                            className={"w-min "}
-                            name="garden"
-                            id="garden"
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                            error={showError && !!formik.errors.garden}
-                            value={formik.values.garden}
+                            error={showError && !!formik.errors.areaOutside}
+                            value={formik.values.areaOutside}
                           />
                           m2
                         </div>
@@ -257,12 +261,12 @@ const MoreDetails = ({
                             enableStepper={false}
                             placeholder="0"
                             className={"w-min "}
-                            name="garage"
-                            id="garage"
+                            name="areaGarage"
+                            id="areaGarage"
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
-                            error={showError && !!formik.errors.garage}
-                            value={formik.values.garage}
+                            error={showError && !!formik.errors.areaGarage}
+                            value={formik.values.areaGarage}
                           />
                           m2
                         </div>
@@ -382,21 +386,21 @@ const MoreDetails = ({
                         <span>Year of built</span>
                         <NumberInput
                           className={"w-min "}
-                          min={2010}
-                          max={2040}
+                          min={1900}
+                          max={tenYearsFromNow}
                           onBlur={formik.handleBlur}
-                          name="yearBuilt"
-                          id="yearBuilt"
+                          name="constructedYear"
+                          id="constructedYear"
                           onValueChange={(e) =>
-                            formik.setFieldValue("yearBuilt", e, true)
+                            formik.setFieldValue("constructedYear", e, true)
                           }
-                          error={showError && !!formik.errors.yearBuilt}
-                          value={formik.values.yearBuilt}
+                          error={showError && !!formik.errors.constructedYear}
+                          value={formik.values.constructedYear}
                         />
                       </div>
-                      {showError && formik.errors.yearBuilt && (
+                      {showError && formik.errors.constructedYear && (
                         <FormHelperText className="flex justify-end" error>
-                          {formik.errors.yearBuilt}
+                          {formik.errors.constructedYear}
                         </FormHelperText>
                       )}
                     </div>
@@ -405,6 +409,7 @@ const MoreDetails = ({
                         <span>Floors in the building</span>
                         <NumberInput
                           className={"w-min "}
+                          min={0}
                           name="numberOfFloorsCommon"
                           id="numberOfFloorsCommon"
                           onBlur={formik.handleBlur}
@@ -434,6 +439,7 @@ const MoreDetails = ({
                           className={"w-min "}
                           name="floorNumber"
                           id="floorNumber"
+                          min={0}
                           onValueChange={(e) =>
                             formik.setFieldValue("floorNumber", e, true)
                           }

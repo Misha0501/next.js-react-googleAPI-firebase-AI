@@ -44,14 +44,14 @@ function Confirmation({
       bathrooms: formik?.values?.bathrooms,
       areaTotal: formik?.values?.totalArea,
       areaLiving: formik?.values?.livingArea,
-      outsideArea: formik.values?.outsideArea,
-      garden: formik?.values?.garden,
-      garage: formik?.values?.garage,
+      areaOutside: formik.values?.areaOutside,
+      areaGarage: formik?.values?.areaGarage,
       volume: formik?.values?.volume,
+      parking: formik?.values?.parking,
       interiorType: formik?.values?.interiorType || null,
       upkeepType: formik?.values?.upkeepType || null,
       heatingType: formik?.values?.heatingType || null,
-      yearBuilt: formik?.values?.yearBuilt,
+      constructedYear: formik?.values?.constructedYear,
       numberOfFloorsCommon: formik?.values?.numberOfFloorsCommon,
       floorNumber: formik?.values?.floorNumber,
       buildingType: formik?.values?.buildingType || null,
@@ -274,20 +274,14 @@ function Confirmation({
                     </span>
 
                     <p className="py-2 text-[16px]">
-                      {formik?.values?.outsideArea}
+                      {formik?.values?.areaOutside}
                     </p>
-
-                    <span className="mb-2 font-semibold text-[14px] ">
-                      Garden
-                    </span>
-
-                    <p className="py-2 text-[16px]">{formik?.values?.garden}</p>
 
                     <span className="mb-2 font-semibold text-[14px] ">
                       Garage
                     </span>
 
-                    <p className="py-2 text-[16px]">{formik?.values?.garage}</p>
+                    <p className="py-2 text-[16px]">{formik?.values?.areaGarage}</p>
 
                     <span className="mb-2 font-semibold text-[14px] ">
                       Volume
@@ -345,7 +339,7 @@ function Confirmation({
                       </span>
 
                       <p className="py-2 text-[16px]">
-                        {formik?.values?.yearBuilt}
+                        {formik?.values?.constructedYear}
                       </p>
                       <span className="mb-2 font-semibold text-[14px] ">
                         Floors in the building

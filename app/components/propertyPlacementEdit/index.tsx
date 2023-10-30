@@ -63,14 +63,13 @@ export default function MultiForm() {
     bathrooms?: number;
     totalArea?: number;
     livingArea?: number;
-    outsideArea?: number;
-    garden?: number;
-    garage?: number;
+    areaOutside?: number;
+    areaGarage?: number;
     volume?: number;
     interiorType?: string;
     upkeepType?: string;
     heatingType?: string;
-    yearBuilt?: number;
+    constructedYear?: number;
     numberOfFloorsCommon?: number;
     floorNumber?: number;
     buildingType?: string;
@@ -151,14 +150,13 @@ export default function MultiForm() {
           bathrooms: undefined,
           totalArea: undefined,
           livingArea: undefined,
-          outsideArea: undefined,
-          garden: undefined,
-          garage: undefined,
+          areaOutside: undefined,
+          areaGarage: undefined,
           volume: undefined,
           interiorType: undefined,
           upkeepType: "",
           heatingType: "",
-          yearBuilt: undefined,
+          constructedYear: undefined,
           numberOfFloorsCommon: undefined,
           floorNumber: undefined,
           buildingType: undefined,
@@ -179,14 +177,13 @@ export default function MultiForm() {
           bathrooms: Yup.number(),
           totalArea: Yup.number(),
           livingArea: Yup.number(),
-          outsideArea: Yup.number(),
-          garden: Yup.number(),
-          garage: Yup.number(),
+          areaOutside: Yup.number(),
+          areaGarage: Yup.number(),
           volume: Yup.number(),
           interiorType: Yup.string().required("interior type is required"),
           upkeepType: Yup.string().required("upkeep type is required"),
           heatingType: Yup.string().required("heating type is required"),
-          yearBuilt: Yup.number(),
+          constructedYear: Yup.number(),
           numberOfFloorsCommon: Yup.number(),
           floorNumber: Yup.number(),
           buildingType: Yup.string(),

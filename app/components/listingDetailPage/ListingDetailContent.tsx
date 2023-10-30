@@ -21,20 +21,27 @@ export const ListingDetailContent = ({ listing }: Prop) => {
       : listing?.description;
   }, [listing?.description]);
 
+  const formatOfferedSinceDate = (date: string) => {
+    const dateObj = new Date(date);
+    return dateObj.toLocaleDateString();
+  }
+
+  const formatConstructedYearDate = (date: string) => {
+    return new Date(date).getFullYear() ?? "-";
+  }
+
   let generalInfo = useMemo(
     () => [
       { title: "Price", value: listing?.price },
       { title: "Amount of Rooms", value: listing?.rooms },
-      { title: "Offered Since", value: listing?.createdAt },
+      { title: "Offered Since", value: formatOfferedSinceDate(listing?.createdAt) },
       { title: "Amount of bathrooms", value: listing?.bathrooms },
-      { title: "Status", value: listing?.active },
       { title: "Amount of bedrooms", value: listing?.bedrooms },
       { title: "Interior", value: listing?.interiorType },
       { title: "Heating", value: listing?.heatingType },
       { title: "Upkeep", value: listing?.upkeepType },
-      { title: "Parking area", value: listing?.parking },
-      { title: "Floor", value: listing?.floorNumber },
-      { title: "Balcony/terrace", value: listing?.balcony },
+      { title: "Parking places", value: listing?.parking },
+      { title: "Floor number", value: listing?.floorNumber },
     ],
     [listing],
   );
@@ -44,7 +51,6 @@ export const ListingDetailContent = ({ listing }: Prop) => {
       { title: "Total area", value: listing?.areaTotal },
       { title: "Outside area", value: listing?.areaOutside },
       { title: "Living area", value: listing?.areaLiving },
-      { title: "Garden", value: listing?.areaGarden },
       { title: "Volume", value: listing?.volume },
       { title: "Garage", value: listing?.areaGarage },
     ],
@@ -53,9 +59,9 @@ export const ListingDetailContent = ({ listing }: Prop) => {
 
   let construction = useMemo(
     () => [
-      { title: "Building type", value: listing?.buildingType },
-      { title: "Year built", value: listing?.constructedYear },
-      { title: "Number of Floor", value: listing?.numberOfFloorsProperty },
+      { title: "Year built", value: formatConstructedYearDate(listing?.constructedYear) },
+      { title: "Floor number", value: listing?.floorNumber },
+      { title: "Number of floors property", value: listing?.numberOfFloorsCommon },
     ],
     [listing],
   );

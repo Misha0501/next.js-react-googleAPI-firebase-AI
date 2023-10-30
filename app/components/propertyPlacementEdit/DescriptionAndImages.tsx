@@ -48,11 +48,10 @@ function DescriptionAndImages({
       areaLiving: formik.values.livingArea,
       areaTotal: formik.values.totalArea,
       upkeepType: formik.values.upkeepType || null,
-      yearBuilt: formik.values.yearBuilt,
+      constructedYear: formik.values.constructedYear,
       buildingType: formik.values.buildingType || null,
-      outsideArea: formik.values.outsideArea,
-      garage: formik.values.garage,
-      garden: formik.values.garden,
+      areaOutside: formik.values.areaOutside,
+      areaGarage: formik.values.areaGarage,
     });
 
     await formik.setFieldValue("description", generatedDescription, true);

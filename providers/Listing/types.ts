@@ -31,10 +31,9 @@ export namespace ListingProvider {
   export type CreateResponse = {};
 
   export type CreateMutationPayload = Partial<Listing> & {
-    outsideArea?: string;
-    garden?: string;
-    garage?: string;
-    yearBuilt?: string;
+    areaOutside?: string;
+    areaGarage?: string;
+    constructedYear?: string;
     characteristics?: string[];
     address?: Partial<Address>;
     images?: Partial<ListingImage>[];

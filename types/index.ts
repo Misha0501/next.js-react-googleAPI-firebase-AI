@@ -8,7 +8,6 @@ export type CompanyMembershipRoleType = "ADMIN" | "EDITOR";
 export type BuildingType = "New building" | "Old building";
 export type Characteristics =
   | "Balcony"
-  | "Garden"
   | "Renewable energy"
   | "Lying / sitting bath"
   | "Swimming pool";
