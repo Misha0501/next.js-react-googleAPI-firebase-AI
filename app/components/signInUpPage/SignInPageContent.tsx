@@ -16,9 +16,10 @@ export default function SignInPageContent() {
       new firebaseui.auth.AuthUI(firebaseClientAuth);
 
     ui.start("#firebaseui", {
+      signInFlow: 'popup',
       signInOptions: [
         firebase.auth.EmailAuthProvider.PROVIDER_ID,
-        // firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+        firebase.auth.GoogleAuthProvider.PROVIDER_ID,
       ],
       signInSuccessUrl: `/profile/myAccount`,
       // Other config options...
@@ -52,7 +53,7 @@ export default function SignInPageContent() {
         <div className="container">
           <div className="text-center mb-8">
             <h1 className="text-4xl flex justify-center mb-6 text-gray-600">Sign-in/up</h1>
-            <div className={"text-l text-gray-500"}>Please provide your email to login or register</div>
+            <div className={"text-l text-gray-500"}>Use one of the following methods to login or register</div>
           </div>
           <div id="firebaseui" className="firebaseui"></div>
           <div ref={loading}>Loading...</div>
