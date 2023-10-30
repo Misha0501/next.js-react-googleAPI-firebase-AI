@@ -49,6 +49,6 @@ prismaClient.$use(async (params: any, next: any) => {
 })
 
 
-prismaClient.$use(cacheMiddleware);
+// prismaClient.$use(cacheMiddleware);
 
 export const prisma = prismaClient;
