@@ -15,7 +15,7 @@ import { getFetchUrl } from "@/app/lib/getFetchUrl";
 import { notFound } from "next/navigation";
 import { ResponseError } from "@/app/lib/classes/ResponseError";
 
-export const revalidate = 300;
+export const revalidate = 15;
 
 type Props = {
   params: {
