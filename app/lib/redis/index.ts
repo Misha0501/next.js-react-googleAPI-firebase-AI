@@ -14,8 +14,7 @@ let redisClient;
 
 // Using below construction to avoid creating multiple instances of PrismaClient in development mode
 if (process.env.NODE_ENV === "production") {
-    // temporary disabled for testing purposes
-    // redisClient = new Redis(getRedisUrl())
+    redisClient = new Redis(getRedisUrl())
 } else {
     redisClient = new Redis();
 }

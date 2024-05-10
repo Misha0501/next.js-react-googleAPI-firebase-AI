@@ -7,7 +7,7 @@ import { validateParamId } from "@/app/lib/api/validateParamId";
 import { ApplicationUser } from "@/types";
 
 /**
- * DELETE Route to delete an membership invite.
+ * DELETE Route to delete a membership invite.
  * @param req
  * @constructor
  * @param request
