@@ -29,7 +29,7 @@ export const getOpenAICompletion = async (
     messages: [
       {
         role: "system",
-        content: `When responding, ignore fields that are null or unset. Limit the response to 2200 characters`,
+        content: `When responding, ignore fields that are null or unset. Limit the response to 200 characters`,
       },
       {
         role: "user",
