@@ -136,13 +136,15 @@ Email: misha.galenda@gmail.com
 ![Notification service sequence diagram](docs/notification_service_sequence_diagram.png)
 
 ## User Interface
+[Visit the UI documentation folder for more user interfaces. ](./docs/UI/README.md)
 ### Home Page
 ![Home Page](docs/UI/assets/home_page_view.png)
 
 ### Listings Page
 ![Listings Page](docs/UI/assets/listings_page_view.png)
 
-### TODO add listing page view
+### Listing item page
+![Listings Page](docs/UI/assets/item_page.png)
 
 ### Listings items
 #### Recently viewed items
@@ -151,12 +153,20 @@ Email: misha.galenda@gmail.com
 #### Saved items
 ![Listings items](docs/UI/assets/card_saved_items_view.png)
 
-### Loading state
-![Loading state](docs/UI/assets/btn_loading_state.png)
+#### Loading state
+![Loading state](docs/UI/assets/card_loading_state.png)
 
 ## User flows
+[Visit the user flows documentation folder for more user flows. ](./docs/user_flows/README.md)
 ### Finding a property
-![Finding a property](docs/user_flow_finding_properties.png)
+![Finding a property](docs/user_flows/assets/user_flow_finding_properties.png) 
+
+### Contact an agent
+![contact_agent.png](docs/user_flows/assets/contact_agent.png)
+
+### Placing a property
+![placing_property.png](docs/user_flows/assets/placing_property.png)
+
 
 ## Low fidelity wireframes
 ### Listing page
