@@ -30,8 +30,10 @@
 ![card_items_view.png](assets/card_items_view.png)
 ![card_recently_viewed_items_view.png](assets/card_recently_viewed_items_view.png)
 ![card_saved_items_view.png](assets/card_saved_items_view.png)
+
 ### Pop up 
 ![confirm_popup.png](assets/confirm_popup.png)
+
 ### Loading state
 #### Loading state general
 ![loading_state_general.png](assets/loading_state_general.png)
@@ -39,3 +41,6 @@
 ![btn_loading_state.png](assets/btn_loading_state.png)
 #### Loading state card
 ![card_loading_state.png](assets/card_loading_state.png)
+
+### Floating notification 
+![floating_notification.png](assets/floating_notification.png)

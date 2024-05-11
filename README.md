@@ -109,33 +109,32 @@ Open http://localhost:3000 with your browser to see the result.
 For any questions or feedback, feel free to reach me out at:
 Email: misha.galenda@gmail.com
 
-## Diagrams
+## Technical Documentation
+[Visit the technical documentation folder for more description. ](./docs/technical_documentation/README.md)
+
 ### Architecture Diagram
-![Architecture Diagram](docs/architecture_diagram.png)
+![Architecture Diagram](docs/technical_documentation/assets/architecture_diagram.png)
 
 ### Database Design
-![Database Design](docs/database_design-1.png)
+![Database Design](docs/technical_documentation/assets/database_design-1.png)
 
 ### Authentication and authorization component diagram
-![Authentication and authorization component diagram](docs/auth.png)
+![Authentication and authorization component diagram](docs/technical_documentation/assets/auth.png)
 
 
 ### Registration process sequence diagram
-![Registration process sequence diagram](docs/registaration_process_sequence_diagram.png)
+![Registration process sequence diagram](docs/technical_documentation/assets/registaration_process_sequence_diagram.png)
 
 ### AI text generation sequence diagram
-![AI text generation](docs/AI_text_generation_sequence_diagram.png)
+![AI text generation](docs/technical_documentation/assets/AI_text_generation_sequence_diagram.png)
 
 ### Google places autocomplete sequence diagram
-![Google places autocomplete sequence diagram](docs/google_places_autocomplete_sequence_diagram.png)
-
-### Google places autocomplete sequence diagram
-![Google places autocomplete sequence diagram](docs/google_places_autocomplete_sequence_diagram.png)
+![Google places autocomplete sequence diagram](docs/technical_documentation/assets/google_places_autocomplete_sequence_diagram.png)
 
 ### Notification service sequence diagram
-![Notification service sequence diagram](docs/notification_service_sequence_diagram.png)
+![Notification service sequence diagram](docs/technical_documentation/assets/notification_service_sequence_diagram.png)
 
-## User Interface
+## User Interfaces
 [Visit the UI documentation folder for more user interfaces. ](./docs/UI/README.md)
 ### Home Page
 ![Home Page](docs/UI/assets/home_page_view.png)
@@ -169,5 +168,13 @@ Email: misha.galenda@gmail.com
 
 
 ## Low fidelity wireframes
-### Listing page
-![Listing page](docs/low_fidelity_wireframe_item_page.png)
+[Visit the wireframes documentation folder for more low fidelity wireframes. ](./docs/user_flows/README.md)
+
+### Home / listings page
+![Home page](docs/wireframes/assets/home_listings.png)
+
+### Item page
+![Home page](docs/wireframes/assets/item_page.png)
+
+### User profile
+![Home page](docs/wireframes/assets/profile_page.png)
