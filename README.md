@@ -169,5 +169,13 @@ Email: misha.galenda@gmail.com
 
 
 ## Low fidelity wireframes
-### Listing page
-![Listing page](docs/low_fidelity_wireframe_item_page.png)
+[Visit the wireframes documentation folder for more low fidelity wireframes. ](./docs/user_flows/README.md)
+
+### Home / listings page
+![Home page](docs/wireframes/assets/home_listings.png)
+
+### Item page
+![Home page](docs/wireframes/assets/item_page.png)
+
+### User profile
+![Home page](docs/wireframes/assets/profile_page.png)
