@@ -2,7 +2,8 @@
 
 ## Introduction
 The Real Estate Marketplace platform aims to revolutionize the Bulgarian real estate market by offering a superior user experience (UX) and user interface (UI). The platform integrates cutting-edge technologies like Artificial Intelligence (AI) and provides comprehensive features such as intelligent property listings, efficient search capabilities, and seamless company management tools.
-
+![View live demo]([docs/UI/assets/item_page.png](https://real-estate-marketplace-swart.vercel.app/))
+ 
 ### Project Goals
 - Create a robust and innovative marketplace platform with superior UX/UI.
 - Incorporate cutting-edge technologies like AI for text generation and address management.
