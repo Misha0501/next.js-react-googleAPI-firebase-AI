@@ -75,14 +75,14 @@ export function HomeHeroHeaderSearch() {
           selectedIndex={listingTypeSelectedIndex}
           onChange={setListingTypeSelectedIndex}
         >
-          <Tab.List className="flex gap-2 p-1 mb-5 w-full max-w-[300px]">
+          <Tab.List className="flex gap-1.5 rounded-xl border border-white/70 bg-white/95 p-1.5 mb-5 w-full max-w-[300px] shadow-[0_18px_50px_rgba(15,23,42,0.18)] backdrop-blur">
             <Tab
               className={({ selected }) =>
                 classNamesJoin(
-                  "w-full rounded-lg py-2 px-3 text-sm font-bold leading-6 outline-none focus:outline-none active:outline-none",
+                  "w-full rounded-lg border py-2 px-3 text-sm font-bold leading-6 outline-none transition-colors focus:outline-none active:outline-none",
                   selected
-                    ? "bg-[#97B6FF] text-white"
-                    : "text-[#222222] bg-[#F2F2F2]",
+                    ? "border-tremor-brand bg-tremor-brand text-white shadow-sm"
+                    : "border-transparent bg-[#EFF6FF] text-[#1E3A8A] hover:bg-[#DBEAFE]",
                 )
               }
             >
@@ -92,10 +92,10 @@ export function HomeHeroHeaderSearch() {
               className={({ selected }) =>
                 classNamesJoin(
                   // "ring-white ring-opacity-60 focus:outline-none ",
-                  "w-full rounded-lg py-2 px-3 text-sm font-bold leading-6 outline-none focus:outline-none active:outline-none",
+                  "w-full rounded-lg border py-2 px-3 text-sm font-bold leading-6 outline-none transition-colors focus:outline-none active:outline-none",
                   selected
-                    ? "bg-[#97B6FF] text-white"
-                    : "text-[#222222] bg-[#F2F2F2]",
+                    ? "border-tremor-brand bg-tremor-brand text-white shadow-sm"
+                    : "border-transparent bg-[#EFF6FF] text-[#1E3A8A] hover:bg-[#DBEAFE]",
                 )
               }
             >

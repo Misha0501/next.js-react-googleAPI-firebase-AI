@@ -54,7 +54,7 @@ export const Modal = ({
                   {onCancelClick && (
                     <button
                       type="button"
-                      className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                      className="inline-flex justify-center rounded-md border border-transparent bg-tremor-brand-faint px-4 py-2 text-sm font-medium text-tremor-brand hover:bg-tremor-brand-muted focus:outline-none focus-visible:ring-2 focus-visible:ring-tremor-brand focus-visible:ring-offset-2"
                       onClick={onCancelClick}
                     >
                       Cancel
@@ -63,7 +63,7 @@ export const Modal = ({
 
                   <button
                     type="button"
-                    className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                    className="inline-flex justify-center rounded-md border border-transparent bg-tremor-brand px-4 py-2 text-sm font-medium text-tremor-brand-inverted hover:bg-tremor-brand-emphasis focus:outline-none focus-visible:ring-2 focus-visible:ring-tremor-brand focus-visible:ring-offset-2"
                     onClick={onSubmitClick}
                   >
                     Sign in/ Sign up

@@ -1,6 +1,5 @@
 "use client";
-import { PlusSmallIcon } from "@heroicons/react/24/solid";
-import { Button } from "@tremor/react";
+import { ArrowRightIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
@@ -50,15 +49,20 @@ function ExploreHomeSection() {
               src={item.img}
               alt={`${item.locality} properties`}
             />
-            <div className="absolute inset-0 flex flex-col items-center justify-between bg-black/15 px-4 py-8">
-              <p className="text-white font-bold text-xl">{item.locality}</p>
-              <Button
+            <div className="absolute inset-0 flex flex-col items-center justify-between bg-gradient-to-b from-black/35 via-black/10 to-black/45 px-4 py-8">
+              <p className="text-white font-semibold text-xl drop-shadow-sm">
+                {item.locality}
+              </p>
+              <button
+                type="button"
                 onClick={() => router.push(item.href)}
-                className="bg-[#97B6FF] border-0 text-white text-sm max-w-full"
-                icon={PlusSmallIcon}
+                className="group inline-flex max-w-full items-center justify-center gap-3 rounded-lg border border-white/70 bg-white/95 px-4 py-2.5 text-sm font-semibold text-slate-950 shadow-[0_14px_34px_rgba(15,23,42,0.24)] backdrop-blur transition-colors hover:bg-white focus:outline-none focus:ring-2 focus:ring-white/90"
               >
                 View properties
-              </Button>
+                <span className="flex h-6 w-6 flex-none items-center justify-center rounded-full bg-slate-950 text-white transition-transform group-hover:translate-x-0.5">
+                  <ArrowRightIcon className="h-3.5 w-3.5" />
+                </span>
+              </button>
             </div>
           </div>
         ))}

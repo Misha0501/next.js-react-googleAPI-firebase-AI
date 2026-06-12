@@ -69,7 +69,7 @@ function MobileFooter() {
           <ListItem
             key={item.title}
             disablePadding
-            sx={{ color: isActiveRoute(item.link) ? "#2C72F6" : "#969ba3" }}
+            sx={{ color: isActiveRoute(item.link) ? "#1D4ED8" : "#969ba3" }}
           >
             <Link
               href={item.link}
@@ -80,7 +80,7 @@ function MobileFooter() {
               <ListItemButton sx={{ display: "block" }}>
                 <ListItemIcon
                   sx={{
-                    color: isActiveRoute(item.link) ? "#2C72F6" : "#969ba3",
+                    color: isActiveRoute(item.link) ? "#1D4ED8" : "#969ba3",
                   }}
                 >
                   {item.icon}

@@ -121,7 +121,7 @@ export default function SignInPageContent() {
                   src={logo}
                   alt="Homfli logo"
                 />
-                <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-blue-100 bg-blue-50 px-3 py-1.5 text-sm font-medium text-[#2C72F6]">
+                <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-blue-100 bg-blue-50 px-3 py-1.5 text-sm font-medium text-[#1D4ED8]">
                   <BuildingOffice2Icon className="h-4 w-4" />
                   Real estate account
                 </div>
