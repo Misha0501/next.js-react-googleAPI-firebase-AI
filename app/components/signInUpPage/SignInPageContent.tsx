@@ -96,7 +96,7 @@ export default function SignInPageContent() {
               </p>
               <div className="mt-8 grid grid-cols-3 gap-3">
                 <div className="rounded-lg border border-white/15 bg-white/10 p-4 backdrop-blur">
-                  <p className="text-2xl font-semibold">40+</p>
+                  <p className="text-2xl font-semibold">100+</p>
                   <p className="mt-1 text-sm text-white/75">listed homes</p>
                 </div>
                 <div className="rounded-lg border border-white/15 bg-white/10 p-4 backdrop-blur">

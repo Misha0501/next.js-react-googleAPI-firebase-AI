@@ -1,4 +1,4 @@
-import "./globals.scss";
+import "@/styles/globals.scss";
 import type { Metadata } from "next";
 import { AuthContextProvider } from "./context/AuthContext";
 import { Inter } from "next/font/google";

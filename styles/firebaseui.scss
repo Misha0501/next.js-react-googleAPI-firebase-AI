@@ -1,87 +1,3 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-:root {
-  font-size: 14px;
-}
-
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
-}
-
-h1 {
-  font-size: 32px;
-  @media screen and (min-width: 768px) {
-    font-size: 56px;
-  }
-}
-
-img {
-  //height: 100%;
-  width: auto;
-  max-width: 100%;
-}
-
-.container {
-  box-sizing: border-box;
-  width: 100%;
-  max-width: 1280px;
-  padding-left: 16px;
-  padding-right: 16px;
-  margin-left: auto;
-  margin-right: auto;
-
-  @media screen and (min-width: 640px) {
-    padding-left: 24px;
-    padding-right: 24px;
-  }
-
-  @media screen and (min-width: 1024px) {
-    padding-left: 32px;
-    padding-right: 32px;
-  }
-}
-
-button {
-  font-size: 1rem;
-  span {
-    font-size: 1rem;
-  }
-}
-
-.text-tremor-default,
-.tremor-Button-root {
-  span {
-    font-size: 1rem !important;
-  }
-}
-
-// Google Places Autocomplete Styles
-.pac-container {
-  border-radius: 8px;
-}
-.pac-item {
-  padding: 8px 12px;
-}
-
-.pac-container:after {
-  /* Disclaimer: not needed to show 'powered by Google' if also a Google Map is shown */
-
-  background-image: none !important;
-  height: 0px;
-}
-
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-
 .signin-page {
   .firebaseui-container {
     width: 100%;
@@ -100,6 +16,18 @@ button {
   .firebaseui-card-actions {
     padding-right: 0;
     padding-left: 0;
+  }
+
+  .firebaseui-form-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+  }
+
+  .firebaseui-form-actions .firebaseui-button {
+    margin: 0;
   }
 
   .firebaseui-title {
@@ -134,8 +62,10 @@ button {
 
   .firebaseui-idp-button,
   .firebaseui-button {
+    min-width: 88px;
     min-height: 48px;
     border-radius: 8px;
+    padding: 0 18px;
     font-family: inherit;
     font-weight: 650;
     letter-spacing: 0;
@@ -175,11 +105,19 @@ button {
   }
 
   .firebaseui-textfield.mdl-textfield {
+    position: relative;
+    display: block;
+    box-sizing: border-box;
     width: 100%;
-    padding-bottom: 22px;
+    height: auto;
+    min-height: 92px;
+    padding: 24px 0 20px;
   }
 
   .firebaseui-textfield.mdl-textfield .firebaseui-input {
+    display: block;
+    box-sizing: border-box;
+    width: 100%;
     height: 48px;
     border: 1px solid #dbe3ef;
     border-radius: 8px;
@@ -198,6 +136,23 @@ button {
   .firebaseui-label {
     color: #64748b;
     font-family: inherit;
+  }
+
+  .firebaseui-textfield.mdl-textfield .firebaseui-label {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: auto;
+    height: auto;
+    font-size: 14px;
+    line-height: 20px;
+    pointer-events: none;
+    transform: none !important;
+    visibility: visible;
+  }
+
+  .firebaseui-textfield.mdl-textfield .firebaseui-label::after {
+    display: none;
   }
 
   .firebaseui-error {
