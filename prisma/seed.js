@@ -367,7 +367,7 @@ function descriptionFor(location, template, price) {
     return `Secure parking space for ${purpose} in ${location.neighborhood}, ${location.locality}. The space is easy to access, close to residential buildings and daily services, and suitable for both owner use and investment.`;
   }
 
-  return `Well-presented ${type} for ${purpose} in ${location.neighborhood}, ${location.locality}. The property offers ${template.rooms} rooms, ${template.bedrooms} bedrooms, practical storage, and comfortable living spaces. It is close to transport, shops, schools, and everyday services. Current asking price is ${price.toLocaleString("en-US")} EUR.`;
+  return `Well-presented ${type} for ${purpose} in ${location.neighborhood}, ${location.locality}. The property offers ${template.rooms} rooms, ${template.bedrooms} bedrooms, practical storage, and comfortable living spaces. It is close to transport, shops, schools, and everyday services. Current asking price is ${price.toLocaleString("bg-BG", { style: "currency", currency: "EUR", maximumFractionDigits: 0 })}.`;
 }
 
 function keyPointsFor(location, template) {

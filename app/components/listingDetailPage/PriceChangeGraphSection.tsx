@@ -2,6 +2,7 @@
 
 import { LineChart, Title } from "@tremor/react";
 import { ListingPrice } from "@/types";
+import { formatEuroPrice } from "@/app/lib/formatPrice";
 
 type Prop = {
   listingPriceArray: ListingPrice[];
@@ -24,6 +25,8 @@ export const PriceChangeGraphSection = ({ listingPriceArray }: Prop) => {
           index="updatedAt"
           categories={["price"]}
           colors={["emerald"]}
+          valueFormatter={formatEuroPrice}
+          yAxisWidth={72}
           data-testid={"priceChangeGraph"}
         />
       </div>

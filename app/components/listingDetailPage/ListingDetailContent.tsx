@@ -3,6 +3,7 @@
 import { Divider } from "@tremor/react";
 import { useMemo, useState } from "react";
 import { Listing } from "@/types";
+import { formatEuroPrice } from "@/app/lib/formatPrice";
 
 type Prop = {
   listing: Listing;
@@ -32,7 +33,10 @@ export const ListingDetailContent = ({ listing }: Prop) => {
 
   let generalInfo = useMemo(
     () => [
-      { title: "Price", value: listing?.price },
+      {
+        title: "Price",
+        value: formatEuroPrice(listing?.price, { fallback: "-" }),
+      },
       { title: "Amount of Rooms", value: listing?.rooms },
       { title: "Offered Since", value: formatOfferedSinceDate(listing?.createdAt) },
       { title: "Amount of bathrooms", value: listing?.bathrooms },

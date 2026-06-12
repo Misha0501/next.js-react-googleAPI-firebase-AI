@@ -3,6 +3,7 @@
 import { BarChart, Title } from "@tremor/react";
 import { useEffect, useState } from "react";
 import { Listing } from "@/types";
+import { formatEuroPrice } from "@/app/lib/formatPrice";
 
 type Prop = {
   listing: Listing;
@@ -29,10 +30,6 @@ export const PriceComparisonGraphSection = ({ listing }: Prop) => {
     }
   }, [listing?.averagePriceInNeighborhood, listing?.price]);
 
-  const dataFormatter = (number: number) => {
-    return "€ " + Intl.NumberFormat("eu").format(number).toString();
-  };
-
   if (!listing?.averagePriceInNeighborhood) return null;
 
   return (
@@ -50,8 +47,8 @@ export const PriceComparisonGraphSection = ({ listing }: Prop) => {
           index="name"
           categories={["Listing price"]}
           colors={["blue"]}
-          valueFormatter={dataFormatter}
-          yAxisWidth={48}
+          valueFormatter={formatEuroPrice}
+          yAxisWidth={72}
           data-testid={"averagePriceNeighborhoodChart"}
         />
       </div>

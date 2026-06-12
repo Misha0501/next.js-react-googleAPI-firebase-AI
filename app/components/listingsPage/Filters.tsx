@@ -23,6 +23,7 @@ import {
 import { FromToFilter } from "./FromToFilter";
 import { RadioGroupCustom } from "../RadioGroupCustom";
 import { usePathname } from "next/navigation";
+import { formatEuroPrice } from "@/app/lib/formatPrice";
 
 export function Filters({ onParamsChange, listingType }: any) {
   const pathname = usePathname();
@@ -246,6 +247,10 @@ export function Filters({ onParamsChange, listingType }: any) {
     onParamsChange(filterValues);
   }, [filterValues, generateQueryParams, onParamsChange]);
 
+  const formatPriceFilterValue = (value: string | number) => {
+    return value === NO_MAX ? NO_MAX : formatEuroPrice(value);
+  };
+
   return (
     <>
       <p className={"font-bold mb-4"}>Price Range</p>
@@ -261,6 +266,7 @@ export function Filters({ onParamsChange, listingType }: any) {
           onChangeTo={(value) =>
             handlePriceChange(filterValues.priceRange.min, value)
           }
+          formatValue={formatPriceFilterValue}
           id={"priceFilter"}
         />
       )}
@@ -276,6 +282,7 @@ export function Filters({ onParamsChange, listingType }: any) {
           onChangeTo={(value) =>
             handlePriceChange(filterValues.priceRange.min, value)
           }
+          formatValue={formatPriceFilterValue}
           id={"priceFilter"}
         />
       )}

@@ -268,6 +268,7 @@ const EditForm = ({ formik, addressId, id, loading }: any) => {
             <p className={"mb-2 font-bold text-sm"}>Type your price</p>
             <NumberInput
               className="max-w-sm"
+              placeholder="0 €"
               name="price"
               min={0}
               id="price"

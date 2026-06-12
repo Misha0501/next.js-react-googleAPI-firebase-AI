@@ -10,6 +10,7 @@ import { Listing, ListingImage } from "@/types";
 import { toast } from "react-toastify";
 import { FormikProps } from "formik";
 import { ArrowSmallRightIcon } from "@heroicons/react/24/solid";
+import { formatEuroPrice } from "@/app/lib/formatPrice";
 
 interface CreatePropertyComponentPropInterface {
   formik: FormikProps<any>;
@@ -209,7 +210,7 @@ function Confirmation({
                   <p className={"font-bold text-[18px]  mb-2"}>Asking Price</p>
                 </div>
                 <p className="pt-2 text-[16px]">
-                  {formik.values.price} {formik.values.currency}
+                  {formatEuroPrice(formik.values.price, { fallback: "-" })}
                 </p>
               </div>
               <Divider />

@@ -25,8 +25,10 @@ import { useRouter } from "next/navigation";
 import { useAuthContext } from "@/app/context/AuthContext";
 import { useEffect, useState, type ReactNode } from "react";
 import { CircularProgress, Skeleton } from "@mui/material";
-import { getCurrencySign } from "@/app/lib/getCurrencySign";
-import { moneyFormatter } from "@/app/lib/formatPrice";
+import {
+  formatEuroPrice,
+  formatEuroPricePerSquareMeter,
+} from "@/app/lib/formatPrice";
 import { roundNumberTwoDecimal } from "@/app/lib/roundNumberTwoDecimal";
 import { Modal } from "@/app/components/Modal";
 import {
@@ -417,19 +419,17 @@ export const ListingItem = ({
               ) : (
                 <>
                   <span className={"font-bold text-[#0071b3] text-xl"}>
-                    {getCurrencySign(listingItem?.currency)}
-                    {moneyFormatter(listingItem?.price)}
+                    {formatEuroPrice(listingItem?.price)}
                   </span>
-                  {listingItem?.areaTotal &&
-                    listingItem?.price &&
-                    listingItem?.currency && (
-                      <span className={"text-gray-500 font-semibold"}>
-                        {roundNumberTwoDecimal(
+                  {listingItem?.areaTotal && listingItem?.price && (
+                    <span className={"text-gray-500 font-semibold"}>
+                      {formatEuroPricePerSquareMeter(
+                        roundNumberTwoDecimal(
                           listingItem?.price / listingItem?.areaTotal,
-                        )}{" "}
-                        {getCurrencySign(listingItem?.currency)} / &#13217;
-                      </span>
-                    )}
+                        ),
+                      )}
+                    </span>
+                  )}
                 </>
               )}
             </div>

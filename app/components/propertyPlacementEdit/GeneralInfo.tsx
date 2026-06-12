@@ -240,7 +240,7 @@ const GeneralInfo = ({
                 <div className="mb-14">
                   <p className={"mb-2"}>Type your price</p>
                   <NumberInput
-                    placeholder="$ 0.00"
+                    placeholder="0 €"
                     enableStepper={false}
                     name="price"
                     id="price"

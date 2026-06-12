@@ -1,4 +1,5 @@
 import { Select, SelectItem } from "@tremor/react";
+import type { ReactNode } from "react";
 
 type Props = {
   initialFrom: string;
@@ -7,6 +8,7 @@ type Props = {
   onChangeTo: (value: string) => void;
   valuesFrom: (string | number)[];
   valuesTo: (string | number)[];
+  formatValue?: (value: string | number) => ReactNode;
   id?: string;
 };
 export const FromToFilter = ({
@@ -16,27 +18,36 @@ export const FromToFilter = ({
   onChangeTo,
   valuesFrom,
   valuesTo,
+  formatValue,
   id,
 }: Props) => {
+  const getLabel = (value: string | number) => {
+    return formatValue ? formatValue(value) : value;
+  };
+
   return (
     <div className="flex justify-center items-center gap-6">
-      <Select value={initialFrom} onValueChange={onChangeFrom} id={id ? id + 'Min' : ''}>
+      <Select
+        value={String(initialFrom)}
+        onValueChange={onChangeFrom}
+        id={id ? id + "Min" : ""}
+      >
         {valuesFrom.map((item, index) => (
-          <SelectItem value={item as string} key={index}>
-            {item}
+          <SelectItem value={String(item)} key={index}>
+            {getLabel(item)}
           </SelectItem>
         ))}
       </Select>
       <span>to</span>
       <Select
-        value={initialTo}
+        value={String(initialTo)}
         onValueChange={onChangeTo}
         className={"text-sm"}
-        id={id ? id + 'Max' : ''}
+        id={id ? id + "Max" : ""}
       >
         {valuesTo.map((item, index) => (
-          <SelectItem value={item as string} key={index}>
-            {item}
+          <SelectItem value={String(item)} key={index}>
+            {getLabel(item)}
           </SelectItem>
         ))}
       </Select>

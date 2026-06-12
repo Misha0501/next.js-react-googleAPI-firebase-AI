@@ -13,6 +13,7 @@ import { toast } from "react-toastify";
 import { Button } from "@tremor/react";
 import { CircularProgress } from "@mui/material";
 import Link from "next/link";
+import { formatEuroPriceRange } from "@/app/lib/formatPrice";
 
 export const SavedSearches = () => {
   const { authToken } = useAuthContext();
@@ -114,7 +115,7 @@ export const SavedSearches = () => {
                     <div className="border-b flex justify-between py-3">
                       <span className={"w-1/2 text-gray-500"}>Price</span>
                       <span className={"w-1/2"}>
-                        From {item.priceMin || "-"} to {item.priceMax || "-"}
+                        {formatEuroPriceRange(item.priceMin, item.priceMax)}
                       </span>
                     </div>
                   )}

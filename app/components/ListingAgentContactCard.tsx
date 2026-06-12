@@ -2,12 +2,12 @@
 
 import React, { useState } from "react";
 import { Listing } from "@/types";
-import { getCurrencySign } from "@/app/lib/getCurrencySign";
 import Link from "next/link";
 import { Button } from "@tremor/react";
 import { ListingContactAgentForm } from "@/app/components/ListingContactAgentForm";
 import { useRouter } from "next/navigation";
 import { useListigDetailContext } from "@/app/context/ListingDetailContext";
+import { formatEuroPrice } from "@/app/lib/formatPrice";
 
 type Props = {
   listing: Listing | undefined;
@@ -42,11 +42,8 @@ export const ListingAgentContactCard = ({ listing }: Props) => {
             Asking Price{" "}
           </p>
           <div className="flex items-baseline mb-8 text-gray-900 dark:text-white">
-            <span className="text-2xl font-semibold" data-testid={'priceCurrencySignDesktop'}>
-              {getCurrencySign(listing?.currency)}
-            </span>
             <span className="text-3xl font-semibold tracking-tight" data-testid={'priceDesktop'}>
-              {new Intl.NumberFormat().format(listing?.price)}
+              {formatEuroPrice(listing?.price)}
             </span>
           </div>
           {contactNumber && (

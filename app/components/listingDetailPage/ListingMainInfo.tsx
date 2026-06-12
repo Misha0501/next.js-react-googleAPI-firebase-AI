@@ -6,6 +6,11 @@ import { GridIcon } from "@/public/GridIcon";
 import { formatToDayAndMonthWithName } from "@/app/lib/formatToDayAndMonthWithName";
 import Link from "next/link";
 import { ListingDetailSavedButton } from "@/app/components/listingDetailPage/ListingDetailSavedButton";
+import {
+  formatEuroPrice,
+  formatEuroPricePerSquareMeter,
+} from "@/app/lib/formatPrice";
+import { roundNumberTwoDecimal } from "@/app/lib/roundNumberTwoDecimal";
 
 type Prop = {
   listing: Listing;
@@ -57,10 +62,14 @@ export const ListingMainInfo = ({ listing }: Prop) => {
         <div className="price_details flex justify-between">
           <div>
             <h2 className="text-2xl font-bold" data-testid={"price"}>
-              €{listing?.price}{" "}
-              <small className="text-[#717D96] ml-2">
-                {listing?.areaTotal}/m2
-              </small>
+              {formatEuroPrice(listing?.price)}
+              {listing?.price && listing?.areaTotal && (
+                <small className="text-[#717D96] ml-2">
+                  {formatEuroPricePerSquareMeter(
+                    roundNumberTwoDecimal(listing.price / listing.areaTotal),
+                  )}
+                </small>
+              )}
             </h2>
             <h3 className="text-[#717D96] text-xl font-bold mt-3">
               {listing?.Address[0]?.locality}
