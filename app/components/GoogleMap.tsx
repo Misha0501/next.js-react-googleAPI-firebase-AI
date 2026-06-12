@@ -8,7 +8,7 @@ interface GoogleMapProps {
     lng: string | number;
   };
 }
-const PointOnMap = () => <MapPinIcon className={'h-12 w-12 text-blue-700'}/>;
+const PointOnMap = (_: { lat: number; lng: number }) => <MapPinIcon className={'h-12 w-12 text-blue-700'}/>;
 const GoogleMap = ({ location }: GoogleMapProps) => {
   return (
     <div className="h-[300px] rounded-lg">
@@ -16,12 +16,12 @@ const GoogleMap = ({ location }: GoogleMapProps) => {
         bootstrapURLKeys={{
           key: process.env.NEXT_PUBLIC_GOOGLE_MAP_KEY || "",
         }}
-        defaultCenter={location}
+        defaultCenter={{ lat: Number(location.lat), lng: Number(location.lng) }}
         defaultZoom={14}
       >
         <PointOnMap
-          lat={location.lat}
-          lng={location.lng}
+          lat={Number(location.lat)}
+          lng={Number(location.lng)}
         />
       </GoogleMapReact>
     </div>

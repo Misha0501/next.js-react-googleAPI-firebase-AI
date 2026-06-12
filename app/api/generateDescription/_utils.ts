@@ -1,6 +1,6 @@
 import openAI from "@/app/lib/openAI";
 import { ResponseError } from "@/app/lib/classes/ResponseError";
-import { ChatCompletion } from "openai/resources/chat";
+import { ChatCompletion } from "openai/resources/chat/completions";
 
 /**
  * Generate the user message content for OpenAI API.

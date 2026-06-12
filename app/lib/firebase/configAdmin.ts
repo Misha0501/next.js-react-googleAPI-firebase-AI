@@ -16,7 +16,7 @@ const firebaseAdminCredentials = {
 
 try {
     admin.initializeApp({
-        credential: admin.credential.cert(firebaseAdminCredentials),
+        credential: admin.credential.cert(firebaseAdminCredentials as admin.ServiceAccount),
     })
 
 } catch (error) {
@@ -24,8 +24,9 @@ try {
      * We skip the "already exists" message which is
      * not an actual error when we're hot-reloading.
      */
-    if (!/already exists/u.test(error.message)) {
-        console.error('Firebase admin initialization error', error.stack)
+    const err = error as Error;
+    if (!/already exists/u.test(err.message)) {
+        console.error('Firebase admin initialization error', err.stack)
     }
 }
 

@@ -13,10 +13,9 @@ export const dynamic = "force-dynamic"; // Force dynamic (server) route instead 
 export async function POST(req: Request) {
   try {
     const parsedValues = contactFormSchema.parse(await req.json());
-    let { name, phoneNumber, email, message, emailTo, subject } = parsedValues;
-
-    emailTo = getDefaultEmailTo(emailTo);
-    subject = getDefaultSubject(subject);
+    const { name, phoneNumber, email, message } = parsedValues;
+    const emailTo = getDefaultEmailTo(parsedValues.emailTo);
+    const subject = getDefaultSubject(parsedValues.subject);
 
     const emailContent = createEmailHTMLContent(
       name,

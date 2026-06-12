@@ -78,7 +78,7 @@ export async function GET(
       return new Response(error.message, { status: error.status });
     }
 
-    if (error.errorInfo && error.errorInfo.code) {
+    if ((error as any).errorInfo && (error as any).errorInfo.code) {
       return new Response(
         "Your auth token is invalid or it has expired. Get a new auth token and try again.",
         { status: 400 },
