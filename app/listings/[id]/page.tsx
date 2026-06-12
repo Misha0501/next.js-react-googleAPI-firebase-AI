@@ -1,11 +1,14 @@
 import { ListingTitleSection } from "@/app/components/listingDetailPage/ListingTitleSection";
 import { ListingDetailSavedButton } from "@/app/components/listingDetailPage/ListingDetailSavedButton";
 import { ListingDetailImages } from "@/app/components/listingDetailPage/ListingDetailImages";
+import { KeyHighlightsBar } from "@/app/components/listingDetailPage/KeyHighlightsBar";
 import { ListingMainInfo } from "@/app/components/listingDetailPage/ListingMainInfo";
 import { ListingDetailContent } from "@/app/components/listingDetailPage/ListingDetailContent";
 import { Divider } from "@tremor/react";
 import { MapsSection } from "@/app/components/listingDetailPage/MapsSection";
 import { ListingAgentContactCard } from "@/app/components/ListingAgentContactCard";
+import { NeighbourhoodPriceCallout } from "@/app/components/listingDetailPage/NeighbourhoodPriceCallout";
+import { ListingTimeline } from "@/app/components/listingDetailPage/ListingTimeline";
 import { PriceComparisonGraphSection } from "@/app/components/listingDetailPage/PriceComparisonGraphSection";
 import { PriceChangeGraphSection } from "@/app/components/listingDetailPage/PriceChangeGraphSection";
 import FloatingContactBar from "@/app/components/listingDetailPage/FloatingContactBar";
@@ -69,6 +72,8 @@ async function ListingPage({ params: { id } }: Props) {
               <ListingDetailImages images={listing?.ListingImage} />
             </div>
 
+            <KeyHighlightsBar listing={listing} />
+
             <div className="grid grid-cols-1 gap-4 xl:grid-cols-3">
               <div className="lg:col-span-2">
                 <ListingMainInfo listing={listing} />
@@ -82,10 +87,13 @@ async function ListingPage({ params: { id } }: Props) {
 
               <div className="col-span-1 lg:col-span-1">
                 <ListingAgentContactCard listing={listing} />
+                <NeighbourhoodPriceCallout listing={listing} />
               </div>
             </div>
           </div>
         </div>
+
+        <ListingTimeline listing={listing} />
 
         <PriceComparisonGraphSection listing={listing} />
 
