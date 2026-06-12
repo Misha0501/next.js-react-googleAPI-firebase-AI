@@ -84,7 +84,7 @@ async function ListingPage({ params: { id } }: Props) {
                 <MapsSection address={listing?.Address?.[0]} />
               </div>
 
-              <div className="col-span-1 lg:col-span-1">
+              <div className="col-span-1 lg:col-span-1 flex flex-col gap-4">
                 <ListingAgentContactCard listing={listing} />
                 <NeighbourhoodPriceCallout listing={listing} />
               </div>
