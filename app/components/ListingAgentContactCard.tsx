@@ -8,6 +8,7 @@ import { ListingContactAgentForm } from "@/app/components/ListingContactAgentFor
 import { useRouter } from "next/navigation";
 import { useListigDetailContext } from "@/app/context/ListingDetailContext";
 import { formatEuroPrice } from "@/app/lib/formatPrice";
+import { ArrowTopRightOnSquareIcon, PhoneIcon, EnvelopeIcon } from "@heroicons/react/24/outline";
 
 type Props = {
   listing: Listing | undefined;
@@ -51,15 +52,22 @@ export const ListingAgentContactCard = ({ listing }: Props) => {
             Listed by{" "}
             {listing?.company?.name ? "real estate agent" : "private owner"}
           </p>
-          <Link href={`/users/${listing?.applicationUser?.id}`} data-testid="userName">
-            <p className="font-semibold text-[#2D3648]">
-              {listing?.applicationUser?.displayName}
-            </p>
-            {listing?.company?.name && (
-              <p className="text-sm text-[#717D96] mt-0.5">
-                {listing.company.name}
+          <Link
+            href={`/users/${listing?.applicationUser?.id}`}
+            data-testid="userName"
+            className="group flex items-center justify-between rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 hover:border-gray-300 hover:bg-gray-100 transition-colors"
+          >
+            <div>
+              <p className="font-semibold text-[#2D3648] group-hover:text-blue-600 transition-colors">
+                {listing?.applicationUser?.displayName}
               </p>
-            )}
+              {listing?.company?.name && (
+                <p className="text-sm text-[#717D96] mt-0.5">
+                  {listing.company.name}
+                </p>
+              )}
+            </div>
+            <ArrowTopRightOnSquareIcon className="h-4 w-4 text-[#717D96] group-hover:text-blue-600 shrink-0 ml-2 transition-colors" />
           </Link>
         </div>
 
@@ -72,12 +80,13 @@ export const ListingAgentContactCard = ({ listing }: Props) => {
                 className="w-full"
                 variant="secondary"
                 data-testid="contactPhoneNumberButton"
+                icon={PhoneIcon}
               >
-                {agentContactState}
+                Show Phone Number
               </Button>
             ) : (
-              <a href={`tel:${contactNumber}`}>
-                <Button className="w-full" variant="secondary" data-testid="contactPhoneNumberButton">
+              <a href={`tel:${contactNumber}`} className="w-full">
+                <Button className="w-full" variant="secondary" data-testid="contactPhoneNumberButton" icon={PhoneIcon}>
                   {agentContactState}
                 </Button>
               </a>
@@ -88,6 +97,7 @@ export const ListingAgentContactCard = ({ listing }: Props) => {
             variant="primary"
             className="w-full"
             data-testid="contactSellerButton"
+            icon={EnvelopeIcon}
           >
             Contact seller
           </Button>
