@@ -5,6 +5,8 @@ import { AutocompleteAddress } from "@/types";
 import { Button, Icon } from "@tremor/react";
 import { useGooglePlaces } from "@/app/lib/hooks/useGoogleServices";
 
+const PRESET_CITIES = ["Sofia", "Plovdiv", "Varna", "Burgas", "Ruse", "Pleven", "Sliven"];
+
 type AutocompleteProps = {
   onLocalityChange?: (locality: string) => void;
   onAddressChange?: (address: AutocompleteAddress) => void;
@@ -21,16 +23,18 @@ const AutoComplete = ({
   const [inputValue, setInputValue] = useState(initialValue || "");
   const [suggestions, setSuggestions] = useState<any[]>([]);
   const [showDropdown, setShowDropdown] = useState(false);
+  const [showPresets, setShowPresets] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const userTyping = useRef(false);
   const [googleInstance] = useGooglePlaces();
 
-  // Close dropdown on outside click
+  // Close dropdowns on outside click
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (wrapperRef.current && !wrapperRef.current.contains(e.target as Node)) {
         setShowDropdown(false);
+        setShowPresets(false);
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
@@ -61,6 +65,14 @@ const AutoComplete = ({
     return () => clearTimeout(timer);
   }, [inputValue, googleInstance]);
 
+  const handlePresetSelect = (city: string) => {
+    userTyping.current = false;
+    setInputValue(city);
+    setShowPresets(false);
+    setShowDropdown(false);
+    if (onLocalityChange) onLocalityChange(city);
+  };
+
   const handleSuggestionSelect = async (suggestion: any) => {
     const place = suggestion.placePrediction.toPlace();
     await place.fetchFields({ fields: ["addressComponents", "location", "displayName"] });
@@ -83,6 +95,7 @@ const AutoComplete = ({
     setInputValue(displayLocality);
     setSuggestions([]);
     setShowDropdown(false);
+    setShowPresets(false);
 
     if (onAddressChange) {
       onAddressChange({ streetNumber, route, locality, administrativeAreaLevelOne, postalCode, neighborhood, latitude: place.location?.lat()?.toString() ?? "", longitude: place.location?.lng()?.toString() ?? "" });
@@ -101,14 +114,41 @@ const AutoComplete = ({
           placeholder="E.g: Sofia, Plovdiv, Varna"
           name="locality"
           value={inputValue}
-          onChange={(e) => { userTyping.current = true; setInputValue(e.target.value); }}
-          onFocus={() => suggestions.length > 0 && setShowDropdown(true)}
+          onChange={(e) => {
+            userTyping.current = true;
+            setInputValue(e.target.value);
+            setShowPresets(false);
+          }}
+          onFocus={() => {
+            if (!userTyping.current && !inputValue) {
+              setShowPresets(true);
+            } else if (suggestions.length > 0) {
+              setShowDropdown(true);
+            }
+          }}
           autoComplete="off"
         />
         <Button type="submit" variant="primary">
           Search
         </Button>
       </div>
+
+      {showPresets && (
+        <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-50 overflow-hidden">
+          <p className="px-4 pt-2.5 pb-1 text-[0.65rem] uppercase tracking-widest text-[#717D96]">Popular cities</p>
+          {PRESET_CITIES.map((city) => (
+            <button
+              key={city}
+              type="button"
+              className="w-full text-left px-4 py-2.5 hover:bg-[#EDF0F7] text-[#2D3648] text-sm transition-colors border-b border-gray-100 last:border-0"
+              onMouseDown={(e) => { e.preventDefault(); handlePresetSelect(city); }}
+            >
+              <span className="font-medium">{city}</span>
+              <span className="text-[#717D96] ml-1">Bulgaria</span>
+            </button>
+          ))}
+        </div>
+      )}
 
       {showDropdown && suggestions.length > 0 && (
         <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-50 overflow-hidden">
