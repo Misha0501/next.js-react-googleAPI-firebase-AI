@@ -81,3 +81,127 @@ button {
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
+
+.signin-page {
+  .firebaseui-container {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    color: #0f172a;
+    font-family: inherit;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .firebaseui-card-content {
+    padding: 0;
+  }
+
+  .firebaseui-card-actions {
+    padding-right: 0;
+    padding-left: 0;
+  }
+
+  .firebaseui-title {
+    margin-bottom: 20px;
+    color: #0f172a;
+    font-family: inherit;
+    font-size: 22px;
+    font-weight: 650;
+    line-height: 1.25;
+  }
+
+  .firebaseui-subtitle,
+  .firebaseui-text,
+  .firebaseui-tos,
+  .firebaseui-link {
+    color: #64748b;
+    font-family: inherit;
+  }
+
+  .firebaseui-link {
+    color: #2c72f6;
+    font-weight: 600;
+  }
+
+  .firebaseui-idp-list {
+    margin: 0;
+  }
+
+  .firebaseui-list-item {
+    margin-bottom: 12px;
+  }
+
+  .firebaseui-idp-button,
+  .firebaseui-button {
+    min-height: 48px;
+    border-radius: 8px;
+    font-family: inherit;
+    font-weight: 650;
+    letter-spacing: 0;
+    text-transform: none;
+    box-shadow: none;
+    transition:
+      border-color 160ms ease,
+      background-color 160ms ease,
+      transform 160ms ease;
+  }
+
+  .firebaseui-idp-button {
+    max-width: none;
+    border: 1px solid #dbe3ef;
+  }
+
+  .firebaseui-idp-button:hover,
+  .firebaseui-button:hover {
+    transform: translateY(-1px);
+    box-shadow: none;
+  }
+
+  .firebaseui-idp-text {
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 650;
+  }
+
+  .firebaseui-idp-password,
+  .firebaseui-button.mdl-button--raised.mdl-button--colored {
+    background: #2c72f6;
+  }
+
+  .firebaseui-idp-password:hover,
+  .firebaseui-button.mdl-button--raised.mdl-button--colored:hover {
+    background: #1f5fd6;
+  }
+
+  .firebaseui-textfield.mdl-textfield {
+    width: 100%;
+    padding-bottom: 22px;
+  }
+
+  .firebaseui-textfield.mdl-textfield .firebaseui-input {
+    height: 48px;
+    border: 1px solid #dbe3ef;
+    border-radius: 8px;
+    padding: 0 14px;
+    color: #0f172a;
+    font-family: inherit;
+    font-size: 15px;
+  }
+
+  .firebaseui-textfield.mdl-textfield .firebaseui-input:focus {
+    border-color: #2c72f6;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(44, 114, 246, 0.12);
+  }
+
+  .firebaseui-label {
+    color: #64748b;
+    font-family: inherit;
+  }
+
+  .firebaseui-error {
+    color: #dc2626;
+    font-family: inherit;
+  }
+}
