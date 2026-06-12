@@ -54,7 +54,7 @@ export const SavedListings = () => {
           </div>
         )}
 
-        <div className={"grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-8 mt-10"}>
+        <div className={"grid grid-cols-1 xl:grid-cols-2 gap-4 lg:gap-8 mt-10"}>
           {savedListings &&
             savedListings.map((item: SavedListing, index) => (
               <ListingItem

@@ -53,7 +53,7 @@ export const ProfilePageOwnListings = ({ initialListings }: Props) => {
 
   return (
     <>
-      <div className="grid grid-cols-1 gap-4 lg:gap-8 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-4 lg:gap-8 xl:grid-cols-2">
         {listings &&
           listings.map((listing, index) => (
             <ListingItem
