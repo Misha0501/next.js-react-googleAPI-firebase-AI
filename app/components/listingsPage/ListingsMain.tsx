@@ -128,7 +128,7 @@ export const ListingsMain = ({ searchParams, listingType, locality }: Props ) =>
     );
   }
   return (
-    <div className="w-full">
+    <div className="min-w-0 flex-1">
       <div className="flex flex-row justify-between">
         <>
           {isLoading && <CircularProgress />}
@@ -142,7 +142,7 @@ export const ListingsMain = ({ searchParams, listingType, locality }: Props ) =>
           )}
         </>
       </div>
-      <div className={"grid grid-cols-1 gap-8 md:grid-cols-2 lg:gap-16 mb-12"}>
+      <div className="mb-12 grid grid-cols-[repeat(auto-fit,minmax(min(100%,360px),1fr))] gap-8 lg:gap-10">
         {populatedListings.map((item, index) => (
           <ListingItem listingItemInitial={item} key={item.id} isLoadingSavedListings={savedListingsIsLoading}/>
         ))}
