@@ -3,8 +3,8 @@
  * @param {string | undefined} emailTo - The provided email address.
  * @returns {string} - Returns the email address or a default one if none is provided.
  */
-export const getDefaultEmailTo = (emailTo?: string): string => {
-  return emailTo ? emailTo : "m.galenda5@gmail.com";
+export const getDefaultEmailTo = (emailTo?: string): string | string[] => {
+  return emailTo ? emailTo : ["contact@homfli.com", "misha.galenda@gmail.com"];
 };
 
 /**

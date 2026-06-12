@@ -1,77 +1,25 @@
-import {
-  EnvelopeIcon,
-  MapPinIcon,
-  PhoneIcon,
-} from "@heroicons/react/24/outline";
-import whatsapp from "@/public/whatsapp.png";
-import viber from "@/public/viber.png";
-import Image from "next/image";
 import { ContactForm } from "@/app/components/ContactForm";
 
 export default function ContactPage() {
   return (
-    <div className={"py-12 md:py-32"}>
-      <div className="container">
-        <div className="flex flex-col gap-10 items-center justify-center md:flex-row md:gap-24">
-          <div className="h-fit flex flex-col bg-blue-50 py-14 md:py-24 px-14 rounded-xl text-gray-600 md:max-w-md">
-            <h1 className={"text-3xl mb-12 font-semibold text-gray-800"}>
-              Contact Us
-            </h1>
-            <div className="flex flex-col gap-6">
-              <div className="flex gap-6 items-center">
-                <MapPinIcon className={"h-6 w-6"} />
-                <span className={"w-fit"}>
-                  1 Business Building Sofia Str., Mladost 4 district, 1766
-                  Sofia, Bulgarije
-                </span>
-              </div>
-              <a href={"mailto:misha.galenda@gmail.com?subject=RealEstate&body=Hello"} className="flex gap-6 items-center">
-                <EnvelopeIcon className={"h-6 w-6"} />
-                <span className={"w-fit"}>info@real-estate.bg</span>
-              </a>
-              <a href={"tel:+380965039622"} className="flex gap-6 items-center">
-                <PhoneIcon className={"h-6 w-6"} />
-                <span className={"w-fit"}>+31 6 33357777</span>
-              </a>
-              <a
-                href="whatsapp://send?text=Hello World!&phone=+380965039622"
-                className="flex gap-6 items-center"
-              >
-                <Image
-                  className={"h-6 w-6"}
-                  width={21}
-                  height={21}
-                  src={whatsapp}
-                  alt="Whatsapp"
-                  placeholder="blur" // Optional blur-up while loading
-                />
-                <span className={"w-fit"}>+31 6 33357777</span>
-              </a>
-              <a
-                id="viber"
-                href="viber://chat?number=+380965039622"
-                className="flex gap-6 items-center"
-              >
-                <Image
-                  className={"h-6 w-6"}
-                  width={21}
-                  height={21}
-                  src={viber}
-                  alt="Whatsapp"
-                  placeholder="blur" // Optional blur-up while loading
-                />
-                <span className={"w-fit"}>+31 6 33357777</span>
-              </a>
-            </div>
-          </div>
-          <div className="flex flex-col rounded-xl max-w-2xl text-gray-600">
-            <h1 className={"text-3xl mb-3 font-semibold text-gray-800"}>
-              Get in touch
-            </h1>
-            <p className={"text-gray-500 mb-8"}>
-              Feel free to contact us if you have any troubles with the website,
-              want to join the team, or have a proposition.
-            </p>
+    <div>
+      {/* Header band */}
+      <div className="bg-[#EDF0F7] py-16 md:py-24 text-center">
+        <div className="container">
+          <p className="text-xs tracking-[0.2em] uppercase text-[#717D96] mb-4 font-medium">
+            Real Estate &middot; Bulgaria
+          </p>
+          <h1 className="font-semibold text-[#2D3648] mb-5">Get in touch</h1>
+          <p className="text-lg text-[#717D96] max-w-md mx-auto leading-relaxed">
+            Have a question or a proposition? We&rsquo;d love to hear from you.
+          </p>
+        </div>
+      </div>
+
+      {/* Form section */}
+      <div className="py-16 md:py-24">
+        <div className="container">
+          <div className="max-w-lg mx-auto bg-white border border-gray-100 rounded-2xl shadow-sm px-8 py-10 md:px-12 md:py-12">
             <ContactForm />
           </div>
         </div>

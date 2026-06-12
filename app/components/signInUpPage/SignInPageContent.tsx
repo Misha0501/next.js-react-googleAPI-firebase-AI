@@ -1,14 +1,23 @@
 "use client";
 import { useEffect, useRef } from "react";
+import { useRouter } from "next/navigation";
 import firebase from "firebase/compat/app";
 import * as firebaseui from "firebaseui";
 import { firebaseClientAuth } from "@/app/lib/firebase/configClient";
 import { useUpdateUser } from "@/providers/Users";
+import { useAuthContext } from "@/app/context/AuthContext";
 
 export default function SignInPageContent() {
-  // UI instance for login / signup
   const loading = useRef<HTMLDivElement>(null);
   const updateUser = useUpdateUser({});
+  const { user } = useAuthContext();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (user) {
+      router.replace("/profile/myAccount");
+    }
+  }, [user]);
 
   useEffect(() => {
     let ui =

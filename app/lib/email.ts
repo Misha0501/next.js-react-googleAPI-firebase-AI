@@ -1,37 +1,20 @@
-import nodemailer, { SentMessageInfo } from "nodemailer";
+import { Resend } from "resend";
 
 type EmailPayload = {
-  to: string;
+  to: string | string[];
   subject: string;
   html: string;
 };
 
-const smtpOptions = {
-  host: process.env.SMTP_HOST || "smtp.mailtrap.io",
-  port: parseInt(process.env.SMTP_PORT || "2525"),
-  secure: false,
-  auth: {
-    user: process.env.SMTP_USER || "user",
-    pass: process.env.SMTP_PASSWORD || "password",
-  },
-};
+const resend = new Resend(process.env.RESEND_API_KEY);
 
-/**
- * Sends an email with the given payload.
- *
- * @param {EmailPayload} data - The email payload.
- * @returns {Promise<SentMessageInfo>} - Resolves when the email is sent.
- * @throws Will throw an error if sending the email fails.
- */
-export const sendEmail = async (
-  data: EmailPayload,
-): Promise<SentMessageInfo> => {
-  const transporter = nodemailer.createTransport({
-    ...smtpOptions,
-  });
-
-  return await transporter.sendMail({
-    from: process.env.SMTP_FROM_EMAIL,
+export const sendEmail = async (data: EmailPayload): Promise<void> => {
+  const { error } = await resend.emails.send({
+    from: process.env.RESEND_FROM_EMAIL || "contact@homfli.com",
     ...data,
   });
+
+  if (error) {
+    throw new Error(error.message);
+  }
 };
