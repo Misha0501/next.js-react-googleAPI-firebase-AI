@@ -1,5 +1,3 @@
-version: "3.7"
-
 services:
   web:
     build:
@@ -13,7 +11,7 @@ services:
     environment:
       NODE_ENV: development
   db:
-    image: postgres
+    image: postgres:18
     container_name: real-estate-db-container
     restart: always
     environment:
@@ -23,7 +21,7 @@ services:
     ports:
       - "5555:5432"
     volumes:
-      - real-estate-db:/var/lib/postgresql/data
+      - real-estate-db:/var/lib/postgresql
   redis:
     image: redis:alpine
     ports:

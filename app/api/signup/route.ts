@@ -15,9 +15,12 @@ export async function POST(req: Request) {
     const applicationUser = await prisma.applicationUser.upsert({
       where: {
         email: email,
+      },
+      update: {
+        displayName: displayName,
+        providerId: providerId,
         firebaseUID: firebaseUID,
       },
-      update: {},
       create: {
         displayName: displayName,
         email: email,

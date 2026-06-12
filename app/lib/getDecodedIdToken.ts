@@ -23,12 +23,13 @@ export const getDecodedIdToken = async () => {
     const headersList = headers()
     const headerAuthorizationToken = headersList.get('Authorization')
 
-    const cookiesAuthTokenObject = cookies().get('Authorization');
-    const cookiesAuthToken = cookiesAuthTokenObject ? cookiesAuthTokenObject.value : '';
+    const cookiesAuthorizationToken = cookies().get('Authorization')?.value || '';
+    const cookiesAuthToken = cookies().get('authToken')?.value || '';
+    const cookieToken = cookiesAuthorizationToken || cookiesAuthToken;
 
-    if(!headerAuthorizationToken && !cookiesAuthToken) {
+    if(!headerAuthorizationToken && !cookieToken) {
         throw new ResponseError("User is not authenticated.", 401)
     }
 
-    return firebaseAdmin.auth().verifyIdToken(cookiesAuthToken || headerAuthorizationToken || '');
+    return firebaseAdmin.auth().verifyIdToken(cookieToken || headerAuthorizationToken || '');
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@tremor/react";
-import { signOut } from "@firebase/auth";
+import { signOut } from "firebase/auth";
 import { firebaseClientAuth } from "@/app/lib/firebase/configClient";
 import { useRouter } from "next/navigation";
 import { SavedItemsPageTabs } from "@/app/components/profilePage/SavedItemsPageTabs";

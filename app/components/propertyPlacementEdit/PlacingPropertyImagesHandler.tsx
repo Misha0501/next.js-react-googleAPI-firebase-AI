@@ -95,7 +95,7 @@ export const PlacingPropertyImagesHandler = ({
       setImages((prevState) => {
         const image = {
           url: downloadURL,
-          positionInListing: images.length,
+          positionInListing: prevState.length,
           imagePath,
         };
         prevState.push(image);
@@ -164,7 +164,7 @@ export const PlacingPropertyImagesHandler = ({
                 </div>
               )}
               <div className="absolute bottom-6 left-6 px-6 py-2 rounded-xl bg-white drop-shadow-2xl">
-                {item.positionInListing}
+                {index + 1}
               </div>
               <Popover className="absolute right-6 top-6 outline-0">
                 <Popover.Button className={"focus-visible:outline-none"}>

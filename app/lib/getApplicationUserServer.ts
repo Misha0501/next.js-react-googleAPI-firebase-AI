@@ -1,6 +1,7 @@
 import { getDecodedIdToken } from "@/app/lib/getDecodedIdToken";
 import { prisma } from "@/app/lib/db/client";
 import { ApplicationUser } from "@/types";
+import { ResponseError } from "@/app/lib/classes/ResponseError";
 
 /**
  * Fetches an application user from the server.
@@ -14,6 +15,10 @@ export const getApplicationUserServer = async (
 ): Promise<ApplicationUser> => {
   const decodedToken = await getDecodedIdToken();
 
+  if (!decodedToken.email) {
+    throw new ResponseError("Authenticated user does not have an email address.", 400);
+  }
+
   let prismaQuery = {
     where: { email: decodedToken.email },
     include: {
@@ -25,7 +30,19 @@ export const getApplicationUserServer = async (
     prismaQuery.include.Membership = true;
   }
 
-  return await prisma.applicationUser.findUnique({
+  const applicationUser = await prisma.applicationUser.findUnique({
     ...prismaQuery,
+  });
+
+  if (applicationUser) return applicationUser;
+
+  return await prisma.applicationUser.create({
+    data: {
+      email: decodedToken.email,
+      displayName: decodedToken.name || "",
+      providerId: decodedToken.firebase?.sign_in_provider || "firebase",
+      firebaseUID: decodedToken.uid,
+    },
+    include: prismaQuery.include,
   });
 };
