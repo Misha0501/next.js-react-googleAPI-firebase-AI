@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+"use client";
+import { useEffect, useRef, useState } from "react";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 import { AutocompleteAddress } from "@/types";
 import { Button, Icon } from "@tremor/react";
@@ -16,130 +17,121 @@ const AutoComplete = ({
   onLocalityChange,
   onAddressChange,
   initialValue,
-  autocompleteType,
 }: AutocompleteProps) => {
-  const [address, setAddress] = useState({
-    streetNumber: "",
-    route: "",
-    locality: "",
-    administrativeAreaLevelOne: "",
-    postalCode: "",
-    neighborhood: "",
-    latitude: "",
-    longitude: "",
-  });
   const [inputValue, setInputValue] = useState(initialValue || "");
-
-  const autoCompleteRef = useRef<any>();
+  const [suggestions, setSuggestions] = useState<any[]>([]);
+  const [showDropdown, setShowDropdown] = useState(false);
+  const wrapperRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-  const options = useMemo(() => ({
-    componentRestrictions: { country: "bg" },
-    fields: ["address_components", "geometry", "name"],
-    types: ["(cities)"],
-  }), []);
+  const userTyping = useRef(false);
+  const [googleInstance] = useGooglePlaces();
 
-  const [googleInstance, isLoading, loadError] = useGooglePlaces();
-
-  // Tracking address changes
+  // Close dropdown on outside click
   useEffect(() => {
-    if (address && onAddressChange) {
-      onAddressChange(address);
+    const handleClickOutside = (e: MouseEvent) => {
+      if (wrapperRef.current && !wrapperRef.current.contains(e.target as Node)) {
+        setShowDropdown(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  // Fetch suggestions with debounce — only when the user is actively typing
+  useEffect(() => {
+    if (!userTyping.current || !googleInstance?.maps?.places?.AutocompleteSuggestion) {
+      return;
     }
 
-    if (address.locality && onLocalityChange) {
-      setInputValue(address.locality);
-      onLocalityChange(address.locality);
-    }
-  }, [address]);
+    const timer = setTimeout(async () => {
+      try {
+        const { suggestions: results } =
+          await googleInstance.maps.places.AutocompleteSuggestion.fetchAutocompleteSuggestions({
+            input: inputValue,
+            includedRegionCodes: ["bg"],
+            includedPrimaryTypes: ["locality"],
+          });
+        setSuggestions(results || []);
+        setShowDropdown((results || []).length > 0);
+      } catch {
+        setSuggestions([]);
+      }
+    }, 300);
 
-  const placeChanged = () => {
-    // Get the place details from the autocomplete object.
-    const place = autoCompleteRef.current.getPlace();
-    if (!place || !place.address_components) return;
+    return () => clearTimeout(timer);
+  }, [inputValue, googleInstance]);
 
-    let streetNumber = "";
-    let route = "";
-    let locality = "";
-    let administrativeAreaLevelOne = "";
-    let postalCode = "";
-    let neighborhood = "";
+  const handleSuggestionSelect = async (suggestion: any) => {
+    const place = suggestion.placePrediction.toPlace();
+    await place.fetchFields({ fields: ["addressComponents", "location", "displayName"] });
 
-    // Get each component of the address from the place details,
-    // and then fill-in the corresponding field on the form.
-    // place.address_components are google.maps.GeocoderAddressComponent objects
-    // which are documented at http://goo.gle/3l5i5Mr
-    // @ts-ignore
-    for (const component of place.address_components as google.maps.GeocoderAddressComponent[]) {
-      const componentType = component.types[0];
-      switch (componentType) {
-        case "street_number": {
-          streetNumber = component.long_name;
-          break;
-        }
-        case "route": {
-          route = component.long_name;
-          break;
-        }
-        case "neighborhood": {
-          neighborhood = component.long_name;
-          break;
-        }
+    let streetNumber = "", route = "", locality = "", administrativeAreaLevelOne = "", postalCode = "", neighborhood = "";
 
-        case "postal_code": {
-          postalCode = component.long_name;
-          break;
-        }
-        case "locality":
-          locality = component.long_name;
-          break;
-
-        case "administrative_area_level_1": {
-          administrativeAreaLevelOne = component.long_name;
-          break;
-        }
+    for (const component of place.addressComponents ?? []) {
+      switch (component.types[0]) {
+        case "street_number": streetNumber = component.longText; break;
+        case "route": route = component.longText; break;
+        case "neighborhood": neighborhood = component.longText; break;
+        case "postal_code": postalCode = component.longText; break;
+        case "locality": locality = component.longText; break;
+        case "administrative_area_level_1": administrativeAreaLevelOne = component.longText; break;
       }
     }
 
-    // Set address state
-    setAddress({
-      streetNumber,
-      route,
-      locality,
-      administrativeAreaLevelOne,
-      postalCode,
-      neighborhood,
-      latitude: place?.geometry?.location?.lat(),
-      longitude: place?.geometry?.location?.lng(),
-    });
+    const displayLocality = locality || place.displayName || "";
+    userTyping.current = false;
+    setInputValue(displayLocality);
+    setSuggestions([]);
+    setShowDropdown(false);
+
+    if (onAddressChange) {
+      onAddressChange({ streetNumber, route, locality, administrativeAreaLevelOne, postalCode, neighborhood, latitude: place.location?.lat()?.toString() ?? "", longitude: place.location?.lng()?.toString() ?? "" });
+    }
+    if (onLocalityChange) onLocalityChange(displayLocality);
   };
 
-  useEffect(() => {
-    if (googleInstance && googleInstance.maps && googleInstance.maps.places) {
-      autoCompleteRef.current = new googleInstance.maps.places.Autocomplete(inputRef.current, options);
-
-      // When the user selects an address from the drop-down, populate the
-      // address fields in the form.
-      autoCompleteRef.current.addListener("place_changed", placeChanged);
-    }
-  }, [googleInstance, options]);
-
   return (
-    <div className="py-2 pl-3 pr-2 flex justify-between m-auto w-full  bg-white border-[#CBD2E0] rounded-lg h-16">
-      <Icon icon={MagnifyingGlassIcon} size="lg" className="text-black flex" />
+    <div ref={wrapperRef} className="relative w-full">
+      <div className="py-2 pl-3 pr-2 flex items-center w-full bg-white border-[#CBD2E0] rounded-lg h-16 gap-2">
+        <Icon icon={MagnifyingGlassIcon} size="lg" className="text-black flex shrink-0" />
+        <input
+          ref={inputRef}
+          className="w-full border-none outline-none focus:outline-none text-black bg-transparent pl-0 lg:pl-2"
+          type="text"
+          placeholder="E.g: Sofia, Plovdiv, Varna"
+          name="locality"
+          value={inputValue}
+          onChange={(e) => { userTyping.current = true; setInputValue(e.target.value); }}
+          onFocus={() => suggestions.length > 0 && setShowDropdown(true)}
+          autoComplete="off"
+        />
+        <Button type="submit" variant="primary">
+          Search
+        </Button>
+      </div>
 
-      <input
-        className="hero__search w-full border-none pl-0 lg:pl-2 outline-none focus:outline-none text-black focus:border-none active:border-none active:outline-none"
-        type={"text"}
-        placeholder={"E.g: Sophia, Plovdiv, Varna"}
-        ref={inputRef}
-        name={"locality"}
-        value={inputValue}
-        onChange={(e) => setInputValue(e.target.value)}
-      />
-      <Button type={"submit"} variant={"primary"}>
-        Search
-      </Button>
+      {showDropdown && suggestions.length > 0 && (
+        <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-50 overflow-hidden">
+          {suggestions.map((suggestion, i) => (
+            <button
+              key={i}
+              type="button"
+              className="w-full text-left px-4 py-3 hover:bg-[#EDF0F7] text-[#2D3648] text-sm transition-colors border-b border-gray-100 last:border-0"
+              onMouseDown={(e) => {
+                e.preventDefault();
+                handleSuggestionSelect(suggestion);
+              }}
+            >
+              <span className="font-medium">{suggestion.placePrediction.mainText?.text}</span>
+              {suggestion.placePrediction.secondaryText?.text && (
+                <span className="text-[#717D96] ml-1">{suggestion.placePrediction.secondaryText.text}</span>
+              )}
+            </button>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
+
 export default AutoComplete;

@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+"use client";
+import { useEffect, useRef, useState } from "react";
 import { AutocompleteAddress } from "@/types";
 import { TextInput } from "@tremor/react";
 import { useGooglePlaces } from "@/app/lib/hooks/useGoogleServices";
@@ -7,7 +8,6 @@ type AutocompleteProps = {
   onLocalityChange?: (locality: string) => void;
   onAddressChange?: (address: AutocompleteAddress) => void;
   initialValue?: string;
-  submitBtnType?: string;
 };
 
 export const AddressAutocomplete = ({
@@ -15,120 +15,116 @@ export const AddressAutocomplete = ({
   onAddressChange,
   initialValue,
 }: AutocompleteProps) => {
-  const [address, setAddress] = useState({
-    streetNumber: "",
-    route: "",
-    locality: "",
-    administrativeAreaLevelOne: "",
-    postalCode: "",
-    neighborhood: "",
-    latitude: "",
-    longitude: "",
-  });
   const [inputValue, setInputValue] = useState(initialValue || "");
+  const [suggestions, setSuggestions] = useState<any[]>([]);
+  const [showDropdown, setShowDropdown] = useState(false);
   const firstUpdate = useRef(true);
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const [googleInstance] = useGooglePlaces();
 
-  const autoCompleteRef = useRef<any>();
-  const inputRef = useRef<HTMLInputElement>(null);
-  const options = useMemo(() => ({
-    componentRestrictions: { country: "bg" },
-    fields: ["address_components", "geometry", "name"],
-    types: ["address"],
-  }), []);
-
-  const [googleInstance, isLoading, loadError] = useGooglePlaces();
-
-  // Tracking address changes
+  // Close dropdown on outside click
   useEffect(() => {
-    if (firstUpdate.current) {
-      firstUpdate.current = false;
+    const handleClickOutside = (e: MouseEvent) => {
+      if (wrapperRef.current && !wrapperRef.current.contains(e.target as Node)) {
+        setShowDropdown(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  // Fetch suggestions with debounce
+  useEffect(() => {
+    if (!googleInstance?.maps?.places?.AutocompleteSuggestion) {
+      setSuggestions([]);
+      setShowDropdown(false);
       return;
     }
 
-    if (address && onAddressChange) {
-      onAddressChange(address);
-    }
+    const timer = setTimeout(async () => {
+      try {
+        const { suggestions: results } =
+          await googleInstance.maps.places.AutocompleteSuggestion.fetchAutocompleteSuggestions({
+            input: inputValue,
+            includedRegionCodes: ["bg"],
+            includedPrimaryTypes: ["street_address", "route"],
+          });
+        setSuggestions(results || []);
+        setShowDropdown((results || []).length > 0);
+      } catch {
+        setSuggestions([]);
+      }
+    }, 300);
 
-    if (address.locality && onLocalityChange) {
-      onLocalityChange(address.locality);
-    }
-  }, [address]);
+    return () => clearTimeout(timer);
+  }, [inputValue, googleInstance]);
 
-  const placeChanged = () => {
-    // Get the place details from the autocomplete object.
-    const place = autoCompleteRef.current.getPlace();
-    if (!place || !place.address_components) return;
+  const handleSuggestionSelect = async (suggestion: any) => {
+    if (firstUpdate.current) firstUpdate.current = false;
 
-    let streetNumber = "";
-    let route = "";
-    let locality = "";
-    let administrativeAreaLevelOne = "";
-    let postalCode = "";
-    let neighborhood = "";
+    const place = suggestion.placePrediction.toPlace();
+    await place.fetchFields({ fields: ["addressComponents", "location"] });
 
-    // Get each component of the address from the place details,
-    // and then fill-in the corresponding field on the form.
-    // place.address_components are google.maps.GeocoderAddressComponent objects
-    // which are documented at http://goo.gle/3l5i5Mr
-    // @ts-ignore
-    for (const component of place.address_components as google.maps.GeocoderAddressComponent[]) {
-      const componentType = component.types[0];
+    let streetNumber = "", route = "", locality = "", administrativeAreaLevelOne = "", postalCode = "", neighborhood = "";
 
-      switch (componentType) {
-        case "street_number": {
-          streetNumber = component.long_name;
-          break;
-        }
-        case "route": {
-          route = component.long_name;
-          break;
-        }
-        case "neighborhood": {
-          neighborhood = component.long_name;
-          break;
-        }
-
-        case "postal_code": {
-          postalCode = component.long_name;
-          break;
-        }
-        case "locality":
-          locality = component.long_name;
-          break;
-
-        case "administrative_area_level_1": {
-          administrativeAreaLevelOne = component.long_name;
-          break;
-        }
+    for (const component of place.addressComponents ?? []) {
+      switch (component.types[0]) {
+        case "street_number": streetNumber = component.longText; break;
+        case "route": route = component.longText; break;
+        case "neighborhood": neighborhood = component.longText; break;
+        case "postal_code": postalCode = component.longText; break;
+        case "locality": locality = component.longText; break;
+        case "administrative_area_level_1": administrativeAreaLevelOne = component.longText; break;
       }
     }
 
-    // Set address state
-    setAddress({
-      streetNumber,
-      route,
-      locality,
-      administrativeAreaLevelOne,
-      postalCode,
-      neighborhood,
-      latitude: place?.geometry?.location?.lat()?.toString(),
-      longitude: place?.geometry?.location?.lng()?.toString(),
-    });
+    const address: AutocompleteAddress = {
+      streetNumber, route, locality, administrativeAreaLevelOne,
+      postalCode, neighborhood,
+      latitude: place.location?.lat()?.toString() ?? "",
+      longitude: place.location?.lng()?.toString() ?? "",
+    };
+
+    setInputValue(suggestion.placePrediction.text.text);
+    setSuggestions([]);
+    setShowDropdown(false);
+
+    if (onAddressChange) onAddressChange(address);
+    if (locality && onLocalityChange) onLocalityChange(locality);
   };
 
-  useEffect(() => {
-    if (googleInstance && googleInstance.maps && googleInstance.maps.places) {
-      autoCompleteRef.current = new googleInstance.maps.places.Autocomplete(inputRef.current, options);
-
-      // When the user selects an address from the drop-down, populate the
-      // address fields in the form.
-      autoCompleteRef.current.addListener("place_changed", placeChanged);
-    }
-  }, [googleInstance, options]);
-
   return (
-    <>
-      <TextInput name="address" id="address" ref={inputRef} />
-    </>
+    <div ref={wrapperRef} className="relative w-full">
+      <TextInput
+        name="address"
+        id="address"
+        value={inputValue}
+        placeholder="Start typing an address..."
+        onChange={(e) => setInputValue(e.target.value)}
+        onFocus={() => suggestions.length > 0 && setShowDropdown(true)}
+        autoComplete="off"
+      />
+
+      {showDropdown && suggestions.length > 0 && (
+        <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-50 overflow-hidden">
+          {suggestions.map((suggestion, i) => (
+            <button
+              key={i}
+              type="button"
+              className="w-full text-left px-4 py-3 hover:bg-[#EDF0F7] text-[#2D3648] text-sm transition-colors border-b border-gray-100 last:border-0"
+              onMouseDown={(e) => {
+                e.preventDefault();
+                handleSuggestionSelect(suggestion);
+              }}
+            >
+              <span className="font-medium">{suggestion.placePrediction.mainText?.text}</span>
+              {suggestion.placePrediction.secondaryText?.text && (
+                <span className="text-[#717D96] ml-1">{suggestion.placePrediction.secondaryText.text}</span>
+              )}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
   );
 };
