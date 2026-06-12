@@ -2,15 +2,20 @@
 
 import React, { useMemo } from "react";
 import { ListingContactAgentForm } from "../ListingContactAgentForm";
-import { Divider } from "@tremor/react";
 import GoogleMap from "../GoogleMap";
 import { ListingItem } from "../ListingItem";
-import Link from "next/link";
 import { useUserDetail } from "@/providers/Users";
 import { useParams, useRouter } from "next/navigation";
 import { CircularProgress } from "@mui/material";
 import FloatingContactBar from "../listingDetailPage/FloatingContactBar";
-import { EnvelopeIcon, MapIcon, PhoneIcon } from "@heroicons/react/24/outline";
+import {
+  EnvelopeIcon,
+  MapPinIcon,
+  PhoneIcon,
+  BuildingOffice2Icon,
+  UserIcon,
+  HomeModernIcon,
+} from "@heroicons/react/24/outline";
 import { getPopulatedListingsSaved } from "@/app/lib/listing/getPopulatedListingsSaved";
 import { useAuthContext } from "@/app/context/AuthContext";
 import { useSavedListings } from "@/providers/SavedListings";
@@ -23,201 +28,172 @@ function UserPageMain() {
   const userDetail = useUserDetail({ id });
 
   const router = useRouter();
-
   const usersSavedListings = useSavedListings({ authToken });
 
-  const company = useMemo(() => {
-    if (userDetail?.data?.Company) {
-      return userDetail?.data?.Company;
-    } else {
-      return null;
-    }
-  }, [userDetail?.data]);
+  const company = useMemo(() => userDetail?.data?.Company ?? null, [userDetail?.data]);
 
-  let contactNumber =
-    company?.phoneNumber ?? userDetail.data?.phoneNumber ?? "";
+  const contactNumber = company?.phoneNumber ?? userDetail.data?.phoneNumber ?? "";
+  const displayName = company?.name ?? userDetail?.data?.displayName ?? "";
+  const isCompany = !!company;
+  const email = company?.email ?? userDetail?.data?.email ?? "";
+  const address = company?.Address?.[0];
+  const hasMap = !!address?.latitude && !!address?.longitude;
 
-  const propertyListing = useMemo(() => {
-    if (userDetail?.data?.Company) {
-      return userDetail?.data?.Company?.Listing;
-    } else {
-      return userDetail?.data?.Listing;
-    }
-  }, [userDetail?.data]);
+  const propertyListing = useMemo(
+    () => (isCompany ? userDetail?.data?.Company?.Listing : userDetail?.data?.Listing),
+    [userDetail?.data, isCompany],
+  );
 
-  const populatedListings = useMemo(() => {
-    return getPopulatedListingsSaved(
-      (propertyListing as Listing[] | undefined) ?? [],
-      usersSavedListings?.data?.results ?? [],
-    );
-  }, [propertyListing, usersSavedListings?.data?.results]);
+  const populatedListings = useMemo(
+    () =>
+      getPopulatedListingsSaved(
+        (propertyListing as Listing[] | undefined) ?? [],
+        usersSavedListings?.data?.results ?? [],
+      ),
+    [propertyListing, usersSavedListings?.data?.results],
+  );
+
+  const initials = displayName
+    .split(" ")
+    .slice(0, 2)
+    .map((w: string) => w[0])
+    .join("")
+    .toUpperCase();
 
   return (
-    <div className="pt-8 pb-32 lg:pt-10">
+    <div className="pb-32">
       {userDetail?.isFetching ? (
-        <div className="flex items-center justify-center mt-7">
+        <div className="flex items-center justify-center mt-20">
           <CircularProgress />
         </div>
       ) : (
         <>
-          <div className="grid grid-cols-1 xl:grid-cols-3 gap-10 pt-6 pb-32 xl:pt-10">
-            <div className="xl:col-span-2 flex flex-col">
-              <h3 className="text-[#222222] text-2xl xl:text-[40px] font-bold">
-                {userDetail?.data?.Company
-                  ? userDetail?.data?.Company?.name
-                  : userDetail?.data?.displayName}
-              </h3>
-              <div className="flex  my-6">
-                {company && (
-                  <Link
-                    href={"#aboutSection"}
-                    className="p-4 bg-none text-[#717D96]  font-bold focus:bg-[#EDF0F7]  focus:text-[#2D3648]  active:bg-[#EDF0F7] active:border-b-2 active:border-[#2D3648]  active:text-[#2D3648] focus:border-b-2 focus:border-[#2D3648]"
-                  >
-                    About us
-                  </Link>
-                )}
-                <Link
-                  href={"#contactSection"}
-                  className="p-4 bg-none text-[#717D96]  font-bold focus:bg-[#EDF0F7]   focus:text-[#2D3648]  active:bg-[#EDF0F7] active:border-b-2 active:border-[#2D3648]  active:text-[#2D3648] focus:border-b-2 focus:border-[#2D3648]"
-                >
-                  Contact
-                </Link>
-                <Link
-                  href={"#propertiesSection"}
-                  className="p-4 bg-none text-[#717D96]  font-bold focus:bg-[#EDF0F7]  focus:text-[#2D3648]  active:bg-[#EDF0F7] active:border-b-2 active:border-[#2D3648]  active:text-[#2D3648] focus:border-b-2 focus:border-[#2D3648]"
-                >
-                  Properties
-                </Link>
+          {/* ── Hero ─────────────────────────────────────────────────── */}
+          <div className="bg-gradient-to-br from-[#1a2332] to-[#2D3648] -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 pt-12 pb-20">
+            <div className="max-w-screen-xl mx-auto flex flex-col sm:flex-row items-start sm:items-end gap-6">
+              <div className="flex-shrink-0 h-20 w-20 rounded-2xl bg-white/10 border border-white/20 flex items-center justify-center">
+                <span className="text-2xl font-bold text-white tracking-wide">
+                  {initials || (isCompany ? "CO" : "U")}
+                </span>
               </div>
-              {company && (
-                <>
-                  <div id="aboutSection" className="flex flex-col gap-4">
-                    <p className="font-bold text-2xl text-[#222222]">
-                      About us
-                    </p>
-                    {userDetail?.data?.Company?.description && (
-                      <p className="text-base font-normal text-[#4A5468]">
-                        {userDetail?.data?.Company?.description}
-                      </p>
+              <div className="flex flex-col gap-2 pb-1">
+                <div className="flex items-center gap-3 flex-wrap">
+                  <span className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-widest px-2.5 py-1 rounded-full bg-white/10 text-white/70 border border-white/15">
+                    {isCompany ? (
+                      <><BuildingOffice2Icon className="h-3.5 w-3.5" />Real estate agent</>
+                    ) : (
+                      <><UserIcon className="h-3.5 w-3.5" />Private owner</>
                     )}
+                  </span>
+                  {populatedListings.length > 0 && (
+                    <span className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-widest px-2.5 py-1 rounded-full bg-white/10 text-white/70 border border-white/15">
+                      <HomeModernIcon className="h-3.5 w-3.5" />
+                      {populatedListings.length} {populatedListings.length === 1 ? "listing" : "listings"}
+                    </span>
+                  )}
+                </div>
+                <h1 className="text-3xl sm:text-4xl font-bold text-white leading-tight">
+                  {displayName}
+                </h1>
+              </div>
+            </div>
+          </div>
+
+          <div className="max-w-screen-xl mx-auto">
+            {/* ── Contact chips ─────────────────────────────────────── */}
+            <div className="bg-white border border-gray-100 rounded-2xl shadow-sm px-6 py-4 -mt-6 mb-8 flex flex-wrap items-center gap-3">
+              {contactNumber && (
+                <a
+                  href={`tel:${contactNumber}`}
+                  className="group inline-flex items-center gap-2.5 px-4 py-2.5 rounded-xl bg-gray-50 border border-gray-200 hover:border-blue-200 hover:bg-blue-50 transition-colors"
+                >
+                  <div className="h-7 w-7 rounded-lg bg-blue-100 flex items-center justify-center flex-shrink-0">
+                    <PhoneIcon className="h-3.5 w-3.5 text-blue-600" />
                   </div>
-                  <Divider />
-                </>
+                  <div>
+                    <p className="text-[10px] font-semibold uppercase tracking-widest text-[#717D96] leading-none mb-0.5">Phone</p>
+                    <p className="text-sm font-semibold text-[#2D3648] group-hover:text-blue-600 transition-colors">
+                      {contactNumber}
+                    </p>
+                  </div>
+                </a>
               )}
-              <div id="contactSection">
-                <p className="font-bold text-2xl text-[#222222] mb-6">
-                  Contact
-                </p>
-                {(company || userDetail?.data?.phoneNumber) && (
-                  <div className="mt-4">
-                    <p className="text-md font-semibold mb-2">Phone number</p>
-                    <div className="flex items-center">
-                      <PhoneIcon width={15} height={15} />
-                      <p className="text-md font-normal  text-[#717D96] ml-2">
-                        {company?.phoneNumber && (
-                          <a
-                            href={`tel:${company.phoneNumber}`}
-                            className="text-base font-normal text-[#4A5468]"
-                          >
-                            {company.phoneNumber}
-                          </a>
-                        )}
-
-                        {!company && (
-                          <a
-                            href={`tel:${userDetail?.data?.phoneNumber}`}
-                            className="text-base font-normal text-[#4A5468]"
-                          >
-                            {userDetail?.data?.phoneNumber}
-                          </a>
-                        )}
-                      </p>
-                    </div>
+              {email && (
+                <a
+                  href={`mailto:${email}`}
+                  className="group inline-flex items-center gap-2.5 px-4 py-2.5 rounded-xl bg-gray-50 border border-gray-200 hover:border-emerald-200 hover:bg-emerald-50 transition-colors"
+                >
+                  <div className="h-7 w-7 rounded-lg bg-emerald-100 flex items-center justify-center flex-shrink-0">
+                    <EnvelopeIcon className="h-3.5 w-3.5 text-emerald-600" />
                   </div>
-                )}
-                <div className="mt-4">
-                  <p className="text-md font-semibold mb-2">Email</p>
-                  <div className="flex items-center">
-                    <EnvelopeIcon width={15} height={15} />
-                    <p className="text-md font-normal  text-[#717D96] ml-2">
-                      {company?.email && (
-                        <a
-                          className="text-base font-normal text-[#4A5468]"
-                          href={`mailto:${company.email}`}
-                        >
-                          {company.email}
-                        </a>
-                      )}
-
-                      {!company && (
-                        <a
-                          className="text-base font-normal text-[#4A5468]"
-                          href={`mailto:${userDetail?.data?.email}`}
-                        >
-                          {userDetail?.data?.email}
-                        </a>
-                      )}
+                  <div>
+                    <p className="text-[10px] font-semibold uppercase tracking-widest text-[#717D96] leading-none mb-0.5">Email</p>
+                    <p className="text-sm font-semibold text-[#2D3648] group-hover:text-emerald-600 transition-colors break-all">
+                      {email}
+                    </p>
+                  </div>
+                </a>
+              )}
+              {address && (
+                <div className="inline-flex items-center gap-2.5 px-4 py-2.5 rounded-xl bg-gray-50 border border-gray-200">
+                  <div className="h-7 w-7 rounded-lg bg-amber-100 flex items-center justify-center flex-shrink-0">
+                    <MapPinIcon className="h-3.5 w-3.5 text-amber-600" />
+                  </div>
+                  <div>
+                    <p className="text-[10px] font-semibold uppercase tracking-widest text-[#717D96] leading-none mb-0.5">Address</p>
+                    <p className="text-sm font-semibold text-[#2D3648]">
+                      {[address.route, address.locality].filter(Boolean).join(", ")}
                     </p>
                   </div>
                 </div>
-                {company && (
-                  <>
-                    <div className="mt-4 mb-4">
-                      <p className="text-md font-semibold mb-2">Address</p>
-                      <div className="flex items-center">
-                        <MapIcon width={15} height={15} />
-                        <p className="text-md ml-2 text-[#717D96]">
-                          {company?.Address?.[0]?.streetNumber}{" "}
-                          {company?.Address?.[0]?.route},{" "}
-                          {company?.Address?.[0]?.locality},{" "}
-                          {company?.Address?.[0]?.postalCode}
-                        </p>
-                      </div>
-                    </div>
-                    {userDetail?.data?.Company?.Address?.[0]?.latitude &&
-                      userDetail?.data?.Company?.Address?.[0]?.longitude && (
-                        <div
-                          id="officeSection"
-                          className="flex flex-col gap-4 my-6"
-                        >
-                          <div className="rounded-lg overflow-hidden">
-                            <GoogleMap
-                              location={{
-                                lat: parseFloat(
-                                  userDetail?.data?.Company?.Address?.[0]
-                                    ?.latitude,
-                                ),
-                                lng: parseFloat(
-                                  userDetail?.data?.Company?.Address?.[0]
-                                    ?.longitude,
-                                ),
-                                address:
-                                  userDetail?.data?.Company?.Address?.[0]
-                                    ?.locality,
-                              }}
-                            />
-                          </div>
-                        </div>
-                      )}
-                  </>
+              )}
+            </div>
+
+            {/* ── About ────────────────────────────────────────────────── */}
+            {isCompany && company?.description && (
+              <div className="bg-white border border-gray-100 rounded-2xl shadow-sm px-6 py-6 mb-8">
+                <h2 className="text-sm font-semibold uppercase tracking-widest text-[#717D96] mb-3">
+                  About
+                </h2>
+                <p className="text-[#4A5468] leading-relaxed text-base">
+                  {company.description}
+                </p>
+              </div>
+            )}
+
+            {/* ── Map ──────────────────────────────────────────────────── */}
+            {hasMap && (
+              <div className="bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden mb-8">
+                <div className="px-6 pt-5 pb-3">
+                  <h2 className="text-sm font-semibold uppercase tracking-widest text-[#717D96]">
+                    Office location
+                  </h2>
+                </div>
+                <GoogleMap
+                  location={{
+                    lat: parseFloat(address!.latitude),
+                    lng: parseFloat(address!.longitude),
+                    address: address!.locality,
+                  }}
+                />
+              </div>
+            )}
+
+            {/* ── Properties ───────────────────────────────────────────── */}
+            <div className="mb-14">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-2xl font-bold text-[#2D3648]">
+                  {isCompany ? "Company listings" : "Listings"}
+                </h2>
+                {populatedListings.length > 0 && (
+                  <span className="text-sm text-[#717D96]">
+                    {populatedListings.length} {populatedListings.length === 1 ? "property" : "properties"}
+                  </span>
                 )}
               </div>
-              <Divider className={"mb-0"} />
-            </div>
-            <div id={"contactAgentForm"}>
-              <ListingContactAgentForm
-                name={userDetail?.data?.displayName ?? ""}
-                emailTo={company?.email ?? userDetail?.data?.email ?? ""}
-                subject={"Someone is interested in your company!"}
-              />
-            </div>
-          </div>
-          <div id="propertiesSection" className="flex flex-col gap-12">
-            <p className="font-bold text-2xl text-[#222222]">Properties</p>
-            {populatedListings?.length ? (
-              <div className="grid grid-cols-1 xl:grid-cols-3 gap-x-6 gap-y-10">
-                {populatedListings &&
-                  populatedListings.map((item, index) => (
+              {populatedListings.length > 0 ? (
+                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-x-6 gap-y-8">
+                  {populatedListings.map((item, index) => (
                     <ListingItem
                       listingItemInitial={item}
                       key={index}
@@ -225,18 +201,28 @@ function UserPageMain() {
                       ownerView={false}
                     />
                   ))}
-              </div>
-            ) : (
-              <p className="text-center font-semibold text-lg">
-                No Data Available
-              </p>
-            )}
+                </div>
+              ) : (
+                <div className="flex flex-col items-center justify-center py-16 bg-gray-50 rounded-2xl border border-gray-100">
+                  <HomeModernIcon className="h-10 w-10 text-gray-300 mb-3" />
+                  <p className="text-[#717D96] font-medium">No listings yet</p>
+                </div>
+              )}
+            </div>
+
+            {/* ── Contact form ─────────────────────────────────────────── */}
+            <div id="contactAgentForm" className="max-w-2xl mx-auto">
+              <ListingContactAgentForm
+                name={displayName}
+                emailTo={email}
+                subject="Someone is interested in your company!"
+              />
+            </div>
           </div>
-          <FloatingContactBar
-            initialPhoneNumber={contactNumber}
-          />
         </>
       )}
+
+      <FloatingContactBar initialPhoneNumber={contactNumber} />
     </div>
   );
 }
