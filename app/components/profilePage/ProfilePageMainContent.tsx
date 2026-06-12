@@ -5,7 +5,7 @@ import { signOut } from "firebase/auth";
 import { firebaseClientAuth } from "@/app/lib/firebase/configClient";
 import { useRouter } from "next/navigation";
 import { SavedItemsPageTabs } from "@/app/components/profilePage/SavedItemsPageTabs";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { useAuthContext } from "@/app/context/AuthContext";
 import { RecentlyViewedListings } from "@/app/components/profilePage/RecentlyViewedListings";
 import { CompanyTab } from "@/app/components/profilePage/CompanyTab";
@@ -31,7 +31,8 @@ export const ProfilePageMainContent = ({ tab }: Props) => {
   ];
   const activeTab = tabList.indexOf(tab);
   const router = useRouter();
-  const { authToken, user } = useAuthContext();
+  const { authToken } = useAuthContext();
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   const {
     data: applicationUser,
@@ -48,11 +49,17 @@ export const ProfilePageMainContent = ({ tab }: Props) => {
   }, [applicationUser]);
 
   const handleLogOut = async () => {
-    await signOut(firebaseClientAuth);
-    router.push("/");
+    setIsLoggingOut(true);
+    try {
+      await signOut(firebaseClientAuth);
+      router.replace("/");
+    } catch (error) {
+      console.error(error);
+      setIsLoggingOut(false);
+    }
   };
 
-  if (isLoading) return <CircularProgress />;
+  if (isLoggingOut || !authToken || isLoading) return <CircularProgress />;
   if (error)
     return (
       <p className={"text-red-500"}>

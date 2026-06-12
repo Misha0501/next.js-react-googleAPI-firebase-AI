@@ -38,6 +38,7 @@ export function useUserOwnData(
     getKeyFromProps(props, "OWN DATA"),
     () => api.userOwnData(props),
     {
+      enabled: Boolean(props?.authToken),
       retry: 0,
     },
   );
