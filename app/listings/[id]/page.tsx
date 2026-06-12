@@ -9,7 +9,6 @@ import { MapsSection } from "@/app/components/listingDetailPage/MapsSection";
 import { ListingAgentContactCard } from "@/app/components/ListingAgentContactCard";
 import { NeighbourhoodPriceCallout } from "@/app/components/listingDetailPage/NeighbourhoodPriceCallout";
 import { ListingTimeline } from "@/app/components/listingDetailPage/ListingTimeline";
-import { PriceComparisonGraphSection } from "@/app/components/listingDetailPage/PriceComparisonGraphSection";
 import { PriceChangeGraphSection } from "@/app/components/listingDetailPage/PriceChangeGraphSection";
 import FloatingContactBar from "@/app/components/listingDetailPage/FloatingContactBar";
 import { ListingDetailRecentlyViewedFunctionality } from "@/app/components/listingDetailPage/ListingDetailRecentlyViewedFunctionality";
@@ -94,8 +93,6 @@ async function ListingPage({ params: { id } }: Props) {
         </div>
 
         <ListingTimeline listing={listing} />
-
-        <PriceComparisonGraphSection listing={listing} />
 
         <PriceChangeGraphSection listingPriceArray={listing?.ListingPrice ?? []} />
 
