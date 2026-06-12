@@ -58,7 +58,7 @@ export const ListingTimeline = ({ listing }: Prop) => {
       const prev = listing.ListingPrice[listing.ListingPrice.length - 1 - i];
       const isDown = prev && lp.price < prev.price;
       events.push({
-        date: fmt(lp.updatedAt),
+        date: fmt(lp.createdAt),
         label: isDown ? "Price reduced" : "Price updated",
         sublabel: formatEuroPrice(lp.price),
         type: "price",

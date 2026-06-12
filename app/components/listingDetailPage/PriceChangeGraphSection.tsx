@@ -19,7 +19,7 @@ export const PriceChangeGraphSection = ({ listingPriceArray }: Prop) => {
   const yAxisMax = Math.ceil(maxPrice * 1.05);
 
   const chartData = listingPriceArray.map((item) => ({
-    date: new Date(item.updatedAt).toLocaleDateString("en-GB", {
+    date: new Date(item.createdAt).toLocaleDateString("en-GB", {
       day: "numeric",
       month: "short",
       year: "numeric",
@@ -50,7 +50,7 @@ export const PriceChangeGraphSection = ({ listingPriceArray }: Prop) => {
               >
                 <div>
                   <p className="text-xs text-[#717D96] mb-0.5">
-                    {new Date(item.updatedAt).toLocaleDateString("en-GB", {
+                    {new Date(item.createdAt).toLocaleDateString("en-GB", {
                       day: "numeric",
                       month: "short",
                       year: "numeric",
