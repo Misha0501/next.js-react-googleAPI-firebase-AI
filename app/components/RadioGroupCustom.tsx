@@ -5,9 +5,10 @@ type Props = {
   options: { label: string; value: string | number }[];
   onChange?: (value: string) => void;
   id?: string;
+  initialValue?: string | number | null;
 };
-export const RadioGroupCustom = ({ options, onChange, id }: Props) => {
-  const [selectedValue, setSelectedValue] = useState(null);
+export const RadioGroupCustom = ({ options, onChange, id, initialValue = null }: Props) => {
+  const [selectedValue, setSelectedValue] = useState<string | number | null>(initialValue);
 
   const handleOnChange = (value: any) => {
     setSelectedValue(value);

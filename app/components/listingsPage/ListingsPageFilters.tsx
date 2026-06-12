@@ -9,7 +9,7 @@ import {
 import { Fragment, useState } from "react";
 import { ListingType } from "@/types";
 import Filters from "@/app/components/listingsPage/Filters";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { XMarkIcon } from "@heroicons/react/24/solid";
 
 type Props = {
@@ -25,13 +25,18 @@ export const ListingsPageFilters = ({
   showFiltersMobile,
 }: Props) => {
   const params = useSearchParams();
+  const router = useRouter();
   const [listingType, setListingType] = useState<ListingType | any>(
     params.get("listingType") || "SELL",
   );
   const [filterValues, setFilterValues] = useState({});
 
   const handleTabChange = (tabIndex: number) => {
-    tabIndex == 0 ? setListingType("SELL") : setListingType("RENT");
+    const newType = tabIndex === 0 ? "SELL" : "RENT";
+    setListingType(newType);
+    const qp = new URLSearchParams(params.toString());
+    qp.set("listingType", newType);
+    router.replace(`/listings?${qp.toString()}`);
   };
 
   const onChange = (data: any) => {
@@ -72,13 +77,13 @@ export const ListingsPageFilters = ({
           <TabPanel>
             {listingType === "SELL" && (
               <>
-                <Filters listingType={listingType} onParamsChange={onChange} />
+                <Filters listingType={listingType} onParamsChange={onChange} locality={locality} />
               </>
             )}
           </TabPanel>
           <TabPanel>
             {listingType === "RENT" && (
-              <Filters listingType={listingType} onParamsChange={onChange} />
+              <Filters listingType={listingType} onParamsChange={onChange} locality={locality} />
             )}
           </TabPanel>
         </TabPanels>

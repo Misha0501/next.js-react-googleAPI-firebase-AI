@@ -32,8 +32,15 @@ export const ListingsPageContent = () => {
     setSearch(data);
   }, []);
 
-  const handleSelectedLocalityChange = (locality: string) => {
-    setLocality(locality);
+  const handleSelectedLocalityChange = (newLocality: string) => {
+    setLocality(newLocality);
+    const params = new URLSearchParams(param.toString());
+    if (newLocality) {
+      params.set("locality", newLocality);
+    } else {
+      params.delete("locality");
+    }
+    router.replace(`/listings?${params.toString()}`);
   };
 
   const [showFiltersMobile, setShowFiltersMobile] = useState(false);
