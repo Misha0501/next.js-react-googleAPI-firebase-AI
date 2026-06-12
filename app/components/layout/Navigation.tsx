@@ -1,5 +1,5 @@
 "use client";
-import logo from "@/public/logo.png";
+import logo from "@/public/homfli-logo.svg";
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@tremor/react";
@@ -46,12 +46,11 @@ export const Navigation = () => {
                   <div className="flex flex-shrink-0 items-center">
                     <Link href="/">
                       <Image
-                        className={"w-24"}
-                        width={100}
-                        height={65}
+                        className={"h-5 w-auto"}
+                        width={111}
+                        height={19}
                         src={logo}
-                        alt="Company logo"
-                        placeholder="blur" // Optional blur-up while loading
+                        alt="Homfli logo"
                       />
                     </Link>
                   </div>

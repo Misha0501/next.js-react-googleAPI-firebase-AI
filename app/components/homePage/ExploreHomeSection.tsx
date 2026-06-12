@@ -30,31 +30,31 @@ function ExploreHomeSection() {
   ];
 
   return (
-    <section className="max-w-screen-xl m-auto flex flex-col text-center gap-12 px-4 md:px-0 py-20">
+    <section className="max-w-screen-xl m-auto flex flex-col text-center gap-12 px-4 sm:px-6 lg:px-8 pt-0 pb-24 lg:pb-28">
       <div className="flex flex-col gap-3">
         <h3 className="text-[#222222]  font-bold text-2xl md:text-[40px]">
           Explore properties with us
         </h3>
       </div>
-      <div className="block md:flex gap-8 justify-between">
+      <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
         {popularSearches.map((item, index) => (
           <div
-            className="rounded-lg overflow-hidden relative w-full h-full md:h-[292px] md:w-[274px] mb-4 md:mb-0"
+            className="rounded-lg overflow-hidden relative w-full aspect-[4/3]"
             key={item.href}
           >
             <Image
-              className="w-full"
-              width={0}
-              height={0}
-              sizes="100vw"
+              className="h-full w-full object-cover"
+              width={420}
+              height={315}
+              sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
               src={item.img}
-              alt={""}
+              alt={`${item.locality} properties`}
             />
-            <div className="conent absolute top-0 left-0 w-full h-full flex flex-col items-center justify-between py-10">
+            <div className="absolute inset-0 flex flex-col items-center justify-between bg-black/15 px-4 py-8">
               <p className="text-white font-bold text-xl">{item.locality}</p>
               <Button
                 onClick={() => router.push(item.href)}
-                className="bg-[#97B6FF] border-0 text-white text-sm"
+                className="bg-[#97B6FF] border-0 text-white text-sm max-w-full"
                 icon={PlusSmallIcon}
               >
                 View properties

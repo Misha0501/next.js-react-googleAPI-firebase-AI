@@ -163,6 +163,12 @@ export const listingSchemaPutRequest = listingSchema.extend({
 });
 
 const searchParamSchema = z.string().array();
+const LISTING_SORT_OPTIONS = [
+  "createdAtDesc",
+  "createdAtAsc",
+  "priceDesc",
+  "priceAsc",
+];
 
 export const listingsSearchParamSchema = z.object({
   page: searchParamSchema
@@ -172,6 +178,17 @@ export const listingsSearchParamSchema = z.object({
   pageSize: searchParamSchema
     .max(1)
     .pipe(z.coerce.number().min(0).max(100))
+    .optional(),
+  sortBy: searchParamSchema
+    .max(1)
+    .pipe(
+      z.coerce.string().refine(
+        (value) => LISTING_SORT_OPTIONS.includes(value),
+        (value) => ({
+          message: `Invalid sort input: ${value}. Allowed values: ${LISTING_SORT_OPTIONS}`,
+        }),
+      ),
+    )
     .optional(),
   locality: searchParamSchema.pipe(z.coerce.string()).optional(),
   heatingType: searchParamSchema

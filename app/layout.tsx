@@ -7,6 +7,7 @@ import ReactQueryProvider from "@/app/lib/reactQuery/ReactQueryProvider";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import MobileFooter from "@/app/components/layout/MobileFooter";
+import Footer from "@/app/components/layout/Footer";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -30,14 +31,15 @@ export default function RootLayout({
           content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, user-scalable=no, viewport-fit=cover"
         />
       </head>
-      <body>
+      <body className={`${inter.className} min-h-screen flex flex-col`}>
         <Navigation />
-        <main className="pb-12 md:pb-0">
+        <main className="flex-1 pb-12 md:pb-0">
           <AuthContextProvider>
             <ToastContainer autoClose={8000} />
             <ReactQueryProvider>{children}</ReactQueryProvider>
           </AuthContextProvider>
         </main>
+        <Footer />
         <MobileFooter />
       </body>
     </html>

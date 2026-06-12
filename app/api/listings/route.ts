@@ -5,6 +5,7 @@ import { prisma } from "@/app/lib/db/client";
 import { getApplicationUserCompanyId } from "@/app/lib/listing/getApplicationUserCompanyId";
 import {
   buildPrismaQueryConditions,
+  buildPrismaOrderBy,
   ensureUserHasListingAccess,
   extractParametersGET,
   handleAddressUpdate,
@@ -47,6 +48,7 @@ export async function GET(req: NextRequest) {
         deleted: null,
         ...prismaQueryConditions,
       },
+      orderBy: buildPrismaOrderBy(params.sortBy),
       include: {
         ListingImage: true,
         Address: true,

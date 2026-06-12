@@ -186,6 +186,20 @@ export const buildPrismaQueryConditions = (params: any) => {
   return prismaQueryConditions;
 };
 
+export const buildPrismaOrderBy = (sortBy?: string) => {
+  switch (sortBy) {
+    case "createdAtAsc":
+      return { createdAt: "asc" };
+    case "priceDesc":
+      return { price: "desc" };
+    case "priceAsc":
+      return { price: "asc" };
+    case "createdAtDesc":
+    default:
+      return { createdAt: "desc" };
+  }
+};
+
 /**
  * Handles the update of images for a listing.
  *

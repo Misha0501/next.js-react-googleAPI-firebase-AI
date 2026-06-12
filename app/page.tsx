@@ -3,12 +3,13 @@ import Image from "next/image";
 import { HomeHeroHeaderSearch } from "@/app/components/homePage/HomeHeroHeaderSearch";
 import HomeWebsiteInfoSection from "@/app/components/homePage/WebsiteInfoSectionHome";
 import ExploreHomeSection from "@/app/components/homePage/ExploreHomeSection";
+import RecentlyPlacedPropertiesSection from "@/app/components/homePage/RecentlyPlacedPropertiesSection";
 
 export default function Home() {
   return (
     <div>
       <header className={'hero min-h-[700px] bg-black relative flex justify-center items-center pt-24 pb-16 text-white'}>
-        <div className="container z-10">
+        <div className="container z-10 px-4 sm:px-6 lg:px-8">
           <div className="hero__inner text-center">
             <h1 className={"mb-6 lg:mb-16"}>Find your future home with ease</h1>
             <HomeHeroHeaderSearch></HomeHeroHeaderSearch>
@@ -26,6 +27,7 @@ export default function Home() {
         </div>
       </header>
       <HomeWebsiteInfoSection />
+      <RecentlyPlacedPropertiesSection />
       <ExploreHomeSection/>
     </div>
   );
