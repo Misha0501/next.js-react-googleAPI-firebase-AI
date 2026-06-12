@@ -29,8 +29,8 @@ module.exports = {
                         faint: "#eff6ff", // blue-50
                         muted: "#bfdbfe", // blue-200
                         subtle: "#3b82f6", // blue-500
-                        DEFAULT: "#1d4ed8", // blue-700
-                        emphasis: "#1e40af", // blue-800
+                        DEFAULT: "#1F5FD6", // custom primary
+                        emphasis: "#1d4ed8", // blue-700
                         inverted: "#ffffff", // white
                         textSecondary: "#717D96",
                         textPrimary: "#2D3648"
@@ -61,7 +61,7 @@ module.exports = {
                         faint: "#0B1229", // custom
                         muted: "#172554", // blue-950
                         subtle: "#1e40af", // blue-800
-                        DEFAULT: "#1d4ed8", // blue-700
+                        DEFAULT: "#1F5FD6", // custom primary
                         emphasis: "#60a5fa", // blue-400
                         inverted: "#030712", // gray-950
                     },

@@ -614,7 +614,7 @@ const EditForm = ({ formik, addressId, id, loading }: any) => {
             setShowErrors(true);
           }
         }}
-        className="w-[247px] h-[56px] mt-8 border border-[#1D4ED8]"
+        className="w-[247px] h-[56px] mt-8 border border-[#1F5FD6]"
         loading={updateProperty.isLoading}
       >
         Submit

@@ -81,7 +81,7 @@ export function HomeHeroHeaderSearch() {
                 classNamesJoin(
                   "w-full rounded-lg border py-2 px-3 text-sm font-bold leading-6 outline-none transition-colors focus:outline-none active:outline-none",
                   selected
-                    ? "border-tremor-brand bg-tremor-brand text-white shadow-sm"
+                    ? "border-[#1F5FD6] bg-[#1F5FD6] text-white shadow-sm"
                     : "border-transparent bg-[#EFF6FF] text-[#1E3A8A] hover:bg-[#DBEAFE]",
                 )
               }
@@ -94,7 +94,7 @@ export function HomeHeroHeaderSearch() {
                   // "ring-white ring-opacity-60 focus:outline-none ",
                   "w-full rounded-lg border py-2 px-3 text-sm font-bold leading-6 outline-none transition-colors focus:outline-none active:outline-none",
                   selected
-                    ? "border-tremor-brand bg-tremor-brand text-white shadow-sm"
+                    ? "border-[#1F5FD6] bg-[#1F5FD6] text-white shadow-sm"
                     : "border-transparent bg-[#EFF6FF] text-[#1E3A8A] hover:bg-[#DBEAFE]",
                 )
               }

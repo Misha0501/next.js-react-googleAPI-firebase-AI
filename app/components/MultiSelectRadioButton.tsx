@@ -51,7 +51,7 @@ export default function MultiSelectRadioButton({
                             as="p"
                             className={`font-medium border-2 w-full p-5 rounded-xl  ${
                               checked
-                                ? "border-[#1D4ED8] font-bold border-2"
+                                ? "border-[#1F5FD6] font-bold border-2"
                                 : "text-[#222] border-[#ADADAD] "
                             }`}
                           >
