@@ -28,7 +28,7 @@ export const PriceChangeGraphSection = ({ listingPriceArray }: Prop) => {
   }));
 
   return (
-    <div className="py-12 lg:py-16">
+    <div className="py-8 lg:py-10">
       <div className="container">
         <p className="font-semibold text-[#2D3648] text-2xl mb-6">
           Price history
