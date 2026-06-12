@@ -10,6 +10,9 @@ import { handleAPIError } from "@/app/lib/api/handleError";
 
 export const maxDuration = 60;
 export async function POST(request: Request) {
+  // TODO: re-enable generate description
+  return new Response("Feature temporarily disabled", { status: 503 });
+
   try {
     const parsedValues = openAISchema.parse(await request.json());
 

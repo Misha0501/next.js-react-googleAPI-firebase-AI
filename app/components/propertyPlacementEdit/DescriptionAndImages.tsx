@@ -112,24 +112,29 @@ function DescriptionAndImages({
                 <p className={"text-md font-light text-[#616161]"}>
                   Share what&apos;s special about your space.
                 </p>
-                <p className={"text-md font-light text-[#616161] text-sm"}>
-                  Let us help you with that and generate a description for you. Just click the button below. <br />
-                  It can take up to 30 seconds.
-                </p>
-                <Button
-                  loading={generate.isLoading}
-                  type="button"
-                  variant={"secondary"}
-                  onClick={generateDescription}
-                >
-                  Generate
-                </Button>
+                {/* TODO: re-enable generate description */}
+                {false && (
+                  <>
+                    <p className={"text-md font-light text-[#616161] text-sm"}>
+                      Let us help you with that and generate a description for you. Just click the button below. <br />
+                      It can take up to 30 seconds.
+                    </p>
+                    <Button
+                      loading={generate.isLoading}
+                      type="button"
+                      variant={"secondary"}
+                      onClick={generateDescription}
+                    >
+                      Generate
+                    </Button>
 
-                {/* Show error message */}
-                {generate.isError && (
-                  <div className="text-red-500">
-                    Oops! Something went wrong. Please try generating again later.
-                  </div>
+                    {/* Show error message */}
+                    {generate.isError && (
+                      <div className="text-red-500">
+                        Oops! Something went wrong. Please try generating again later.
+                      </div>
+                    )}
+                  </>
                 )}
 
                 <textarea
