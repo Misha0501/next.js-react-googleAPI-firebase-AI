@@ -48,7 +48,7 @@ function Footer() {
 
   return (
     <footer className="bg-[#111827] text-white border-t border-slate-800">
-      <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 pt-14 pb-28 lg:pb-10">
+      <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 pt-14 pb-40 lg:pb-10">
         <div className="grid grid-cols-1 gap-10 lg:grid-cols-[1.35fr_2fr]">
           <div className="max-w-md">
             <Link href="/" className="inline-flex items-center mb-5">
