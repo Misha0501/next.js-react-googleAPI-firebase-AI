@@ -38,8 +38,8 @@ export function HomeHeroHeaderSearch() {
       href: "pleven",
     },
     {
-      locality: "Silven",
-      href: "silven",
+      locality: "Sliven",
+      href: "sliven",
     },
   ];
 
