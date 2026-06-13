@@ -14,7 +14,7 @@ import { PersonalDetailsTab } from "@/app/components/profilePage/PersonalDetails
 import { PropertiesTab } from "@/app/components/profilePage/PropertiesTab";
 import { ProfilePageOwnListings } from "@/app/components/profilePage/ProfilePageOwnListings";
 import { useUserOwnData } from "@/providers/Users";
-import { CircularProgress } from "@mui/material";
+import { CircularProgress, Skeleton } from "@mui/material";
 import { Listing } from "@/types";
 
 type Props = {
@@ -59,13 +59,10 @@ export const ProfilePageMainContent = ({ tab }: Props) => {
     }
   };
 
-  if (isLoggingOut || !authToken) return <CircularProgress />;
-  if (error)
-    return (
-      <p className={"text-red-500"}>
-        Oops something went wrong, please try again later
-      </p>
-    );
+  if (isLoggingOut) return <CircularProgress />;
+
+  const showSkeleton = !authToken || isLoading;
+
   return (
     <div className={""}>
       <TabGroup
@@ -76,8 +73,19 @@ export const ProfilePageMainContent = ({ tab }: Props) => {
           <div
             className={"flex flex-col gap-2 w-fit mx-auto items-center mb-12"}
           >
-            <div className={"font-bold"}>{applicationUser?.displayName}</div>
-            <div className={"font-bold"}>{applicationUser?.email}</div>
+            {showSkeleton ? (
+              <>
+                <Skeleton variant="text" width={130} height={26} />
+                <Skeleton variant="text" width={180} height={22} />
+              </>
+            ) : error ? (
+              <p className={"text-red-500 text-sm"}>Could not load profile</p>
+            ) : (
+              <>
+                <div className={"font-bold"}>{applicationUser?.displayName}</div>
+                <div className={"font-bold"}>{applicationUser?.email}</div>
+              </>
+            )}
             {/*<div className={"text-gray-400"}>Visitor/Seller</div>*/}
           </div>
           <div className="">
@@ -97,16 +105,16 @@ export const ProfilePageMainContent = ({ tab }: Props) => {
         <TabPanels className={"pt-12 pl:1 md:pl-20"}>
           <TabPanel>
             <p className={"font-bold text-4xl mb-12"}>Properties</p>
-            {(company || isLoading) && (
+            {(company || showSkeleton) && (
               <PropertiesTab
                 company={company}
                 userListings={
                   (applicationUser?.Listing as Listing[] | undefined) || []
                 }
-                isLoading={isLoading}
+                isLoading={showSkeleton}
               />
             )}
-            {!company && !isLoading && (
+            {!company && !showSkeleton && (
               <ProfilePageOwnListings
                 initialListings={
                   (applicationUser?.Listing as Listing[] | undefined) || []
