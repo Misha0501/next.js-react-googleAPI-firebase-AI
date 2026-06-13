@@ -1,11 +1,13 @@
 # Unsplash Image Index
 
+**Total images: 69**
+
 Track downloaded Unsplash images to avoid duplicates.
 
 | File | Unsplash ID | Description | Photographer | Unsplash URL | Size | Search query | Downloaded |
 |---|---|---|---|---|---|---|---|
 | kitchen-01.webp | GliaHAJ3_5A | modern white kitchen with marble island | Jason Briscoe | https://unsplash.com/photos/GliaHAJ3_5A | 1200×800 | modern kitchen | 2026-06-13 |
-| kitchen-02.webp | MP0bgaS_d1c | We hung that art piece by Tekuma artist Lulu Zheng, and I particularly loved how Lulu combines architecture and organic  | Naomi Hébert | https://unsplash.com/photos/MP0bgaS_d1c | 1200×800 | modern kitchen | 2026-06-13 |
+| kitchen-02.webp | MP0bgaS_d1c | We hung that art piece by Tekuma artist Lulu Zheng, and I particularly loved how Lulu combines architecture and organic | Naomi Hébert | https://unsplash.com/photos/MP0bgaS_d1c | 1200×800 | modern kitchen | 2026-06-13 |
 | kitchen-03.webp | VgyN_CWXQVM | modern kitchen with island and large window | Cat Han | https://unsplash.com/photos/VgyN_CWXQVM | 1200×800 | modern kitchen | 2026-06-13 |
 | kitchen-04.webp | G7sE2S4Lab4 | White and Gold | Aaron Huber | https://unsplash.com/photos/G7sE2S4Lab4 | 1200×800 | modern kitchen | 2026-06-13 |
 | kitchen-05.webp | vqMQN9zImG4 | a modern kitchen with a bar and stools | Kam Idris | https://unsplash.com/photos/vqMQN9zImG4 | 1200×800 | modern kitchen | 2026-06-13 |
@@ -72,5 +74,4 @@ Track downloaded Unsplash images to avoid duplicates.
 | kitchen-66.webp | CwnPmtA2NHc | A sleek modern kitchen with a pristine white countertop, adorned with stylish utensils. | ASR Design Studio | https://unsplash.com/photos/CwnPmtA2NHc | 1200×800 | kitchen interior | 2026-06-13 |
 | kitchen-67.webp | VaGdhK-kI1c | silver french door refrigerator beside white wooden kitchen cabinet | Lotus Design N Print | https://unsplash.com/photos/VaGdhK-kI1c | 1200×800 | kitchen interior | 2026-06-13 |
 | kitchen-68.webp | E7yGIdzNE3k | a kitchen with a table and chairs next to a window | taufiq triadi | https://unsplash.com/photos/E7yGIdzNE3k | 1200×800 | kitchen interior | 2026-06-13 |
-| kitchen-69.webp | y-XZf_TNRms | A chef dressed in a white coat working in a kitchen.  @novokayn on Instagram | Pylyp Sukhenko | https://unsplash.com/photos/y-XZf_TNRms | 1200×800 | kitchen interior | 2026-06-13 |
-| kitchen-70.webp | PCDlE94JjcI | Modern Kitchen Design with industrial island, decor and fixtures.   Flats Luxury Suites at 22 East Center Street in Loga | Adam Winger | https://unsplash.com/photos/PCDlE94JjcI | 1200×800 | kitchen interior | 2026-06-13 |
+| kitchen-69.webp | PCDlE94JjcI | Modern Kitchen Design with industrial island, decor and fixtures.   Flats Luxury Suites at 22 East Center Street in Loga | Adam Winger | https://unsplash.com/photos/PCDlE94JjcI | 1200×800 | kitchen interior | 2026-06-13 |

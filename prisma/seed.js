@@ -11,15 +11,15 @@ function pool(dir, prefix, count) {
 }
 
 const IMG = {
-  aptExt:   pool("exteriors",       "apartment",   50),
-  hseExt:   pool("house-exteriors", "house",       50),
+  aptExt:   pool("exteriors",       "apartment",   65),
+  hseExt:   pool("house-exteriors", "house",       54),
   vilExt:   pool("villa-exteriors", "villa",       50),
-  living:   pool("living-rooms",    "living-room", 70),
-  kitchen:  pool("kitchens",        "kitchen",     70),
-  bedroom:  pool("bedrooms",        "bedroom",     70),
-  bathroom: pool("bathrooms",       "bathroom",    70),
-  balcony:  pool("balconies",       "balcony",     70),
-  aerial:   pool("aerial",         "aerial",      70),
+  living:   pool("living-rooms",    "living-room", 62),
+  kitchen:  pool("kitchens",        "kitchen",     69),
+  bedroom:  pool("bedrooms",        "bedroom",     64),
+  bathroom: pool("bathrooms",       "bathroom",    68),
+  balcony:  pool("balconies",       "balcony",     49),
+  aerial:   pool("aerial",          "aerial",      53),
 };
 
 // Exterior counters — minimise reuse across listings
@@ -58,7 +58,7 @@ function buildImages(sub, idx) {
   if (r === 0) slot3 = IMG.bathroom[idx % 70];
   else if (r === 1) slot3 = IMG.bedroom[(idx + 5) % 70];
   else if (r === 2) slot3 = IMG.kitchen[(idx + 5) % 70];
-  else slot3 = (sub === "house" || sub === "villa") ? IMG.balcony[idx % 70] : IMG.aerial[idx % 60];
+  else slot3 = (sub === "house" || sub === "villa") ? IMG.balcony[idx % IMG.balcony.length] : IMG.aerial[idx % IMG.aerial.length];
   imgs.push({ url: slot3, imagePath: slot3, positionInListing: 3 });
   return imgs;
 }

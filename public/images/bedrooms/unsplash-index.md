@@ -1,5 +1,7 @@
 # Unsplash Image Index
 
+**Total images: 64**
+
 Track downloaded Unsplash images to avoid duplicates.
 
 | File | Unsplash ID | Description | Photographer | Unsplash URL | Size | Search query | Downloaded |
@@ -48,7 +50,7 @@ Track downloaded Unsplash images to avoid duplicates.
 | bedroom-42.webp | QlA5N4Vnp3g | a bedroom with a large window | Omar Shabana | https://unsplash.com/photos/QlA5N4Vnp3g | 1200×800 | minimalist bedroom | 2026-06-13 |
 | bedroom-43.webp | 8HJ1w5qOVdo | Bedroom (IG: @clay.banks) | Clay Banks | https://unsplash.com/photos/8HJ1w5qOVdo | 1200×800 | minimalist bedroom | 2026-06-13 |
 | bedroom-44.webp | 57sIOF81IxU | 2017 bedroom | Joseph Cortez | https://unsplash.com/photos/57sIOF81IxU | 1200×800 | minimalist bedroom | 2026-06-13 |
-| bedroom-45.webp | 8ElkxFEsSdE | modern residence that redefines city living. This stunning home boasts innovative design, sleek lines, and cutting-edge  | RS Architects | https://unsplash.com/photos/8ElkxFEsSdE | 1200×800 | minimalist bedroom | 2026-06-13 |
+| bedroom-45.webp | 8ElkxFEsSdE | modern residence that redefines city living. This stunning home boasts innovative design, sleek lines, and cutting-edge | RS Architects | https://unsplash.com/photos/8ElkxFEsSdE | 1200×800 | minimalist bedroom | 2026-06-13 |
 | bedroom-46.webp | CW_Cnjdby1c | A beautifully crafted bedroom featuring a platform bed with warm LED underglow, rich walnut wood panelling, and a minima | RS Architects | https://unsplash.com/photos/CW_Cnjdby1c | 1200×800 | minimalist bedroom | 2026-06-13 |
 | bedroom-47.webp | V2nVaXrbPv8 | A modern bed with plush upholstery and white linens. | Caroline Badran | https://unsplash.com/photos/V2nVaXrbPv8 | 1200×800 | minimalist bedroom | 2026-06-13 |
 | bedroom-48.webp | Jxam7P99NMA | A serene and minimalist bedroom with Poliform furniture, showcasing a sleek bed, modern wardrobe, and a stylish vanity a | Obegi Home | https://unsplash.com/photos/Jxam7P99NMA | 1200×800 | minimalist bedroom | 2026-06-13 |
@@ -56,21 +58,15 @@ Track downloaded Unsplash images to avoid duplicates.
 | bedroom-50.webp | 9mOnw8GtnN0 | Fabric #3 | Julissa Santana | https://unsplash.com/photos/9mOnw8GtnN0 | 1200×800 | minimalist bedroom | 2026-06-13 |
 | bedroom-51.webp | cNYaoDwok6Q | another photo of my bedroom in 2017 | Joseph Cortez | https://unsplash.com/photos/cNYaoDwok6Q | 1200×800 | minimalist bedroom | 2026-06-13 |
 | bedroom-52.webp | pOt4jLzhr8Y | Fotografia para Nova Marcenaria Brasileira. | Caroline Badran | https://unsplash.com/photos/pOt4jLzhr8Y | 1200×800 | minimalist bedroom | 2026-06-13 |
-| bedroom-53.webp | ytIrICiDShA | White vases | Mel Poole | https://unsplash.com/photos/ytIrICiDShA | 1200×800 | minimalist bedroom | 2026-06-13 |
-| bedroom-54.webp | f_mWO1Spf4w | A wide-angle view of a modern studio apartment featuring a wooden desk with laptop, a neatly made bed, and a tall open s | Marc Wieland | https://unsplash.com/photos/f_mWO1Spf4w | 1200×800 | minimalist bedroom | 2026-06-13 |
-| bedroom-55.webp | a1G0y-k6AP8 | A cozy bedroom with pillows and a shelf. | Anamica Jain | https://unsplash.com/photos/a1G0y-k6AP8 | 1200×800 | minimalist bedroom | 2026-06-13 |
-| bedroom-56.webp | A5Lb_YVQXNE | This modern, minimalist apartment was our first home before we moved in 2024. Capturing the clean aesthetic and ambient  | Lukáš Parničan | https://unsplash.com/photos/A5Lb_YVQXNE | 1200×800 | minimalist bedroom | 2026-06-13 |
-| bedroom-57.webp | JHidVK7VclY | white and gray bed linen | Point3D Commercial Imaging Ltd. | https://unsplash.com/photos/JHidVK7VclY | 1200×800 | white bedroom | 2026-06-13 |
-| bedroom-58.webp | AJCs3SvOzRg | white bed with white bed linen | Point3D Commercial Imaging Ltd. | https://unsplash.com/photos/AJCs3SvOzRg | 1200×800 | white bedroom | 2026-06-13 |
-| bedroom-59.webp | o0JN8_JwMus | white bed linen with pillows | Point3D Commercial Imaging Ltd. | https://unsplash.com/photos/o0JN8_JwMus | 1200×800 | white bedroom | 2026-06-13 |
-| bedroom-60.webp | xcuBKWvnp7o | A bedroom with a white bed and a round window | Linh Pham | https://unsplash.com/photos/xcuBKWvnp7o | 1200×800 | white bedroom | 2026-06-13 |
-| bedroom-61.webp | emXOGdNFbzc | Empty bed in a dark room with bright window. | nedimshoots | https://unsplash.com/photos/emXOGdNFbzc | 1200×800 | white bedroom | 2026-06-13 |
-| bedroom-62.webp | kWj1xgcT3yk | greek lifestyle | laura adai | https://unsplash.com/photos/kWj1xgcT3yk | 1200×800 | white bedroom | 2026-06-13 |
-| bedroom-63.webp | 24fe4bXlbu8 | Linen & Light 0I | Bree Anne | https://unsplash.com/photos/24fe4bXlbu8 | 1200×800 | white bedroom | 2026-06-13 |
-| bedroom-64.webp | 0vnfb12LUU0 | Chill and relax | Hanif Hafizhan | https://unsplash.com/photos/0vnfb12LUU0 | 1200×800 | white bedroom | 2026-06-13 |
-| bedroom-65.webp | drV3lTGCUp0 | Luxurious bedroom with tufted headboard and plush bedding. | Imagine Reality Studio | https://unsplash.com/photos/drV3lTGCUp0 | 1200×800 | white bedroom | 2026-06-13 |
-| bedroom-66.webp | SC8UVfz9O4g | Home Renovation by iR immo RENOVATION | immo RENOVATION | https://unsplash.com/photos/SC8UVfz9O4g | 1200×800 | white bedroom | 2026-06-13 |
-| bedroom-67.webp | tpb71GRts8o | A bed with a white canopy over it | Didi Paul | https://unsplash.com/photos/tpb71GRts8o | 1200×800 | white bedroom | 2026-06-13 |
-| bedroom-68.webp | NouAMYGKtdk | A bright and cozy modern bedroom interior featuring a white double bed, a matching nightstand with a teddy bear, and ele | Margo Evardson | https://unsplash.com/photos/NouAMYGKtdk | 1200×800 | white bedroom | 2026-06-13 |
-| bedroom-69.webp | hFce375mV-A | cyclades | laura adai | https://unsplash.com/photos/hFce375mV-A | 1200×800 | white bedroom | 2026-06-13 |
-| bedroom-70.webp | GOzvLXx4E-E | A white bedroom in hotel | Kin Shing Lai | https://unsplash.com/photos/GOzvLXx4E-E | 1200×800 | white bedroom | 2026-06-13 |
+| bedroom-53.webp | f_mWO1Spf4w | A wide-angle view of a modern studio apartment featuring a wooden desk with laptop, a neatly made bed, and a tall open s | Marc Wieland | https://unsplash.com/photos/f_mWO1Spf4w | 1200×800 | minimalist bedroom | 2026-06-13 |
+| bedroom-54.webp | a1G0y-k6AP8 | A cozy bedroom with pillows and a shelf. | Anamica Jain | https://unsplash.com/photos/a1G0y-k6AP8 | 1200×800 | minimalist bedroom | 2026-06-13 |
+| bedroom-55.webp | A5Lb_YVQXNE | This modern, minimalist apartment was our first home before we moved in 2024. Capturing the clean aesthetic and ambient | Lukáš Parničan | https://unsplash.com/photos/A5Lb_YVQXNE | 1200×800 | minimalist bedroom | 2026-06-13 |
+| bedroom-56.webp | JHidVK7VclY | white and gray bed linen | Point3D Commercial Imaging Ltd. | https://unsplash.com/photos/JHidVK7VclY | 1200×800 | white bedroom | 2026-06-13 |
+| bedroom-57.webp | AJCs3SvOzRg | white bed with white bed linen | Point3D Commercial Imaging Ltd. | https://unsplash.com/photos/AJCs3SvOzRg | 1200×800 | white bedroom | 2026-06-13 |
+| bedroom-58.webp | o0JN8_JwMus | white bed linen with pillows | Point3D Commercial Imaging Ltd. | https://unsplash.com/photos/o0JN8_JwMus | 1200×800 | white bedroom | 2026-06-13 |
+| bedroom-59.webp | xcuBKWvnp7o | A bedroom with a white bed and a round window | Linh Pham | https://unsplash.com/photos/xcuBKWvnp7o | 1200×800 | white bedroom | 2026-06-13 |
+| bedroom-60.webp | drV3lTGCUp0 | Luxurious bedroom with tufted headboard and plush bedding. | Imagine Reality Studio | https://unsplash.com/photos/drV3lTGCUp0 | 1200×800 | white bedroom | 2026-06-13 |
+| bedroom-61.webp | tpb71GRts8o | A bed with a white canopy over it | Didi Paul | https://unsplash.com/photos/tpb71GRts8o | 1200×800 | white bedroom | 2026-06-13 |
+| bedroom-62.webp | NouAMYGKtdk | A bright and cozy modern bedroom interior featuring a white double bed, a matching nightstand with a teddy bear, and ele | Margo Evardson | https://unsplash.com/photos/NouAMYGKtdk | 1200×800 | white bedroom | 2026-06-13 |
+| bedroom-63.webp | hFce375mV-A | cyclades | laura adai | https://unsplash.com/photos/hFce375mV-A | 1200×800 | white bedroom | 2026-06-13 |
+| bedroom-64.webp | GOzvLXx4E-E | A white bedroom in hotel | Kin Shing Lai | https://unsplash.com/photos/GOzvLXx4E-E | 1200×800 | white bedroom | 2026-06-13 |
