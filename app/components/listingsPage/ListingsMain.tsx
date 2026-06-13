@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { ListingItem } from "@/app/components/ListingItem";
 import { usePropertyListing } from "@/providers/Listing";
 import { useAuthContext } from "@/app/context/AuthContext";
@@ -7,6 +7,7 @@ import { Listing, SavedListing } from "@/types";
 import { NO_MAX } from "@/app/lib/constants/filters";
 import { CircularProgress, Pagination } from "@mui/material";
 import { useSavedListings } from "@/providers/SavedListings";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 type Props = {
   searchParams: any;
@@ -15,10 +16,26 @@ type Props = {
 };
 
 const LISTINGS_PAGE_SIZE = 16;
+const MAX_LISTINGS_PAGE = 1000000;
+
+const getPageFromSearchParams = (params: { get: (key: string) => string | null }) => {
+  const page = Number(params.get("page"));
+  return Number.isInteger(page) && page > 0 && page <= MAX_LISTINGS_PAGE
+    ? page
+    : 1;
+};
 
 export const ListingsMain = ({ searchParams, listingType, locality }: Props ) => {
   const { authToken } = useAuthContext();
-  const [page, setPage] = useState(1);
+  const pathname = usePathname();
+  const router = useRouter();
+  const urlSearchParams = useSearchParams();
+  const urlQueryString = urlSearchParams.toString();
+  const currentUrlPage = useMemo(
+    () => getPageFromSearchParams(new URLSearchParams(urlQueryString)),
+    [urlQueryString],
+  );
+  const [page, setPage] = useState(currentUrlPage);
   const pageSize = LISTINGS_PAGE_SIZE;
   const [sortBy, setSortBy] = useState(undefined);
   const { data: savedListingsData, isLoading: savedListingsIsLoading } = useSavedListings({ authToken });
@@ -63,12 +80,28 @@ export const ListingsMain = ({ searchParams, listingType, locality }: Props ) =>
     page: page,
   });
 
-  const handlePageChange = (
-    event: React.ChangeEvent<unknown>,
-    value: number,
-  ) => {
-    setPage(value);
-  };
+  const updatePageUrl = useCallback(
+    (value: number) => {
+      const params = new URLSearchParams(urlQueryString);
+      if (value > 1) {
+        params.set("page", String(value));
+      } else {
+        params.delete("page");
+      }
+
+      const queryString = params.toString();
+      router.push(queryString ? `${pathname}?${queryString}` : pathname);
+    },
+    [pathname, router, urlQueryString],
+  );
+
+  const handlePageChange = useCallback(
+    (event: React.ChangeEvent<unknown>, value: number) => {
+      setPage(value);
+      updatePageUrl(value);
+    },
+    [updatePageUrl],
+  );
 
   const savedListings = useMemo(() => {
     if (!savedListingsData) return [];
@@ -116,10 +149,10 @@ export const ListingsMain = ({ searchParams, listingType, locality }: Props ) =>
   }, [savedListings, listings]);
 
   useEffect(() => {
-    if (!listingsData) return;
-    // Assing pages related variables
-    setPage(listingsData?.page);
-  }, [listingsData]);
+    setPage((previousPage) =>
+      previousPage === currentUrlPage ? previousPage : currentUrlPage,
+    );
+  }, [currentUrlPage]);
 
 
   if (isError) {

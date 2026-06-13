@@ -36,6 +36,7 @@ export const ListingsPageFilters = ({
     setListingType(newType);
     const qp = new URLSearchParams(params.toString());
     qp.set("listingType", newType);
+    qp.delete("page");
     router.replace(`/listings?${qp.toString()}`);
   };
 

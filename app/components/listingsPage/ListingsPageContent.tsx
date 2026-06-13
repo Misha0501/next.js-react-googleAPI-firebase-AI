@@ -40,6 +40,7 @@ export const ListingsPageContent = () => {
     } else {
       params.delete("locality");
     }
+    params.delete("page");
     router.replace(`/listings?${params.toString()}`);
   };
 
