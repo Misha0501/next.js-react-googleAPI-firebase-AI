@@ -64,3 +64,13 @@ Track downloaded Unsplash images to avoid duplicates.
 | aerial-58.webp | u8wvY8Q3B9I | a high angle view of a building | Ivaylo Nikolov | https://unsplash.com/photos/u8wvY8Q3B9I | 1200×800 | plovdiv | 2026-06-13 |
 | aerial-59.webp | TLIGU_G5BWA | the interior of a car with a steering wheel | Stoyan Ramalchanov | https://unsplash.com/photos/TLIGU_G5BWA | 1200×800 | plovdiv | 2026-06-13 |
 | aerial-60.webp | zWEvS8ciStc | a car driving down a road with mountains in the background | Stoyan Ramalchanov | https://unsplash.com/photos/zWEvS8ciStc | 1200×800 | plovdiv | 2026-06-13 |
+| aerial-61.webp | jfKUnlJGIMs | This inspiring photo is taken nearby Varna, Bulgaria, from one of our team members. | Presentsquare | https://unsplash.com/photos/jfKUnlJGIMs | 1200×800 | varna | 2026-06-13 |
+| aerial-62.webp | eY9vmL454es | Stunning coastal landscape and travel photography from Varna Bulgaria featuring a lighthouse, golden hour light, private | Timiciuc Andrei | https://unsplash.com/photos/eY9vmL454es | 1200×800 | varna | 2026-06-13 |
+| aerial-63.webp | fMp9KBnRarg | These beautiful buildings grace the walkways in Varna, Bulgaria. | Jillian Amatt - Artistic Voyages | https://unsplash.com/photos/fMp9KBnRarg | 1200×800 | varna | 2026-06-13 |
+| aerial-64.webp | 6RxqAcHUR_A | I couldn't help but snap this stunning golden church during golden hour in Varna, Bulgaria. | Jillian Amatt - Artistic Voyages | https://unsplash.com/photos/6RxqAcHUR_A | 1200×800 | varna | 2026-06-13 |
+| aerial-65.webp | O7wML4ThdTY | This inspiring photo is taken nearby Varna, Bulgaria, from one of our team members. | Presentsquare | https://unsplash.com/photos/O7wML4ThdTY | 1200×800 | varna | 2026-06-13 |
+| aerial-66.webp | KWOpQBgswWQ | These two dragons are on display along the waterfront of Varna, Bulgaria. They stand proud above a fountain that dishes  | Jillian Amatt - Artistic Voyages | https://unsplash.com/photos/KWOpQBgswWQ | 1200×800 | varna | 2026-06-13 |
+| aerial-67.webp | NVBMI-2kjM4 | A street in Varna. | Ivo Yordanov | https://unsplash.com/photos/NVBMI-2kjM4 | 1200×800 | varna | 2026-06-13 |
+| aerial-68.webp | IhlstkuDgM0 | Sunset Over Docks | Denislav Popov | https://unsplash.com/photos/IhlstkuDgM0 | 1200×800 | varna | 2026-06-13 |
+| aerial-69.webp | T74BFaY0Zlo | 📷 Point of view | Ivaylo Angelov | https://unsplash.com/photos/T74BFaY0Zlo | 1200×800 | varna | 2026-06-13 |
+| aerial-70.webp | QON9FA9UPTI | a man standing on top of a surfboard in the ocean | Kamen Atanassov | https://unsplash.com/photos/QON9FA9UPTI | 1200×800 | varna | 2026-06-13 |
