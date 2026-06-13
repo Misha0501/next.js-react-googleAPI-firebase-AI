@@ -15,7 +15,8 @@ export function useCompanyMemberships(
   props: any
 ): UseQueryResult<Membership> {
   return useQuery(`${KEY} | Items`, () => api.companyMemberships(props), {
-    retry: 0
+    enabled: !!props?.authToken,
+    retry: 0,
   });
 }
 

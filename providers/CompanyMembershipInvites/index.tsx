@@ -14,6 +14,7 @@ export function useCompanyMembershipInvites(
   props: CompanyMembershipInvitesProvider.POSTProps,
 ): UseQueryResult<CompanyMembershipInvite[], any> {
   return useQuery(`${KEY} | Items`, () => api.companyMembershipInvites(props), {
+    enabled: !!props?.authToken,
     retry: 0,
   });
 }

@@ -16,12 +16,24 @@ const GoogleMap = ({ location }: GoogleMapProps) => {
     const lat = Number(location.lat);
     const lng = Number(location.lng);
 
-    const initMap = () => {
+    const initMap = async () => {
       if (!containerRef.current || !(window as any).google?.maps) return;
       const { google } = window as any;
       const center = { lat, lng };
-      const map = new google.maps.Map(containerRef.current, { center, zoom: 14 });
-      new google.maps.Marker({ position: center, map });
+
+      const map = new google.maps.Map(containerRef.current, {
+        center,
+        zoom: 14,
+        mapId: "DEMO_MAP_ID",
+      });
+
+      // Use AdvancedMarkerElement if available, fall back to Marker
+      try {
+        const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
+        new AdvancedMarkerElement({ position: center, map });
+      } catch {
+        new google.maps.Marker({ position: center, map });
+      }
     };
 
     if ((window as any).google?.maps) {
@@ -33,7 +45,7 @@ const GoogleMap = ({ location }: GoogleMapProps) => {
     const prev = (window as any).initGoogleServices;
     (window as any).initGoogleServices = async (...args: unknown[]) => {
       if (prev) await prev(...args);
-      initMap();
+      await initMap();
     };
 
     if (!document.querySelector('script[src*="maps.googleapis.com"]')) {

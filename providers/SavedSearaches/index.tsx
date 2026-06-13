@@ -14,6 +14,7 @@ export function useSavedSearches(
   props: any,
 ): UseQueryResult<SavedSearchesProvider.ReadResponse> {
   return useQuery(`${KEY} | Items`, () => api.savedSearches(props), {
+    enabled: !!props?.authToken,
     retry: 0,
   });
 }

@@ -15,7 +15,8 @@ export function useRecentlyViewedListings(
   props: RecentlyViewedListingsProvider.GetProps
 ): UseQueryResult<RecentlyViewedListingsProvider.GetResponse> {
   return useQuery(`${KEY} | Listings`, () => api.recentlyViewedListings(props), {
-    retry: 0
+    enabled: !!props?.authToken,
+    retry: 0,
   });
 }
 

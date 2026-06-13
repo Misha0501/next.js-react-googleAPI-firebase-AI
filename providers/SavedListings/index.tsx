@@ -15,6 +15,7 @@ export function useSavedListings(
   props: any,
 ): UseQueryResult<SavedListingsProvider.ReadResponse> {
   return useQuery(`${KEY} | Items`, () => api.savedListings(props), {
+    enabled: !!props?.authToken,
     retry: 0,
   });
 }
