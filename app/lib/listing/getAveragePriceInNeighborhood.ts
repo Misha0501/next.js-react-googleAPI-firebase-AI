@@ -31,7 +31,11 @@ export const getAveragePriceInNeighborhood = async (
         },
       },
       include: {
-        ListingPrice: true,
+        ListingPrice: {
+          orderBy: {
+            createdAt: "asc",
+          },
+        },
       },
     });
 

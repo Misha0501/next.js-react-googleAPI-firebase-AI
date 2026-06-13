@@ -12,13 +12,16 @@ type Prop = {
 export const PriceChangeGraphSection = ({ listingPriceArray }: Prop) => {
   if (!listingPriceArray?.length || !(listingPriceArray?.length - 1)) return null;
 
-  const prices = listingPriceArray.map((p) => p.price).filter(Boolean) as number[];
+  const priceHistory = [...listingPriceArray].sort(
+    (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+  );
+  const prices = priceHistory.map((p) => p.price).filter(Boolean) as number[];
   const minPrice = Math.min(...prices);
   const maxPrice = Math.max(...prices);
   const yAxisMin = Math.floor(minPrice * 0.95);
   const yAxisMax = Math.ceil(maxPrice * 1.05);
 
-  const chartData = listingPriceArray.map((item) => ({
+  const chartData = priceHistory.map((item) => ({
     date: new Date(item.createdAt).toLocaleDateString("en-GB", {
       day: "numeric",
       month: "short",
@@ -36,8 +39,8 @@ export const PriceChangeGraphSection = ({ listingPriceArray }: Prop) => {
 
         {/* Price change timeline */}
         <div className="flex flex-wrap gap-3 mb-8">
-          {listingPriceArray.map((item, i) => {
-            const prev = listingPriceArray[i - 1];
+          {priceHistory.map((item, i) => {
+            const prev = priceHistory[i - 1];
             const priceDiff = prev ? item.price - prev.price : 0;
             const pct = prev ? ((priceDiff / prev.price) * 100).toFixed(1) : null;
             const isUp = priceDiff > 0;

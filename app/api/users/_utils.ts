@@ -21,7 +21,11 @@ export const findApplicationUserByEmail = async (
                 include: {
                   ListingImage: true,
                   Address: true,
-                  ListingPrice: true,
+                  ListingPrice: {
+                    orderBy: {
+                      createdAt: "asc",
+                    },
+                  },
                 },
                 where: {
                   deleted: null,
@@ -36,7 +40,11 @@ export const findApplicationUserByEmail = async (
         include: {
           ListingImage: true,
           Address: true,
-          ListingPrice: true,
+          ListingPrice: {
+            orderBy: {
+              createdAt: "asc",
+            },
+          },
         },
         where: {
           deleted: null,

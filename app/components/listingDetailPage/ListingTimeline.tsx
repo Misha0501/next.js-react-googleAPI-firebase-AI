@@ -37,28 +37,31 @@ const fmt = (d: string) =>
     year: "numeric",
   });
 
+const byCreatedAt = (a: { createdAt: string }, b: { createdAt: string }) =>
+  new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+
 export const ListingTimeline = ({ listing }: Prop) => {
   if (!listing?.createdAt) return null;
 
   const events: TimelineEvent[] = [];
+  const priceHistory = [...(listing.ListingPrice ?? [])].sort(byCreatedAt);
 
   // Listed event
-  const initialPrice = listing.ListingPrice?.[listing.ListingPrice.length - 1];
+  const initialPrice = priceHistory[0];
   events.push({
-    date: fmt(listing.createdAt),
+    date: listing.createdAt,
     label: "Listed",
     sublabel: initialPrice ? formatEuroPrice(initialPrice.price) : undefined,
     type: "listed",
   });
 
   // Price change events (oldest → newest, skip the initial price)
-  if (listing.ListingPrice && listing.ListingPrice.length > 1) {
-    const sorted = [...listing.ListingPrice].reverse().slice(1);
-    sorted.forEach((lp, i) => {
-      const prev = listing.ListingPrice[listing.ListingPrice.length - 1 - i];
+  if (priceHistory.length > 1) {
+    priceHistory.slice(1).forEach((lp, i) => {
+      const prev = priceHistory[i];
       const isDown = prev && lp.price < prev.price;
       events.push({
-        date: fmt(lp.createdAt),
+        date: lp.createdAt,
         label: isDown ? "Price reduced" : "Price updated",
         sublabel: formatEuroPrice(lp.price),
         type: "price",
@@ -70,13 +73,17 @@ export const ListingTimeline = ({ listing }: Prop) => {
   if (listing.activeUntil) {
     const isExpired = new Date(listing.activeUntil) < new Date();
     events.push({
-      date: fmt(listing.activeUntil),
+      date: listing.activeUntil,
       label: isExpired ? "Listing expired" : "Active until",
       type: "expiry",
     });
   }
 
   if (events.length < 2) return null;
+
+  const sortedEvents = events.sort(
+    (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
+  );
 
   return (
     <div className="py-8 lg:py-10">
@@ -88,7 +95,7 @@ export const ListingTimeline = ({ listing }: Prop) => {
         {/* Desktop horizontal timeline */}
         <div className="hidden md:block overflow-x-auto scrollbar-hide">
           <div className="flex items-start min-w-max pb-2">
-            {events.map((event, i) => (
+            {sortedEvents.map((event, i) => (
               <div key={i} className="flex items-start">
                 {/* Event */}
                 <div className="flex flex-col items-center w-44">
@@ -97,7 +104,7 @@ export const ListingTimeline = ({ listing }: Prop) => {
                   >
                     {dot[event.type].icon}
                   </div>
-                  <p className="text-xs text-[#717D96] mb-1">{event.date}</p>
+                  <p className="text-xs text-[#717D96] mb-1">{fmt(event.date)}</p>
                   <p className="text-sm font-semibold text-[#2D3648] text-center">
                     {event.label}
                   </p>
@@ -106,7 +113,7 @@ export const ListingTimeline = ({ listing }: Prop) => {
                   )}
                 </div>
                 {/* Connector */}
-                {i < events.length - 1 && (
+                {i < sortedEvents.length - 1 && (
                   <div className="h-px w-12 bg-gray-300 mt-4 shrink-0" />
                 )}
               </div>
@@ -116,7 +123,7 @@ export const ListingTimeline = ({ listing }: Prop) => {
 
         {/* Mobile vertical timeline */}
         <div className="md:hidden flex flex-col gap-0">
-          {events.map((event, i) => (
+          {sortedEvents.map((event, i) => (
             <div key={i} className="flex gap-4">
               <div className="flex flex-col items-center">
                 <div
@@ -124,12 +131,12 @@ export const ListingTimeline = ({ listing }: Prop) => {
                 >
                   {dot[event.type].icon}
                 </div>
-                {i < events.length - 1 && (
+                {i < sortedEvents.length - 1 && (
                   <div className="w-px flex-1 bg-gray-200 my-1" />
                 )}
               </div>
               <div className="pb-6">
-                <p className="text-xs text-[#717D96]">{event.date}</p>
+                <p className="text-xs text-[#717D96]">{fmt(event.date)}</p>
                 <p className="text-sm font-semibold text-[#2D3648]">{event.label}</p>
                 {event.sublabel && (
                   <p className="text-sm text-[#717D96]">{event.sublabel}</p>

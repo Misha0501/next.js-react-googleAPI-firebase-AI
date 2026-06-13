@@ -80,6 +80,10 @@ function euros(v) {
   return Math.round(v / unit) * unit;
 }
 
+function chronological(history) {
+  return [...history].sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
+}
+
 function buildPriceHistory(price, idx, listedAt) {
   // listedAt is the listing's createdAt — the first entry must use this date so the
   // app labels it "Listed". Every listing gets at least 2 entries.
@@ -95,10 +99,10 @@ function buildPriceHistory(price, idx, listedAt) {
   // <5 days: change placed at midpoint of elapsed time
   if (daysListed < 5) {
     const p0 = euros(price * (1.03 + (idx % 5) * 0.01));
-    return [
+    return chronological([
       { currency: "EUR", price: p0,    tax: null, createdAt: listedAt },
       { currency: "EUR", price: price, tax: null, createdAt: afterMs(Math.floor(msListed * 0.5)) },
-    ];
+    ]);
   }
 
   // Proportional anchors — always strictly increasing, always before "now"
@@ -110,10 +114,10 @@ function buildPriceHistory(price, idx, listedAt) {
   // <20 days: 2 entries only (not enough room for meaningful multi-step history)
   if (daysListed < 20) {
     const p0 = euros(price * (1.05 + (idx % 8) * 0.01));
-    return [
+    return chronological([
       { currency: "EUR", price: p0,    tax: null, createdAt: listedAt },
       { currency: "EUR", price: price, tax: null, createdAt: after(d1) },
-    ];
+    ]);
   }
 
   const scenario = idx % 10;
@@ -122,11 +126,11 @@ function buildPriceHistory(price, idx, listedAt) {
     // 70%: listed high → mid reduction → current
     const p0 = euros(price * (1.08 + (idx % 10) * 0.01));
     const p1 = euros(price * (1.03 + (idx % 5)  * 0.01));
-    return [
+    return chronological([
       { currency: "EUR", price: p0,    tax: null, createdAt: listedAt },
       { currency: "EUR", price: p1,    tax: null, createdAt: after(d1) },
       { currency: "EUR", price: price, tax: null, createdAt: after(d2) },
-    ];
+    ]);
   }
 
   if (scenario <= 8) {
@@ -135,31 +139,31 @@ function buildPriceHistory(price, idx, listedAt) {
       const p0 = euros(price * (1.15 + (idx % 8) * 0.01));
       const p1 = euros(price * (1.08 + (idx % 6) * 0.01));
       const p2 = euros(price * (1.03 + (idx % 4) * 0.01));
-      return [
+      return chronological([
         { currency: "EUR", price: p0,    tax: null, createdAt: listedAt },
         { currency: "EUR", price: p1,    tax: null, createdAt: after(d1) },
         { currency: "EUR", price: p2,    tax: null, createdAt: after(d2) },
         { currency: "EUR", price: price, tax: null, createdAt: after(d3) },
-      ];
+      ]);
     }
     // Fall back to 3 entries for younger listings
     const p0 = euros(price * (1.08 + (idx % 10) * 0.01));
     const p1 = euros(price * (1.03 + (idx % 5)  * 0.01));
-    return [
+    return chronological([
       { currency: "EUR", price: p0,    tax: null, createdAt: listedAt },
       { currency: "EUR", price: p1,    tax: null, createdAt: after(d1) },
       { currency: "EUR", price: price, tax: null, createdAt: after(d2) },
-    ];
+    ]);
   }
 
   // 10%: listed slightly lower → small increase → current (higher)
   const p0 = euros(price * (0.94 + (idx % 5) * 0.01));
   const p1 = euros(price * (0.97 + (idx % 4) * 0.01));
-  return [
+  return chronological([
     { currency: "EUR", price: p0,    tax: null, createdAt: listedAt },
     { currency: "EUR", price: p1,    tax: null, createdAt: after(d1) },
     { currency: "EUR", price: price, tax: null, createdAt: after(d2) },
-  ];
+  ]);
 }
 
 // ── Description & key points ──────────────────────────────────────────────────

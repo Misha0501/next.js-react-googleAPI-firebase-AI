@@ -52,7 +52,11 @@ export async function GET(req: NextRequest) {
       include: {
         ListingImage: true,
         Address: true,
-        ListingPrice: true,
+        ListingPrice: {
+          orderBy: {
+            createdAt: "asc",
+          },
+        },
       },
     });
 
@@ -110,7 +114,11 @@ export async function POST(req: Request) {
       include: {
         ListingImage: true,
         Address: true,
-        ListingPrice: true,
+        ListingPrice: {
+          orderBy: {
+            createdAt: "asc",
+          },
+        },
       },
     });
 
@@ -154,7 +162,11 @@ export async function PUT(req: Request) {
       include: {
         ListingImage: true,
         Address: true,
-        ListingPrice: true,
+        ListingPrice: {
+          orderBy: {
+            createdAt: "asc",
+          },
+        },
       },
     });
     return NextResponse.json(updatedListing);

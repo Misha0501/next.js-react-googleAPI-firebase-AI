@@ -32,7 +32,11 @@ export async function GET(request: Request, {params}: { params: { slug: number }
                 company: true,
                 ListingImage: true,
                 Address: true,
-                ListingPrice: true,
+                ListingPrice: {
+                    orderBy: {
+                        createdAt: "asc",
+                    },
+                },
             },
         });
 

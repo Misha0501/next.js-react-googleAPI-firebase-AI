@@ -21,7 +21,11 @@ export const getRecentlyViewedListings = async (
         include: {
           ListingImage: true,
           Address: true,
-          ListingPrice: true,
+          ListingPrice: {
+            orderBy: {
+              createdAt: "asc",
+            },
+          },
         },
       },
     },

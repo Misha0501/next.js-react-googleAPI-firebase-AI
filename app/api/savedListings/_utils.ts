@@ -20,7 +20,11 @@ export const getSavedListings = async (userId: number): Promise<any> => {
         include: {
           ListingImage: true,
           Address: true,
-          ListingPrice: true,
+          ListingPrice: {
+            orderBy: {
+              createdAt: "asc",
+            },
+          },
         },
       },
     },
