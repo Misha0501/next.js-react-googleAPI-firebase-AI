@@ -6,7 +6,13 @@ const normalizeBaseUrl = (baseUrl: string): string => {
   const value = baseUrl.trim().replace(/\/$/, "");
 
   if (value.startsWith("http://") || value.startsWith("https://")) {
-    return value;
+    try {
+      // Extract only the origin so env vars like https://example.com/api
+      // don't produce doubled path segments (e.g. /api/api/listings/…)
+      return new URL(value).origin;
+    } catch {
+      // fall through if the URL is somehow malformed
+    }
   }
 
   const isLocal =
