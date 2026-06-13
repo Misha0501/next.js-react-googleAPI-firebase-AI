@@ -32,7 +32,7 @@ export async function POST(req: Request) {
     });
   } catch (error) {
     if (error instanceof z.ZodError) {
-      return new Response(error.message, { status: 422 });
+      return new Response(error.issues.map((i) => i.message).join("; "), { status: 422 });
     }
 
     if (
