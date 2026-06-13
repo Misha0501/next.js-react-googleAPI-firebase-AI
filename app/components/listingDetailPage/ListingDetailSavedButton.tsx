@@ -93,12 +93,12 @@ export const ListingDetailSavedButton = ({
         <Button
           icon={isListingSaved ? HeartIconSolid : HeartIcon}
           variant={"secondary"}
-          loading={savedIconIsLoading}
+          disabled={savedIconIsLoading}
           className={"hidden lg:flex"}
           onClick={handleSavedIconClick}
           data-testid="favouriteButton"
         >
-          Favourite
+          {savedIconIsLoading ? "Loading..." : "Favourite"}
         </Button>
       )}
 

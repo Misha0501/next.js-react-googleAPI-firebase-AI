@@ -142,8 +142,8 @@ export const ContactForm = ({emailTo, subject} : Props) => {
           <div className="text-sm text-red-500">{formik.errors.message}</div>
         )}
       </div>
-      <Button type={"submit"} loading={sendEmail.isLoading}>
-        Send
+      <Button type={"submit"} disabled={sendEmail.isLoading}>
+        {sendEmail.isLoading ? "Sending..." : "Send"}
       </Button>
     </form>
   );

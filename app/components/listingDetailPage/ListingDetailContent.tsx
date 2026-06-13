@@ -23,8 +23,7 @@ export const ListingDetailContent = ({ listing }: Prop) => {
   }, [listing?.description]);
 
   const formatOfferedSinceDate = (date: string) => {
-    const dateObj = new Date(date);
-    return dateObj.toLocaleDateString();
+    return new Date(date).toLocaleDateString("en-GB");
   }
 
   const formatConstructedYearDate = (date: string) => {
