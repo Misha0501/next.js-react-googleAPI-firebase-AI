@@ -13,9 +13,10 @@ import { PriceChangeGraphSection } from "@/app/components/listingDetailPage/Pric
 import FloatingContactBar from "@/app/components/listingDetailPage/FloatingContactBar";
 import { ListingDetailRecentlyViewedFunctionality } from "@/app/components/listingDetailPage/ListingDetailRecentlyViewedFunctionality";
 import { ListigDetailContextProvider } from "@/app/context/ListingDetailContext";
-import { getFetchUrl } from "@/app/lib/getFetchUrl";
 import { notFound } from "next/navigation";
-import { ResponseError } from "@/app/lib/classes/ResponseError";
+import { getFetchUrl } from "@/app/lib/getFetchUrl";
+
+export const dynamic = "force-dynamic";
 
 type Props = {
   params: {
@@ -23,34 +24,45 @@ type Props = {
   };
 };
 
+const fetchListing = async (listingId: number) => {
+  const response = await fetch(getFetchUrl(`/api/listings/${listingId}`), {
+    cache: "no-store",
+  });
+
+  if (response.status === 404) {
+    return null;
+  }
+
+  if (!response.ok) {
+    throw new Error(`Listing fetch failed with status ${response.status}`);
+  }
+
+  return response.json();
+};
+
 async function ListingPage({ params: { id } }: Props) {
   const listingId = Number(id);
-  let listing = null;
+  let listing: any = null;
+
+  if (!Number.isInteger(listingId) || listingId <= 0) {
+    return notFound();
+  }
 
   try {
-    // fetch listing
-    const response = await fetch(getFetchUrl(`/api/listings/${listingId}`));
-
-    if (!response.ok) {
-      if (response.status === 404) {
-        throw new ResponseError("Listing not found", 404)
-      }
-
-      throw new Error("Data fetch failed");
-    }
-
-    listing = await response.json();
-
+    listing = await fetchListing(listingId);
   } catch (error) {
     console.error(error);
-    if (error instanceof ResponseError) {
-      if(error.status === 404) {
-        return notFound();
-      }
-    }
-
-    return <div className={"text-red-500 container text-center font-bold"}>Oops an error occurred. Please try again later..</div>;
+    return (
+      <div className={"text-red-500 container text-center font-bold"}>
+        Oops an error occurred. Please try again later..
+      </div>
+    );
   }
+
+  if (!listing) {
+    return notFound();
+  }
+
   return (
     <ListigDetailContextProvider>
       <div className="pb-32 lg:pb-10">
