@@ -74,30 +74,54 @@ function buildImages(sub, idx, hasBalcony) {
 
 // ── Price history ─────────────────────────────────────────────────────────────
 
-function euros(v) { return Math.round(v / 100) * 100; }
+function euros(v) {
+  // Rounding unit scales with price so small prices still get a visible change
+  const unit = v >= 100000 ? 1000 : v >= 20000 ? 500 : v >= 5000 ? 100 : v >= 1000 ? 50 : 10;
+  return Math.round(v / unit) * unit;
+}
 
 function buildPriceHistory(price, idx, listedAt) {
   // listedAt is the listing's createdAt — the first entry must use this date so the
-  // app labels it "Listed". All changes come AFTER. New listings (< 15 days) show
-  // only the listed price; established listings get at least 2 price changes.
+  // app labels it "Listed". Every listing gets at least 2 entries.
+  // Anchor days are computed proportionally so dates are always strictly increasing
+  // regardless of how long the listing has been live.
   const now = Date.now();
-  const daysListed = Math.floor((now - listedAt.getTime()) / MS_PER_DAY);
-  if (daysListed < 15) {
-    return [{ currency: "EUR", price, tax: null, createdAt: listedAt }];
-  }
-  const max = daysListed - 5;
+  const msListed   = now - listedAt.getTime();
+  const daysListed = Math.floor(msListed / MS_PER_DAY);
 
-  function after(d) { return new Date(listedAt.getTime() + d * MS_PER_DAY); }
-  function clamp(d) { return Math.min(d, max); }
+  function after(d)    { return new Date(listedAt.getTime() + d * MS_PER_DAY); }
+  function afterMs(ms) { return new Date(listedAt.getTime() + ms); }
+
+  // <5 days: change placed at midpoint of elapsed time
+  if (daysListed < 5) {
+    const p0 = euros(price * (1.03 + (idx % 5) * 0.01));
+    return [
+      { currency: "EUR", price: p0,    tax: null, createdAt: listedAt },
+      { currency: "EUR", price: price, tax: null, createdAt: afterMs(Math.floor(msListed * 0.5)) },
+    ];
+  }
+
+  // Proportional anchors — always strictly increasing, always before "now"
+  const w  = daysListed - 1; // available days (1-day buffer before now)
+  const d1 = Math.max(1,       Math.floor(w * 0.30));
+  const d2 = Math.max(d1 + 3,  Math.floor(w * 0.62));
+  const d3 = Math.max(d2 + 3,  Math.floor(w * 0.84));
+
+  // <20 days: 2 entries only (not enough room for meaningful multi-step history)
+  if (daysListed < 20) {
+    const p0 = euros(price * (1.05 + (idx % 8) * 0.01));
+    return [
+      { currency: "EUR", price: p0,    tax: null, createdAt: listedAt },
+      { currency: "EUR", price: price, tax: null, createdAt: after(d1) },
+    ];
+  }
 
   const scenario = idx % 10;
 
   if (scenario <= 6) {
-    // 70% — listed high → first reduction → current (lower)
-    const p0 = euros(price * (1.08 + (idx % 10) * 0.01)); // 8–17% above current
-    const p1 = euros(price * (1.03 + (idx % 5)  * 0.01)); // 3–7% above current
-    const d1 = clamp(10 + idx % 20);
-    const d2 = clamp(d1 + 12 + idx % 25);
+    // 70%: listed high → mid reduction → current
+    const p0 = euros(price * (1.08 + (idx % 10) * 0.01));
+    const p1 = euros(price * (1.03 + (idx % 5)  * 0.01));
     return [
       { currency: "EUR", price: p0,    tax: null, createdAt: listedAt },
       { currency: "EUR", price: p1,    tax: null, createdAt: after(d1) },
@@ -106,26 +130,31 @@ function buildPriceHistory(price, idx, listedAt) {
   }
 
   if (scenario <= 8) {
-    // 20% — listed high → three reductions → current
-    const p0 = euros(price * (1.15 + (idx % 8) * 0.01));
-    const p1 = euros(price * (1.08 + (idx % 6) * 0.01));
-    const p2 = euros(price * (1.03 + (idx % 4) * 0.01));
-    const d1 = clamp(8  + idx % 18);
-    const d2 = clamp(d1 + 10 + idx % 18);
-    const d3 = clamp(d2 + 8  + idx % 18);
+    // 20%: 4 entries with 3 step-down reductions (only when listing is old enough)
+    if (daysListed >= 40) {
+      const p0 = euros(price * (1.15 + (idx % 8) * 0.01));
+      const p1 = euros(price * (1.08 + (idx % 6) * 0.01));
+      const p2 = euros(price * (1.03 + (idx % 4) * 0.01));
+      return [
+        { currency: "EUR", price: p0,    tax: null, createdAt: listedAt },
+        { currency: "EUR", price: p1,    tax: null, createdAt: after(d1) },
+        { currency: "EUR", price: p2,    tax: null, createdAt: after(d2) },
+        { currency: "EUR", price: price, tax: null, createdAt: after(d3) },
+      ];
+    }
+    // Fall back to 3 entries for younger listings
+    const p0 = euros(price * (1.08 + (idx % 10) * 0.01));
+    const p1 = euros(price * (1.03 + (idx % 5)  * 0.01));
     return [
       { currency: "EUR", price: p0,    tax: null, createdAt: listedAt },
       { currency: "EUR", price: p1,    tax: null, createdAt: after(d1) },
-      { currency: "EUR", price: p2,    tax: null, createdAt: after(d2) },
-      { currency: "EUR", price: price, tax: null, createdAt: after(d3) },
+      { currency: "EUR", price: price, tax: null, createdAt: after(d2) },
     ];
   }
 
-  // 10% — listed low → dip → current (net increase vs original)
-  const p0 = euros(price * (0.94 + (idx % 5) * 0.01)); // original lower
-  const p1 = euros(price * (0.96 + (idx % 4) * 0.01)); // slight dip back
-  const d1 = clamp(10 + idx % 20);
-  const d2 = clamp(d1 + 12 + idx % 25);
+  // 10%: listed slightly lower → small increase → current (higher)
+  const p0 = euros(price * (0.94 + (idx % 5) * 0.01));
+  const p1 = euros(price * (0.97 + (idx % 4) * 0.01));
   return [
     { currency: "EUR", price: p0,    tax: null, createdAt: listedAt },
     { currency: "EUR", price: p1,    tax: null, createdAt: after(d1) },
@@ -511,8 +540,9 @@ async function main() {
 
   for (const p of PROPS) {
     const user = users[idx % users.length];
-    // Every 5th listing is "new" (1–10 days old); the rest are established (30–149 days old)
-    const daysAgo = idx % 5 === 0 ? 1 + (idx % 10) : 30 + (idx * 7) % 120;
+    // Prime step (19) against 10-user cycle ensures each user's listings are
+    // spread across all time windows, not clustered together.
+    const daysAgo = 1 + (idx * 19) % 135;
     const createdAt = new Date(now - daysAgo * MS_PER_DAY);
     const activeUntil = new Date(createdAt.getTime() + 8 * 30 * MS_PER_DAY);
     const latStr  = (p.lat  + (idx % 9) * 0.0004).toFixed(6);
@@ -586,7 +616,7 @@ async function main() {
   // Land and parking
   for (const p of LAND_PARKING) {
     const user = users[idx % users.length];
-    const daysAgo = idx % 5 === 0 ? 1 + (idx % 10) : 30 + (idx * 7) % 120;
+    const daysAgo = 1 + (idx * 19) % 135;
     const createdAt  = new Date(now - daysAgo * MS_PER_DAY);
     const activeUntil = new Date(createdAt.getTime() + 8 * 30 * MS_PER_DAY);
     const latStr  = (p.lat  + (idx % 9) * 0.0004).toFixed(6);
