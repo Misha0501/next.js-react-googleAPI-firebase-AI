@@ -1,11 +1,14 @@
 "use client";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { ListingItem } from "@/app/components/ListingItem";
+import {
+  ListingItem,
+  ListingItemSkeleton,
+} from "@/app/components/ListingItem";
 import { usePropertyListing } from "@/providers/Listing";
 import { useAuthContext } from "@/app/context/AuthContext";
 import { Listing, SavedListing } from "@/types";
 import { NO_MAX } from "@/app/lib/constants/filters";
-import { CircularProgress, Pagination } from "@mui/material";
+import { Pagination } from "@mui/material";
 import { useSavedListings } from "@/providers/SavedListings";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
@@ -17,6 +20,8 @@ type Props = {
 
 const LISTINGS_PAGE_SIZE = 16;
 const MAX_LISTINGS_PAGE = 1000000;
+const EAGER_LISTING_ITEMS = 4;
+const SKELETON_LISTING_ITEMS = 8;
 
 const getPageFromSearchParams = (params: { get: (key: string) => string | null }) => {
   const page = Number(params.get("page"));
@@ -117,6 +122,7 @@ export const ListingsMain = ({ searchParams, listingType, locality }: Props ) =>
     if (!listingsData) return 0;
     return Math.ceil(listingsData.total / pageSize);
   }, [listingsData, pageSize]);
+  const shouldShowListingSkeletons = isLoading && !listings.length;
 
   const populatedListings: Listing[] = useMemo(() => {
     if (!savedListings?.length) return listings;
@@ -166,7 +172,6 @@ export const ListingsMain = ({ searchParams, listingType, locality }: Props ) =>
     <div className="min-w-0 flex-1">
       <div className="flex flex-row justify-between">
         <>
-          {isLoading && <CircularProgress />}
           {isSuccess && (
             <div>
               <div className={"text-xl mb-12"}>
@@ -178,9 +183,18 @@ export const ListingsMain = ({ searchParams, listingType, locality }: Props ) =>
         </>
       </div>
       <div className="mb-12 grid grid-cols-[repeat(auto-fit,minmax(min(100%,360px),1fr))] gap-8 lg:gap-10">
-        {populatedListings.map((item, index) => (
-          <ListingItem listingItemInitial={item} key={item.id} isLoadingSavedListings={savedListingsIsLoading}/>
-        ))}
+        {shouldShowListingSkeletons
+          ? Array.from({ length: SKELETON_LISTING_ITEMS }).map((_, index) => (
+              <ListingItemSkeleton key={index} />
+            ))
+          : populatedListings.map((item, index) => (
+              <ListingItem
+                listingItemInitial={item}
+                key={item.id}
+                isLoadingSavedListings={savedListingsIsLoading}
+                lazy={index >= EAGER_LISTING_ITEMS}
+              />
+            ))}
       </div>
       <Pagination
         shape="rounded"
