@@ -12,53 +12,62 @@ function pool(dir, prefix, count) {
 
 const IMG = {
   aptExt:   pool("exteriors",       "apartment",   65),
-  hseExt:   pool("house-exteriors", "house",       54),
-  vilExt:   pool("villa-exteriors", "villa",       50),
+  hseExt:   pool("house-exteriors", "house",       39),
   living:   pool("living-rooms",    "living-room", 62),
   kitchen:  pool("kitchens",        "kitchen",     69),
   bedroom:  pool("bedrooms",        "bedroom",     64),
   bathroom: pool("bathrooms",       "bathroom",    68),
   balcony:  pool("balconies",       "balcony",     49),
   aerial:   pool("aerial",          "aerial",      53),
+  land:     pool("land",            "land",        15),
+  parking:  pool("parking",         "parking",     12),
 };
 
 // Exterior counters — minimise reuse across listings
-let aptExtIdx = 0, hseExtIdx = 0, vilExtIdx = 0;
+let aptExtIdx = 0, hseExtIdx = 0, landIdx = 0, parkingIdx = 0;
 
 function exterior(sub) {
-  if (sub === "villa") return IMG.vilExt[vilExtIdx++ % IMG.vilExt.length];
-  if (sub === "house") return IMG.hseExt[hseExtIdx++ % IMG.hseExt.length];
+  // villas use house-exteriors (villa-exteriors pool not used in seed)
+  if (sub === "house" || sub === "villa") return IMG.hseExt[hseExtIdx++ % IMG.hseExt.length];
   return IMG.aptExt[aptExtIdx++ % IMG.aptExt.length];
 }
 
-// Image count: 10%→1, 15%→2, 25%→3, 50%→4  (based on listingIdx 0-99)
+// Image count: 10%→1, 15%→2, 25%→3, 50%→4  (based on listingIdx 0-149)
 function imageCount(idx) {
-  if (idx < 10) return 1;
-  if (idx < 25) return 2;
-  if (idx < 50) return 3;
+  if (idx < 15) return 1;
+  if (idx < 38) return 2;
+  if (idx < 75) return 3;
   return 4;
 }
 
-function buildImages(sub, idx) {
-  const ext = exterior(sub);
+function buildImages(sub, idx, hasBalcony) {
+  // Land and parking: always exactly 1 unique image from dedicated pools
+  if (sub === "land")    { const img = IMG.land[landIdx++       % IMG.land.length];    return [{ url: img, imagePath: img, positionInListing: 0 }]; }
+  if (sub === "parking") { const img = IMG.parking[parkingIdx++ % IMG.parking.length]; return [{ url: img, imagePath: img, positionInListing: 0 }]; }
+
+  const ext   = exterior(sub);
   const count = imageCount(idx);
-  const imgs = [{ url: ext, imagePath: ext, positionInListing: 0 }];
+  const imgs  = [{ url: ext, imagePath: ext, positionInListing: 0 }];
   if (count === 1) return imgs;
 
   const lr = IMG.living[idx % IMG.living.length];
   imgs.push({ url: lr, imagePath: lr, positionInListing: 1 });
   if (count === 2) return imgs;
 
-  const slot2 = idx % 2 === 0 ? IMG.kitchen[idx % 70] : IMG.bedroom[idx % 70];
+  const slot2 = idx % 2 === 0 ? IMG.kitchen[idx % IMG.kitchen.length] : IMG.bedroom[idx % IMG.bedroom.length];
   imgs.push({ url: slot2, imagePath: slot2, positionInListing: 2 });
   if (count === 3) return imgs;
 
+  // Slot 3: balcony if the property has one, otherwise vary by type
   let slot3;
-  const r = idx % 4;
-  if (r === 0) slot3 = IMG.bathroom[idx % 70];
-  else if (r === 1) slot3 = IMG.bedroom[(idx + 5) % 70];
-  else if (r === 2) slot3 = IMG.kitchen[(idx + 5) % 70];
-  else slot3 = (sub === "house" || sub === "villa") ? IMG.balcony[idx % IMG.balcony.length] : IMG.aerial[idx % IMG.aerial.length];
+  if (hasBalcony) {
+    slot3 = IMG.balcony[idx % IMG.balcony.length];
+  } else {
+    const r = idx % 3;
+    if (r === 0) slot3 = IMG.bathroom[idx % IMG.bathroom.length];
+    else if (r === 1) slot3 = IMG.bedroom[(idx + 5) % IMG.bedroom.length];
+    else slot3 = IMG.kitchen[(idx + 5) % IMG.kitchen.length];
+  }
   imgs.push({ url: slot3, imagePath: slot3, positionInListing: 3 });
   return imgs;
 }
@@ -127,6 +136,23 @@ function buildPriceHistory(price, idx, listedAt) {
 // ── Description & key points ──────────────────────────────────────────────────
 
 function buildDescription(p) {
+  if (p.sub === "land") {
+    const use = p.zone ? p.zone : "residential or investment";
+    return (
+      `Building plot for sale in ${p.nbhd}, ${p.city}. ` +
+      `The land spans ${p.area} sqm and is suitable for ${use} development. ` +
+      `Fully regulated with all utilities available nearby. ` +
+      `Prime location in ${p.nbhd} with excellent transport links and infrastructure.`
+    );
+  }
+  if (p.sub === "parking") {
+    return (
+      `Parking space for sale in ${p.nbhd}, ${p.city}. ` +
+      `Secure ${p.covered ? "covered " : ""}parking spot of ${p.area} sqm, ` +
+      `located in a ${p.indoor ? "underground garage" : "surface car park"} with 24/7 access. ` +
+      `Ideal for residents and investors in ${p.nbhd}.`
+    );
+  }
   const type  = p.sub === "villa" ? "villa" : p.sub === "house" ? "house" : "apartment";
   const action = p.lt === "RENT" ? "rent" : "sale";
   const balcony = p.aOut  ? ` with a ${p.aOut} sqm balcony` : "";
@@ -147,6 +173,20 @@ function buildDescription(p) {
 }
 
 function buildKeyPoints(p) {
+  if (p.sub === "land") {
+    return [
+      ["Land area",    `${p.area} sqm of regulated land ready for development.`],
+      ["Prime location", `Located in ${p.nbhd}, ${p.city} — well connected and in demand.`],
+      ["Utilities",    "Water, electricity and road access available at the plot boundary."],
+    ];
+  }
+  if (p.sub === "parking") {
+    return [
+      ["Secure parking", `${p.covered ? "Covered" : "Surface"} parking space with ${p.indoor ? "underground garage" : "barrier"} access.`],
+      ["Prime location",  `Located in ${p.nbhd}, ${p.city} — high-demand area for parking.`],
+      ["Low maintenance", "No maintenance fees beyond standard building costs."],
+    ];
+  }
   const kp = [];
   if (p.aOut)  kp.push(["Outdoor space",      `${p.aOut} sqm balcony or terrace with natural light.`]);
   if (p.park)  kp.push(["Parking included",    `${p.park} dedicated parking space${p.park > 1 ? "s" : ""} included.`]);
@@ -326,6 +366,97 @@ const PROPS = [
   { sub:"apartment", lt:"SELL", city:"Sliven", nbhd:"Center",         street:"ul. Tsar Simeon",      hn:"6",  pc:"8800", lat:42.6861, lng:26.3228, area:78,  aLiv:66,  aOut:6,   aLand:null, aGar:null, rooms:3, bed:2, bath:1, fl:2,  tfl:5,  built:2009, int:"FURNISHED",   upk:"GOOD",      heat:"CENTRAL", park:0, price:68000  },
   { sub:"apartment", lt:"RENT", city:"Sliven", nbhd:"Center",         street:"ul. Tsar Simeon",      hn:"14", pc:"8800", lat:42.6869, lng:26.3236, area:58,  aLiv:50,  aOut:null,aLand:null, aGar:null, rooms:2, bed:1, bath:1, fl:3,  tfl:6,  built:2011, int:"FURNISHED",   upk:"GOOD",      heat:"CENTRAL", park:0, price:320   },
   { sub:"house",     lt:"SELL", city:"Sliven", nbhd:"Center",         street:"ul. Tsar Simeon",      hn:"22", pc:"8800", lat:42.6877, lng:26.3244, area:148, aLiv:122, aOut:22,  aLand:300,  aGar:18,   rooms:4, bed:3, bath:2, fl:null,tfl:2,  built:2006, int:"FURNISHED",   upk:"FAIR",      heat:"BOILER",  park:1, price:155000 },
+
+  // ── Sofia · Oborishte ────────────────────────────────────────────────────────
+  { sub:"apartment", lt:"SELL", city:"Sofia", nbhd:"Oborishte",       street:"ul. Oborishte",        hn:"10", pc:"1504", lat:42.6935, lng:23.3370, area:110, aLiv:95,  aOut:10,  aLand:null, aGar:null, rooms:3, bed:2, bath:2, fl:4,  tfl:7,  built:2016, int:"FURNISHED",   upk:"EXCELLENT", heat:"CENTRAL", park:1, price:268000 },
+  { sub:"apartment", lt:"SELL", city:"Sofia", nbhd:"Oborishte",       street:"ul. Oborishte",        hn:"18", pc:"1504", lat:42.6943, lng:23.3378, area:78,  aLiv:66,  aOut:6,   aLand:null, aGar:null, rooms:3, bed:2, bath:1, fl:2,  tfl:6,  built:2013, int:"FURNISHED",   upk:"GOOD",      heat:"CENTRAL", park:0, price:195000 },
+  { sub:"apartment", lt:"RENT", city:"Sofia", nbhd:"Oborishte",       street:"ul. Oborishte",        hn:"26", pc:"1504", lat:42.6951, lng:23.3386, area:92,  aLiv:79,  aOut:8,   aLand:null, aGar:null, rooms:3, bed:2, bath:1, fl:3,  tfl:8,  built:2015, int:"FURNISHED",   upk:"EXCELLENT", heat:"CENTRAL", park:0, price:1300  },
+  { sub:"house",     lt:"SELL", city:"Sofia", nbhd:"Oborishte",       street:"ul. Oborishte",        hn:"35", pc:"1504", lat:42.6959, lng:23.3394, area:165, aLiv:138, aOut:28,  aLand:380,  aGar:20,   rooms:4, bed:3, bath:2, fl:null,tfl:2,  built:2012, int:"FURNISHED",   upk:"GOOD",      heat:"BOILER",  park:1, price:355000 },
+  { sub:"villa",     lt:"SELL", city:"Sofia", nbhd:"Oborishte",       street:"ul. Oborishte",        hn:"44", pc:"1504", lat:42.6967, lng:23.3402, area:295, aLiv:250, aOut:52,  aLand:780,  aGar:32,   rooms:6, bed:5, bath:3, fl:null,tfl:2,  built:2020, int:"FURNISHED",   upk:"EXCELLENT", heat:"BOILER",  park:2, price:620000 },
+
+  // ── Sofia · Nadezhda ─────────────────────────────────────────────────────────
+  { sub:"apartment", lt:"SELL", city:"Sofia", nbhd:"Nadezhda",        street:"bul. Rositsa",         hn:"5",  pc:"1220", lat:42.7178, lng:23.2889, area:68,  aLiv:58,  aOut:null,aLand:null, aGar:null, rooms:2, bed:1, bath:1, fl:3,  tfl:8,  built:2014, int:"FURNISHED",   upk:"GOOD",      heat:"CENTRAL", park:0, price:108000 },
+  { sub:"apartment", lt:"SELL", city:"Sofia", nbhd:"Nadezhda",        street:"bul. Rositsa",         hn:"13", pc:"1220", lat:42.7186, lng:23.2897, area:52,  aLiv:44,  aOut:null,aLand:null, aGar:null, rooms:2, bed:1, bath:1, fl:2,  tfl:6,  built:2011, int:"FURNISHED",   upk:"GOOD",      heat:"CENTRAL", park:0, price:88000  },
+  { sub:"apartment", lt:"SELL", city:"Sofia", nbhd:"Nadezhda",        street:"bul. Rositsa",         hn:"21", pc:"1220", lat:42.7194, lng:23.2905, area:88,  aLiv:75,  aOut:7,   aLand:null, aGar:null, rooms:3, bed:2, bath:1, fl:5,  tfl:9,  built:2016, int:"FURNISHED",   upk:"EXCELLENT", heat:"CENTRAL", park:1, price:138000 },
+  { sub:"house",     lt:"SELL", city:"Sofia", nbhd:"Nadezhda",        street:"bul. Rositsa",         hn:"30", pc:"1220", lat:42.7202, lng:23.2913, area:145, aLiv:120, aOut:20,  aLand:310,  aGar:16,   rooms:4, bed:3, bath:2, fl:null,tfl:2,  built:2009, int:"FURNISHED",   upk:"GOOD",      heat:"BOILER",  park:1, price:248000 },
+  { sub:"house",     lt:"SELL", city:"Sofia", nbhd:"Nadezhda",        street:"bul. Rositsa",         hn:"38", pc:"1220", lat:42.7210, lng:23.2921, area:188, aLiv:158, aOut:32,  aLand:450,  aGar:20,   rooms:5, bed:4, bath:2, fl:null,tfl:2,  built:2013, int:"FURNISHED",   upk:"EXCELLENT", heat:"BOILER",  park:2, price:298000 },
+
+  // ── Sofia · Geo Milev ────────────────────────────────────────────────────────
+  { sub:"apartment", lt:"SELL", city:"Sofia", nbhd:"Geo Milev",       street:"ul. Kosta Lulchev",    hn:"6",  pc:"1111", lat:42.6922, lng:23.3596, area:82,  aLiv:70,  aOut:7,   aLand:null, aGar:null, rooms:3, bed:2, bath:1, fl:3,  tfl:7,  built:2014, int:"FURNISHED",   upk:"EXCELLENT", heat:"CENTRAL", park:0, price:175000 },
+  { sub:"apartment", lt:"SELL", city:"Sofia", nbhd:"Geo Milev",       street:"ul. Kosta Lulchev",    hn:"14", pc:"1111", lat:42.6930, lng:23.3604, area:105, aLiv:90,  aOut:9,   aLand:null, aGar:null, rooms:3, bed:2, bath:2, fl:5,  tfl:8,  built:2017, int:"FURNISHED",   upk:"EXCELLENT", heat:"CENTRAL", park:1, price:228000 },
+  { sub:"apartment", lt:"RENT", city:"Sofia", nbhd:"Geo Milev",       street:"ul. Kosta Lulchev",    hn:"22", pc:"1111", lat:42.6938, lng:23.3612, area:65,  aLiv:55,  aOut:null,aLand:null, aGar:null, rooms:2, bed:1, bath:1, fl:2,  tfl:6,  built:2012, int:"FURNISHED",   upk:"GOOD",      heat:"CENTRAL", park:0, price:950   },
+  { sub:"house",     lt:"SELL", city:"Sofia", nbhd:"Geo Milev",       street:"ul. Kosta Lulchev",    hn:"31", pc:"1111", lat:42.6946, lng:23.3620, area:158, aLiv:132, aOut:26,  aLand:360,  aGar:18,   rooms:4, bed:3, bath:2, fl:null,tfl:2,  built:2011, int:"FURNISHED",   upk:"GOOD",      heat:"BOILER",  park:1, price:345000 },
+  { sub:"villa",     lt:"SELL", city:"Sofia", nbhd:"Geo Milev",       street:"ul. Kosta Lulchev",    hn:"40", pc:"1111", lat:42.6954, lng:23.3628, area:275, aLiv:235, aOut:48,  aLand:750,  aGar:30,   rooms:6, bed:5, bath:3, fl:null,tfl:2,  built:2019, int:"FURNISHED",   upk:"EXCELLENT", heat:"BOILER",  park:2, price:568000 },
+
+  // ── Plovdiv · Hristo Smirnenski ──────────────────────────────────────────────
+  { sub:"apartment", lt:"SELL", city:"Plovdiv", nbhd:"Hristo Smirnenski", street:"bul. Hristo Smirnenski", hn:"4",  pc:"4006", lat:42.1402, lng:24.7350, area:78,  aLiv:66,  aOut:6,   aLand:null, aGar:null, rooms:3, bed:2, bath:1, fl:2,  tfl:6,  built:2011, int:"FURNISHED",   upk:"GOOD",      heat:"CENTRAL", park:0, price:96000  },
+  { sub:"apartment", lt:"SELL", city:"Plovdiv", nbhd:"Hristo Smirnenski", street:"bul. Hristo Smirnenski", hn:"12", pc:"4006", lat:42.1410, lng:24.7358, area:92,  aLiv:79,  aOut:8,   aLand:null, aGar:null, rooms:3, bed:2, bath:1, fl:4,  tfl:8,  built:2014, int:"FURNISHED",   upk:"EXCELLENT", heat:"CENTRAL", park:0, price:112000 },
+  { sub:"apartment", lt:"SELL", city:"Plovdiv", nbhd:"Hristo Smirnenski", street:"bul. Hristo Smirnenski", hn:"20", pc:"4006", lat:42.1418, lng:24.7366, area:58,  aLiv:50,  aOut:null,aLand:null, aGar:null, rooms:2, bed:1, bath:1, fl:1,  tfl:5,  built:2009, int:"UNFURNISHED",  upk:"FAIR",      heat:"BOILER",  park:0, price:72000  },
+  { sub:"house",     lt:"SELL", city:"Plovdiv", nbhd:"Hristo Smirnenski", street:"bul. Hristo Smirnenski", hn:"29", pc:"4006", lat:42.1426, lng:24.7374, area:148, aLiv:122, aOut:22,  aLand:300,  aGar:16,   rooms:4, bed:3, bath:2, fl:null,tfl:2,  built:2008, int:"FURNISHED",   upk:"GOOD",      heat:"BOILER",  park:1, price:218000 },
+  { sub:"house",     lt:"SELL", city:"Plovdiv", nbhd:"Hristo Smirnenski", street:"bul. Hristo Smirnenski", hn:"37", pc:"4006", lat:42.1434, lng:24.7382, area:178, aLiv:148, aOut:28,  aLand:420,  aGar:20,   rooms:5, bed:4, bath:2, fl:null,tfl:2,  built:2012, int:"FURNISHED",   upk:"EXCELLENT", heat:"BOILER",  park:2, price:272000 },
+
+  // ── Plovdiv · Marasha ────────────────────────────────────────────────────────
+  { sub:"apartment", lt:"SELL", city:"Plovdiv", nbhd:"Marasha",       street:"ul. Han Kubrat",       hn:"5",  pc:"4002", lat:42.1558, lng:24.7550, area:88,  aLiv:75,  aOut:8,   aLand:null, aGar:null, rooms:3, bed:2, bath:1, fl:3,  tfl:7,  built:2015, int:"FURNISHED",   upk:"EXCELLENT", heat:"CENTRAL", park:0, price:118000 },
+  { sub:"apartment", lt:"SELL", city:"Plovdiv", nbhd:"Marasha",       street:"ul. Han Kubrat",       hn:"13", pc:"4002", lat:42.1566, lng:24.7558, area:62,  aLiv:53,  aOut:null,aLand:null, aGar:null, rooms:2, bed:1, bath:1, fl:2,  tfl:5,  built:2012, int:"FURNISHED",   upk:"GOOD",      heat:"CENTRAL", park:0, price:85000  },
+  { sub:"apartment", lt:"RENT", city:"Plovdiv", nbhd:"Marasha",       street:"ul. Han Kubrat",       hn:"21", pc:"4002", lat:42.1574, lng:24.7566, area:75,  aLiv:64,  aOut:6,   aLand:null, aGar:null, rooms:3, bed:2, bath:1, fl:4,  tfl:8,  built:2014, int:"FURNISHED",   upk:"GOOD",      heat:"CENTRAL", park:0, price:600   },
+  { sub:"house",     lt:"SELL", city:"Plovdiv", nbhd:"Marasha",       street:"ul. Han Kubrat",       hn:"30", pc:"4002", lat:42.1582, lng:24.7574, area:162, aLiv:136, aOut:28,  aLand:380,  aGar:18,   rooms:4, bed:3, bath:2, fl:null,tfl:2,  built:2010, int:"FURNISHED",   upk:"GOOD",      heat:"BOILER",  park:1, price:245000 },
+  { sub:"villa",     lt:"SELL", city:"Plovdiv", nbhd:"Marasha",       street:"ul. Han Kubrat",       hn:"39", pc:"4002", lat:42.1590, lng:24.7582, area:248, aLiv:208, aOut:44,  aLand:680,  aGar:28,   rooms:5, bed:4, bath:3, fl:null,tfl:2,  built:2018, int:"FURNISHED",   upk:"EXCELLENT", heat:"BOILER",  park:2, price:368000 },
+
+  // ── Varna · Center ───────────────────────────────────────────────────────────
+  { sub:"apartment", lt:"SELL", city:"Varna", nbhd:"Center",          street:"bul. Slivnitsa",       hn:"3",  pc:"9000", lat:43.2096, lng:27.9107, area:105, aLiv:90,  aOut:9,   aLand:null, aGar:null, rooms:3, bed:2, bath:2, fl:5,  tfl:7,  built:2016, int:"FURNISHED",   upk:"EXCELLENT", heat:"CENTRAL", park:1, price:198000 },
+  { sub:"apartment", lt:"SELL", city:"Varna", nbhd:"Center",          street:"bul. Slivnitsa",       hn:"11", pc:"9000", lat:43.2104, lng:27.9115, area:78,  aLiv:66,  aOut:6,   aLand:null, aGar:null, rooms:3, bed:2, bath:1, fl:3,  tfl:6,  built:2013, int:"FURNISHED",   upk:"GOOD",      heat:"CENTRAL", park:0, price:158000 },
+  { sub:"apartment", lt:"RENT", city:"Varna", nbhd:"Center",          street:"bul. Slivnitsa",       hn:"19", pc:"9000", lat:43.2112, lng:27.9123, area:62,  aLiv:53,  aOut:null,aLand:null, aGar:null, rooms:2, bed:1, bath:1, fl:2,  tfl:5,  built:2014, int:"FURNISHED",   upk:"GOOD",      heat:"CENTRAL", park:0, price:780   },
+  { sub:"house",     lt:"SELL", city:"Varna", nbhd:"Center",          street:"ul. Knyaz Boris I",    hn:"7",  pc:"9000", lat:43.2120, lng:27.9131, area:165, aLiv:138, aOut:28,  aLand:380,  aGar:20,   rooms:4, bed:3, bath:2, fl:null,tfl:2,  built:2011, int:"FURNISHED",   upk:"GOOD",      heat:"BOILER",  park:1, price:328000 },
+  { sub:"villa",     lt:"SELL", city:"Varna", nbhd:"Center",          street:"ul. Knyaz Boris I",    hn:"16", pc:"9000", lat:43.2128, lng:27.9139, area:285, aLiv:242, aOut:52,  aLand:780,  aGar:32,   rooms:6, bed:5, bath:3, fl:null,tfl:2,  built:2019, int:"FURNISHED",   upk:"EXCELLENT", heat:"BOILER",  park:2, price:545000 },
+
+  // ── Varna · Chaika ───────────────────────────────────────────────────────────
+  { sub:"apartment", lt:"SELL", city:"Varna", nbhd:"Chaika",          street:"ul. Chaika",           hn:"4",  pc:"9023", lat:43.2380, lng:27.8750, area:88,  aLiv:75,  aOut:8,   aLand:null, aGar:null, rooms:3, bed:2, bath:1, fl:3,  tfl:7,  built:2014, int:"FURNISHED",   upk:"EXCELLENT", heat:"CENTRAL", park:0, price:148000 },
+  { sub:"apartment", lt:"SELL", city:"Varna", nbhd:"Chaika",          street:"ul. Chaika",           hn:"12", pc:"9023", lat:43.2388, lng:27.8758, area:62,  aLiv:53,  aOut:null,aLand:null, aGar:null, rooms:2, bed:1, bath:1, fl:2,  tfl:6,  built:2011, int:"FURNISHED",   upk:"GOOD",      heat:"CENTRAL", park:0, price:112000 },
+  { sub:"apartment", lt:"SELL", city:"Varna", nbhd:"Chaika",          street:"ul. Chaika",           hn:"20", pc:"9023", lat:43.2396, lng:27.8766, area:115, aLiv:98,  aOut:10,  aLand:null, aGar:null, rooms:4, bed:3, bath:2, fl:6,  tfl:9,  built:2018, int:"FURNISHED",   upk:"EXCELLENT", heat:"CENTRAL", park:1, price:195000 },
+  { sub:"house",     lt:"SELL", city:"Varna", nbhd:"Chaika",          street:"ul. Chaika",           hn:"29", pc:"9023", lat:43.2404, lng:27.8774, area:178, aLiv:150, aOut:30,  aLand:420,  aGar:20,   rooms:5, bed:4, bath:2, fl:null,tfl:2,  built:2013, int:"FURNISHED",   upk:"GOOD",      heat:"BOILER",  park:2, price:358000 },
+  { sub:"villa",     lt:"SELL", city:"Varna", nbhd:"Chaika",          street:"ul. Chaika",           hn:"38", pc:"9023", lat:43.2412, lng:27.8782, area:268, aLiv:228, aOut:48,  aLand:760,  aGar:30,   rooms:6, bed:5, bath:3, fl:null,tfl:2,  built:2020, int:"FURNISHED",   upk:"EXCELLENT", heat:"BOILER",  park:2, price:498000 },
+
+  // ── Burgas · Center ──────────────────────────────────────────────────────────
+  { sub:"apartment", lt:"SELL", city:"Burgas", nbhd:"Center",         street:"bul. Aleko Bogoridi",  hn:"5",  pc:"8000", lat:42.5048, lng:27.4626, area:92,  aLiv:79,  aOut:8,   aLand:null, aGar:null, rooms:3, bed:2, bath:1, fl:4,  tfl:7,  built:2015, int:"FURNISHED",   upk:"EXCELLENT", heat:"CENTRAL", park:0, price:145000 },
+  { sub:"apartment", lt:"SELL", city:"Burgas", nbhd:"Center",         street:"bul. Aleko Bogoridi",  hn:"13", pc:"8000", lat:42.5056, lng:27.4634, area:78,  aLiv:66,  aOut:6,   aLand:null, aGar:null, rooms:3, bed:2, bath:1, fl:2,  tfl:6,  built:2012, int:"FURNISHED",   upk:"GOOD",      heat:"CENTRAL", park:0, price:118000 },
+  { sub:"apartment", lt:"RENT", city:"Burgas", nbhd:"Center",         street:"bul. Aleko Bogoridi",  hn:"21", pc:"8000", lat:42.5064, lng:27.4642, area:58,  aLiv:50,  aOut:null,aLand:null, aGar:null, rooms:2, bed:1, bath:1, fl:3,  tfl:8,  built:2013, int:"FURNISHED",   upk:"GOOD",      heat:"CENTRAL", park:0, price:620   },
+  { sub:"house",     lt:"SELL", city:"Burgas", nbhd:"Center",         street:"ul. Lermontov",        hn:"6",  pc:"8000", lat:42.5072, lng:27.4650, area:165, aLiv:138, aOut:28,  aLand:380,  aGar:20,   rooms:4, bed:3, bath:2, fl:null,tfl:2,  built:2010, int:"FURNISHED",   upk:"GOOD",      heat:"BOILER",  park:1, price:272000 },
+  { sub:"villa",     lt:"SELL", city:"Burgas", nbhd:"Center",         street:"ul. Lermontov",        hn:"15", pc:"8000", lat:42.5080, lng:27.4658, area:245, aLiv:208, aOut:44,  aLand:680,  aGar:28,   rooms:5, bed:4, bath:3, fl:null,tfl:2,  built:2018, int:"FURNISHED",   upk:"EXCELLENT", heat:"BOILER",  park:2, price:415000 },
+
+  // ── Burgas · Sarafovo ────────────────────────────────────────────────────────
+  { sub:"apartment", lt:"SELL", city:"Burgas", nbhd:"Sarafovo",       street:"ul. Yanko Komitov",    hn:"4",  pc:"8014", lat:42.5370, lng:27.5180, area:68,  aLiv:58,  aOut:null,aLand:null, aGar:null, rooms:2, bed:1, bath:1, fl:2,  tfl:5,  built:2010, int:"FURNISHED",   upk:"GOOD",      heat:"CENTRAL", park:0, price:78000  },
+  { sub:"house",     lt:"SELL", city:"Burgas", nbhd:"Sarafovo",       street:"ul. Yanko Komitov",    hn:"12", pc:"8014", lat:42.5378, lng:27.5188, area:148, aLiv:122, aOut:22,  aLand:320,  aGar:18,   rooms:4, bed:3, bath:2, fl:null,tfl:2,  built:2008, int:"FURNISHED",   upk:"GOOD",      heat:"BOILER",  park:1, price:185000 },
+  { sub:"villa",     lt:"SELL", city:"Burgas", nbhd:"Sarafovo",       street:"ul. Yanko Komitov",    hn:"21", pc:"8014", lat:42.5386, lng:27.5196, area:248, aLiv:210, aOut:44,  aLand:650,  aGar:26,   rooms:5, bed:4, bath:3, fl:null,tfl:2,  built:2016, int:"FURNISHED",   upk:"EXCELLENT", heat:"BOILER",  park:2, price:348000 },
+
+  // ── Ruse · Zdravets ──────────────────────────────────────────────────────────
+  { sub:"apartment", lt:"SELL", city:"Ruse", nbhd:"Zdravets",         street:"bul. Lipnik",          hn:"5",  pc:"7014", lat:43.8390, lng:25.9900, area:78,  aLiv:66,  aOut:6,   aLand:null, aGar:null, rooms:3, bed:2, bath:1, fl:2,  tfl:6,  built:2009, int:"FURNISHED",   upk:"GOOD",      heat:"CENTRAL", park:0, price:72000  },
+  { sub:"apartment", lt:"SELL", city:"Ruse", nbhd:"Zdravets",         street:"bul. Lipnik",          hn:"13", pc:"7014", lat:43.8398, lng:25.9908, area:58,  aLiv:50,  aOut:null,aLand:null, aGar:null, rooms:2, bed:1, bath:1, fl:3,  tfl:7,  built:2011, int:"FURNISHED",   upk:"GOOD",      heat:"CENTRAL", park:0, price:55000  },
+  { sub:"house",     lt:"SELL", city:"Ruse", nbhd:"Zdravets",         street:"bul. Lipnik",          hn:"22", pc:"7014", lat:43.8406, lng:25.9916, area:145, aLiv:120, aOut:20,  aLand:290,  aGar:16,   rooms:4, bed:3, bath:2, fl:null,tfl:2,  built:2006, int:"FURNISHED",   upk:"GOOD",      heat:"BOILER",  park:1, price:162000 },
+  { sub:"villa",     lt:"SELL", city:"Ruse", nbhd:"Zdravets",         street:"bul. Lipnik",          hn:"31", pc:"7014", lat:43.8414, lng:25.9924, area:228, aLiv:192, aOut:38,  aLand:580,  aGar:26,   rooms:5, bed:4, bath:3, fl:null,tfl:2,  built:2015, int:"FURNISHED",   upk:"EXCELLENT", heat:"BOILER",  park:2, price:285000 },
+
+  // ── Stara Zagora ─────────────────────────────────────────────────────────────
+  { sub:"apartment", lt:"SELL", city:"Stara Zagora", nbhd:"Center",   street:"bul. Tsar Simeon Veliki", hn:"8", pc:"6000", lat:42.4240, lng:25.6344, area:88,  aLiv:75,  aOut:7,   aLand:null, aGar:null, rooms:3, bed:2, bath:1, fl:3,  tfl:7,  built:2013, int:"FURNISHED",   upk:"GOOD",      heat:"CENTRAL", park:0, price:88000  },
+  { sub:"apartment", lt:"SELL", city:"Stara Zagora", nbhd:"Center",   street:"bul. Tsar Simeon Veliki", hn:"16",pc:"6000", lat:42.4248, lng:25.6352, area:62,  aLiv:53,  aOut:null,aLand:null, aGar:null, rooms:2, bed:1, bath:1, fl:2,  tfl:6,  built:2010, int:"FURNISHED",   upk:"GOOD",      heat:"CENTRAL", park:0, price:68000  },
+  { sub:"house",     lt:"SELL", city:"Stara Zagora", nbhd:"Tri Chuchura", street:"ul. Ivan Vazov",   hn:"4",  pc:"6008", lat:42.4156, lng:25.6220, area:145, aLiv:120, aOut:20,  aLand:295,  aGar:16,   rooms:4, bed:3, bath:2, fl:null,tfl:2,  built:2007, int:"FURNISHED",   upk:"GOOD",      heat:"BOILER",  park:1, price:172000 },
+  { sub:"apartment", lt:"RENT", city:"Stara Zagora", nbhd:"Kazanski",  street:"ul. Geo Milev",       hn:"3",  pc:"6010", lat:42.4195, lng:25.6480, area:72,  aLiv:62,  aOut:6,   aLand:null, aGar:null, rooms:3, bed:2, bath:1, fl:4,  tfl:8,  built:2012, int:"FURNISHED",   upk:"GOOD",      heat:"CENTRAL", park:0, price:420   },
+];
+
+// ── Land plots & parking spaces ───────────────────────────────────────────────
+
+const LAND_PARKING = [
+  // 5 land plots — price = area × EUR/sqm; each gets 1 unique image from land pool
+  { sub:"land",    lt:"SELL", city:"Sofia",    nbhd:"Lozenets",        street:"ul. Cherni Vrah",      hn:"6",  pc:"1407", lat:42.6800, lng:23.3200, area:500, aLiv:null,aOut:null,aLand:null,aGar:null, rooms:null,bed:null,bath:null,fl:null,tfl:null,built:null,int:null,upk:null,heat:null,park:null, price:200000 },
+  { sub:"land",    lt:"SELL", city:"Plovdiv",  nbhd:"Kapana",          street:"ul. Zlatarska",        hn:"40", pc:"4000", lat:42.1510, lng:24.7510, area:600, aLiv:null,aOut:null,aLand:null,aGar:null, rooms:null,bed:null,bath:null,fl:null,tfl:null,built:null,int:null,upk:null,heat:null,park:null, price:72000  },
+  { sub:"land",    lt:"SELL", city:"Varna",    nbhd:"Sea Garden",      street:"ul. Preslav",          hn:"50", pc:"9000", lat:43.2065, lng:27.9230, area:800, aLiv:null,aOut:null,aLand:null,aGar:null, rooms:null,bed:null,bath:null,fl:null,tfl:null,built:null,int:null,upk:null,heat:null,park:null, price:160000 },
+  { sub:"land",    lt:"SELL", city:"Sofia",    nbhd:"Vitosha",         street:"ul. Simeonsko shose",  hn:"52", pc:"1700", lat:42.6455, lng:23.3030, area:350, aLiv:null,aOut:null,aLand:null,aGar:null, rooms:null,bed:null,bath:null,fl:null,tfl:null,built:null,int:null,upk:null,heat:null,park:null, price:175000 },
+  { sub:"land",    lt:"SELL", city:"Burgas",   nbhd:"Lazur",           street:"ul. Koprivshtitsa",    hn:"35", pc:"8001", lat:42.5110, lng:27.4795, area:700, aLiv:null,aOut:null,aLand:null,aGar:null, rooms:null,bed:null,bath:null,fl:null,tfl:null,built:null,int:null,upk:null,heat:null,park:null, price:63000  },
+
+  // 5 parking spaces — each gets 1 unique image from parking pool
+  { sub:"parking", lt:"SELL", city:"Sofia",    nbhd:"Center",          street:"bul. Vitosha",         hn:"12", pc:"1000", lat:42.6980, lng:23.3220, area:25,  aLiv:null,aOut:null,aLand:null,aGar:null, rooms:null,bed:null,bath:null,fl:null,tfl:null,built:null,int:null,upk:null,heat:null,park:null, price:40000, covered:true, indoor:true  },
+  { sub:"parking", lt:"SELL", city:"Sofia",    nbhd:"Lozenets",        street:"ul. Krichim",          hn:"8",  pc:"1164", lat:42.6750, lng:23.3245, area:18,  aLiv:null,aOut:null,aLand:null,aGar:null, rooms:null,bed:null,bath:null,fl:null,tfl:null,built:null,int:null,upk:null,heat:null,park:null, price:25000, covered:true, indoor:false },
+  { sub:"parking", lt:"SELL", city:"Varna",    nbhd:"Sea Garden",      street:"ul. Preslav",          hn:"4",  pc:"9000", lat:43.2032, lng:27.9195, area:20,  aLiv:null,aOut:null,aLand:null,aGar:null, rooms:null,bed:null,bath:null,fl:null,tfl:null,built:null,int:null,upk:null,heat:null,park:null, price:16000, covered:false,indoor:false },
+  { sub:"parking", lt:"SELL", city:"Plovdiv",  nbhd:"Center",          street:"ul. Hristo Botev",     hn:"8",  pc:"4000", lat:43.1455, lng:24.7505, area:16,  aLiv:null,aOut:null,aLand:null,aGar:null, rooms:null,bed:null,bath:null,fl:null,tfl:null,built:null,int:null,upk:null,heat:null,park:null, price:8000,  covered:false,indoor:false },
+  { sub:"parking", lt:"SELL", city:"Sofia",    nbhd:"Mladost",         street:"bul. Aleksandar Malinov",hn:"16",pc:"1715", lat:42.6260, lng:23.3800, area:22,  aLiv:null,aOut:null,aLand:null,aGar:null, rooms:null,bed:null,bath:null,fl:null,tfl:null,built:null,int:null,upk:null,heat:null,park:null, price:20000, covered:true, indoor:true  },
 ];
 
 // ── Delete all data ───────────────────────────────────────────────────────────
@@ -386,16 +517,19 @@ async function main() {
     const activeUntil = new Date(createdAt.getTime() + 8 * 30 * MS_PER_DAY);
     const latStr  = (p.lat  + (idx % 9) * 0.0004).toFixed(6);
     const lngStr  = (p.lng  + (idx % 9) * 0.0004).toFixed(6);
-    const propType = p.sub === "apartment" ? "APARTMENT" : "HOUSE";
+    const propType = p.sub === "land"    ? "LAND"
+                   : p.sub === "parking" ? "PARKING"
+                   : p.sub === "apartment" ? "APARTMENT"
+                   : "HOUSE";
 
     await prisma.listing.create({
       data: {
         applicationUserId: user.id,
         listingType:    p.lt,
         propertyType:   propType,
-        interiorType:   p.int,
-        upkeepType:     p.upk,
-        heatingType:    p.heat,
+        interiorType:   p.int ?? null,
+        upkeepType:     p.upk ?? null,
+        heatingType:    p.heat ?? null,
         description:    buildDescription(p),
         price:          p.price,
         currency:       "EUR",
@@ -435,7 +569,78 @@ async function main() {
           }],
         },
         ListingImage: {
-          create: buildImages(p.sub, idx),
+          create: buildImages(p.sub, idx, !!p.aOut),
+        },
+        ListingPrice: {
+          create: buildPriceHistory(p.price, idx, createdAt),
+        },
+        listingDescriptionKeyPoints: {
+          create: buildKeyPoints(p).map(([title, description]) => ({ title, description })),
+        },
+      },
+    });
+
+    idx++;
+  }
+
+  // Land and parking
+  for (const p of LAND_PARKING) {
+    const user = users[idx % users.length];
+    const daysAgo = idx % 5 === 0 ? 1 + (idx % 10) : 30 + (idx * 7) % 120;
+    const createdAt  = new Date(now - daysAgo * MS_PER_DAY);
+    const activeUntil = new Date(createdAt.getTime() + 8 * 30 * MS_PER_DAY);
+    const latStr  = (p.lat  + (idx % 9) * 0.0004).toFixed(6);
+    const lngStr  = (p.lng  + (idx % 9) * 0.0004).toFixed(6);
+    const propType = p.sub === "land" ? "LAND" : "PARKING";
+
+    await prisma.listing.create({
+      data: {
+        applicationUserId: user.id,
+        listingType:    p.lt,
+        propertyType:   propType,
+        interiorType:   null,
+        upkeepType:     null,
+        heatingType:    null,
+        description:    buildDescription(p),
+        price:          p.price,
+        currency:       "EUR",
+        locality:       p.city,
+        areaTotal:      p.area     ?? null,
+        areaLiving:     null,
+        areaLand:       null,
+        areaOutside:    null,
+        areaGarage:     null,
+        streetName:     p.street,
+        houseNumber:    p.hn,
+        postalCode:     p.pc,
+        latitude:       latStr,
+        longitude:      lngStr,
+        rooms:          null,
+        bedrooms:       null,
+        bathrooms:      null,
+        parking:        null,
+        constructedYear: null,
+        floorNumber:    null,
+        numberOfFloorsProperty: null,
+        numberOfFloorsCommon:   null,
+        active:         true,
+        activeUntil,
+        createdAt,
+        Address: {
+          create: [{
+            streetNumber:               p.hn,
+            route:                      p.street,
+            administrativeAreaLevelOne: "Bulgaria",
+            locality:                   p.city,
+            postalCode:                 p.pc,
+            neighborhood:               p.nbhd,
+            latitude:                   latStr,
+            longitude:                  lngStr,
+            showExactLocation:          true,
+          }],
+        },
+        ListingImage: {
+          create: buildImages(p.sub, idx, false),
         },
         ListingPrice: {
           create: buildPriceHistory(p.price, idx, createdAt),
@@ -450,20 +655,23 @@ async function main() {
   }
 
   // Summary
-  const apts   = PROPS.filter(p => p.sub === "apartment").length;
-  const houses = PROPS.filter(p => p.sub === "house").length;
-  const villas = PROPS.filter(p => p.sub === "villa").length;
-  const sells  = PROPS.filter(p => p.lt === "SELL").length;
-  const rents  = PROPS.filter(p => p.lt === "RENT").length;
+  const allProps = [...PROPS, ...LAND_PARKING];
+  const apts     = allProps.filter(p => p.sub === "apartment").length;
+  const houses   = allProps.filter(p => p.sub === "house").length;
+  const villas   = allProps.filter(p => p.sub === "villa").length;
+  const lands    = allProps.filter(p => p.sub === "land").length;
+  const parkings = allProps.filter(p => p.sub === "parking").length;
+  const sells    = allProps.filter(p => p.lt === "SELL").length;
+  const rents    = allProps.filter(p => p.lt === "RENT").length;
 
   console.log(`\nCreated ${idx} listings:`);
-  console.log(`  ${apts} apartments, ${houses} houses, ${villas} villas`);
+  console.log(`  ${apts} apartments, ${houses} houses, ${villas} villas, ${lands} land plots, ${parkings} parking spaces`);
   console.log(`  ${sells} for sale, ${rents} for rent`);
   console.log(`  Across ${users.length} users`);
 
-  const cities = [...new Set(PROPS.map(p => p.city))];
+  const cities = [...new Set(allProps.map(p => p.city))];
   for (const city of cities) {
-    const count = PROPS.filter(p => p.city === city).length;
+    const count = allProps.filter(p => p.city === city).length;
     console.log(`  ${city}: ${count}`);
   }
 }
