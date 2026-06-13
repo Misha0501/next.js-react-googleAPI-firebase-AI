@@ -170,58 +170,59 @@ const LISTING_SORT_OPTIONS = [
   "priceAsc",
 ];
 
+// Extracts first element and converts to number; used for single numeric query params.
+const numericParam = (min: number, max: number) =>
+  searchParamSchema
+    .max(1)
+    .transform((arr) => Number(arr[0] ?? ""))
+    .pipe(z.number().min(min).max(max))
+    .optional();
+
+// Extracts first element as string; used for single string query params.
+const stringParam = () =>
+  searchParamSchema
+    .max(1)
+    .transform((arr) => arr[0] ?? "")
+    .pipe(z.string())
+    .optional();
+
 export const listingsSearchParamSchema = z.object({
-  page: searchParamSchema
-    .max(1)
-    .pipe(z.coerce.number().min(0).max(1000000))
-    .optional(),
-  pageSize: searchParamSchema
-    .max(1)
-    .pipe(z.coerce.number().min(0).max(100))
-    .optional(),
-  sortBy: searchParamSchema
-    .max(1)
-    .pipe(
-      z.coerce.string().refine(
-        (value) => LISTING_SORT_OPTIONS.includes(value),
-        (value) => ({
-          message: `Invalid sort input: ${value}. Allowed values: ${LISTING_SORT_OPTIONS}`,
-        }),
-      ),
-    )
-    .optional(),
-  locality: searchParamSchema.pipe(z.coerce.string()).optional(),
+  page: numericParam(0, 1000000),
+  pageSize: numericParam(0, 100),
+  sortBy: stringParam().superRefine((value, ctx) => {
+    if (value !== undefined && !LISTING_SORT_OPTIONS.includes(value)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: `Invalid sort input: ${value}. Allowed values: ${LISTING_SORT_OPTIONS}`,
+      });
+    }
+  }),
+  locality: stringParam(),
   heatingType: searchParamSchema
     .min(1)
     .max(HEATING_TYPES.length)
     .refine(
       (userInputArray) =>
         userInputArray.every((el) => HEATING_TYPES.includes(el as any)),
-      (val) => ({
-        message: `Invalid heating type input: ${val}. Allowed values: ${HEATING_TYPES}`,
-      }),
+      { message: `Invalid heating type input. Allowed values: ${HEATING_TYPES}` },
     )
     .optional(),
-    currencyType: searchParamSchema
-        .min(1)
-        .max(CURRENCIES.length)
-        .refine(
-            (userInputArray) =>
-                userInputArray.every((el) => CURRENCIES.includes(el as any)),
-            (val) => ({
-                message: `Invalid listing type input: ${val}. Allowed values: ${CURRENCIES}`,
-            }),
-        )
-        .optional(),
+  currencyType: searchParamSchema
+    .min(1)
+    .max(CURRENCIES.length)
+    .refine(
+      (userInputArray) =>
+        userInputArray.every((el) => CURRENCIES.includes(el as any)),
+      { message: `Invalid listing type input. Allowed values: ${CURRENCIES}` },
+    )
+    .optional(),
   listingType: searchParamSchema
     .min(1)
     .max(LISTING_TYPES.length)
     .refine(
       (userInputArray) =>
         userInputArray.every((el) => LISTING_TYPES.includes(el as any)),
-      (val) => ({
-        message: `Invalid listing type input: ${val}. Allowed values: ${LISTING_TYPES}`,
-      }),
+      { message: `Invalid listing type input. Allowed values: ${LISTING_TYPES}` },
     )
     .optional(),
   interiorType: searchParamSchema
@@ -230,128 +231,63 @@ export const listingsSearchParamSchema = z.object({
     .refine(
       (userInputArray) =>
         userInputArray.every((el) => INTERIOR_TYPES.includes(el as any)),
-      (val) => ({
-        message: `Invalid interior type input: ${val}. Allowed values: ${INTERIOR_TYPES}`,
-      }),
+      { message: `Invalid interior type input. Allowed values: ${INTERIOR_TYPES}` },
     )
     .optional(),
   propertyType: searchParamSchema
-      .min(1)
-      .max(PROPERTY_TYPES.length)
-      .refine(
-          (userInputArray) =>
-              userInputArray.every((el) => PROPERTY_TYPES.includes(el as any)),
-          (val) => ({
-              message: `Invalid interior type input: ${val}. Allowed values: ${PROPERTY_TYPES}`,
-          }),
-      )
-      .optional(),
+    .min(1)
+    .max(PROPERTY_TYPES.length)
+    .refine(
+      (userInputArray) =>
+        userInputArray.every((el) => PROPERTY_TYPES.includes(el as any)),
+      { message: `Invalid interior type input. Allowed values: ${PROPERTY_TYPES}` },
+    )
+    .optional(),
   upkeepType: searchParamSchema
     .min(1)
     .max(UPKEEP_TYPES.length)
     .refine(
       (userInputArray) =>
         userInputArray.every((el) => UPKEEP_TYPES.includes(el as any)),
-      (val) => ({
-        message: `Invalid upkeep type input: ${val}. Allowed values: ${UPKEEP_TYPES}`,
-      }),
+      { message: `Invalid upkeep type input. Allowed values: ${UPKEEP_TYPES}` },
     )
     .optional(),
-    priceMin: searchParamSchema
-        .max(1)
-        .pipe(z.coerce.number().min(0).max(1000000000))
-        .optional(),
-    priceMax: searchParamSchema
-        .max(1)
-        .pipe(z.coerce.number().min(0).max(1000000000))
-        .optional(),
-  areaTotalMin: searchParamSchema
-    .max(1)
-    .pipe(z.coerce.number().min(0).max(1000000))
-    .optional(),
-  areaTotalMax: searchParamSchema
-    .max(1)
-    .pipe(z.coerce.number().min(0).max(1000000))
-    .optional(),
-  areaLivingMin: searchParamSchema
-    .max(1)
-    .pipe(z.coerce.number().min(0).max(1000000))
-    .optional(),
-  areaLivingMax: searchParamSchema
-    .max(1)
-    .pipe(z.coerce.number().min(0).max(1000000))
-    .optional(),
-  areaLandMin: searchParamSchema
-    .max(1)
-    .pipe(z.coerce.number().min(0).max(1000000))
-    .optional(),
-  areaLandMax: searchParamSchema
-    .max(1)
-    .pipe(z.coerce.number().min(0).max(1000000))
-    .optional(),
-  areaOutsideMin: searchParamSchema
-    .max(1)
-    .pipe(z.coerce.number().min(0).max(1000000))
-    .optional(),
-  areaOutsideMax: searchParamSchema
-    .max(1)
-    .pipe(z.coerce.number().min(0).max(1000000))
-    .optional(),
-  roomsMin: searchParamSchema
-    .max(1)
-    .pipe(z.coerce.number().min(0).max(1000000))
-    .optional(),
-  roomsMax: searchParamSchema
-    .max(1)
-    .pipe(z.coerce.number().min(0).max(1000000))
-    .optional(),
-  bathroomsMin: searchParamSchema
-    .max(1)
-    .pipe(z.coerce.number().min(0).max(1000000))
-    .optional(),
-  bathroomsMax: searchParamSchema
-    .max(1)
-    .pipe(z.coerce.number().min(0).max(1000000))
-    .optional(),
-  bedroomsMin: searchParamSchema
-    .max(1)
-    .pipe(z.coerce.number().min(0).max(1000000))
-    .optional(),
-  bedroomsMax: searchParamSchema
-    .max(1)
-    .pipe(z.coerce.number().min(0).max(1000000))
-    .optional(),
-  parkingMin: searchParamSchema
-    .max(1)
-    .pipe(z.coerce.number().min(0).max(1000000))
-    .optional(),
-  parkingMax: searchParamSchema
-    .max(1)
-    .pipe(z.coerce.number().min(0).max(1000000))
-    .optional(),
-  listedSince: searchParamSchema
-    .max(1)
-    .pipe(z.coerce.number().min(0).max(1000000))
-    .optional(),
+  priceMin: numericParam(0, 1000000000),
+  priceMax: numericParam(0, 1000000000),
+  areaTotalMin: numericParam(0, 1000000),
+  areaTotalMax: numericParam(0, 1000000),
+  areaLivingMin: numericParam(0, 1000000),
+  areaLivingMax: numericParam(0, 1000000),
+  areaLandMin: numericParam(0, 1000000),
+  areaLandMax: numericParam(0, 1000000),
+  areaOutsideMin: numericParam(0, 1000000),
+  areaOutsideMax: numericParam(0, 1000000),
+  roomsMin: numericParam(0, 1000000),
+  roomsMax: numericParam(0, 1000000),
+  bathroomsMin: numericParam(0, 1000000),
+  bathroomsMax: numericParam(0, 1000000),
+  bedroomsMin: numericParam(0, 1000000),
+  bedroomsMax: numericParam(0, 1000000),
+  parkingMin: numericParam(0, 1000000),
+  parkingMax: numericParam(0, 1000000),
+  listedSince: numericParam(0, 1000000),
   constructedYearMin: searchParamSchema
     .max(1)
+    .transform((arr) => arr[0] ?? "")
     .pipe(
-      z.coerce.string().refine(
+      z.string().refine(
         (v) => isValidDateFromString(v),
-        (val) => ({
-          message: `Invalid plain date: ${val}, should be the next format 2023-12-31`,
-        }),
+        { message: "Invalid plain date, should be the next format 2023-12-31" },
       ),
     )
     .optional(),
   constructedYearMax: searchParamSchema
     .max(1)
+    .transform((arr) => arr[0] ?? "")
     .pipe(
-      z.coerce.string().refine(
+      z.string().refine(
         (v) => isValidDateFromString(v),
-        (val) => ({
-          message: `Invalid plain date: ${val}, should be the next format 2023-12-31`,
-        }),
+        { message: "Invalid plain date, should be the next format 2023-12-31" },
       ),
     )
     .optional(),
