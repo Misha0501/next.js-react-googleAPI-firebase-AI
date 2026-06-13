@@ -16,6 +16,8 @@ import {
 import { ApplicationUser } from "@/types";
 import { handleAPIError } from "@/app/lib/api/handleError";
 
+const DEFAULT_LISTINGS_PAGE_SIZE = 16;
+
 /**
  * GET Route to retrieve listings.
  * @param req
@@ -29,7 +31,7 @@ export async function GET(req: NextRequest) {
     let prismaQueryConditions = buildPrismaQueryConditions(params);
 
     const page = params.page || 1;
-    const pageSize = params.pageSize || 25;
+    const pageSize = params.pageSize || DEFAULT_LISTINGS_PAGE_SIZE;
 
     const offsetRecords = (page - 1) * pageSize;
 

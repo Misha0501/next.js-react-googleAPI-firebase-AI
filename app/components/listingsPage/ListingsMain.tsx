@@ -14,10 +14,12 @@ type Props = {
   locality: string;
 };
 
+const LISTINGS_PAGE_SIZE = 16;
+
 export const ListingsMain = ({ searchParams, listingType, locality }: Props ) => {
   const { authToken } = useAuthContext();
   const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(15);
+  const pageSize = LISTINGS_PAGE_SIZE;
   const [sortBy, setSortBy] = useState(undefined);
   const { data: savedListingsData, isLoading: savedListingsIsLoading } = useSavedListings({ authToken });
 
