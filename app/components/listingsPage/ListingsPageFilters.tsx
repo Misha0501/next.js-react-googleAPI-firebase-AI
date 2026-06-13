@@ -39,9 +39,10 @@ export const ListingsPageFilters = ({
   };
 
   const tabBase =
-    "w-full text-center px-4 pt-3 pb-2 text-sm font-medium border-b-2 transition-colors";
-  const tabActive = "border-blue-500 text-blue-600 bg-gray-100 rounded-t-lg";
-  const tabInactive = "border-transparent text-gray-500 hover:text-gray-700";
+    "flex whitespace-nowrap truncate max-w-xs outline-none focus:ring-0 text-sm transition duration-100 -mb-px w-full justify-center px-4 pt-3";
+  const tabActive = "bg-gray-100 rounded-t-lg border-b-2 border-[#1F5FD6] text-[#1F5FD6]";
+  const tabInactive =
+    "border-b border-transparent text-gray-500 hover:border-b-2 hover:border-gray-500 hover:text-gray-700";
 
   return (
     <>
@@ -53,8 +54,12 @@ export const ListingsPageFilters = ({
       </div>
 
       <div className="my-8">
-        <div className="flex" role="tablist">
+        <div
+          className="flex border-b border-gray-200 justify-start overflow-x-clip"
+          role="tablist"
+        >
           <button
+            type="button"
             role="tab"
             aria-selected={listingType === "SELL"}
             className={`${tabBase} ${listingType === "SELL" ? tabActive : tabInactive}`}
@@ -63,6 +68,7 @@ export const ListingsPageFilters = ({
             Buy
           </button>
           <button
+            type="button"
             role="tab"
             aria-selected={listingType === "RENT"}
             className={`${tabBase} ${listingType === "RENT" ? tabActive : tabInactive}`}
