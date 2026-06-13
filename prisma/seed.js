@@ -1,13 +1,48 @@
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 const MS_PER_DAY = 24 * 60 * 60 * 1000;
+const LOCAL_IMAGE_SOURCE = "local";
+const REMOTE_IMAGE_SOURCE = "remote";
+const SEED_IMAGE_SOURCE = (
+  process.env.SEED_IMAGE_SOURCE || LOCAL_IMAGE_SOURCE
+).toLowerCase();
+const LOCAL_IMAGES_BASE_PATH = "/images";
+const REMOTE_IMAGES_STORAGE_PREFIX = "publicImages";
+const DEFAULT_REMOTE_IMAGE_BASE_URL = process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET
+  ? `https://firebasestorage.googleapis.com/v0/b/${process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET}/o`
+  : "";
+const REMOTE_IMAGE_BASE_URL = (
+  process.env.SEED_REMOTE_IMAGE_BASE_URL || DEFAULT_REMOTE_IMAGE_BASE_URL
+).replace(/\/$/, "");
+
+if (![LOCAL_IMAGE_SOURCE, REMOTE_IMAGE_SOURCE].includes(SEED_IMAGE_SOURCE)) {
+  throw new Error(
+    `Unsupported SEED_IMAGE_SOURCE "${SEED_IMAGE_SOURCE}". Use "local" or "remote".`,
+  );
+}
+
+if (SEED_IMAGE_SOURCE === REMOTE_IMAGE_SOURCE && !REMOTE_IMAGE_BASE_URL) {
+  throw new Error(
+    "SEED_REMOTE_IMAGE_BASE_URL or NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET is required when SEED_IMAGE_SOURCE=remote.",
+  );
+}
 
 // ── Image pools ───────────────────────────────────────────────────────────────
 
 function pool(dir, prefix, count) {
-  return Array.from({ length: count }, (_, i) =>
-    `/images/${dir}/${prefix}-${String(i + 1).padStart(2, "0")}.webp`
-  );
+  return Array.from({ length: count }, (_, i) => {
+    const fileName = `${prefix}-${String(i + 1).padStart(2, "0")}.webp`;
+    const localPath = `${LOCAL_IMAGES_BASE_PATH}/${dir}/${fileName}`;
+    const storagePath = `${REMOTE_IMAGES_STORAGE_PREFIX}/${dir}/${fileName}`;
+
+    return {
+      url:
+        SEED_IMAGE_SOURCE === REMOTE_IMAGE_SOURCE
+          ? `${REMOTE_IMAGE_BASE_URL}/${encodeURIComponent(storagePath)}?alt=media`
+          : localPath,
+      imagePath: SEED_IMAGE_SOURCE === REMOTE_IMAGE_SOURCE ? storagePath : localPath,
+    };
+  });
 }
 
 const IMG = {
@@ -42,20 +77,26 @@ function imageCount(idx) {
 
 function buildImages(sub, idx, hasBalcony) {
   // Land and parking: always exactly 1 unique image from dedicated pools
-  if (sub === "land")    { const img = IMG.land[landIdx++       % IMG.land.length];    return [{ url: img, imagePath: img, positionInListing: 0 }]; }
-  if (sub === "parking") { const img = IMG.parking[parkingIdx++ % IMG.parking.length]; return [{ url: img, imagePath: img, positionInListing: 0 }]; }
+  if (sub === "land") {
+    const img = IMG.land[landIdx++ % IMG.land.length];
+    return [{ ...img, positionInListing: 0 }];
+  }
+  if (sub === "parking") {
+    const img = IMG.parking[parkingIdx++ % IMG.parking.length];
+    return [{ ...img, positionInListing: 0 }];
+  }
 
   const ext   = exterior(sub);
   const count = imageCount(idx);
-  const imgs  = [{ url: ext, imagePath: ext, positionInListing: 0 }];
+  const imgs  = [{ ...ext, positionInListing: 0 }];
   if (count === 1) return imgs;
 
   const lr = IMG.living[idx % IMG.living.length];
-  imgs.push({ url: lr, imagePath: lr, positionInListing: 1 });
+  imgs.push({ ...lr, positionInListing: 1 });
   if (count === 2) return imgs;
 
   const slot2 = idx % 2 === 0 ? IMG.kitchen[idx % IMG.kitchen.length] : IMG.bedroom[idx % IMG.bedroom.length];
-  imgs.push({ url: slot2, imagePath: slot2, positionInListing: 2 });
+  imgs.push({ ...slot2, positionInListing: 2 });
   if (count === 3) return imgs;
 
   // Slot 3: balcony if the property has one, otherwise vary by type
@@ -68,7 +109,7 @@ function buildImages(sub, idx, hasBalcony) {
     else if (r === 1) slot3 = IMG.bedroom[(idx + 5) % IMG.bedroom.length];
     else slot3 = IMG.kitchen[(idx + 5) % IMG.kitchen.length];
   }
-  imgs.push({ url: slot3, imagePath: slot3, positionInListing: 3 });
+  imgs.push({ ...slot3, positionInListing: 3 });
   return imgs;
 }
 
@@ -519,6 +560,7 @@ async function deleteAllData() {
 // ── Main ──────────────────────────────────────────────────────────────────────
 
 async function main() {
+  console.log(`Using ${SEED_IMAGE_SOURCE} seed images.`);
   await deleteAllData();
 
   // Create users
