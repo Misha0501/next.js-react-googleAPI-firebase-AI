@@ -1,8 +1,5 @@
 // @ts-nocheck
-// import {redis} from "@/app/lib/redis";
 import {PrismaClient} from '@prisma/client'
-import {createPrismaRedisCache} from "prisma-redis-middleware";
-import {Prisma} from "@prisma/client/extension";
 
 let prismaClient;
 
@@ -15,15 +12,6 @@ if (process.env.NODE_ENV === "production") {
     }
     prismaClient = global.prismaClient
 }
-
-// const cacheMiddleware: Prisma.Middleware = createPrismaRedisCache({
-//     models: [
-//         {model: "Listing"},
-//     ],
-//     storage: {type: "redis", options: {client: redis, invalidation: {referencesTTL: 300}}},
-//     cacheTime: 1,
-// });
-
 
 // Prisma use soft delete for listing table
 prismaClient.$use(async (params: any, next: any) => {
@@ -48,7 +36,5 @@ prismaClient.$use(async (params: any, next: any) => {
     return next(params)
 })
 
-
-// prismaClient.$use(cacheMiddleware);
 
 export const prisma = prismaClient;
