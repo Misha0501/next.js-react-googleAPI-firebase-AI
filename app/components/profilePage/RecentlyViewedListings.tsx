@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { useAuthContext } from "@/app/context/AuthContext";
 import { Listing, RecentlyViewedListing } from "@/types";
-import { ListingItem } from "@/app/components/ListingItem";
+import { ListingItem, ListingItemSkeleton } from "@/app/components/ListingItem";
 import { useRecentlyViewedListings } from "@/providers/RecentlyViewedListings";
 import { useSavedListings } from "@/providers/SavedListings";
 import { getPopulatedListingsSaved } from "@/app/lib/listing/getPopulatedListingsSaved";
@@ -45,32 +45,27 @@ export const RecentlyViewedListings = () => {
 
   return (
     <div className="mt-6 lg:mt-10 w-full">
-      {recentlyViewedListingsResponse.isLoading && <p>Loading...</p>}
       {recentlyViewedListingsResponse.isError && (
         <p>Oops! Something went wrong. Please try again.</p>
       )}
+      <div className={"grid grid-cols-1 xl:grid-cols-2 gap-4 lg:gap-8 mt-10"}>
+        {recentlyViewedListingsResponse.isLoading
+          ? Array.from({ length: 4 }).map((_, i) => <ListingItemSkeleton key={i} />)
+          : populatedListings.map((item, index) => (
+              <ListingItem listingItemInitial={item} key={index} />
+            ))}
+      </div>
       {!recentlyViewedListingsResponse.isLoading &&
-        !recentlyViewedListingsResponse.isError && (
+        !recentlyViewedListingsResponse.isError &&
+        populatedListings &&
+        !populatedListings.length && (
           <div>
-            <div
-              className={"grid grid-cols-1 xl:grid-cols-2 gap-4 lg:gap-8 mt-10"}
-            >
-              {populatedListings &&
-                populatedListings.map((item, index) => (
-                  <ListingItem listingItemInitial={item} key={index} />
-                ))}
-            </div>
-
-            {populatedListings && !populatedListings.length && (
-              <div>
-                <p className="text-gray-500 mb-4">
-                  You haven&apos;t viewed any properties yet
-                </p>
-                <Link href={`/listings`}>
-                  <Button>Browse properties</Button>
-                </Link>
-              </div>
-            )}
+            <p className="text-gray-500 mb-4">
+              You haven&apos;t viewed any properties yet
+            </p>
+            <Link href={`/listings`}>
+              <Button>Browse properties</Button>
+            </Link>
           </div>
         )}
     </div>

@@ -59,7 +59,7 @@ export const ProfilePageMainContent = ({ tab }: Props) => {
     }
   };
 
-  if (isLoggingOut || !authToken || isLoading) return <CircularProgress />;
+  if (isLoggingOut || !authToken) return <CircularProgress />;
   if (error)
     return (
       <p className={"text-red-500"}>
@@ -97,15 +97,16 @@ export const ProfilePageMainContent = ({ tab }: Props) => {
         <TabPanels className={"pt-12 pl:1 md:pl-20"}>
           <TabPanel>
             <p className={"font-bold text-4xl mb-12"}>Properties</p>
-            {company && (
+            {(company || isLoading) && (
               <PropertiesTab
                 company={company}
                 userListings={
                   (applicationUser?.Listing as Listing[] | undefined) || []
                 }
+                isLoading={isLoading}
               />
             )}
-            {!company && (
+            {!company && !isLoading && (
               <ProfilePageOwnListings
                 initialListings={
                   (applicationUser?.Listing as Listing[] | undefined) || []

@@ -1,8 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { CircularProgress } from "@mui/material";
-import { ListingItem } from "@/app/components/ListingItem";
+import { ListingItem, ListingItemSkeleton } from "@/app/components/ListingItem";
 import { usePropertyListing } from "@/providers/Listing";
 import { Listing } from "@/types";
 
@@ -34,12 +33,6 @@ function RecentlyPlacedPropertiesSection() {
         </Link>
       </div>
 
-      {isLoading && (
-        <div className="flex justify-center py-12">
-          <CircularProgress />
-        </div>
-      )}
-
       {isError && (
         <p className="text-red-500">
           Oops there was an error loading recent properties.
@@ -50,13 +43,15 @@ function RecentlyPlacedPropertiesSection() {
         <p className="text-[#717D96]">No properties have been placed yet.</p>
       )}
 
-      {listings.length > 0 && (
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-          {listings.map((listing) => (
-            <ListingItem listingItemInitial={listing} key={listing.id} />
-          ))}
-        </div>
-      )}
+      <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+        {isLoading
+          ? Array.from({ length: 6 }).map((_, i) => (
+              <ListingItemSkeleton key={i} />
+            ))
+          : listings.map((listing) => (
+              <ListingItem listingItemInitial={listing} key={listing.id} />
+            ))}
+      </div>
     </section>
   );
 }

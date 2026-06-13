@@ -1,7 +1,7 @@
 "use client";
 
 import { Listing } from "@/types";
-import { ListingItem } from "@/app/components/ListingItem";
+import { ListingItem, ListingItemSkeleton } from "@/app/components/ListingItem";
 import { Fragment, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { useAuthContext } from "@/app/context/AuthContext";
@@ -12,8 +12,9 @@ import { Button } from "@tremor/react";
 
 type Props = {
   initialListings: Listing[];
+  isLoading?: boolean;
 };
-export const ProfilePageOwnListings = ({ initialListings }: Props) => {
+export const ProfilePageOwnListings = ({ initialListings, isLoading }: Props) => {
   const { authToken } = useAuthContext();
 
   const [listings, setListings] = useState(initialListings);
@@ -54,16 +55,17 @@ export const ProfilePageOwnListings = ({ initialListings }: Props) => {
   return (
     <>
       <div className="grid grid-cols-1 gap-4 lg:gap-8 xl:grid-cols-2">
-        {listings &&
-          listings.map((listing, index) => (
-            <ListingItem
-              key={index}
-              listingItemInitial={listing}
-              onDeleteIconClick={onDeletedIconClick}
-              ownerView={true}
-            />
-          ))}
-        {(!listings || !listings.length) && (
+        {isLoading
+          ? Array.from({ length: 4 }).map((_, i) => <ListingItemSkeleton key={i} />)
+          : listings.map((listing, index) => (
+              <ListingItem
+                key={index}
+                listingItemInitial={listing}
+                onDeleteIconClick={onDeletedIconClick}
+                ownerView={true}
+              />
+            ))}
+        {!isLoading && (!listings || !listings.length) && (
           <div>
             <p className="text-gray-500 mb-4">You haven&apos;t placed any properties yet</p>
             <Link href={`/placeproperties`}>

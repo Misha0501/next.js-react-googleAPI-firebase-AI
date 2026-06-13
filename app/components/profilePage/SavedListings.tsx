@@ -1,11 +1,10 @@
 "use client";
 
 import { useMemo } from "react";
-import { ListingItem } from "@/app/components/ListingItem";
+import { ListingItem, ListingItemSkeleton } from "@/app/components/ListingItem";
 import { useAuthContext } from "@/app/context/AuthContext";
 import { SavedListing } from "@/types";
 import { useSavedListings } from "@/providers/SavedListings";
-import { CircularProgress } from "@mui/material";
 import Link from "next/link";
 import { Button } from "@tremor/react";
 
@@ -30,7 +29,6 @@ export const SavedListings = () => {
     return [];
   }, [savedListingsData]);
 
-  if (isLoading) return <CircularProgress />;
   if (error)
     return (
       <p className={"mt-10 text-red-500"}>
@@ -41,7 +39,7 @@ export const SavedListings = () => {
   return (
     <div className="mt-10 w-full">
       <div>
-        {savedListings && savedListings.length > 0 && (
+        {!isLoading && savedListings && savedListings.length > 0 && (
           <div className="flex justify-between items-baseline">
             <div className="text-xl">
               <span className={"font-bold"}>Results: </span>{" "}
@@ -55,16 +53,17 @@ export const SavedListings = () => {
         )}
 
         <div className={"grid grid-cols-1 xl:grid-cols-2 gap-4 lg:gap-8 mt-10"}>
-          {savedListings &&
-            savedListings.map((item: SavedListing, index) => (
-              <ListingItem
-                listingItemInitial={item.listing}
-                key={index}
-                onStateChanged={refetch}
-              />
-            ))}
+          {isLoading
+            ? Array.from({ length: 4 }).map((_, i) => <ListingItemSkeleton key={i} />)
+            : savedListings.map((item: SavedListing, index) => (
+                <ListingItem
+                  listingItemInitial={item.listing}
+                  key={index}
+                  onStateChanged={refetch}
+                />
+              ))}
         </div>
-        {savedListings && !savedListings.length && (
+        {!isLoading && savedListings && !savedListings.length && (
           <div>
             <p className="text-gray-500 mb-4">
               You haven&apos;t saved any properties yet

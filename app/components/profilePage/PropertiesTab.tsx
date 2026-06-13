@@ -7,8 +7,9 @@ import { Company, Listing } from "@/types";
 type Props = {
   userListings: Listing[];
   company: Company | null;
+  isLoading?: boolean;
 };
-export const PropertiesTab = ({ userListings, company }: Props) => {
+export const PropertiesTab = ({ userListings, company, isLoading }: Props) => {
     return (
       <div className="w-full">
           <TabGroup>
@@ -22,11 +23,13 @@ export const PropertiesTab = ({ userListings, company }: Props) => {
                   <TabPanel>
                       <ProfilePageOwnListings
                         initialListings={userListings}
+                        isLoading={isLoading}
                       ></ProfilePageOwnListings>
                   </TabPanel>
                   <TabPanel>
                       <ProfilePageOwnListings
                         initialListings={company?.Listing || []}
+                        isLoading={isLoading}
                       ></ProfilePageOwnListings>
                   </TabPanel>
               </TabPanels>
