@@ -12,10 +12,11 @@ import { validateParamId } from "@/app/lib/api/validateParamId";
  */
 export async function DELETE(
   request: Request,
-  { params }: { params: { slug: number } },
+  { params }: { params: Promise<{ slug: string }> },
 ) {
   try {
-    const id = validateParamId(params.slug);
+    const { slug } = await params;
+    const id = validateParamId(slug);
     const applicationUser = await getApplicationUserServer();
     const savedSearch = await fetchSavedSearch(id);
 

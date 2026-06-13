@@ -19,9 +19,7 @@ import { getFetchUrl } from "@/app/lib/getFetchUrl";
 export const dynamic = "force-dynamic";
 
 type Props = {
-  params: {
-    id: string;
-  };
+  params: Promise<{ id: string }>;
 };
 
 const fetchListing = async (listingId: number) => {
@@ -40,7 +38,8 @@ const fetchListing = async (listingId: number) => {
   return response.json();
 };
 
-async function ListingPage({ params: { id } }: Props) {
+async function ListingPage({ params }: Props) {
+  const { id } = await params;
   const listingId = Number(id);
   let listing: any = null;
 

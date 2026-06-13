@@ -20,11 +20,11 @@ import {ResponseError} from "@/app/lib/classes/ResponseError";
  */
 
 export const getDecodedIdToken = async () => {
-    const headersList = headers()
-    const headerAuthorizationToken = headersList.get('Authorization')
+    const [headersList, cookieStore] = await Promise.all([headers(), cookies()]);
+    const headerAuthorizationToken = headersList.get('Authorization');
 
-    const cookiesAuthorizationToken = cookies().get('Authorization')?.value || '';
-    const cookiesAuthToken = cookies().get('authToken')?.value || '';
+    const cookiesAuthorizationToken = cookieStore.get('Authorization')?.value || '';
+    const cookiesAuthToken = cookieStore.get('authToken')?.value || '';
     const cookieToken = cookiesAuthorizationToken || cookiesAuthToken;
 
     if(!headerAuthorizationToken && !cookieToken) {

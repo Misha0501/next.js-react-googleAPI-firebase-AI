@@ -20,18 +20,12 @@ module.exports = {
         port: "",
         pathname: "/**",
       },
+      {
+        protocol: "https",
+        hostname: "firebasestorage.googleapis.com",
+        port: "",
+        pathname: "/**",
+      },
     ],
-    domains: [
-      "firebasestorage.googleapis.com",
-      "https://firebasestorage.googleapis.com",
-    ],
-  },
-  compilerOptions: {
-    baseUrl: ".",
-    paths: {
-      "@/*": ["*"],
-    },
   },
 };
-
-// module.exports = nextConfig

@@ -15,12 +15,13 @@ const ONE_DAY = 24 * 60 * 60 * 1000;
  * @param {string} authToken - The authentication token.
  * @param {string} refreshToken - The refresh token.
  */
-export const setAuthCookiesForOneDay = (
+export const setAuthCookiesForOneDay = async (
   authToken: string,
   refreshToken: string,
-): void => {
-  cookies().set("authToken", authToken, { expires: Date.now() + ONE_DAY });
-  cookies().set("refreshToken", refreshToken, {
+): Promise<void> => {
+  const cookieStore = await cookies();
+  cookieStore.set("authToken", authToken, { expires: Date.now() + ONE_DAY });
+  cookieStore.set("refreshToken", refreshToken, {
     expires: Date.now() + ONE_DAY,
   });
 };

@@ -18,9 +18,10 @@ import { validateParamId } from "@/app/lib/api/validateParamId";
  * @constructor
  * @param request
  */
-export async function GET(request: Request, {params}: { params: { slug: number } }) {
+export async function GET(request: Request, { params }: { params: Promise<{ slug: string }> }) {
     try {
-        const id = validateParamId(params.slug);
+        const { slug } = await params;
+        const id = validateParamId(slug);
 
         const listing = await prisma.listing.findUnique({
             where: {
@@ -58,9 +59,10 @@ export async function GET(request: Request, {params}: { params: { slug: number }
  * @constructor
  * @param request
  */
-export async function DELETE(request: Request, {params}: { params: { slug: number } }) {
+export async function DELETE(request: Request, { params }: { params: Promise<{ slug: string }> }) {
     try {
-        const id = validateParamId(params.slug);
+        const { slug } = await params;
+        const id = validateParamId(slug);
 
         const applicationUser: ApplicationUser = await getApplicationUserServer(true);
 

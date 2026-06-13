@@ -23,7 +23,7 @@ export async function POST(req: Request) {
     const authToken = response.data.idToken;
     const refreshToken = response.data.refreshToken;
 
-    setAuthCookiesForOneDay(authToken, refreshToken);
+    await setAuthCookiesForOneDay(authToken, refreshToken);
 
     return NextResponse.json({
       email: response.data.email,

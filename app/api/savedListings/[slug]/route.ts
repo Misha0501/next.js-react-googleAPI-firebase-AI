@@ -12,10 +12,11 @@ import { handleAPIError } from "@/app/lib/api/handleError";
  */
 export async function DELETE(
   request: Request,
-  { params }: { params: { slug: number } },
+  { params }: { params: Promise<{ slug: string }> },
 ) {
   try {
-    const id = Number(params.slug);
+    const { slug } = await params;
+    const id = Number(slug);
 
     if (isNaN(id)) throw new ResponseError("ID must be a valid number", 422);
 

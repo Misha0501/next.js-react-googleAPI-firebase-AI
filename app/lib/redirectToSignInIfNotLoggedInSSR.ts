@@ -12,7 +12,7 @@ import DecodedIdToken = auth.DecodedIdToken;
  */
 export const redirectToSignInIfNotLoggedInSSR = async () => {
     try {
-        const userToken = cookies().get('authToken');
+        const userToken = (await cookies()).get('authToken');
         if (!userToken) redirect('/signin')
 
         const decodedIdToken: DecodedIdToken = await firebaseAdmin.auth().verifyIdToken(userToken.value);

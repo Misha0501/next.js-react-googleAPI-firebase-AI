@@ -4,12 +4,11 @@ import { redirect } from "next/navigation";
 import { firebaseAdmin } from "@/app/lib/firebase/configAdmin";
 
 type Props = {
-  params: {
-    tab: string;
-  };
+  params: Promise<{ tab: string }>;
 };
-export default async function ProfilePage({ params: { tab } }: Props) {
-  const userToken = cookies().get('authToken');
+export default async function ProfilePage({ params }: Props) {
+  const { tab } = await params;
+  const userToken = (await cookies()).get('authToken');
   if (!userToken || !userToken.value) redirect('/signin')
 
   await firebaseAdmin.auth().verifyIdToken(userToken.value).catch(error => {
