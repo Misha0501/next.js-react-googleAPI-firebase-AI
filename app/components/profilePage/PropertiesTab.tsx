@@ -11,10 +11,10 @@ type Props = {
 };
 
 const TAB_BASE =
-  "flex whitespace-nowrap truncate max-w-xs outline-none focus:ring-0 text-sm transition duration-100 -mb-px w-full justify-center px-4 pt-3";
-const TAB_ACTIVE = "bg-gray-100 rounded-t-lg border-b-2 border-[#1F5FD6] text-[#1F5FD6]";
+  "flex min-h-11 flex-1 items-center justify-center whitespace-nowrap truncate rounded-t-lg border-b-2 px-4 pb-2 pt-3 text-sm font-semibold outline-none transition duration-150 focus-visible:ring-2 focus-visible:ring-[#1F5FD6]/25 md:flex-none md:min-w-40";
+const TAB_ACTIVE = "border-[#1F5FD6] bg-[#1F5FD6]/5 text-[#1F5FD6]";
 const TAB_INACTIVE =
-  "border-b border-transparent text-gray-500 hover:border-b-2 hover:border-gray-500 hover:text-gray-700";
+  "border-transparent text-gray-500 hover:bg-gray-50 hover:text-gray-700";
 
 export const PropertiesTab = ({ userListings, company, isLoading }: Props) => {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -23,7 +23,7 @@ export const PropertiesTab = ({ userListings, company, isLoading }: Props) => {
     <div className="w-full">
       <div
         role="tablist"
-        className="flex border-b border-gray-200 justify-start overflow-x-clip space-x-0 w-min mb-10"
+        className="mb-10 flex w-full justify-start overflow-x-auto border-b border-gray-200 pb-2 md:w-fit md:overflow-x-visible"
       >
         {["Placed by you", "Company owned"].map((label, i) => (
           <button
@@ -40,10 +40,16 @@ export const PropertiesTab = ({ userListings, company, isLoading }: Props) => {
       </div>
       <div role="tabpanel">
         {activeIndex === 0 && (
-          <ProfilePageOwnListings initialListings={userListings} isLoading={isLoading} />
+          <ProfilePageOwnListings
+            initialListings={userListings}
+            isLoading={isLoading}
+          />
         )}
         {activeIndex === 1 && (
-          <ProfilePageOwnListings initialListings={company?.Listing || []} isLoading={isLoading} />
+          <ProfilePageOwnListings
+            initialListings={company?.Listing || []}
+            isLoading={isLoading}
+          />
         )}
       </div>
     </div>

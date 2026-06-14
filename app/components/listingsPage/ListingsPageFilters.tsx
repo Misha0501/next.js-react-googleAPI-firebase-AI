@@ -39,10 +39,10 @@ export const ListingsPageFilters = ({
   };
 
   const tabBase =
-    "flex whitespace-nowrap truncate max-w-xs outline-none focus:ring-0 text-sm transition duration-100 -mb-px w-full justify-center px-4 pt-3";
-  const tabActive = "bg-gray-100 rounded-t-lg border-b-2 border-[#1F5FD6] text-[#1F5FD6]";
+    "flex min-h-11 flex-1 items-center justify-center whitespace-nowrap truncate rounded-t-lg border-b-2 px-4 pb-2 pt-3 text-sm font-semibold outline-none transition duration-150 focus-visible:ring-2 focus-visible:ring-[#1F5FD6]/25";
+  const tabActive = "border-[#1F5FD6] bg-[#1F5FD6]/5 text-[#1F5FD6]";
   const tabInactive =
-    "border-b border-transparent text-gray-500 hover:border-b-2 hover:border-gray-500 hover:text-gray-700";
+    "border-transparent text-gray-500 hover:bg-gray-50 hover:text-gray-700";
 
   return (
     <>
@@ -55,7 +55,7 @@ export const ListingsPageFilters = ({
 
       <div className="my-8">
         <div
-          className="flex border-b border-gray-200 justify-start overflow-x-clip"
+          className="flex w-full justify-start overflow-x-auto border-b border-gray-200 pb-2 sm:overflow-x-visible"
           role="tablist"
         >
           <button
@@ -79,10 +79,18 @@ export const ListingsPageFilters = ({
         </div>
         <div role="tabpanel">
           {listingType === "SELL" && (
-            <Filters listingType={listingType} onParamsChange={onChange} locality={locality} />
+            <Filters
+              listingType={listingType}
+              onParamsChange={onChange}
+              locality={locality}
+            />
           )}
           {listingType === "RENT" && (
-            <Filters listingType={listingType} onParamsChange={onChange} locality={locality} />
+            <Filters
+              listingType={listingType}
+              onParamsChange={onChange}
+              locality={locality}
+            />
           )}
         </div>
       </div>
