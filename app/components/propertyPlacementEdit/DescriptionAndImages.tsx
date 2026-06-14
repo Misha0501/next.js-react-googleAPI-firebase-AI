@@ -120,12 +120,12 @@ function DescriptionAndImages({
                       It can take up to 30 seconds.
                     </p>
                     <Button
-                      loading={generate.isLoading}
+                      disabled={generate.isLoading}
                       type="button"
                       variant={"secondary"}
                       onClick={generateDescription}
                     >
-                      Generate
+                      {generate.isLoading ? "Generating..." : "Generate"}
                     </Button>
 
                     {/* Show error message */}
@@ -170,7 +170,7 @@ function DescriptionAndImages({
                   size={"xl"}
                   iconPosition={"right"}
                   onClick={handleNext}
-                  loading={generate.isLoading}
+                  disabled={generate.isLoading}
                 >
                   Next
                 </Button>

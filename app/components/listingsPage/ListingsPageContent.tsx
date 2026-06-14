@@ -117,9 +117,9 @@ export const ListingsPageContent = () => {
         <Button
           variant={"secondary"}
           onClick={handleSaveSearch}
-          loading={createSavedSearches.isLoading}
+          disabled={createSavedSearches.isLoading}
         >
-          Save search
+          {createSavedSearches.isLoading ? "Saving..." : "Save search"}
         </Button>
       </div>
       <section className={"text-black pb-16 container"}>

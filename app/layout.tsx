@@ -4,7 +4,7 @@ import { AuthContextProvider } from "./context/AuthContext";
 import { Inter } from "next/font/google";
 import { Navigation } from "@/app/components/layout/Navigation";
 import ReactQueryProvider from "@/app/lib/reactQuery/ReactQueryProvider";
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, Bounce } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import MobileFooter from "@/app/components/layout/MobileFooter";
 import Footer from "@/app/components/layout/Footer";
@@ -35,7 +35,7 @@ export default function RootLayout({
         <Navigation />
         <main className="flex-1 pb-12 md:pb-0">
           <AuthContextProvider>
-            <ToastContainer autoClose={8000} />
+            <ToastContainer position="top-right" autoClose={8000} transition={Bounce} />
             <ReactQueryProvider>{children}</ReactQueryProvider>
           </AuthContextProvider>
         </main>
