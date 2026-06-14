@@ -1,23 +1,75 @@
 "use client";
 import React, { useState } from "react";
-import Step from "@mui/material/Step";
-import StepLabel from "@mui/material/StepLabel";
-import { MuiStepper } from "./Styled";
 import GeneralInfo from "./GeneralInfo";
 import MoreDetails from "./MoreDetails";
 import DescriptionAndImages from "./DescriptionAndImages";
 import Confirmation from "./Confirmation";
 import { Formik, FormikProps } from "formik";
-import * as Yup from "yup";
+import {
+  CheckBadgeIcon,
+  ClipboardDocumentListIcon,
+  HomeModernIcon,
+  PhotoIcon,
+} from "@heroicons/react/24/outline";
+import { PlacementFormValues } from "./validation";
 
 const steps = [
-  "General information",
-  "More details",
-  "Description & images",
-  "Confirmation",
+  {
+    title: "General information",
+    description: "Intent, property type, address and price",
+    icon: HomeModernIcon,
+  },
+  {
+    title: "More details",
+    description: "Spaces, dimensions and condition",
+    icon: ClipboardDocumentListIcon,
+  },
+  {
+    title: "Description & images",
+    description: "Photos and listing copy",
+    icon: PhotoIcon,
+  },
+  {
+    title: "Confirmation",
+    description: "Review and publish",
+    icon: CheckBadgeIcon,
+  },
 ];
 
-const initialImages: any = [];
+const initialValues: PlacementFormValues = {
+  listingType: "SELL",
+  propertyType: "",
+  address: "",
+  streetNumber: "",
+  route: "",
+  locality: "",
+  neighborhood: "",
+  administrativeArea: "",
+  postalCode: "",
+  latitude: "",
+  longitude: "",
+  currency: "EUR",
+  price: 0,
+  rooms: undefined,
+  bedrooms: undefined,
+  bathrooms: undefined,
+  parking: undefined,
+  totalArea: undefined,
+  livingArea: undefined,
+  areaOutside: undefined,
+  areaGarage: undefined,
+  volume: undefined,
+  interiorType: "",
+  upkeepType: "",
+  heatingType: "",
+  constructedYear: undefined,
+  numberOfFloorsCommon: undefined,
+  floorNumber: undefined,
+  buildingType: undefined,
+  characteristics: undefined,
+  description: undefined,
+  images: [],
+};
 
 export default function MultiForm() {
   const [activeStep, setActiveStep] = useState(0);
@@ -42,43 +94,9 @@ export default function MultiForm() {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
-  interface CreatePropertyFormikPropInterface {
-    listingType: string;
-    propertyType: string;
-    address: string;
-    streetNumber: string;
-    route: string;
-    locality: string;
-    neighborhood: string;
-    administrativeArea: string;
-    postalCode: string;
-    latitude: string;
-    longitude: string;
-    currency: string;
-    price: number | string;
-    rooms?: number;
-    bedrooms?: number;
-    bathrooms?: number;
-    totalArea?: number;
-    livingArea?: number;
-    areaOutside?: number;
-    areaGarage?: number;
-    volume?: number;
-    interiorType?: string;
-    upkeepType?: string;
-    heatingType?: string;
-    constructedYear?: number;
-    numberOfFloorsCommon?: number;
-    floorNumber?: number;
-    buildingType?: string;
-    characteristics?: string;
-    description?: string;
-    images: any;
-  }
-
   const formContent = (
     step: number,
-    formik: FormikProps<CreatePropertyFormikPropInterface>
+    formik: FormikProps<PlacementFormValues>,
   ) => {
     switch (step) {
       case 0:
@@ -127,118 +145,97 @@ export default function MultiForm() {
   };
 
   return (
-    <div>
-      <Formik
-        initialValues={{
-          listingType: "SELL",
-          propertyType: "",
-          address: "",
-          streetNumber: "",
-          route: "",
-          locality: "",
-          neighborhood: "",
-          administrativeArea: "",
-          postalCode: "",
-          latitude: "",
-          longitude: "",
-          currency: "EUR",
-          price: 0 as string | number,
-          rooms: undefined,
-          bedrooms: undefined,
-          bathrooms: undefined,
-          totalArea: undefined,
-          livingArea: undefined,
-          areaOutside: undefined,
-          areaGarage: undefined,
-          volume: undefined,
-          interiorType: "",
-          upkeepType: "",
-          heatingType: "",
-          constructedYear: undefined,
-          numberOfFloorsCommon: undefined,
-          floorNumber: undefined,
-          buildingType: undefined,
-          characteristics: undefined,
-          description: undefined,
-          images: initialImages,
-        }}
-        validationSchema={Yup.object().shape({
-          listingType: Yup.string().required("Listing type is required"),
-          propertyType: Yup.string(),
-          address: Yup.string().required("Address is required"),
-          streetNumber: Yup.string(),
-          administrativeArea: Yup.string(),
-          currency: Yup.string().required("Currency is required"),
-          price: Yup.number().positive().required("Price is required"),
-          rooms: Yup.number(),
-          bedrooms: Yup.number(),
-          bathrooms: Yup.number(),
-          totalArea: Yup.number(),
-          livingArea: Yup.number(),
-          areaOutside: Yup.number(),
-          areaGarage: Yup.number(),
-          volume: Yup.number(),
-          interiorType: Yup.string().required("interior type is required"),
-          upkeepType: Yup.string().required("upkeep type is required"),
-          heatingType: Yup.string().required("heating type is required"),
-          constructedYear: Yup.number(),
-          numberOfFloorsCommon: Yup.number(),
-          floorNumber: Yup.number(),
-          buildingType: Yup.string(),
-          characteristics: Yup.string(),
-          description: Yup.string().required("description is required"),
-        })}
-        onSubmit={(values) => {
-          alert(values);
-          if (activeStep === steps.length - 1) {
-          } else {
-            setActiveStep((prevStep) => prevStep + 1);
-          }
-        }}
-      >
+    <div className="min-h-screen bg-[#F8FAFC]">
+      <Formik initialValues={initialValues} onSubmit={() => undefined}>
         {(formik) => (
-          <form>
-            {/* Step bar — flush to the nav */}
-            <div className="bg-[#F2F2F2] shadow-[0_4px_20px_0px_rgba(0,0,0,0.1)]">
-              {/* Desktop: full labelled stepper */}
-              <div className="hidden md:block">
-                <MuiStepper
-                  className="max-w-screen-xl mx-auto items-stretch flex"
-                  activeStep={activeStep}
-                  orientation="horizontal"
-                >
-                  {steps.map((label, index) => (
-                    <Step key={index}>
-                      <StepLabel>{label}</StepLabel>
-                    </Step>
-                  ))}
-                </MuiStepper>
-              </div>
-              {/* Mobile: pill progress + stacked label */}
-              <div className="flex md:hidden items-center gap-3 px-5 py-3">
-                <div className="flex gap-1.5 shrink-0">
-                  {steps.map((_, i) => (
-                    <div
-                      key={i}
-                      className={`h-1.5 rounded-full transition-all duration-300 ${
-                        i === activeStep
-                          ? "w-6 bg-[#4785FD]"
-                          : i < activeStep
-                          ? "w-4 bg-[#4785FD]/50"
-                          : "w-4 bg-gray-300"
-                      }`}
-                    />
-                  ))}
+          <form onSubmit={(event) => event.preventDefault()}>
+            <div className="border-b border-slate-200 bg-white">
+              <div className="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 lg:px-8">
+                <p className="mb-3 text-sm font-bold uppercase tracking-wide text-[#1F5FD6]">
+                  Property placement
+                </p>
+                <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+                  <div>
+                    <h1 className="max-w-3xl text-3xl font-bold tracking-tight text-[#1F2937] md:text-5xl">
+                      Create a listing that feels ready for serious buyers.
+                    </h1>
+                    <p className="mt-4 max-w-2xl text-sm leading-6 text-[#596579] md:text-base">
+                      Work through the details step by step. Required fields are
+                      checked before you move forward, so the final listing is
+                      complete before it is published.
+                    </p>
+                  </div>
+                  <div className="rounded-xl border border-[#CFE0FF] bg-[#EAF2FF] px-4 py-3 text-sm font-semibold text-[#1F5FD6]">
+                    Step {activeStep + 1} of {steps.length}
+                  </div>
                 </div>
-                <div>
-                  <p className="text-xs text-gray-500">Step {activeStep + 1} of {steps.length}</p>
-                  <p className="text-sm font-semibold text-gray-900">{steps[activeStep]}</p>
+              </div>
+
+              <div className="mx-auto max-w-screen-xl px-4 pb-6 sm:px-6 lg:px-8">
+                <div className="hidden grid-cols-4 gap-3 lg:grid">
+                  {steps.map((item, index) => {
+                    const Icon = item.icon;
+                    const isActive = index === activeStep;
+                    const isDone = index < activeStep;
+
+                    return (
+                      <div
+                        key={item.title}
+                        className={`rounded-2xl border p-4 transition ${
+                          isActive
+                            ? "border-[#1F5FD6] bg-[#F6F9FF] shadow-sm"
+                            : isDone
+                              ? "border-[#CFE0FF] bg-white"
+                              : "border-slate-200 bg-white"
+                        }`}
+                      >
+                        <div className="flex items-start gap-3">
+                          <span
+                            className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${
+                              isActive || isDone
+                                ? "bg-[#1F5FD6] text-white"
+                                : "bg-slate-100 text-slate-500"
+                            }`}
+                          >
+                            <Icon className="h-5 w-5" />
+                          </span>
+                          <div>
+                            <p className="text-sm font-bold text-[#1F2937]">
+                              {item.title}
+                            </p>
+                            <p className="mt-1 text-xs leading-5 text-[#64748B]">
+                              {item.description}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+
+                <div className="lg:hidden">
+                  <div className="mb-3 flex gap-1.5">
+                    {steps.map((item, index) => (
+                      <span
+                        key={item.title}
+                        className={`h-1.5 flex-1 rounded-full transition ${
+                          index <= activeStep ? "bg-[#1F5FD6]" : "bg-slate-200"
+                        }`}
+                      />
+                    ))}
+                  </div>
+                  <p className="text-sm font-bold text-[#1F2937]">
+                    {steps[activeStep].title}
+                  </p>
+                  <p className="mt-1 text-sm text-[#64748B]">
+                    {steps[activeStep].description}
+                  </p>
                 </div>
               </div>
             </div>
-            {/* Form content */}
-            <div className="px-5 pb-10">
-              {formContent(activeStep, formik as any)}
+
+            <div className="px-4 py-8 sm:px-6 lg:px-8 lg:py-12">
+              {formContent(activeStep, formik)}
             </div>
           </form>
         )}

@@ -1,6 +1,5 @@
 import { RadioGroup } from "@headlessui/react";
 import { CheckCircleIcon } from "@heroicons/react/24/solid";
-import { Icon } from "@tremor/react";
 
 type PropertyPlacementRadioButtonsProps = {
   options: string[];
@@ -23,57 +22,38 @@ export default function SingleSelectRadioButton({
   };
 
   return (
-    <div className="w-full">
-      <div className="w-full ">
-        <RadioGroup onBlur={onBlur} value={value} onChange={handleOnChange}>
-          <RadioGroup.Label className="sr-only">Server size</RadioGroup.Label>
-          <div className="">
-            {options.map((item, index) => (
-              <RadioGroup.Option
-                id={id}
-                key={index}
-                value={item}
-                defaultValue={value}
-                className={({ active, checked }) =>
-                  `
-                  ${checked ? "bg-transperent " : "bg-white"}
-                     cursor-pointer rounded-lg    focus:outline-none`
-                }
-              >
-                {({ active, checked }) => (
-                  <>
-                    <div className="">
-                      <div className="">
-                        <div className="text-sm">
-                          <RadioGroup.Label
-                            as="div"
-                            className={`font-medium border-2 w-full p-5 rounded-xl mb-5 ${
-                              checked
-                                ? "border-[#1F5FD6] font-bold border-2"
-                                : "text-[#222] border-[#ADADAD] "
-                            }`}
-                          >
-                            <div className="flex items-center justify-between">
-                              <span>{item}</span>
-                              {checked ? (
-                                <Icon
-                                  size="sm"
-                                  className="font-bold"
-                                  icon={CheckCircleIcon}
-                                />
-                              ) : null}
-                            </div>
-                          </RadioGroup.Label>
-                        </div>
-                      </div>
-                    </div>
-                  </>
+    <RadioGroup onBlur={onBlur} value={value} onChange={handleOnChange}>
+      <RadioGroup.Label className="sr-only">Select one option</RadioGroup.Label>
+      <div className="grid gap-3">
+        {options.map((item) => (
+          <RadioGroup.Option
+            id={id}
+            key={item}
+            value={item}
+            className={({ checked }) =>
+              `cursor-pointer rounded-xl border p-4 outline-none transition ${
+                checked
+                  ? "border-[#1F5FD6] bg-[#F6F9FF] shadow-sm"
+                  : "border-slate-200 bg-white hover:border-[#CFE0FF] hover:bg-[#F8FAFC]"
+              }`
+            }
+          >
+            {({ checked }) => (
+              <div className="flex items-center justify-between gap-4">
+                <RadioGroup.Label
+                  as="span"
+                  className="text-sm font-bold text-[#1F2937]"
+                >
+                  {item}
+                </RadioGroup.Label>
+                {checked && (
+                  <CheckCircleIcon className="h-5 w-5 shrink-0 text-[#1F5FD6]" />
                 )}
-              </RadioGroup.Option>
-            ))}
-          </div>
-        </RadioGroup>
+              </div>
+            )}
+          </RadioGroup.Option>
+        ))}
       </div>
-    </div>
+    </RadioGroup>
   );
 }

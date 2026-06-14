@@ -1,27 +1,65 @@
 "use client";
-import { ArrowSmallRightIcon } from "@heroicons/react/24/solid";
+
 import {
-  Button,
-  Divider,
-  Select,
-  SelectItem,
-  TextInput,
-} from "@tremor/react";
+  BanknotesIcon,
+  HomeModernIcon,
+  MapPinIcon,
+  TagIcon,
+} from "@heroicons/react/24/outline";
 import property1 from "@/public/property1.png";
 import StepsTopInfo from "./StepsTopInfo";
 import { LISTING_TYPES, PROPERTY_TYPES } from "../../lib/constants";
 import React, { useState } from "react";
 import PropertyPlacementRadioButtons from "./PropertyPlacementRadioButtons";
-import { FormHelperText } from "@mui/material";
 import { AutocompleteAddress } from "@/types";
 import { AddressAutocomplete } from "@/app/components/propertyPlacementEdit/AddressAutocomplete";
+import {
+  applyStepErrors,
+  getGeneralInfoFields,
+  PlacementFormValues,
+  validateGeneralInfo,
+} from "./validation";
+import { FormikProps } from "formik";
 
 interface CreatePropertyComponentPropInterface {
-  formik: any;
+  formik: FormikProps<PlacementFormValues>;
   handleNext: () => void;
   step: number;
   isShow: boolean;
 }
+
+type SectionProps = {
+  icon: React.ReactNode;
+  title: string;
+  description: string;
+  children: React.ReactNode;
+};
+
+const inputClass =
+  "w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-[#1F2937] outline-none transition focus:border-[#1F5FD6] focus:ring-2 focus:ring-[#1F5FD6]/15 disabled:bg-[#F8FAFC] disabled:text-[#64748B]";
+
+const ErrorText = ({ children }: { children?: React.ReactNode }) => {
+  if (!children) return null;
+
+  return <p className="mt-2 text-sm font-semibold text-red-600">{children}</p>;
+};
+
+const SectionRow = ({ icon, title, description, children }: SectionProps) => (
+  <section className="grid gap-5 border-b border-slate-200 py-8 last:border-b-0 lg:grid-cols-[0.9fr_1.1fr] lg:gap-10">
+    <div className="flex gap-4">
+      <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#EAF2FF] text-[#1F5FD6]">
+        {icon}
+      </span>
+      <div>
+        <h3 className="text-xl font-bold text-[#1F2937]">{title}</h3>
+        <p className="mt-2 max-w-md text-sm leading-6 text-[#64748B]">
+          {description}
+        </p>
+      </div>
+    </div>
+    <div>{children}</div>
+  </section>
+);
 
 const GeneralInfo = ({
   formik,
@@ -29,223 +67,285 @@ const GeneralInfo = ({
   step,
   isShow,
 }: CreatePropertyComponentPropInterface) => {
-
   const [show, setShow] = useState(true);
-  const [showError, setShowErros] = useState(false);
+  const [showError, setShowErrors] = useState(false);
   const [priceDisplay, setPriceDisplay] = useState(
-    formik.values.price ? new Intl.NumberFormat("bg-BG").format(Number(formik.values.price)) : ""
+    formik.values.price
+      ? new Intl.NumberFormat("bg-BG").format(Number(formik.values.price))
+      : "",
   );
 
-  const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const digits = e.target.value.replace(/\D/g, "");
+  const [showAddress, setShowAddress] = useState(
+    Boolean(
+      formik.values.route ||
+      formik.values.administrativeArea ||
+      formik.values.locality ||
+      formik.values.streetNumber ||
+      formik.values.postalCode ||
+      formik.values.latitude ||
+      formik.values.longitude,
+    ),
+  );
+
+  const title = "Add the essentials";
+  const stepNumber = "Step 1";
+
+  const handlePriceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const digits = event.target.value.replace(/\D/g, "");
+
     if (!digits) {
       setPriceDisplay("");
       formik.setFieldValue("price", "", true);
       return;
     }
-    const num = parseInt(digits, 10);
-    setPriceDisplay(new Intl.NumberFormat("bg-BG").format(num));
-    formik.setFieldValue("price", num, true);
+
+    const numericPrice = parseInt(digits, 10);
+    setPriceDisplay(new Intl.NumberFormat("bg-BG").format(numericPrice));
+    formik.setFieldValue("price", numericPrice, true);
   };
-  const [showAddress, setShowAddress] = useState(
-    formik.values.route ||
-      Boolean(
-        formik.values.administrativeArea ||
-          formik.values.locality ||
-          formik.values.streetNumber ||
-          formik.values.postalCode ||
-          formik.values.latitude ||
-          formik.values.longitude
-      )
-  );
-  const title = "Add essential information about your property";
-  const stepNumber = "Step 1";
 
   const handleAddressChange = (address: AutocompleteAddress) => {
-    if (address) {
-      formik.setFieldValue("route", address.route);
-      formik.setFieldValue("neighborhood", address.neighborhood);
-      formik.setFieldValue("streetNumber", address.streetNumber);
-      formik.setFieldValue("locality", address.locality);
-      formik.setFieldValue("administrativeArea", address.administrativeAreaLevelOne);
-      formik.setFieldValue("postalCode", address.postalCode);
-      formik.setFieldValue("latitude", address.latitude);
-      formik.setFieldValue("longitude", address.longitude);
-      setShowAddress(true);
-      formik.setFieldError("locality", undefined);
-    }
+    if (!address) return;
+
+    formik.setFieldValue("route", address.route, true);
+    formik.setFieldValue("neighborhood", address.neighborhood, true);
+    formik.setFieldValue("streetNumber", address.streetNumber, true);
+    formik.setFieldValue("locality", address.locality, true);
+    formik.setFieldValue(
+      "administrativeArea",
+      address.administrativeAreaLevelOne,
+      true,
+    );
+    formik.setFieldValue("postalCode", address.postalCode, true);
+    formik.setFieldValue("latitude", address.latitude, true);
+    formik.setFieldValue("longitude", address.longitude, true);
+    formik.setFieldError("locality", undefined);
+    setShowAddress(true);
   };
 
-  const validateStep1 = () => {
-    event?.preventDefault();
-    const errors: any = {};
-    if (!formik.values.listingType) errors.listingType = "Required";
-    if (!formik.values.propertyType) errors.propertyType = "Required";
-    if (!formik.values.locality) errors.locality = "Please select an address from the suggestions";
-    if (!formik.values.price) errors.price = "Required";
-    return errors;
+  const handleContinue = () => {
+    const errors = validateGeneralInfo(formik.values);
+    applyStepErrors(formik, getGeneralInfoFields(), errors);
+
+    if (Object.keys(errors).length === 0) {
+      handleNext();
+      return;
+    }
+
+    setShowErrors(true);
   };
+
   return (
-    <>
-      <div className="max-w-screen-xl m-auto">
-        {isShow && show ? (
-          <StepsTopInfo
-            stepNumber={stepNumber}
-            title={title}
-            description="In this step we will ask you information about your intention whether you’re renting or selling a property. We will also acquire information about your property, its type, location, specifics and special characteristics."
-            imageSrc={property1}
-            step={step}
-            onClick={() => setShow(false)}
-          />
-        ) : (
-          <div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 py-10 w-full gap-0 md:gap-20 items-center">
-              <div>
-                <p className="text-[18px] text-[#222]">{stepNumber}</p>
-                <h4
-                  className="text-[24px] md:text-[40px] font-bold py-10"
-                  style={{ lineHeight: "120%" }}
-                >
-                  {title}
-                </h4>
-              </div>
-            </div>
-            <div className="grid md:grid-cols-2 gap-8 md:gap-16">
-              <p className={"text-2xl font-bold"}>
-                Are you planning to rent or sell your property?
-              </p>
-              <div className="">
-                <PropertyPlacementRadioButtons
-                  value={formik.values.listingType}
-                  options={LISTING_TYPES}
-                  onChange={(e) => formik.setFieldValue("listingType", e, true)}
-                  id="listingType"
-                />
-                {showError && formik.errors.listingType && (
-                  <FormHelperText error>
-                    {formik?.errors?.listingType}
-                  </FormHelperText>
-                )}
-              </div>
-            </div>
-            <Divider className={"my-8 md:my-14"} />
-            <div className="grid md:grid-cols-2 gap-8 md:gap-16">
-              <p className={"text-2xl font-bold"}>What is your property type</p>
-              <div>
-                <Select
-                  id="propertyType"
-                  onChange={(e) =>
-                    formik.setFieldValue("propertyType", e, true)
-                  }
-                  value={formik.values.propertyType}
-                  onBlur={formik.handleBlur("propertyType")}
-                >
-                  {PROPERTY_TYPES.map((item, index) => (
-                    <SelectItem value={item} key={index}>
-                      {item}
-                    </SelectItem>
-                  ))}
-                </Select>
-                {showError && formik.errors.propertyType && (
-                  <FormHelperText error>
-                    {formik.errors.propertyType}
-                  </FormHelperText>
-                )}
-              </div>
-            </div>
-            <Divider className={"my-8 md:my-14"} />
-            <div className="grid md:grid-cols-2 gap-8 md:gap-16">
-              <p className={"text-2xl font-bold"}>
-                What is the location of your property
-              </p>
-              <div className="">
-                <div className="mb-7">
-                  <p className={"mb-2"}>Type your address</p>
+    <div className="mx-auto max-w-screen-xl">
+      {isShow && show ? (
+        <StepsTopInfo
+          stepNumber={stepNumber}
+          title="Start with the core listing details"
+          description="Set the intent, choose the property type, select the real address, and add the asking price. These details drive how the listing is presented and searched."
+          imageSrc={property1}
+          step={step}
+          onClick={() => setShow(false)}
+        />
+      ) : (
+        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8 lg:p-10">
+          <div className="mb-3 text-sm font-bold uppercase tracking-wide text-[#1F5FD6]">
+            {stepNumber}
+          </div>
+          <div className="max-w-3xl">
+            <h2 className="text-3xl font-bold tracking-tight text-[#1F2937] md:text-4xl">
+              {title}
+            </h2>
+            <p className="mt-3 text-sm leading-6 text-[#64748B] md:text-base">
+              Keep this part precise. It becomes the headline information buyers
+              see first.
+            </p>
+          </div>
+
+          <div className="mt-4">
+            <SectionRow
+              icon={<HomeModernIcon className="h-5 w-5" />}
+              title="Listing intent"
+              description="Choose whether this property is being sold or offered for rent."
+            >
+              <PropertyPlacementRadioButtons
+                value={formik.values.listingType}
+                options={LISTING_TYPES}
+                onChange={(value) =>
+                  formik.setFieldValue("listingType", value, true)
+                }
+                id="listingType"
+              />
+              {showError && (
+                <ErrorText>{formik.errors.listingType as string}</ErrorText>
+              )}
+            </SectionRow>
+
+            <SectionRow
+              icon={<TagIcon className="h-5 w-5" />}
+              title="Property type"
+              description="Pick the closest category so filters and recommendations work correctly."
+            >
+              <select
+                id="propertyType"
+                name="propertyType"
+                value={formik.values.propertyType}
+                onChange={(event) =>
+                  formik.setFieldValue("propertyType", event.target.value, true)
+                }
+                onBlur={formik.handleBlur}
+                className={inputClass}
+              >
+                <option value="" disabled>
+                  Select property type
+                </option>
+                {PROPERTY_TYPES.map((item) => (
+                  <option value={item} key={item}>
+                    {item}
+                  </option>
+                ))}
+              </select>
+              {showError && (
+                <ErrorText>{formik.errors.propertyType as string}</ErrorText>
+              )}
+            </SectionRow>
+
+            <SectionRow
+              icon={<MapPinIcon className="h-5 w-5" />}
+              title="Location"
+              description="Select the address from Google suggestions so the map and locality data are stored correctly."
+            >
+              <div className="space-y-5">
+                <div>
+                  <label
+                    className="mb-2 block text-sm font-bold text-[#1F2937]"
+                    htmlFor="address"
+                  >
+                    Address
+                  </label>
                   <AddressAutocomplete onAddressChange={handleAddressChange} />
-                  {showError && formik.errors.locality && (
-                    <FormHelperText error>{formik.errors.locality}</FormHelperText>
+                  {showError && (
+                    <ErrorText>{formik.errors.locality as string}</ErrorText>
                   )}
                 </div>
+
                 {showAddress && (
-                  <div className="">
-                    <div className="mb-7">
-                      <p className={"mb-2"}>House number</p>
-                      <TextInput value={formik.values.streetNumber} disabled />
-                    </div>
-                    <div className="mb-7">
-                      <p className={"mb-2"}>Street</p>
-                      <TextInput value={formik.values.route} disabled />
-                    </div>
-                    <div className="mb-7">
-                      <p className={"mb-2"}>Neighborhood</p>
-                      <TextInput value={formik.values.neighborhood} disabled />
-                    </div>
-                    <div className="mb-7">
-                      <p className={"mb-2"}>City</p>
-                      <TextInput value={formik.values.locality} disabled />
-                    </div>
-                    <div className="mb-7">
-                      <p className={"mb-2"}>Administrative area</p>
-                      <TextInput
-                        value={formik.values.administrativeArea}
+                  <div className="grid gap-4 rounded-2xl border border-slate-200 bg-[#F8FAFC] p-4 sm:grid-cols-2">
+                    <div>
+                      <p className="mb-1 text-xs font-bold uppercase text-[#64748B]">
+                        House number
+                      </p>
+                      <input
+                        value={formik.values.streetNumber}
+                        className={inputClass}
                         disabled
+                        readOnly
                       />
                     </div>
-                    <div className="mb-7">
-                      <p className={"mb-2"}>Postal Code</p>
-                      <TextInput value={formik.values.postalCode} disabled />
+                    <div>
+                      <p className="mb-1 text-xs font-bold uppercase text-[#64748B]">
+                        Street
+                      </p>
+                      <input
+                        value={formik.values.route}
+                        className={inputClass}
+                        disabled
+                        readOnly
+                      />
+                    </div>
+                    <div>
+                      <p className="mb-1 text-xs font-bold uppercase text-[#64748B]">
+                        Neighborhood
+                      </p>
+                      <input
+                        value={formik.values.neighborhood}
+                        className={inputClass}
+                        disabled
+                        readOnly
+                      />
+                    </div>
+                    <div>
+                      <p className="mb-1 text-xs font-bold uppercase text-[#64748B]">
+                        City
+                      </p>
+                      <input
+                        value={formik.values.locality}
+                        className={inputClass}
+                        disabled
+                        readOnly
+                      />
+                    </div>
+                    <div>
+                      <p className="mb-1 text-xs font-bold uppercase text-[#64748B]">
+                        Administrative area
+                      </p>
+                      <input
+                        value={formik.values.administrativeArea}
+                        className={inputClass}
+                        disabled
+                        readOnly
+                      />
+                    </div>
+                    <div>
+                      <p className="mb-1 text-xs font-bold uppercase text-[#64748B]">
+                        Postal code
+                      </p>
+                      <input
+                        value={formik.values.postalCode}
+                        className={inputClass}
+                        disabled
+                        readOnly
+                      />
                     </div>
                   </div>
                 )}
               </div>
-            </div>
-            <Divider className={"my-8 md:my-14"} />
-            <div className="grid md:grid-cols-2 gap-8 md:gap-16">
-              <p className={"text-2xl font-bold"}>What is your asking price</p>
-              <div className="">
-                <div className="mb-14">
-                  <p className={"mb-2"}>Type your price</p>
-                  <div className="relative flex items-center">
-                    <span className="absolute left-3 text-gray-500 text-sm pointer-events-none select-none font-medium">€</span>
-                    <input
-                      type="text"
-                      inputMode="numeric"
-                      id="price"
-                      name="price"
-                      placeholder="0"
-                      value={priceDisplay}
-                      onChange={handlePriceChange}
-                      onBlur={formik.handleBlur("price")}
-                      className="w-full pl-7 pr-3 py-2 text-sm rounded-md border border-gray-200 bg-white text-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-400 transition"
-                    />
-                  </div>
-                  {(showError || formik.touched.price) && formik.errors.price && (
-                    <FormHelperText error>{formik.errors.price}</FormHelperText>
-                  )}
-                </div>
-                <Button
-                  className="min-w-[250px]"
-                  icon={ArrowSmallRightIcon}
-                  size={"xl"}
-                  iconPosition={"right"}
-                  onClick={async () => {
-                    const errors = validateStep1();
-                    formik.setErrors(errors);
-                    if (Object.keys(errors).length === 0) {
-                      handleNext();
-                    } else {
-                      setShowErros(true);
-                    }
-                  }}
-                >
-                  Next
-                </Button>
+            </SectionRow>
+
+            <SectionRow
+              icon={<BanknotesIcon className="h-5 w-5" />}
+              title="Asking price"
+              description="Prices are stored in euro and displayed with Bulgarian number formatting."
+            >
+              <label
+                className="mb-2 block text-sm font-bold text-[#1F2937]"
+                htmlFor="price"
+              >
+                Price
+              </label>
+              <div className="relative">
+                <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-sm font-bold text-[#64748B]">
+                  €
+                </span>
+                <input
+                  type="text"
+                  inputMode="numeric"
+                  id="price"
+                  name="price"
+                  placeholder="0"
+                  value={priceDisplay}
+                  onChange={handlePriceChange}
+                  onBlur={formik.handleBlur}
+                  className={`${inputClass} pl-9`}
+                />
               </div>
-            </div>
+              {showError && (
+                <ErrorText>{formik.errors.price as string}</ErrorText>
+              )}
+            </SectionRow>
           </div>
-        )}
-      </div>
-    </>
+
+          <div className="mt-8 flex justify-end">
+            <button
+              type="button"
+              onClick={handleContinue}
+              className="inline-flex min-h-[50px] w-full items-center justify-center rounded-xl bg-[#1F5FD6] px-6 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-[#184FB5] sm:w-auto"
+            >
+              Continue to details
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
   );
 };
 

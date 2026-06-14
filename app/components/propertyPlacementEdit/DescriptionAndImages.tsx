@@ -1,21 +1,60 @@
 import React, { useState } from "react";
 import StepsTopInfo from "./StepsTopInfo";
 import property1 from "@/public/property1.png";
-import { Button, Divider } from "@tremor/react";
-import { ArrowSmallRightIcon } from "@heroicons/react/24/solid";
+import {
+  ArrowLeftIcon,
+  ChatBubbleLeftRightIcon,
+  PhotoIcon,
+} from "@heroicons/react/24/outline";
 
 import { ListingImage } from "@/types";
 import { PlacingPropertyImagesHandler } from "@/app/components/propertyPlacementEdit/PlacingPropertyImagesHandler";
 import { useGenerateDescription } from "@/providers/GenerateDescription";
 import { FormikProps } from "formik";
+import {
+  applyStepErrors,
+  getDescriptionFields,
+  PlacementFormValues,
+  validateDescriptionAndImages,
+} from "./validation";
 
 interface CreatePropertyComponentPropInterface {
-  formik: FormikProps<any>;
+  formik: FormikProps<PlacementFormValues>;
   handleNext: () => void;
   handleBack: () => void;
   step: number;
   isShow: boolean;
 }
+
+type SectionProps = {
+  icon: React.ReactNode;
+  title: string;
+  description: string;
+  children: React.ReactNode;
+};
+
+const ErrorText = ({ children }: { children?: React.ReactNode }) => {
+  if (!children) return null;
+
+  return <p className="mt-2 text-sm font-semibold text-red-600">{children}</p>;
+};
+
+const SectionRow = ({ icon, title, description, children }: SectionProps) => (
+  <section className="grid gap-5 border-b border-slate-200 py-8 last:border-b-0 lg:grid-cols-[0.9fr_1.1fr] lg:gap-10">
+    <div className="flex gap-4">
+      <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#EAF2FF] text-[#1F5FD6]">
+        {icon}
+      </span>
+      <div>
+        <h3 className="text-xl font-bold text-[#1F2937]">{title}</h3>
+        <p className="mt-2 max-w-md text-sm leading-6 text-[#64748B]">
+          {description}
+        </p>
+      </div>
+    </div>
+    <div>{children}</div>
+  </section>
+);
 
 function DescriptionAndImages({
   formik,
@@ -25,10 +64,12 @@ function DescriptionAndImages({
   isShow,
 }: CreatePropertyComponentPropInterface) {
   const [show, setShow] = useState(true);
+  const [showError, setShowErrors] = useState(false);
   const generate = useGenerateDescription();
 
   const handleImagesChange = (images: ListingImage[]) => {
     formik.setFieldValue("images", images, true);
+    formik.setFieldTouched("images", true, false);
   };
 
   const generateDescription = async () => {
@@ -57,129 +98,143 @@ function DescriptionAndImages({
     await formik.setFieldValue("description", generatedDescription, true);
   };
 
+  const handleContinue = () => {
+    const errors = validateDescriptionAndImages(formik.values);
+    applyStepErrors(formik, getDescriptionFields(), errors);
+
+    if (Object.keys(errors).length === 0) {
+      handleNext();
+      return;
+    }
+
+    setShowErrors(true);
+  };
+
+  const description = formik.values.description || "";
   const stepNumber = "Step 3";
-  const title = "Make your space stand out!";
-  const description =
-    "In this step we will ask you information about your intention whether you’re renting or selling a property. We will also acquire information about your property, its type, location, specifics and special characteristics.";
+
   return (
-    <>
-      <div className="max-w-screen-xl m-auto">
-        {isShow && show ? (
-          <StepsTopInfo
-            stepNumber={stepNumber}
-            title={title}
-            description={description}
-            imageSrc={property1}
-            step={step}
-            handleBack={handleBack}
-            onClick={() => setShow(false)}
-          />
-        ) : (
-          <div className="container">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 py-10 w-full gap-0 md:gap-20 items-center">
+    <div className="mx-auto max-w-screen-xl">
+      {isShow && show ? (
+        <StepsTopInfo
+          stepNumber={stepNumber}
+          title="Make the listing feel complete"
+          description="Add photos if they are available and write a clear description. This is the part that turns property data into a listing people can picture themselves visiting."
+          imageSrc={property1}
+          step={step}
+          handleBack={handleBack}
+          onClick={() => setShow(false)}
+        />
+      ) : (
+        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8 lg:p-10">
+          <div className="mb-3 text-sm font-bold uppercase tracking-wide text-[#1F5FD6]">
+            {stepNumber}
+          </div>
+          <div className="max-w-3xl">
+            <h2 className="text-3xl font-bold tracking-tight text-[#1F2937] md:text-4xl">
+              Photos and description
+            </h2>
+            <p className="mt-3 text-sm leading-6 text-[#64748B] md:text-base">
+              Add enough visual context and describe the best qualities of the
+              property in plain language.
+            </p>
+          </div>
+
+          <div className="mt-4">
+            <SectionRow
+              icon={<PhotoIcon className="h-5 w-5" />}
+              title="Property photos"
+              description="Photos are optional. If you upload any, the first image becomes the main listing image."
+            >
+              <PlacingPropertyImagesHandler
+                initialImages={formik.values.images || []}
+                onChange={handleImagesChange}
+              />
+            </SectionRow>
+
+            <SectionRow
+              icon={<ChatBubbleLeftRightIcon className="h-5 w-5" />}
+              title="Description"
+              description="Mention the space, light, condition, location and any details that make the property easier to evaluate."
+            >
               <div>
-                <p className="text-[18px] text-[#222]">{stepNumber}</p>
-                <h4
-                  className="text-[24px] md:text-[40px] font-bold py-10"
-                  style={{ lineHeight: "120%" }}
-                >
-                  {title}
-                </h4>
-              </div>
-            </div>
-            <div className="grid md:grid-cols-2 gap-8 md:gap-16">
-              <div>
-                <p className={"text-2xl font-bold"}>
-                  Upload at least 3 pictures <br /> of your property
-                </p>
-              </div>
-              <div className="grid gap-6">
-                {/*<p>You can drag and drop images to change the order</p>*/}
-                <PlacingPropertyImagesHandler
-                  initialImages={formik.values.images || []}
-                  onChange={handleImagesChange}
-                />
-              </div>
-            </div>
-            <Divider className={"my-8 md:my-14"} />
-            <div className="grid md:grid-cols-2 gap-8 md:gap-16">
-              <p className={"text-2xl font-bold"}>
-                Write description about your <br />
-                property
-              </p>
-              <div className="flex flex-col gap-4">
-                <p className={"text-md font-bold"}>Description</p>
-                <p className={"text-md font-light text-[#616161]"}>
-                  Share what&apos;s special about your space.
-                </p>
-                {/* TODO: re-enable generate description */}
+                <div className="mb-3 flex items-center justify-between gap-4">
+                  <label
+                    className="block text-sm font-bold text-[#1F2937]"
+                    htmlFor="description"
+                  >
+                    Listing description
+                  </label>
+                  <span className="text-xs font-semibold text-[#64748B]">
+                    {description.trim().length} characters
+                  </span>
+                </div>
                 {false && (
-                  <>
-                    <p className={"text-md font-light text-[#616161] text-sm"}>
-                      Let us help you with that and generate a description for you. Just click the button below. <br />
-                      It can take up to 30 seconds.
+                  <div className="mb-4 rounded-xl border border-[#CFE0FF] bg-[#F6F9FF] p-4">
+                    <p className="text-sm text-[#596579]">
+                      Generate a first draft from the listing details. It can
+                      take up to 30 seconds.
                     </p>
-                    <Button
+                    <button
                       disabled={generate.isLoading}
                       type="button"
-                      variant={"secondary"}
                       onClick={generateDescription}
+                      className="mt-3 inline-flex rounded-xl border border-[#1F5FD6] px-4 py-2 text-sm font-bold text-[#1F5FD6] transition hover:bg-[#1F5FD6] hover:text-white disabled:opacity-50"
                     >
                       {generate.isLoading ? "Generating..." : "Generate"}
-                    </Button>
-
-                    {/* Show error message */}
+                    </button>
                     {generate.isError && (
-                      <div className="text-red-500">
-                        Oops! Something went wrong. Please try generating again later.
-                      </div>
+                      <p className="mt-3 text-sm font-semibold text-red-600">
+                        Oops. Something went wrong. Please try again later.
+                      </p>
                     )}
-                  </>
+                  </div>
                 )}
 
                 <textarea
                   disabled={generate.isLoading}
-                  onChange={(e) => {
-                    formik.setFieldValue("description", e.target.value);
+                  onChange={(event) => {
+                    formik.setFieldValue(
+                      "description",
+                      event.target.value,
+                      true,
+                    );
                   }}
-                  value={formik.values.description}
+                  onBlur={formik.handleBlur}
+                  value={description}
                   name="description"
                   id="description"
-                  placeholder="Type your description here"
-                  className={
-                    "border-2 border-[#97B6FF] rounded-md max-w-[676px] outline-0 min-h-[150px] p-3 text-gray-500 text-md"
-                  }
+                  placeholder="Describe the layout, condition, natural light, location and anything buyers should know."
+                  className="min-h-[190px] w-full resize-y rounded-xl border border-slate-200 bg-white p-4 text-sm leading-6 text-[#1F2937] outline-none transition placeholder:text-slate-400 focus:border-[#1F5FD6] focus:ring-2 focus:ring-[#1F5FD6]/15 disabled:bg-slate-50"
                 />
+                {showError && (
+                  <ErrorText>{formik.errors.description as string}</ErrorText>
+                )}
               </div>
-            </div>
-            <Divider className={"my-8 md:my-14"} />
-            <div className="grid md:grid-cols-2 gap-8 md:gap-16">
-              <div></div>
-              <div className="flex items-center flex-wrap justify-between gap-4">
-                <Button
-                  onClick={handleBack}
-                  variant="secondary"
-                  size={"xl"}
-                  className="w-full lg:max-w-[250px]"
-                >
-                  Back
-                </Button>
-                <Button
-                  className="w-full lg:max-w-[250px]"
-                  icon={ArrowSmallRightIcon}
-                  size={"xl"}
-                  iconPosition={"right"}
-                  onClick={handleNext}
-                  disabled={generate.isLoading}
-                >
-                  Next
-                </Button>
-              </div>
-            </div>
+            </SectionRow>
           </div>
-        )}
-      </div>
-    </>
+
+          <div className="mt-8 flex flex-col-reverse gap-3 sm:flex-row sm:justify-between">
+            <button
+              type="button"
+              onClick={handleBack}
+              className="inline-flex min-h-[50px] w-full items-center justify-center gap-2 rounded-xl border border-slate-300 bg-white px-6 py-3 text-sm font-bold text-[#334155] transition hover:border-[#1F5FD6] hover:text-[#1F5FD6] sm:w-auto"
+            >
+              <ArrowLeftIcon className="h-4 w-4" />
+              Back
+            </button>
+            <button
+              type="button"
+              onClick={handleContinue}
+              disabled={generate.isLoading}
+              className="inline-flex min-h-[50px] w-full items-center justify-center rounded-xl bg-[#1F5FD6] px-6 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-[#184FB5] disabled:opacity-50 sm:w-auto"
+            >
+              Continue to review
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
   );
 }
 
