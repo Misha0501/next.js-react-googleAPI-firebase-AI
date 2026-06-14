@@ -67,30 +67,22 @@ const GeneralInfo = ({
       formik.setFieldValue("neighborhood", address.neighborhood);
       formik.setFieldValue("streetNumber", address.streetNumber);
       formik.setFieldValue("locality", address.locality);
-      formik.setFieldValue(
-        "administrativeArea",
-        address.administrativeAreaLevelOne
-      );
+      formik.setFieldValue("administrativeArea", address.administrativeAreaLevelOne);
       formik.setFieldValue("postalCode", address.postalCode);
       formik.setFieldValue("latitude", address.latitude);
       formik.setFieldValue("longitude", address.longitude);
       setShowAddress(true);
+      formik.setFieldError("locality", undefined);
     }
   };
 
   const validateStep1 = () => {
     event?.preventDefault();
-    let errors: any = {};
-    if (!formik.values.listingType) {
-      errors.listingType = "Required";
-    }
-    if (!formik.values.propertyType) {
-      errors.propertyType = "Required";
-    }
-    if (!formik.values.price) {
-      errors.price = "Required";
-    }
-
+    const errors: any = {};
+    if (!formik.values.listingType) errors.listingType = "Required";
+    if (!formik.values.propertyType) errors.propertyType = "Required";
+    if (!formik.values.locality) errors.locality = "Please select an address from the suggestions";
+    if (!formik.values.price) errors.price = "Required";
     return errors;
   };
   return (
@@ -129,7 +121,7 @@ const GeneralInfo = ({
                   onChange={(e) => formik.setFieldValue("listingType", e, true)}
                   id="listingType"
                 />
-                {formik.touched.listingType && formik.errors.listingType && (
+                {showError && formik.errors.listingType && (
                   <FormHelperText error>
                     {formik?.errors?.listingType}
                   </FormHelperText>
@@ -170,6 +162,9 @@ const GeneralInfo = ({
                 <div className="mb-7">
                   <p className={"mb-2"}>Type your address</p>
                   <AddressAutocomplete onAddressChange={handleAddressChange} />
+                  {showError && formik.errors.locality && (
+                    <FormHelperText error>{formik.errors.locality}</FormHelperText>
+                  )}
                 </div>
                 {showAddress && (
                   <div className="">
@@ -209,14 +204,6 @@ const GeneralInfo = ({
                       <p className={"mb-2"}>Postal Code</p>
                       <TextInput value={formik.values.postalCode} disabled />
                     </div>
-                    <div className="mb-7">
-                      <p className={"mb-2"}>Latitude</p>
-                      <TextInput value={formik.values.latitude} disabled />
-                    </div>
-                    <div className="mb-7">
-                      <p className={"mb-2"}>Longitude</p>
-                      <TextInput value={formik.values.longitude} disabled />
-                    </div>
                   </div>
                 )}
               </div>
@@ -241,7 +228,7 @@ const GeneralInfo = ({
                       className="w-full pl-7 pr-3 py-2 text-sm rounded-md border border-gray-200 bg-white text-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-400 transition"
                     />
                   </div>
-                  {formik.touched.price && formik.errors.price && (
+                  {(showError || formik.touched.price) && formik.errors.price && (
                     <FormHelperText error>{formik.errors.price}</FormHelperText>
                   )}
                 </div>
