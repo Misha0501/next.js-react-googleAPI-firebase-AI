@@ -17,8 +17,8 @@ type Props = {
 };
 
 export const ListingDetailImages = ({ images }: Props) => {
-  const listingImagesAmount = useMemo(() => images?.length, [images]);
-  const lightboxSlides = images?.map((item) => ({ src: item.url }));
+  const listingImagesAmount = useMemo(() => images?.length ?? 0, [images]);
+  const lightboxSlides = images?.map((item) => ({ src: item.url })) ?? [];
   const [openLightBox, setOpenLightBox] = useState(false);
   const [lightBoxImageIndex, setLightBoxImageIndex] = useState(0);
 
@@ -27,7 +27,23 @@ export const ListingDetailImages = ({ images }: Props) => {
     setOpenLightBox(true);
   };
 
-  if (!images?.length) return null;
+  if (!images?.length) {
+    return (
+      <div className="flex h-[56vw] min-h-[260px] items-center justify-center overflow-hidden rounded-2xl border border-dashed border-slate-300 bg-white shadow-sm lg:h-[460px]">
+        <div className="flex max-w-xs flex-col items-center px-6 text-center">
+          <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-[#EAF2FF]">
+            <PhotoIcon className="h-7 w-7 text-[#1F5FD6]" />
+          </div>
+          <p className="text-base font-semibold text-[#2D3648]">
+            Photos coming soon
+          </p>
+          <p className="mt-1 text-sm text-[#717D96]">
+            The seller has not uploaded property images yet.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -40,26 +56,26 @@ export const ListingDetailImages = ({ images }: Props) => {
       />
 
       {/* Desktop grid */}
-      <div className="relative hidden lg:block h-[420px] overflow-hidden rounded-xl">
+      <div className="relative hidden h-[460px] overflow-hidden rounded-2xl border border-slate-200 bg-white p-1.5 shadow-[0_18px_45px_rgba(15,23,42,0.12)] lg:block">
         <div
-          className={`h-full grid gap-2 ${
+          className={`grid h-full gap-1.5 ${
             listingImagesAmount === 1
               ? "grid-cols-1"
               : listingImagesAmount === 2
-              ? "grid-cols-2"
-              : "grid-cols-3"
+                ? "grid-cols-2"
+                : "grid-cols-3"
           }`}
         >
           {/* Main image */}
           {images[0]?.url && (
             <div
               onClick={() => handleOpenLightBox(0)}
-              className={`overflow-hidden rounded-lg cursor-pointer ${
+              className={`group overflow-hidden rounded-xl cursor-pointer ${
                 listingImagesAmount > 2 ? "col-span-2" : "col-span-1"
               }`}
             >
               <Image
-                className="object-cover w-full h-full"
+                className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.02]"
                 height={680}
                 width={1500}
                 sizes="(max-width: 1024px) 100vw, 66vw"
@@ -72,11 +88,11 @@ export const ListingDetailImages = ({ images }: Props) => {
           {/* 2-image layout: second image beside main */}
           {listingImagesAmount === 2 && images[1]?.url && (
             <div
-              className="overflow-hidden rounded-lg cursor-pointer"
+              className="group overflow-hidden rounded-xl cursor-pointer"
               onClick={() => handleOpenLightBox(1)}
             >
               <Image
-                className="object-cover w-full h-full"
+                className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.02]"
                 height={600}
                 width={480}
                 src={images[1].url}
@@ -87,14 +103,14 @@ export const ListingDetailImages = ({ images }: Props) => {
 
           {/* 3+ image layout: right column with 2 stacked images */}
           {listingImagesAmount > 2 && (
-            <div className="grid grid-rows-2 gap-2 h-full min-h-0">
+            <div className="grid h-full min-h-0 grid-rows-2 gap-1.5">
               {images[1]?.url && (
                 <div
-                  className="overflow-hidden rounded-lg cursor-pointer min-h-0"
+                  className="group min-h-0 overflow-hidden rounded-xl cursor-pointer"
                   onClick={() => handleOpenLightBox(1)}
                 >
                   <Image
-                    className="object-cover w-full h-full"
+                    className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.02]"
                     height={322}
                     width={492}
                     src={images[1].url}
@@ -104,11 +120,11 @@ export const ListingDetailImages = ({ images }: Props) => {
               )}
               {images[2]?.url && (
                 <div
-                  className="overflow-hidden rounded-lg cursor-pointer min-h-0"
+                  className="group min-h-0 overflow-hidden rounded-xl cursor-pointer"
                   onClick={() => handleOpenLightBox(2)}
                 >
                   <Image
-                    className="object-cover w-full h-full"
+                    className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.02]"
                     height={322}
                     width={492}
                     src={images[2].url}
@@ -123,9 +139,10 @@ export const ListingDetailImages = ({ images }: Props) => {
         {images[2]?.url && (
           <Button
             onClick={() => handleOpenLightBox(1)}
-            className="absolute bottom-4 right-4"
+            className="absolute bottom-5 right-5 border border-white/80 bg-white text-[#2D3648] shadow-lg hover:bg-slate-50"
             icon={PhotoIcon}
             data-testid="viewAllPhotos"
+            variant="secondary"
           >
             View all photos
           </Button>
@@ -136,11 +153,11 @@ export const ListingDetailImages = ({ images }: Props) => {
       <div className="block lg:hidden">
         {images[0]?.url && (
           <div
-            className="h-[56vw] min-h-[220px] max-h-[340px] overflow-hidden cursor-pointer"
+            className="h-[56vw] min-h-[220px] max-h-[360px] overflow-hidden rounded-t-2xl border border-b-0 border-slate-200 bg-white cursor-pointer shadow-sm"
             onClick={() => handleOpenLightBox(0)}
           >
             <Image
-              className="object-cover w-full h-full"
+              className="h-full w-full object-cover"
               height={500}
               width={800}
               sizes="100vw"
@@ -149,19 +166,21 @@ export const ListingDetailImages = ({ images }: Props) => {
             />
           </div>
         )}
-        <div className="bg-[#F2F2F2] border-b border-[#ccc]">
-          <div className="flex justify-around py-4">
+        <div className="rounded-b-2xl border border-slate-200 bg-white shadow-sm">
+          <div className="grid grid-cols-2 divide-x divide-slate-200 py-2">
             <Button
               icon={PhotosIcon}
               onClick={() => setOpenLightBox(true)}
-              className="flex gap-1 p-0 bg-transparent border-0 text-tremor-brand-textPrimary font-bold hover:bg-transparent"
+              variant="light"
+              className="flex justify-center gap-1 border-0 bg-transparent text-[#1F5FD6] hover:bg-[#EAF2FF]"
             >
               Photos
             </Button>
             <Link href="#mapSection">
               <Button
                 icon={VerticaleMap}
-                className="flex gap-1 p-0 bg-transparent border-0 text-tremor-brand-textPrimary font-bold hover:bg-transparent"
+                variant="light"
+                className="flex w-full justify-center gap-1 border-0 bg-transparent text-[#1F5FD6] hover:bg-[#EAF2FF]"
               >
                 Location
               </Button>

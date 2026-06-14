@@ -10,11 +10,8 @@ type Props = {
   listing?: Listing;
   initialPhoneNumber?: string;
 };
-export const FloatingContactBar = ({
-  listing,
-  initialPhoneNumber,
-}: Props) => {
-  const {setContactSellerFormVisible} = useListigDetailContext();
+export const FloatingContactBar = ({ listing, initialPhoneNumber }: Props) => {
+  const { setContactSellerFormVisible } = useListigDetailContext();
   const router = useRouter();
   const handleContactAgentClick = () => {
     setContactSellerFormVisible(true);
@@ -27,12 +24,13 @@ export const FloatingContactBar = ({
     listing?.company?.phoneNumber ??
     listing?.applicationUser?.phoneNumber ??
     "";
+  const actionWidth = phoneNumber ? "w-1/2" : "w-full";
 
   return (
-    <div className="fixed bottom-[68px] left-0 right-0 bg-white border-t-2 lg:hidden shadow-2xl py-4">
-      <div className="container flex items-center gap-4 justify-around">
+    <div className="fixed bottom-[68px] left-0 right-0 z-40 border-t border-slate-200 bg-white/95 py-3 shadow-2xl backdrop-blur lg:hidden">
+      <div className="mx-auto flex max-w-screen-sm items-center gap-3 px-4">
         {phoneNumber && (
-          <a href={`tel:${phoneNumber}`} className="w-1/2">
+          <a href={`tel:${phoneNumber}`} className={actionWidth}>
             <Button variant="secondary" icon={PhoneIcon} className={"w-full"}>
               Call
             </Button>
@@ -41,10 +39,10 @@ export const FloatingContactBar = ({
         <Button
           variant="primary"
           icon={EnvelopeIcon}
-          className="w-1/2"
+          className={actionWidth}
           onClick={handleContactAgentClick}
         >
-          Contact Seller
+          Contact seller
         </Button>
       </div>
     </div>

@@ -15,10 +15,13 @@ type TimelineEvent = {
   type: "listed" | "price" | "expiry";
 };
 
-const dot: Record<TimelineEvent["type"], { bg: string; icon: React.ReactNode }> = {
+const dot: Record<
+  TimelineEvent["type"],
+  { bg: string; icon: React.ReactNode }
+> = {
   listed: {
-    bg: "bg-blue-100 border-blue-300",
-    icon: <CheckCircleIcon className="h-4 w-4 text-blue-600" />,
+    bg: "bg-[#EAF2FF] border-[#BFD4FF]",
+    icon: <CheckCircleIcon className="h-4 w-4 text-[#1F5FD6]" />,
   },
   price: {
     bg: "bg-amber-50 border-amber-300",
@@ -86,66 +89,81 @@ export const ListingTimeline = ({ listing }: Prop) => {
   );
 
   return (
-    <div className="py-8 lg:py-10">
-      <div className="container">
-        <p className="font-semibold text-[#2D3648] text-2xl mb-8">
-          Listing history
-        </p>
+    <section>
+      <div className="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
+        <div className="rounded-2xl border border-slate-200 bg-white px-5 py-6 shadow-sm sm:px-6 lg:px-8">
+          <div className="mb-8 flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <p className="text-lg font-semibold text-[#2D3648] sm:text-xl">
+                Listing history
+              </p>
+              <p className="mt-1 text-sm text-[#717D96]">
+                Price and availability changes over time
+              </p>
+            </div>
+          </div>
 
-        {/* Desktop horizontal timeline */}
-        <div className="hidden md:block overflow-x-auto scrollbar-hide">
-          <div className="flex items-start min-w-max pb-2">
+          {/* Desktop horizontal timeline */}
+          <div className="hidden overflow-x-auto scrollbar-hide md:block">
+            <div className="flex min-w-max items-start pb-2">
+              {sortedEvents.map((event, i) => (
+                <div key={i} className="flex items-start">
+                  {/* Event */}
+                  <div className="flex w-44 flex-col items-center">
+                    <div
+                      className={`mb-3 flex h-9 w-9 items-center justify-center rounded-full border-2 ${dot[event.type].bg}`}
+                    >
+                      {dot[event.type].icon}
+                    </div>
+                    <p className="mb-1 text-xs text-[#717D96]">
+                      {fmt(event.date)}
+                    </p>
+                    <p className="text-center text-sm font-semibold text-[#2D3648]">
+                      {event.label}
+                    </p>
+                    {event.sublabel && (
+                      <p className="mt-0.5 text-sm text-[#717D96]">
+                        {event.sublabel}
+                      </p>
+                    )}
+                  </div>
+                  {/* Connector */}
+                  {i < sortedEvents.length - 1 && (
+                    <div className="mt-4 h-px w-12 shrink-0 bg-slate-300" />
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Mobile vertical timeline */}
+          <div className="flex flex-col gap-0 md:hidden">
             {sortedEvents.map((event, i) => (
-              <div key={i} className="flex items-start">
-                {/* Event */}
-                <div className="flex flex-col items-center w-44">
+              <div key={i} className="flex gap-4">
+                <div className="flex flex-col items-center">
                   <div
-                    className={`h-8 w-8 rounded-full border-2 flex items-center justify-center mb-3 ${dot[event.type].bg}`}
+                    className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-2 ${dot[event.type].bg}`}
                   >
                     {dot[event.type].icon}
                   </div>
-                  <p className="text-xs text-[#717D96] mb-1">{fmt(event.date)}</p>
-                  <p className="text-sm font-semibold text-[#2D3648] text-center">
+                  {i < sortedEvents.length - 1 && (
+                    <div className="my-1 w-px flex-1 bg-slate-200" />
+                  )}
+                </div>
+                <div className="pb-6">
+                  <p className="text-xs text-[#717D96]">{fmt(event.date)}</p>
+                  <p className="text-sm font-semibold text-[#2D3648]">
                     {event.label}
                   </p>
                   {event.sublabel && (
-                    <p className="text-sm text-[#717D96] mt-0.5">{event.sublabel}</p>
+                    <p className="text-sm text-[#717D96]">{event.sublabel}</p>
                   )}
                 </div>
-                {/* Connector */}
-                {i < sortedEvents.length - 1 && (
-                  <div className="h-px w-12 bg-gray-300 mt-4 shrink-0" />
-                )}
               </div>
             ))}
           </div>
         </div>
-
-        {/* Mobile vertical timeline */}
-        <div className="md:hidden flex flex-col gap-0">
-          {sortedEvents.map((event, i) => (
-            <div key={i} className="flex gap-4">
-              <div className="flex flex-col items-center">
-                <div
-                  className={`h-8 w-8 rounded-full border-2 flex items-center justify-center shrink-0 ${dot[event.type].bg}`}
-                >
-                  {dot[event.type].icon}
-                </div>
-                {i < sortedEvents.length - 1 && (
-                  <div className="w-px flex-1 bg-gray-200 my-1" />
-                )}
-              </div>
-              <div className="pb-6">
-                <p className="text-xs text-[#717D96]">{fmt(event.date)}</p>
-                <p className="text-sm font-semibold text-[#2D3648]">{event.label}</p>
-                {event.sublabel && (
-                  <p className="text-sm text-[#717D96]">{event.sublabel}</p>
-                )}
-              </div>
-            </div>
-          ))}
-        </div>
       </div>
-    </div>
+    </section>
   );
 };

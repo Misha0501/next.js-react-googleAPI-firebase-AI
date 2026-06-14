@@ -1,6 +1,5 @@
 "use client";
 
-import { Divider } from "@tremor/react";
 import { useMemo, useState } from "react";
 import { Listing } from "@/types";
 import { formatEuroPrice } from "@/app/lib/formatPrice";
@@ -8,63 +7,151 @@ import { formatEuroPrice } from "@/app/lib/formatPrice";
 type Prop = {
   listing: Listing;
 };
+
+type DetailItem = {
+  title: string;
+  value?: string | number | null;
+  testId?: string;
+};
+
+type DetailSectionProps = {
+  title: string;
+  items: DetailItem[];
+  testId: string;
+};
+
+const displayValue = (value?: string | number | null) => {
+  if (value === null || value === undefined || value === "") return "-";
+
+  return value;
+};
+
+const humanize = (value?: string | null) => {
+  if (!value) return "-";
+
+  return value
+    .split("_")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(" ");
+};
+
+const formatDate = (date?: string | null) => {
+  if (!date) return "-";
+
+  const parsedDate = new Date(date);
+
+  if (Number.isNaN(parsedDate.getTime())) return "-";
+
+  return parsedDate.toLocaleDateString("en-GB");
+};
+
+const formatYear = (date?: string | null) => {
+  if (!date) return "-";
+
+  const parsedDate = new Date(date);
+
+  if (Number.isNaN(parsedDate.getTime())) return "-";
+
+  return parsedDate.getFullYear();
+};
+
+const formatSquareMeters = (value?: number | null) =>
+  value === null || value === undefined ? "-" : `${value} m²`;
+
+const formatCubicMeters = (value?: number | null) =>
+  value === null || value === undefined ? "-" : `${value} m³`;
+
+const DetailSection = ({ title, items, testId }: DetailSectionProps) => (
+  <section className="border-t border-slate-100 px-5 py-6 sm:px-6 lg:px-8">
+    <h2 className="text-lg font-semibold text-[#2D3648] sm:text-xl">{title}</h2>
+    <div
+      className="mt-5 grid grid-cols-1 gap-x-8 gap-y-4 sm:grid-cols-2"
+      data-testid={testId}
+    >
+      {items.map((item, index) => (
+        <div
+          key={index}
+          data-testid={item.testId}
+          className="flex items-center justify-between gap-4 border-b border-slate-100 pb-3 last:border-b-0 sm:last:border-b"
+        >
+          <p className="text-sm text-[#717D96]">{item.title}</p>
+          <p className="text-right text-sm font-semibold text-[#2D3648]">
+            {displayValue(item.value)}
+          </p>
+        </div>
+      ))}
+    </div>
+  </section>
+);
+
 export const ListingDetailContent = ({ listing }: Prop) => {
   const [showMore, setShowMore] = useState(false);
 
+  const description = listing?.description ?? "";
+
   const hasLongDescription = useMemo(() => {
-    return listing?.description?.length > 400;
-  } , [listing?.description]);
+    return description.length > 400;
+  }, [description]);
 
-  // format description using to show only 400 characters if it is more than 400 characters
   const formattedDescription = useMemo(() => {
-    return hasLongDescription
-      ? listing?.description?.slice(0, 400) + "..."
-      : listing?.description;
-  }, [listing?.description]);
+    if (!hasLongDescription || showMore) return description;
 
-  const formatOfferedSinceDate = (date: string) => {
-    return new Date(date).toLocaleDateString("en-GB");
-  }
+    return `${description.slice(0, 400)}...`;
+  }, [description, hasLongDescription, showMore]);
 
-  const formatConstructedYearDate = (date: string) => {
-    return new Date(date).getFullYear() ?? "-";
-  }
-
-  let generalInfo = useMemo(
+  const generalInfo = useMemo(
     () => [
       {
         title: "Price",
         value: formatEuroPrice(listing?.price, { fallback: "-" }),
       },
-      { title: "Amount of Rooms", value: listing?.rooms },
-      { title: "Offered Since", value: formatOfferedSinceDate(listing?.createdAt) },
-      { title: "Amount of bathrooms", value: listing?.bathrooms },
-      { title: "Amount of bedrooms", value: listing?.bedrooms },
-      { title: "Interior", value: listing?.interiorType },
-      { title: "Heating", value: listing?.heatingType },
-      { title: "Upkeep", value: listing?.upkeepType },
+      { title: "Listing type", value: humanize(listing?.listingType) },
+      { title: "Property type", value: humanize(listing?.propertyType) },
+      { title: "Offered since", value: formatDate(listing?.createdAt) },
+      { title: "Rooms", value: listing?.rooms },
+      { title: "Bedrooms", value: listing?.bedrooms },
+      { title: "Bathrooms", value: listing?.bathrooms },
+      { title: "Interior", value: humanize(listing?.interiorType) },
+    ],
+    [listing],
+  );
+
+  const areaAndCapacity = useMemo(
+    () => [
+      { title: "Total area", value: formatSquareMeters(listing?.areaTotal) },
+      { title: "Living area", value: formatSquareMeters(listing?.areaLiving) },
+      {
+        title: "Outside area",
+        value: formatSquareMeters(listing?.areaOutside),
+      },
+      { title: "Garden area", value: formatSquareMeters(listing?.areaGarden) },
+      { title: "Land area", value: formatSquareMeters(listing?.areaLand) },
+      { title: "Garage area", value: formatSquareMeters(listing?.areaGarage) },
+      { title: "Volume", value: formatCubicMeters(listing?.volume) },
+    ],
+    [listing],
+  );
+
+  const construction = useMemo(
+    () => [
+      { title: "Year built", value: formatYear(listing?.constructedYear) },
+      { title: "Building type", value: listing?.buildingType },
+      { title: "Floor number", value: listing?.floorNumber },
+      {
+        title: "Floors in building",
+        value: listing?.numberOfFloorsCommon,
+      },
+      {
+        title: "Floors in property",
+        value: listing?.numberOfFloorsProperty,
+      },
+      {
+        title: "Heating",
+        value: humanize(listing?.heatingType),
+        testId: "heating",
+      },
+      { title: "Upkeep", value: humanize(listing?.upkeepType) },
       { title: "Parking places", value: listing?.parking },
-      { title: "Floor number", value: listing?.floorNumber },
-    ],
-    [listing],
-  );
-
-  let areaAndCapacity = useMemo(
-    () => [
-      { title: "Total area", value: listing?.areaTotal },
-      { title: "Outside area", value: listing?.areaOutside },
-      { title: "Living area", value: listing?.areaLiving },
-      { title: "Volume", value: listing?.volume },
-      { title: "Garage", value: listing?.areaGarage },
-    ],
-    [listing],
-  );
-
-  let construction = useMemo(
-    () => [
-      { title: "Year built", value: formatConstructedYearDate(listing?.constructedYear) },
-      { title: "Floor number", value: listing?.floorNumber },
-      { title: "Number of floors property", value: listing?.numberOfFloorsCommon },
     ],
     [listing],
   );
@@ -74,96 +161,48 @@ export const ListingDetailContent = ({ listing }: Prop) => {
   }
 
   return (
-    <div className="lg:pt-12">
-      {formattedDescription && (
-        <>
-          <div className={"py-8 lg:py-0"}>
-            <p className="text-2xl">Description</p>
+    <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+      {description && (
+        <section className="px-5 py-6 sm:px-6 lg:px-8">
+          <div className="max-w-3xl">
+            <h2 className="text-lg font-semibold text-[#2D3648] sm:text-xl">
+              Description
+            </h2>
             <p
-              className="pt-4 text-gray-500 font-light"
+              className="mt-4 text-base font-normal leading-7 text-[#4A5468]"
               data-testid="description"
             >
-              {!showMore ? formattedDescription: listing?.description}
+              {formattedDescription}
             </p>
             {!showMore && hasLongDescription && (
-              <p
-                className="pt-4 font-bold underline cursor-pointer"
+              <button
+                type="button"
+                className="mt-4 text-sm font-semibold text-[#1F5FD6] underline-offset-4 hover:underline"
                 onClick={() => setShowMore(!showMore)}
                 data-testid="showMoreBtn"
               >
-                Show More
-              </p>
+                Show more
+              </button>
             )}
           </div>
-          <Divider className={"hidden lg:block"} />
-        </>
+        </section>
       )}
-      <div className={"pb-8 lg:pb-0"}>
-      <p className="text-2xl">General information</p>
-        <div
-          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-6 pt-5 "
-          data-testid={"generalInfo"}
-        >
-          {generalInfo.map((item, index) => (
-            <div
-              key={index}
-              className="flex justify-between sm:border-0 border-b border-gray-200 sm:pb-0 pb-3.5"
-            >
-              <p className="text-gray-500">{item.title}</p>
-              <p>{item.value || "-"}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-      <Divider className={"hidden lg:block"} />
-      <div className={"pb-8 lg:pb-0"}>
-      <p className="text-2xl">Area and Capacity</p>
-        <div
-          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-6 pt-5"
-          data-testid={"areaAndCapacity"}
-        >
-          {areaAndCapacity?.map((item, index) => (
-            <div
-              key={index}
-              className="flex justify-between sm:border-0 border-b border-gray-200 sm:pb-0 pb-3.5"
-            >
-              <p className="text-gray-500">{item.title}</p>
-              <p>{item.value || "-"}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-      <Divider className={"hidden lg:block"} />
-      <div className={"pb-8 lg:pb-0"}>
-      <p className="text-2xl">Construction</p>
-        <div
-          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-6 pt-5"
-          data-testid={"construction"}
-        >
-          {construction?.map((item, index) => (
-            <div
-              key={index}
-              className="flex justify-between sm:border-0 border-b border-gray-200 sm:pb-0 pb-3.5"
-            >
-              <p className="text-gray-500">{item.title}</p>
-              <p>{item.value || "-"}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-      <Divider className={"hidden lg:block"} />
-      <div className={"pb-8 lg:pb-0"}>
-      <p className="text-2xl">Heating</p>
-        <div
-          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-6 pt-4"
-          data-testid={"heating"}
-        >
-          <div className="flex justify-between sm:border-0 border-b border-gray-200 sm:pb-0 pb-3.5">
-            <p className="text-gray-500">Heating Type</p>
-            <p>{listing?.heatingType || "-"}</p>
-          </div>
-        </div>
-      </div>
+
+      <DetailSection
+        title="General information"
+        items={generalInfo}
+        testId="generalInfo"
+      />
+      <DetailSection
+        title="Area and capacity"
+        items={areaAndCapacity}
+        testId="areaAndCapacity"
+      />
+      <DetailSection
+        title="Building and comfort"
+        items={construction}
+        testId="construction"
+      />
     </div>
   );
 };

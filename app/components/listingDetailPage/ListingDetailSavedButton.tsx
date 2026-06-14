@@ -94,7 +94,7 @@ export const ListingDetailSavedButton = ({
           icon={isListingSaved ? HeartIconSolid : HeartIcon}
           variant={"secondary"}
           disabled={savedIconIsLoading}
-          className={"hidden lg:flex"}
+          className={"hidden border-slate-200 bg-white shadow-sm lg:flex"}
           onClick={handleSavedIconClick}
           data-testid="favouriteButton"
         >
@@ -110,7 +110,7 @@ export const ListingDetailSavedButton = ({
             <Icon
               size="sm"
               onClick={handleSavedIconClick}
-              className="text-gray-500 border border-solid border-gray-500 rounded-full h-10 w-10 justify-center hover:cursor-pointer"
+              className="h-10 w-10 justify-center rounded-full border border-solid border-slate-200 bg-white text-[#1F5FD6] shadow-sm hover:cursor-pointer"
               icon={isListingSaved ? HeartIconSolid : HeartIcon}
             />
           )}

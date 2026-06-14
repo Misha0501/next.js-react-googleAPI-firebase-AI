@@ -7,9 +7,10 @@ interface GoogleMapProps {
     lat: string | number;
     lng: string | number;
   };
+  "data-testid"?: string;
 }
 
-const GoogleMap = ({ location }: GoogleMapProps) => {
+const GoogleMap = ({ location, "data-testid": dataTestId }: GoogleMapProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -29,7 +30,8 @@ const GoogleMap = ({ location }: GoogleMapProps) => {
 
       // Use AdvancedMarkerElement if available, fall back to Marker
       try {
-        const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
+        const { AdvancedMarkerElement } =
+          await google.maps.importLibrary("marker");
         new AdvancedMarkerElement({ position: center, map });
       } catch {
         new google.maps.Marker({ position: center, map });
@@ -55,7 +57,13 @@ const GoogleMap = ({ location }: GoogleMapProps) => {
     }
   }, [location.lat, location.lng]);
 
-  return <div ref={containerRef} className="h-[300px] rounded-lg" />;
+  return (
+    <div
+      ref={containerRef}
+      data-testid={dataTestId}
+      className="h-[320px] rounded-lg"
+    />
+  );
 };
 
 export default GoogleMap;

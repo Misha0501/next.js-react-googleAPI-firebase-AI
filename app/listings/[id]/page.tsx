@@ -4,7 +4,6 @@ import { ListingDetailImages } from "@/app/components/listingDetailPage/ListingD
 import { KeyHighlightsBar } from "@/app/components/listingDetailPage/KeyHighlightsBar";
 import { ListingMainInfo } from "@/app/components/listingDetailPage/ListingMainInfo";
 import { ListingDetailContent } from "@/app/components/listingDetailPage/ListingDetailContent";
-import { Divider } from "@tremor/react";
 import { MapsSection } from "@/app/components/listingDetailPage/MapsSection";
 import { ListingAgentContactCard } from "@/app/components/ListingAgentContactCard";
 import { NeighbourhoodPriceCallout } from "@/app/components/listingDetailPage/NeighbourhoodPriceCallout";
@@ -52,8 +51,8 @@ async function ListingPage({ params }: Props) {
   } catch (error) {
     console.error(error);
     return (
-      <div className={"text-red-500 container text-center font-bold"}>
-        Oops an error occurred. Please try again later..
+      <div className="mx-auto max-w-screen-xl px-4 py-16 text-center font-semibold text-red-500 sm:px-6 lg:px-8">
+        Oops an error occurred. Please try again later.
       </div>
     );
   }
@@ -64,13 +63,13 @@ async function ListingPage({ params }: Props) {
 
   return (
     <ListigDetailContextProvider>
-      <div className="pb-32 lg:pb-10">
-        <div className="container">
-          <div className="pt-8 lg:pt-10">
-            <div className="flex items-center justify-between">
+      <div className="bg-[#F8FAFC] pb-32 lg:pb-16">
+        <div className="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
+          <div className="space-y-6 pb-8 pt-6 lg:space-y-8 lg:pb-10 lg:pt-10">
+            <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
               <ListingTitleSection listing={listing} />
 
-              <div>
+              <div className="hidden shrink-0 lg:block">
                 <ListingDetailSavedButton
                   listingId={listingId}
                   showOnDesktop={true}
@@ -78,34 +77,34 @@ async function ListingPage({ params }: Props) {
               </div>
             </div>
 
-            <div className="lg:mt-8 lg:mb-4">
-              <ListingDetailImages images={listing?.ListingImage} />
-            </div>
+            <ListingDetailImages images={listing?.ListingImage} />
 
             <KeyHighlightsBar listing={listing} />
 
-            <div className="grid grid-cols-1 gap-4 xl:grid-cols-3">
-              <div className="lg:col-span-2">
+            <div className="grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,1fr)_360px] xl:gap-8">
+              <main className="flex min-w-0 flex-col gap-6 lg:gap-8">
                 <ListingMainInfo listing={listing} />
 
                 <ListingDetailContent listing={listing} />
 
-                <Divider className="hidden lg:block" />
-
                 <MapsSection address={listing?.Address?.[0]} />
-              </div>
+              </main>
 
-              <div className="col-span-1 lg:col-span-1 flex flex-col gap-4">
+              <aside className="flex min-w-0 flex-col gap-5 xl:sticky xl:top-24 xl:self-start">
                 <ListingAgentContactCard listing={listing} />
                 <NeighbourhoodPriceCallout listing={listing} />
-              </div>
+              </aside>
             </div>
           </div>
         </div>
 
-        <ListingTimeline listing={listing} />
+        <div className="space-y-8 lg:space-y-10">
+          <ListingTimeline listing={listing} />
 
-        <PriceChangeGraphSection listingPriceArray={listing?.ListingPrice ?? []} />
+          <PriceChangeGraphSection
+            listingPriceArray={listing?.ListingPrice ?? []}
+          />
+        </div>
 
         <FloatingContactBar listing={listing} />
 
