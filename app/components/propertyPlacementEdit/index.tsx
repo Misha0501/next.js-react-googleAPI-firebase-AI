@@ -151,7 +151,7 @@ export default function MultiForm() {
           areaOutside: undefined,
           areaGarage: undefined,
           volume: undefined,
-          interiorType: undefined,
+          interiorType: "",
           upkeepType: "",
           heatingType: "",
           constructedYear: undefined,

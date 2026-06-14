@@ -1,8 +1,11 @@
 import { Divider } from "@tremor/react";
 import { Listing } from "@/types";
-import { ClockIcon, Square3Stack3DIcon } from "@heroicons/react/24/outline";
-import { Icons, BedRoomIcon, WindowsIcon } from "@/public/Icons";
-import { GridIcon } from "@/public/GridIcon";
+import {
+  CalendarDaysIcon,
+  ArrowsPointingOutIcon,
+  Squares2X2Icon,
+} from "@heroicons/react/24/outline";
+import { BedRoomIcon } from "@/public/Icons";
 import { formatToDayAndMonthWithName } from "@/app/lib/formatToDayAndMonthWithName";
 import Link from "next/link";
 import { ListingDetailSavedButton } from "@/app/components/listingDetailPage/ListingDetailSavedButton";
@@ -17,26 +20,26 @@ type Prop = {
 };
 
 export const ListingMainInfo = ({ listing }: Prop) => {
-  let stats = [
+  const stats = [
     {
       title: "Rooms",
       value: listing?.rooms,
-      icon: <Square3Stack3DIcon className="text-[#848484] h-7 w-7" />,
+      icon: <Squares2X2Icon className="text-[#848484] h-6 w-6 shrink-0" />,
     },
     {
       title: "Bedrooms",
       value: listing?.bedrooms,
-      icon: <Icons />,
+      icon: <BedRoomIcon />,
     },
     {
       title: "Square Area",
-      value: listing?.areaTotal,
-      icon: <GridIcon />,
+      value: listing?.areaTotal ? `${listing.areaTotal} m²` : null,
+      icon: <ArrowsPointingOutIcon className="text-[#848484] h-6 w-6 shrink-0" />,
     },
     {
       title: "Offered since",
       value: formatToDayAndMonthWithName(listing?.createdAt ?? ""),
-      icon: <ClockIcon className="text-[#848484] h-7 w-7" />,
+      icon: <CalendarDaysIcon className="text-[#848484] h-6 w-6 shrink-0" />,
     },
   ];
 
@@ -44,23 +47,26 @@ export const ListingMainInfo = ({ listing }: Prop) => {
 
   return (
     <>
-      <div className="bg-[#f2f2f2] rounded-lg shadow-md  py-8  flex-col lg:flex-row items-center justify-between hidden lg:flex">
-        {stats?.map((el, index) => (
+      {/* Desktop stats bar */}
+      <div className="bg-[#f2f2f2] rounded-lg shadow-md py-8 flex-col lg:flex-row items-center justify-between hidden lg:flex">
+        {stats.map((el, index) => (
           <div
             key={index}
-            className="flex flex-row lg:flex-col items-center justify-between w-full sm:border-1"
+            className="flex flex-col items-center justify-center w-full"
           >
-            <p className="text-gray-600">{el.title}</p>
-            <div className="flex items-center pt-2 sm:pt-4">
+            <p className="text-gray-500 text-sm">{el.title}</p>
+            <div className="flex items-center pt-3">
               {el.icon}
-              <p className="pl-2 text-gray-600">{el.value || "-"}</p>
+              <p className="pl-2 text-gray-700 font-semibold">{el.value || "-"}</p>
             </div>
           </div>
         ))}
       </div>
+
+      {/* Mobile layout */}
       <div className="block lg:hidden py-2">
         <div className="price_details flex justify-between">
-          <div>
+          <div className="flex-1 min-w-0">
             <h2 className="text-2xl font-bold" data-testid={"price"}>
               {formatEuroPrice(listing?.price)}
               {listing?.price && listing?.areaTotal && (
@@ -74,19 +80,16 @@ export const ListingMainInfo = ({ listing }: Prop) => {
             <h3 className="text-[#717D96] text-xl font-bold mt-3">
               {listing?.Address[0]?.locality}
             </h3>
-            <div className="flex my-3">
-              <div className="flex items-center mr-3">
-                <WindowsIcon />
-                <p className="ml-2 text-[#717D96] text-base">
-                  {listing?.areaTotal} m2
-                </p>
-              </div>
-              <div className="flex items-center">
-                <BedRoomIcon />
-                <p className="ml-2 text-[#717D96] text-base">
-                  {listing?.bedrooms} bedrooms
-                </p>
-              </div>
+            <div className="grid grid-cols-2 gap-x-4 gap-y-3 my-4">
+              {stats.map((el, index) => (
+                <div key={index} className="flex items-center gap-2">
+                  {el.icon}
+                  <div>
+                    <p className="text-xs text-[#848484] leading-tight">{el.title}</p>
+                    <p className="text-sm font-semibold text-gray-800 leading-tight">{el.value || "-"}</p>
+                  </div>
+                </div>
+              ))}
             </div>
             <Link href={`/users/${listing?.applicationUser?.id}`}>
               <p className="text-[#717D96] text-base">

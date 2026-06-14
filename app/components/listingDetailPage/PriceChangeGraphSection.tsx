@@ -102,6 +102,7 @@ export const PriceChangeGraphSection = ({ listingPriceArray }: Prop) => {
           curveType="step"
           minValue={yAxisMin}
           maxValue={yAxisMax}
+          showLegend={false}
           showAnimation
           data-testid="priceChangeGraph"
         />

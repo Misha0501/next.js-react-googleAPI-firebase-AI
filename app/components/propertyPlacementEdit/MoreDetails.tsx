@@ -102,7 +102,7 @@ const MoreDetails = ({
                           }
                           onBlur={formik.handleBlur("rooms")}
                           error={!!formik.errors.rooms && showError}
-                          value={formik.values.rooms}
+                          value={formik.values.rooms ?? ""}
                         />
                       </div>
                       {formik.touched.rooms && formik.errors.rooms && (
@@ -124,7 +124,7 @@ const MoreDetails = ({
                             formik.setFieldValue("bedrooms", e, true)
                           }
                           error={!!formik.errors.bedrooms && showError}
-                          value={formik.values.bedrooms}
+                          value={formik.values.bedrooms ?? ""}
                           onBlur={formik.handleBlur("bedrooms")}
                         />
                       </div>
@@ -146,7 +146,7 @@ const MoreDetails = ({
                             formik.setFieldValue("bathrooms", e, true)
                           }
                           error={!!formik.errors.bathrooms && showError}
-                          value={formik.values.bathrooms}
+                          value={formik.values.bathrooms ?? ""}
                           onBlur={formik.handleBlur}
                         />
                       </div>
@@ -168,7 +168,7 @@ const MoreDetails = ({
                             formik.setFieldValue("parking", e, true)
                           }
                           error={!!formik.errors.parking && showError}
-                          value={formik.values.parking}
+                          value={formik.values.parking ?? ""}
                           onBlur={formik.handleBlur}
                         />
                       </div>
@@ -202,7 +202,7 @@ const MoreDetails = ({
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         error={showError && !!formik.errors.totalArea}
-                        value={formik.values.totalArea}
+                        value={formik.values.totalArea ?? ""}
                       />
                       m2
                     </div>
@@ -225,7 +225,7 @@ const MoreDetails = ({
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
                             error={showError && !!formik.errors.livingArea}
-                            value={formik.values.livingArea}
+                            value={formik.values.livingArea ?? ""}
                           />
                           m2
                         </div>
@@ -246,7 +246,7 @@ const MoreDetails = ({
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
                             error={showError && !!formik.errors.areaOutside}
-                            value={formik.values.areaOutside}
+                            value={formik.values.areaOutside ?? ""}
                           />
                           m2
                         </div>
@@ -266,7 +266,7 @@ const MoreDetails = ({
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
                             error={showError && !!formik.errors.areaGarage}
-                            value={formik.values.areaGarage}
+                            value={formik.values.areaGarage ?? ""}
                           />
                           m2
                         </div>
@@ -286,7 +286,7 @@ const MoreDetails = ({
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
                             error={showError && !!formik.errors.volume}
-                            value={formik.values.volume}
+                            value={formik.values.volume ?? ""}
                           />
                           m3
                         </div>
@@ -395,7 +395,7 @@ const MoreDetails = ({
                             formik.setFieldValue("constructedYear", e, true)
                           }
                           error={showError && !!formik.errors.constructedYear}
-                          value={formik.values.constructedYear}
+                          value={formik.values.constructedYear ?? ""}
                         />
                       </div>
                       {showError && formik.errors.constructedYear && (
@@ -423,7 +423,7 @@ const MoreDetails = ({
                           error={
                             showError && !!formik.errors.numberOfFloorsCommon
                           }
-                          value={formik.values.numberOfFloorsCommon}
+                          value={formik.values.numberOfFloorsCommon ?? ""}
                         />
                       </div>
                       {showError && formik.errors.numberOfFloorsCommon && (
@@ -445,7 +445,7 @@ const MoreDetails = ({
                           }
                           onBlur={formik.handleBlur}
                           error={showError && !!formik.errors.floorNumber}
-                          value={formik.values.floorNumber}
+                          value={formik.values.floorNumber ?? ""}
                         />
                       </div>
                       {showError && formik.errors.floorNumber && (

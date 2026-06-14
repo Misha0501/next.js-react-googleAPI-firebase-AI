@@ -46,7 +46,7 @@ export default function SingleSelectRadioButton({
                       <div className="">
                         <div className="text-sm">
                           <RadioGroup.Label
-                            as="p"
+                            as="div"
                             className={`font-medium border-2 w-full p-5 rounded-xl mb-5 ${
                               checked
                                 ? "border-[#1F5FD6] font-bold border-2"
@@ -54,7 +54,7 @@ export default function SingleSelectRadioButton({
                             }`}
                           >
                             <div className="flex items-center justify-between">
-                              <p>{item}</p>
+                              <span>{item}</span>
                               {checked ? (
                                 <Icon
                                   size="sm"

@@ -432,7 +432,7 @@ function Confirmation({
                 {step > 0 && (
                   <Button
                     onClick={handleBack}
-                    loading={createProperty.isLoading}
+                    disabled={createProperty.isLoading}
                     variant="secondary"
                     size={"xl"}
                     className="w-full lg:max-w-[250px]"
@@ -445,10 +445,10 @@ function Confirmation({
                   icon={ArrowSmallRightIcon}
                   size={"xl"}
                   iconPosition={"right"}
-                  loading={createProperty.isLoading}
+                  disabled={createProperty.isLoading}
                   onClick={confirmBtnHandler}
                 >
-                  Confirm
+                  {createProperty.isLoading ? "Submitting..." : "Confirm"}
                 </Button>
               </div>
               {createError && (
