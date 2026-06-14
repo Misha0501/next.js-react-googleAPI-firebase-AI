@@ -132,7 +132,7 @@ export default function MultiForm() {
     <div className="py-11">
       <Formik
         initialValues={{
-          listingType: "RENT",
+          listingType: "SELL",
           propertyType: "",
           address: "",
           streetNumber: "",
@@ -143,7 +143,7 @@ export default function MultiForm() {
           postalCode: "",
           latitude: "",
           longitude: "",
-          currency: "",
+          currency: "EUR",
           price: 0 as string | number,
           rooms: undefined,
           bedrooms: undefined,

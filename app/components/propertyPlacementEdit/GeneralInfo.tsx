@@ -3,14 +3,13 @@ import { ArrowSmallRightIcon } from "@heroicons/react/24/solid";
 import {
   Button,
   Divider,
-  NumberInput,
   Select,
   SelectItem,
   TextInput,
 } from "@tremor/react";
 import property1 from "@/public/property1.png";
 import StepsTopInfo from "./StepsTopInfo";
-import { CURRENCIES, LISTING_TYPES, PROPERTY_TYPES } from "../../lib/constants";
+import { LISTING_TYPES, PROPERTY_TYPES } from "../../lib/constants";
 import React, { useState } from "react";
 import PropertyPlacementRadioButtons from "./PropertyPlacementRadioButtons";
 import { FormHelperText } from "@mui/material";
@@ -33,6 +32,21 @@ const GeneralInfo = ({
 
   const [show, setShow] = useState(true);
   const [showError, setShowErros] = useState(false);
+  const [priceDisplay, setPriceDisplay] = useState(
+    formik.values.price ? new Intl.NumberFormat("bg-BG").format(Number(formik.values.price)) : ""
+  );
+
+  const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const digits = e.target.value.replace(/\D/g, "");
+    if (!digits) {
+      setPriceDisplay("");
+      formik.setFieldValue("price", "", true);
+      return;
+    }
+    const num = parseInt(digits, 10);
+    setPriceDisplay(new Intl.NumberFormat("bg-BG").format(num));
+    formik.setFieldValue("price", num, true);
+  };
   const [showAddress, setShowAddress] = useState(
     formik.values.route ||
       Boolean(
@@ -72,9 +86,6 @@ const GeneralInfo = ({
     }
     if (!formik.values.propertyType) {
       errors.propertyType = "Required";
-    }
-    if (!formik.values.currency) {
-      errors.currency = "Required";
     }
     if (!formik.values.price) {
       errors.price = "Required";
@@ -214,44 +225,22 @@ const GeneralInfo = ({
             <div className="grid md:grid-cols-2 gap-8 md:gap-16">
               <p className={"text-2xl font-bold"}>What is your asking price</p>
               <div className="">
-                <div className="mb-7">
-                  <p className={"mb-2"}>Select the currency</p>
-                  <Select
-                    id="currency"
-                    onBlur={formik.handleBlur("currency")}
-                    onValueChange={(e) =>
-                      formik.setFieldValue("currency", e, true)
-                    }
-                    className={"text-sm"}
-                    value={formik.values.currency}
-                  >
-                    {CURRENCIES.map((item, index) => (
-                      <SelectItem value={item} key={index}>
-                        {item}
-                      </SelectItem>
-                    ))}
-                  </Select>
-                  {showError && formik.errors.currency && (
-                    <FormHelperText error>
-                      {formik.errors.currency}
-                    </FormHelperText>
-                  )}
-                </div>
                 <div className="mb-14">
                   <p className={"mb-2"}>Type your price</p>
-                  <NumberInput
-                    placeholder="0 €"
-                    enableStepper={false}
-                    name="price"
-                    id="price"
-                    min={0}
-                    onValueChange={(e) =>
-                      formik.setFieldValue("price", e, true)
-                    }
-                    value={formik.values.price}
-                    onBlur={formik.handleBlur}
-                    error={!!formik.errors.price && showError}
-                  />
+                  <div className="relative flex items-center">
+                    <span className="absolute left-3 text-gray-500 text-sm pointer-events-none select-none font-medium">€</span>
+                    <input
+                      type="text"
+                      inputMode="numeric"
+                      id="price"
+                      name="price"
+                      placeholder="0"
+                      value={priceDisplay}
+                      onChange={handlePriceChange}
+                      onBlur={formik.handleBlur("price")}
+                      className="w-full pl-7 pr-3 py-2 text-sm rounded-md border border-gray-200 bg-white text-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-400 transition"
+                    />
+                  </div>
                   {formik.touched.price && formik.errors.price && (
                     <FormHelperText error>{formik.errors.price}</FormHelperText>
                   )}
