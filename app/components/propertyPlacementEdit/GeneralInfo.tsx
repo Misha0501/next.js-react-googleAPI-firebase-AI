@@ -170,16 +170,7 @@ const GeneralInfo = ({
                   <div className="">
                     <div className="mb-7">
                       <p className={"mb-2"}>House number</p>
-                      <TextInput
-                        value={formik.values.streetNumber}
-                        onChange={(e) =>
-                          formik.setFieldValue(
-                            "streetNumber",
-                            e.target.value,
-                            true
-                          )
-                        }
-                      />
+                      <TextInput value={formik.values.streetNumber} disabled />
                     </div>
                     <div className="mb-7">
                       <p className={"mb-2"}>Street</p>
