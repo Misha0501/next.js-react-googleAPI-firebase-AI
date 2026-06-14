@@ -1,41 +1,65 @@
 "use client";
 
-import { useState } from "react";
+import Link from "next/link";
 import { SavedListings } from "@/app/components/profilePage/SavedListings";
 import { SavedSearches } from "@/app/components/profilePage/SavedSearches";
+import { HeartIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 
-const TAB_BASE =
-  "flex min-h-11 flex-1 items-center justify-center whitespace-nowrap truncate rounded-t-lg border-b-2 px-4 pb-2 pt-3 text-sm font-semibold outline-none transition duration-150 focus-visible:ring-2 focus-visible:ring-[#1F5FD6]/25 md:flex-none md:min-w-40";
-const TAB_ACTIVE = "border-[#1F5FD6] bg-[#1F5FD6]/5 text-[#1F5FD6]";
-const TAB_INACTIVE =
-  "border-transparent text-gray-500 hover:bg-gray-50 hover:text-gray-700";
+type Props = {
+  activeView?: string;
+};
 
-export const SavedItemsPageTabs = () => {
-  const [activeIndex, setActiveIndex] = useState(0);
+const SAVED_VIEWS = [
+  {
+    id: "properties",
+    label: "Properties",
+    href: "/profile/saved?view=properties",
+    icon: <HeartIcon className="h-4 w-4" />,
+  },
+  {
+    id: "searches",
+    label: "Searches",
+    href: "/profile/saved?view=searches",
+    icon: <MagnifyingGlassIcon className="h-4 w-4" />,
+  },
+];
+
+export const SavedItemsPageTabs = ({ activeView }: Props) => {
+  const selectedView = activeView === "searches" ? "searches" : "properties";
 
   return (
-    <div className="w-full">
-      <div
-        role="tablist"
-        className="flex w-full justify-start overflow-x-auto border-b border-gray-200 pb-2 md:w-fit md:overflow-x-visible"
-      >
-        {["Properties", "Searches"].map((label, i) => (
-          <button
-            key={label}
-            type="button"
-            role="tab"
-            aria-selected={activeIndex === i}
-            className={`${TAB_BASE} ${activeIndex === i ? TAB_ACTIVE : TAB_INACTIVE}`}
-            onClick={() => setActiveIndex(i)}
-          >
-            {label}
-          </button>
-        ))}
+    <div className="space-y-6">
+      <div className="rounded-2xl border border-slate-200 bg-white p-2 shadow-sm">
+        <div
+          role="tablist"
+          className="grid grid-cols-2 gap-2"
+          aria-label="Saved items"
+        >
+          {SAVED_VIEWS.map((item) => {
+            const active = selectedView === item.id;
+
+            return (
+              <Link
+                key={item.id}
+                href={item.href}
+                role="tab"
+                aria-selected={active}
+                className={`flex min-h-11 items-center justify-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold transition ${
+                  active
+                    ? "bg-[#1F5FD6] text-white shadow-sm"
+                    : "text-[#4A5468] hover:bg-[#F8FAFC] hover:text-[#1F5FD6]"
+                }`}
+              >
+                {item.icon}
+                <span>{item.label}</span>
+              </Link>
+            );
+          })}
+        </div>
       </div>
-      <div role="tabpanel">
-        {activeIndex === 0 && <SavedListings />}
-        {activeIndex === 1 && <SavedSearches />}
-      </div>
+
+      {selectedView === "properties" && <SavedListings />}
+      {selectedView === "searches" && <SavedSearches />}
     </div>
   );
 };

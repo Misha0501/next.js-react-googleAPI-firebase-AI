@@ -28,7 +28,7 @@ const cityLinks = [
 const accountLinks = [
   { label: "Sign in", href: "/signin" },
   { label: "My properties", href: "/profile/myProperties" },
-  { label: "Saved searches", href: "/profile/saved" },
+  { label: "Saved searches", href: "/profile/saved?view=searches" },
   { label: "Contact", href: "/contact" },
 ];
 

@@ -7,7 +7,7 @@ import { useRecentlyViewedListings } from "@/providers/RecentlyViewedListings";
 import { useSavedListings } from "@/providers/SavedListings";
 import { getPopulatedListingsSaved } from "@/app/lib/listing/getPopulatedListingsSaved";
 import Link from "next/link";
-import { Button } from "@tremor/react";
+import { ClockIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 
 export const RecentlyViewedListings = () => {
   const { authToken } = useAuthContext();
@@ -44,13 +44,35 @@ export const RecentlyViewedListings = () => {
   ]);
 
   return (
-    <div className="mt-6 lg:mt-10 w-full">
+    <div className="w-full">
       {recentlyViewedListingsResponse.isError && (
-        <p>Oops! Something went wrong. Please try again.</p>
+        <p className="rounded-2xl border border-rose-100 bg-rose-50 px-5 py-4 text-sm font-semibold text-rose-600">
+          Oops! Something went wrong. Please try again.
+        </p>
       )}
-      <div className={"grid grid-cols-1 xl:grid-cols-2 gap-4 lg:gap-8 mt-10"}>
+      {populatedListings.length > 0 && (
+        <div className="mb-6 rounded-2xl border border-slate-200 bg-white px-5 py-4 shadow-sm">
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#EAF2FF] text-[#1F5FD6]">
+              <ClockIcon className="h-5 w-5" />
+            </div>
+            <div>
+              <p className="text-xs font-semibold uppercase text-[#717D96]">
+                Recently viewed
+              </p>
+              <p className="font-semibold text-[#2D3648]">
+                {populatedListings.length}{" "}
+                {populatedListings.length === 1 ? "property" : "properties"}
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+      <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
         {recentlyViewedListingsResponse.isLoading
-          ? Array.from({ length: 4 }).map((_, i) => <ListingItemSkeleton key={i} />)
+          ? Array.from({ length: 4 }).map((_, i) => (
+              <ListingItemSkeleton key={i} />
+            ))
           : populatedListings.map((item, index) => (
               <ListingItem listingItemInitial={item} key={index} />
             ))}
@@ -59,12 +81,23 @@ export const RecentlyViewedListings = () => {
         !recentlyViewedListingsResponse.isError &&
         populatedListings &&
         !populatedListings.length && (
-          <div>
-            <p className="text-gray-500 mb-4">
-              You haven&apos;t viewed any properties yet
+          <div className="rounded-2xl border border-dashed border-slate-300 bg-white px-6 py-12 text-center shadow-sm">
+            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-[#EAF2FF] text-[#1F5FD6]">
+              <ClockIcon className="h-7 w-7" />
+            </div>
+            <h3 className="mt-4 text-lg font-semibold text-[#2D3648]">
+              No recently viewed properties
+            </h3>
+            <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-[#717D96]">
+              Open listings while browsing and they will appear here for quick
+              access.
             </p>
-            <Link href={`/listings`}>
-              <Button>Browse properties</Button>
+            <Link
+              href="/listings"
+              className="mt-6 inline-flex items-center justify-center gap-2 rounded-xl bg-[#1F5FD6] px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#184FB5]"
+            >
+              <MagnifyingGlassIcon className="h-4 w-4" />
+              Browse properties
             </Link>
           </div>
         )}

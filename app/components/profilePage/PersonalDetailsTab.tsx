@@ -1,4 +1,3 @@
-// @ts-nocheck
 "use client";
 
 import React, { useEffect, useState } from "react";
@@ -11,6 +10,12 @@ import { useUpdateUser, useUserOwnData } from "@/providers/Users";
 import { useRouter } from "next/navigation";
 import { signOut } from "firebase/auth";
 import { firebaseClientAuth } from "@/app/lib/firebase/configClient";
+import {
+  KeyIcon,
+  PhoneIcon,
+  ShieldCheckIcon,
+  UserCircleIcon,
+} from "@heroicons/react/24/outline";
 
 const ApplicationUserUpdateSchema = Yup.object().shape({
   displayName: Yup.string()
@@ -28,18 +33,18 @@ const ApplicationUserUpdateSchema = Yup.object().shape({
 interface FormValues {
   displayName: string;
   phoneNumber: string;
-  newPassword: string,
+  newPassword: string;
 }
 
 export const PersonalDetailsTab = () => {
   const { authToken } = useAuthContext();
-  const [personalDetails, setPersonalDetails] = useState<any>({
+  const [personalDetails, setPersonalDetails] = useState<FormValues>({
     displayName: "",
     phoneNumber: "",
     newPassword: "",
   });
 
-  const router = useRouter()
+  const router = useRouter();
 
   const userData = useUserOwnData({ authToken });
   const updateUser = useUpdateUser({ authToken });
@@ -56,13 +61,10 @@ export const PersonalDetailsTab = () => {
       await updateUser.mutateAsync(values);
       toast.success("Updated successfully");
 
-      // redirect to login if changed password
-      if(values.newPassword) {
+      if (values.newPassword) {
         await signOut(firebaseClientAuth);
-        router.push("/signin")
+        router.push("/signin");
       }
-
-      return;
     } catch (error: any) {
       toast.error(error?.message || "Something went wrong. Please try again");
     }
@@ -71,87 +73,123 @@ export const PersonalDetailsTab = () => {
   useEffect(() => {
     if (userData.isSuccess && userData.data) {
       setPersonalDetails({
-        displayName: userData.data?.displayName,
-        phoneNumber: userData.data?.phoneNumber,
+        displayName: userData.data?.displayName || "",
+        phoneNumber: userData.data?.phoneNumber || "",
+        newPassword: "",
       });
     }
-
-
   }, [userData.data, userData.isSuccess]);
 
   return (
-    <div className="mt-10 w-full">
-      <form onSubmit={formik.handleSubmit}>
-        <div className="mb-7">
-          <p className={"mb-2"}>Display Name</p>
+    <form
+      onSubmit={formik.handleSubmit}
+      className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm"
+    >
+      <div className="border-b border-slate-100 px-5 py-5 sm:px-6">
+        <div className="flex items-start gap-3">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#EAF2FF] text-[#1F5FD6]">
+            <UserCircleIcon className="h-5 w-5" />
+          </div>
+          <div>
+            <h3 className="font-semibold text-[#2D3648]">Profile details</h3>
+            <p className="mt-1 text-sm leading-6 text-[#717D96]">
+              These details are used for your profile, enquiries, and listing
+              contact information.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 gap-5 px-5 py-6 sm:px-6 md:grid-cols-2">
+        <label className="block">
+          <span className="mb-2 flex items-center gap-2 text-sm font-semibold text-[#2D3648]">
+            <UserCircleIcon className="h-4 w-4 text-[#1F5FD6]" />
+            Display name
+          </span>
           <TextInput
-            defaultValue={formik.values.displayName}
+            value={formik.values.displayName}
             onChange={(event) => {
-              formik.values.displayName = event.target.value;
+              formik.setFieldValue("displayName", event.target.value, true);
             }}
             errorMessage={
               formik.errors.displayName && formik.touched.displayName
                 ? formik.errors.displayName
                 : undefined
             }
-            error={
-              formik.errors.displayName && formik.touched.displayName
-                ? true
-                : undefined
-            }
+            error={Boolean(
+              formik.errors.displayName && formik.touched.displayName,
+            )}
           />
-        </div>
-        <div className="mb-7">
-          <p className={"mb-2"}>Phone number</p>
+        </label>
+
+        <label className="block">
+          <span className="mb-2 flex items-center gap-2 text-sm font-semibold text-[#2D3648]">
+            <PhoneIcon className="h-4 w-4 text-[#1F5FD6]" />
+            Phone number
+          </span>
           <TextInput
-            defaultValue={formik.values.phoneNumber}
+            value={formik.values.phoneNumber}
             onChange={(event) => {
-              formik.values.phoneNumber = event.target.value;
+              formik.setFieldValue("phoneNumber", event.target.value, true);
             }}
             errorMessage={
               formik.errors.phoneNumber && formik.touched.phoneNumber
                 ? formik.errors.phoneNumber
                 : undefined
             }
-            error={
-              formik.errors.phoneNumber && formik.touched.phoneNumber
-                ? true
-                : undefined
-            }
+            error={Boolean(
+              formik.errors.phoneNumber && formik.touched.phoneNumber,
+            )}
           />
+        </label>
+      </div>
+
+      <div className="border-t border-slate-100 px-5 py-6 sm:px-6">
+        <div className="mb-5 rounded-2xl border border-amber-100 bg-amber-50 px-4 py-4">
+          <div className="flex gap-3">
+            <ShieldCheckIcon className="h-5 w-5 shrink-0 text-amber-600" />
+            <p className="text-sm leading-6 text-amber-800">
+              Changing your password signs you out so you can sign in again with
+              the new credentials.
+            </p>
+          </div>
         </div>
-        <div className="mb-7">
-          <p className={"mb-1"}>New password</p>
-          <p className={"text-gray-500 mb-2"}>After resetting the password you will be redirected to the sing in page</p>
+
+        <label className="block max-w-xl">
+          <span className="mb-2 flex items-center gap-2 text-sm font-semibold text-[#2D3648]">
+            <KeyIcon className="h-4 w-4 text-[#1F5FD6]" />
+            New password
+          </span>
           <TextInput
-            defaultValue={formik.values.newPassword}
+            type="password"
+            value={formik.values.newPassword}
             onChange={(event) => {
-              formik.values.newPassword = event.target.value;
+              formik.setFieldValue("newPassword", event.target.value, true);
             }}
             errorMessage={
               formik.errors.newPassword && formik.touched.newPassword
-                ? formik.errors.newPassword || ''
+                ? formik.errors.newPassword
                 : undefined
             }
-            error={
-              formik.errors.newPassword && formik.touched.newPassword
-                ? true
-                : undefined
-            }
+            error={Boolean(
+              formik.errors.newPassword && formik.touched.newPassword,
+            )}
           />
+        </label>
+      </div>
+
+      {updateUser.isError && (
+        <div className="mx-5 mb-5 rounded-xl border border-rose-100 bg-rose-50 px-4 py-3 text-sm font-semibold text-rose-600 sm:mx-6">
+          {updateUser?.error?.message ||
+            "Something went wrong. Please try again"}
         </div>
-        {updateUser.isError && (
-          <div className="mb-7">
-            <p className={"mb-2 text-red-600"}>
-              {updateUser?.error?.message ||
-                "Something went wrong. Please try again"}
-            </p>
-          </div>
-        )}
-        <Button type={"submit"} disabled={updateUser.isLoading}>
-          Submit
+      )}
+
+      <div className="flex justify-end border-t border-slate-100 px-5 py-5 sm:px-6">
+        <Button type="submit" disabled={updateUser.isLoading}>
+          {updateUser.isLoading ? "Saving..." : "Save changes"}
         </Button>
-      </form>
-    </div>
+      </div>
+    </form>
   );
 };

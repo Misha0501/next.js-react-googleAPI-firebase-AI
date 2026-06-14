@@ -5,21 +5,24 @@ import { firebaseAdmin } from "@/app/lib/firebase/configAdmin";
 
 type Props = {
   params: Promise<{ tab: string }>;
+  searchParams: Promise<{ view?: string }>;
 };
-export default async function ProfilePage({ params }: Props) {
+export default async function ProfilePage({ params, searchParams }: Props) {
   const { tab } = await params;
-  const userToken = (await cookies()).get('authToken');
-  if (!userToken || !userToken.value) redirect('/signin')
+  const { view } = await searchParams;
+  const userToken = (await cookies()).get("authToken");
+  if (!userToken || !userToken.value) redirect("/signin");
 
-  await firebaseAdmin.auth().verifyIdToken(userToken.value).catch(error => {
-    // user is not authenticated
-    redirect('/signin');
-  });
+  await firebaseAdmin
+    .auth()
+    .verifyIdToken(userToken.value)
+    .catch((error) => {
+      // user is not authenticated
+      redirect("/signin");
+    });
   // the user is authenticated
 
   return (
-    <div className="container mx-auto">
-      <ProfilePageMainContent tab={tab}></ProfilePageMainContent>
-    </div>
+    <ProfilePageMainContent tab={tab} view={view}></ProfilePageMainContent>
   );
 }
