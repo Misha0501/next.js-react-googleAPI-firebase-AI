@@ -18,8 +18,23 @@ export const useGooglePlaces = (): [any | undefined, boolean, string | null] => 
       return;
     }
 
-    // Chain onto any existing initGoogleServices callback (e.g. from GoogleMap.tsx)
-    // so only one Maps JS script tag is ever injected per page.
+    // Maps JS already loaded (e.g. by GoogleMap.tsx) but places not imported yet.
+    // importLibrary directly rather than waiting for a callback that already fired.
+    if ((window as any).google?.maps) {
+      (window as any).google.maps.importLibrary("places").then(() => {
+        googleInstance = (window as any).google;
+        setGoogle(googleInstance);
+        setLoading(false);
+      }).catch((err: any) => {
+        console.error("Failed to import Places library:", err);
+        setError("Something went wrong please try again later");
+        setLoading(false);
+      });
+      return;
+    }
+
+    // Script not yet loaded — chain onto any existing callback so only one
+    // script tag is ever injected per page.
     const prev = (window as any).initGoogleServices;
     (window as any).initGoogleServices = async () => {
       if (prev) await prev();

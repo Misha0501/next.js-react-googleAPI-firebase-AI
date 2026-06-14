@@ -24,6 +24,7 @@ const AutoComplete = ({
   const [suggestions, setSuggestions] = useState<any[]>([]);
   const [showDropdown, setShowDropdown] = useState(false);
   const [showPresets, setShowPresets] = useState(false);
+  const [isFetching, setIsFetching] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const userTyping = useRef(false);
@@ -47,6 +48,7 @@ const AutoComplete = ({
       return;
     }
 
+    setIsFetching(true);
     const timer = setTimeout(async () => {
       try {
         const { suggestions: results } =
@@ -59,10 +61,15 @@ const AutoComplete = ({
         setShowDropdown((results || []).length > 0);
       } catch {
         setSuggestions([]);
+      } finally {
+        setIsFetching(false);
       }
     }, 300);
 
-    return () => clearTimeout(timer);
+    return () => {
+      clearTimeout(timer);
+      setIsFetching(false);
+    };
   }, [inputValue, googleInstance]);
 
   const handlePresetSelect = (city: string) => {
@@ -150,7 +157,20 @@ const AutoComplete = ({
         </div>
       )}
 
-      {showDropdown && suggestions.length > 0 && (
+      {isFetching && inputValue && (
+        <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-50 overflow-hidden">
+          {[1, 2, 3].map((i) => (
+            <div key={i} className="px-4 py-3 border-b border-gray-100 last:border-0 animate-pulse">
+              <div className="flex items-center gap-2">
+                <div className="h-3.5 bg-gray-200 rounded w-24" />
+                <div className="h-3 bg-gray-100 rounded w-32" />
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {!isFetching && showDropdown && suggestions.length > 0 && (
         <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-50 overflow-hidden">
           {suggestions.map((suggestion, i) => (
             <button

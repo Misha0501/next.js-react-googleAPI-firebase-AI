@@ -18,6 +18,7 @@ export const AddressAutocomplete = ({
   const [inputValue, setInputValue] = useState(initialValue || "");
   const [suggestions, setSuggestions] = useState<any[]>([]);
   const [showDropdown, setShowDropdown] = useState(false);
+  const [isFetching, setIsFetching] = useState(false);
   const firstUpdate = useRef(true);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const [googleInstance] = useGooglePlaces();
@@ -41,6 +42,7 @@ export const AddressAutocomplete = ({
       return;
     }
 
+    setIsFetching(true);
     const timer = setTimeout(async () => {
       try {
         const { suggestions: results } =
@@ -53,10 +55,15 @@ export const AddressAutocomplete = ({
         setShowDropdown((results || []).length > 0);
       } catch {
         setSuggestions([]);
+      } finally {
+        setIsFetching(false);
       }
     }, 300);
 
-    return () => clearTimeout(timer);
+    return () => {
+      clearTimeout(timer);
+      setIsFetching(false);
+    };
   }, [inputValue, googleInstance]);
 
   const handleSuggestionSelect = async (suggestion: any) => {
@@ -105,7 +112,20 @@ export const AddressAutocomplete = ({
         autoComplete="off"
       />
 
-      {showDropdown && suggestions.length > 0 && (
+      {isFetching && inputValue && (
+        <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-50 overflow-hidden">
+          {[1, 2, 3].map((i) => (
+            <div key={i} className="px-4 py-3 border-b border-gray-100 last:border-0 animate-pulse">
+              <div className="flex items-center gap-2">
+                <div className="h-3.5 bg-gray-200 rounded w-36" />
+                <div className="h-3 bg-gray-100 rounded w-24" />
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {!isFetching && showDropdown && suggestions.length > 0 && (
         <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-50 overflow-hidden">
           {suggestions.map((suggestion, i) => (
             <button
