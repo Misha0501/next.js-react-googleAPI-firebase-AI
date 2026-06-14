@@ -1,16 +1,14 @@
 "use client";
 import React, { useState } from "react";
-import Box from "@mui/material/Box";
 import Step from "@mui/material/Step";
-import { Grid } from "@mui/material";
 import StepLabel from "@mui/material/StepLabel";
+import { MuiStepper } from "./Styled";
 import GeneralInfo from "./GeneralInfo";
 import MoreDetails from "./MoreDetails";
 import DescriptionAndImages from "./DescriptionAndImages";
 import Confirmation from "./Confirmation";
 import { Formik, FormikProps } from "formik";
 import * as Yup from "yup";
-import { MuiStepper } from "./Styled";
 
 const steps = [
   "General information",
@@ -129,7 +127,7 @@ export default function MultiForm() {
   };
 
   return (
-    <div className="py-11">
+    <div>
       <Formik
         initialValues={{
           listingType: "SELL",
@@ -200,27 +198,47 @@ export default function MultiForm() {
       >
         {(formik) => (
           <form>
-            <div className="pt-10 pb-10">
-              <Box>
-                <div className="bg-[#F2F2F2] shadow-[0_4px_20px_0px_rgba(0,0,0,0.1)]">
-                  <MuiStepper
-                    className="max-w-screen-xl hidden m-auto items-stretch md:flex"
-                    activeStep={activeStep}
-                    orientation="horizontal"
-                  >
-                    {steps.map((label, index) => (
-                      <Step key={index}>
-                        <StepLabel>{label}</StepLabel>
-                      </Step>
-                    ))}
-                  </MuiStepper>
+            {/* Step bar — flush to the nav */}
+            <div className="bg-[#F2F2F2] shadow-[0_4px_20px_0px_rgba(0,0,0,0.1)]">
+              {/* Desktop: full labelled stepper */}
+              <div className="hidden md:block">
+                <MuiStepper
+                  className="max-w-screen-xl mx-auto items-stretch flex"
+                  activeStep={activeStep}
+                  orientation="horizontal"
+                >
+                  {steps.map((label, index) => (
+                    <Step key={index}>
+                      <StepLabel>{label}</StepLabel>
+                    </Step>
+                  ))}
+                </MuiStepper>
+              </div>
+              {/* Mobile: pill progress + stacked label */}
+              <div className="flex md:hidden items-center gap-3 px-5 py-3">
+                <div className="flex gap-1.5 shrink-0">
+                  {steps.map((_, i) => (
+                    <div
+                      key={i}
+                      className={`h-1.5 rounded-full transition-all duration-300 ${
+                        i === activeStep
+                          ? "w-6 bg-[#4785FD]"
+                          : i < activeStep
+                          ? "w-4 bg-[#4785FD]/50"
+                          : "w-4 bg-gray-300"
+                      }`}
+                    />
+                  ))}
                 </div>
-                <Grid container>
-                  <Grid item xs={12} sx={{ padding: "20px" }}>
-                    {formContent(activeStep, formik as any)}
-                  </Grid>
-                </Grid>
-              </Box>
+                <div>
+                  <p className="text-xs text-gray-500">Step {activeStep + 1} of {steps.length}</p>
+                  <p className="text-sm font-semibold text-gray-900">{steps[activeStep]}</p>
+                </div>
+              </div>
+            </div>
+            {/* Form content */}
+            <div className="px-5 pb-10">
+              {formContent(activeStep, formik as any)}
             </div>
           </form>
         )}
