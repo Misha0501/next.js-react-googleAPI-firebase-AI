@@ -26,7 +26,7 @@ export const FromToFilter = ({
   };
 
   return (
-    <div className="flex justify-center items-center gap-6">
+    <div className="flex items-center justify-center gap-3">
       <Select
         value={String(initialFrom)}
         onValueChange={onChangeFrom}
@@ -38,7 +38,7 @@ export const FromToFilter = ({
           </SelectItem>
         ))}
       </Select>
-      <span>to</span>
+      <span className="text-sm font-medium text-[#717D96]">to</span>
       <Select
         value={String(initialTo)}
         onValueChange={onChangeTo}

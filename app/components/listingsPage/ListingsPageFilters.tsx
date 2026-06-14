@@ -46,14 +46,26 @@ export const ListingsPageFilters = ({
 
   return (
     <>
-      <div
-        className={"flex justify-end lg:hidden cursor-pointer"}
-        onClick={showFiltersMobile}
-      >
-        <XMarkIcon className="text-[#2D3648] h-6 w-6 text-lg" />
+      <div className="mb-5 flex items-center justify-between lg:hidden">
+        <div>
+          <p className="text-lg font-bold text-[#222222]">Filters</p>
+          <p className="text-sm text-[#717D96]">Refine your search</p>
+        </div>
+        <button
+          type="button"
+          onClick={showFiltersMobile}
+          className="flex h-10 w-10 items-center justify-center rounded-lg border border-slate-200 bg-white text-[#2D3648]"
+        >
+          <XMarkIcon className="h-5 w-5" />
+        </button>
       </div>
 
-      <div className="my-8">
+      <div className="mb-7 hidden lg:block">
+        <p className="text-lg font-bold text-[#222222]">Filters</p>
+        <p className="text-sm text-[#717D96]">Refine your search</p>
+      </div>
+
+      <div className="mb-8">
         <div
           className="flex w-full justify-start overflow-x-auto border-b border-gray-200 pb-2 sm:overflow-x-visible"
           role="tablist"

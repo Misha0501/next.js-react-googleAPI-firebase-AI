@@ -1,9 +1,6 @@
 "use client";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import {
-  ListingItem,
-  ListingItemSkeleton,
-} from "@/app/components/ListingItem";
+import { ListingItem, ListingItemSkeleton } from "@/app/components/ListingItem";
 import { usePropertyListing } from "@/providers/Listing";
 import { useAuthContext } from "@/app/context/AuthContext";
 import { Listing, SavedListing } from "@/types";
@@ -23,14 +20,20 @@ const MAX_LISTINGS_PAGE = 1000000;
 const EAGER_LISTING_ITEMS = 4;
 const SKELETON_LISTING_ITEMS = 8;
 
-const getPageFromSearchParams = (params: { get: (key: string) => string | null }) => {
+const getPageFromSearchParams = (params: {
+  get: (key: string) => string | null;
+}) => {
   const page = Number(params.get("page"));
   return Number.isInteger(page) && page > 0 && page <= MAX_LISTINGS_PAGE
     ? page
     : 1;
 };
 
-export const ListingsMain = ({ searchParams, listingType, locality }: Props ) => {
+export const ListingsMain = ({
+  searchParams,
+  listingType,
+  locality,
+}: Props) => {
   const { authToken } = useAuthContext();
   const pathname = usePathname();
   const router = useRouter();
@@ -43,7 +46,8 @@ export const ListingsMain = ({ searchParams, listingType, locality }: Props ) =>
   const [page, setPage] = useState(currentUrlPage);
   const pageSize = LISTINGS_PAGE_SIZE;
   const [sortBy, setSortBy] = useState(undefined);
-  const { data: savedListingsData, isLoading: savedListingsIsLoading } = useSavedListings({ authToken });
+  const { data: savedListingsData, isLoading: savedListingsIsLoading } =
+    useSavedListings({ authToken });
 
   const {
     data: listingsData,
@@ -131,7 +135,9 @@ export const ListingsMain = ({ searchParams, listingType, locality }: Props ) =>
     let savedListingsListingIds: number[] = [];
 
     // Store all savedListing's listingIds
-    savedListingsListingIds = savedListings.map((el: SavedListing) => el.listingId);
+    savedListingsListingIds = savedListings.map(
+      (el: SavedListing) => el.listingId,
+    );
 
     // populate listings with saved listings data
     const populatedListings = listings.map((listing: Listing) => {
@@ -160,28 +166,37 @@ export const ListingsMain = ({ searchParams, listingType, locality }: Props ) =>
     );
   }, [currentUrlPage]);
 
-
   if (isError) {
     return (
-      <p className={"text-red-500"}>
+      <div className="min-w-0 flex-1 rounded-xl border border-red-100 bg-white p-6 text-red-600 shadow-sm">
         Oops there was an error, please try again.
-      </p>
+      </div>
     );
   }
+
   return (
     <div className="min-w-0 flex-1">
-      <div className="flex flex-row justify-between">
-        <>
-          {isSuccess && (
+      <div className="mb-8 rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+        {isSuccess ? (
+          <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
             <div>
-              <div className={"text-xl mb-12"}>
-                <span className={"font-bold"}>Results: </span>{" "}
-                <span>{listingsData?.total} properties found.</span>
-              </div>
+              <p className="text-sm font-bold uppercase tracking-wide text-[#1F5FD6]">
+                Results
+              </p>
+              <h2 className="mt-1 text-2xl font-bold text-[#222222]">
+                {listingsData?.total} properties found
+              </h2>
             </div>
-          )}
-        </>
+            <p className="text-sm text-[#717D96]">
+              Showing {populatedListings.length} on page {page}
+              {numberOfPages > 0 ? ` of ${numberOfPages}` : ""}
+            </p>
+          </div>
+        ) : (
+          <div className="h-16 animate-pulse rounded-lg bg-slate-100" />
+        )}
       </div>
+
       <div className="mb-12 grid grid-cols-[repeat(auto-fit,minmax(min(100%,360px),1fr))] gap-8 lg:gap-10">
         {shouldShowListingSkeletons
           ? Array.from({ length: SKELETON_LISTING_ITEMS }).map((_, index) => (
@@ -196,15 +211,18 @@ export const ListingsMain = ({ searchParams, listingType, locality }: Props ) =>
               />
             ))}
       </div>
-      <Pagination
-        shape="rounded"
-        count={numberOfPages}
-        page={page}
-        onChange={handlePageChange}
-        variant="outlined"
-        color="primary"
-        className={"mx-auto w-fit"}
-      />
+      {numberOfPages > 1 && (
+        <div className="mx-auto w-fit rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm">
+          <Pagination
+            shape="rounded"
+            count={numberOfPages}
+            page={page}
+            onChange={handlePageChange}
+            variant="outlined"
+            color="primary"
+          />
+        </div>
+      )}
     </div>
   );
 };

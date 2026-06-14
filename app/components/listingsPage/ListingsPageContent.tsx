@@ -18,7 +18,7 @@ export const ListingsPageContent = () => {
   const { authToken } = useAuthContext();
   const param = useSearchParams();
   const [search, setSearch] = useState(null);
-  const [listingType, setListingType] = useState<ListingType>('SELL');
+  const [listingType, setListingType] = useState<ListingType>("SELL");
   const [locality, setLocality] = useState(param.get("locality") || "");
   const createSavedSearches = useCreateSavedSearches({ authToken });
   let [showAuthModal, setShowAuthModal] = useState(false);
@@ -101,14 +101,14 @@ export const ListingsPageContent = () => {
   };
 
   return (
-    <div className="w-full flex flex-col my-8 lg:my-12 gap-6">
+    <div className="flex min-h-screen w-full flex-col bg-[#F8FAFC]">
       <ListingsPageHeader
         onLocalityChange={handleSelectedLocalityChange}
         initialLocality={locality}
       />
-      <div className="container flex justify-between">
+      <div className="mx-auto flex w-full max-w-screen-xl items-center justify-between gap-3 px-4 pt-6 sm:px-6 lg:px-8">
         <Button
-          className="lg:hidden"
+          className="lg:hidden border-slate-200 bg-white text-[#2D3648] shadow-sm hover:bg-slate-50"
           variant={"secondary"}
           onClick={() => setShowFiltersMobile(true)}
         >
@@ -116,27 +116,32 @@ export const ListingsPageContent = () => {
         </Button>
         <Button
           variant={"secondary"}
+          className="border-slate-200 bg-white text-[#2D3648] shadow-sm hover:bg-slate-50"
           onClick={handleSaveSearch}
           disabled={createSavedSearches.isLoading}
         >
           {createSavedSearches.isLoading ? "Saving..." : "Save search"}
         </Button>
       </div>
-      <section className={"text-black pb-16 container"}>
-        <div className="flex gap-10 justify-between lg:gap-24">
+      <section className="mx-auto w-full max-w-screen-xl px-4 pb-20 pt-6 text-black sm:px-6 lg:px-8">
+        <div className="flex items-start justify-between gap-6 lg:gap-8 xl:gap-10">
           <div
             className={`${
               !showFiltersMobile
-                ? "hidden lg:block"
-                : "fixed inset-0 bg-white z-10 pt-4 pb-24 overflow-y-scroll px-4 lg:min-w-min lg:block lg:static lg:p-0 lg:overflow-y-visible"
+                ? "hidden lg:block lg:w-[320px] lg:shrink-0 xl:w-[340px]"
+                : "fixed inset-0 z-[70] overflow-y-auto bg-[#F8FAFC] px-4 pb-24 pt-4 lg:static lg:block lg:w-[320px] lg:shrink-0 lg:overflow-visible lg:bg-transparent lg:p-0 xl:w-[340px]"
             }`}
           >
-            <ListingsPageFilters
-              onListingTypeChange={(e) => setListingType(e)}
-              locality={locality}
-              onParamsChange={onParamsChange}
-              showFiltersMobile={() => setShowFiltersMobile(!showFiltersMobile)}
-            />
+            <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm lg:sticky lg:top-28">
+              <ListingsPageFilters
+                onListingTypeChange={(e) => setListingType(e)}
+                locality={locality}
+                onParamsChange={onParamsChange}
+                showFiltersMobile={() =>
+                  setShowFiltersMobile(!showFiltersMobile)
+                }
+              />
+            </div>
           </div>
           <ListingsMain
             listingType={listingType}
