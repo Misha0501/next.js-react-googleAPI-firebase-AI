@@ -1,13 +1,18 @@
 "use client";
-import { useState } from "react";
+import { FormEvent, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Autocomplete from "@/app/components/Autocomplete";
+import {
+  BuildingOffice2Icon,
+  HomeModernIcon,
+} from "@heroicons/react/24/outline";
 
 type ListingType = "SELL" | "RENT";
 
 export function HomeHeroHeaderSearch() {
-  const [listingTypeSelected, setListingTypeSelected] = useState<ListingType>("SELL");
+  const [listingTypeSelected, setListingTypeSelected] =
+    useState<ListingType>("SELL");
   const [selectedLocality, setSelectedLocality] = useState("");
   const router = useRouter();
 
@@ -17,84 +22,81 @@ export function HomeHeroHeaderSearch() {
     { locality: "Varna", href: "varna" },
     { locality: "Burgas", href: "burgas" },
     { locality: "Ruse", href: "ruse" },
-    { locality: "Pleven", href: "pleven" },
-    { locality: "Sliven", href: "sliven" },
   ];
 
   const handleSelectedLocalityChange = (locality: string) => {
-    router.push(`/listings?listingType=${listingTypeSelected}&locality=${locality}`);
+    setSelectedLocality(locality);
+    router.push(
+      `/listings?listingType=${listingTypeSelected}&locality=${locality}`,
+    );
   };
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const locality = String(formData.get("locality") || selectedLocality);
     const url = `/listings?listingType=${listingTypeSelected}${
-      selectedLocality ? `&locality=${selectedLocality}` : ""
+      locality ? `&locality=${locality}` : ""
     }`;
     router.push(url);
   };
 
-  const tabBase =
-    "w-full rounded-lg border py-2 px-3 text-sm font-bold leading-6 outline-none transition-colors focus:outline-none active:outline-none";
-  const tabActive = "border-[#1F5FD6] bg-[#1F5FD6] text-white shadow-sm";
-  const tabInactive = "border-transparent bg-[#EFF6FF] text-[#1E3A8A] hover:bg-[#DBEAFE]";
+  const searchModeTabs = [
+    { label: "Buy", value: "SELL" as ListingType, icon: HomeModernIcon },
+    { label: "Rent", value: "RENT" as ListingType, icon: BuildingOffice2Icon },
+  ];
 
   return (
-    <>
-      <form
-        className={"flex flex-col justify-center items-center"}
-        onSubmit={handleSubmit}
-        onKeyDown={(e) => {
-          e.key === "Enter" && e.preventDefault();
-        }}
-      >
-        <div
-          role="tablist"
-          className="flex gap-1.5 rounded-xl border border-white/70 bg-white/95 p-1.5 mb-5 w-full max-w-[300px] shadow-[0_18px_50px_rgba(15,23,42,0.18)] backdrop-blur"
-        >
-          <button
-            type="button"
-            role="tab"
-            aria-selected={listingTypeSelected === "SELL"}
-            className={`${tabBase} ${listingTypeSelected === "SELL" ? tabActive : tabInactive}`}
-            onClick={() => setListingTypeSelected("SELL")}
-          >
-            Buy
-          </button>
-          <button
-            type="button"
-            role="tab"
-            aria-selected={listingTypeSelected === "RENT"}
-            className={`${tabBase} ${listingTypeSelected === "RENT" ? tabActive : tabInactive}`}
-            onClick={() => setListingTypeSelected("RENT")}
-          >
-            Rent
-          </button>
-        </div>
+    <form className="w-full" onSubmit={handleSubmit}>
+      <div className="mb-3 flex justify-center gap-1.5">
+        {searchModeTabs.map((item) => {
+          const Icon = item.icon;
+          const isSelected = listingTypeSelected === item.value;
+          return (
+            <button
+              key={item.value}
+              type="button"
+              role="tab"
+              aria-selected={isSelected}
+              className={`flex items-center gap-2 rounded-full px-6 py-2.5 text-sm font-bold transition-all duration-200 ${
+                isSelected
+                  ? "bg-white text-[#1F5FD6] shadow-md"
+                  : "border border-white/40 bg-white/12 text-white hover:bg-white/20"
+              }`}
+              onClick={() => setListingTypeSelected(item.value)}
+            >
+              <Icon className="h-4 w-4" />
+              {item.label}
+            </button>
+          );
+        })}
+      </div>
 
-        <div className="relative max-w-2xl w-full flex items-center mb-10">
-          <Autocomplete
-            // className="hero__search w-full p-3 pl-8 rounded-l-lg outline-0 focus:outline-none text-black"
-            onLocalityChange={handleSelectedLocalityChange}
-          />
-        </div>
-        <div className="hero__popular-searches">
-          <div className={"font-bold mb-2 text-xl"}>Popular searches</div>
-          <div className="space-x-3">
-            {popularSearches.map((item) => (
-              <Link
-                key={item.href}
-                href={`listings?locality=${item.locality}&listingType=${listingTypeSelected}`}
-                className={"hover:underline"}
-              >
-                {item.locality}
-              </Link>
-            ))}
-          </div>
-        </div>
-        <button type={"submit"} hidden>
-          Search
-        </button>
-      </form>
-    </>
+      <div className="w-full">
+        <Autocomplete
+          onLocalityChange={handleSelectedLocalityChange}
+          variant="hero"
+        />
+      </div>
+
+      <div className="mt-4 flex flex-wrap items-center justify-center gap-x-2 gap-y-2">
+        <span className="text-xs font-semibold uppercase tracking-widest text-white/45">
+          Popular:
+        </span>
+        {popularSearches.map((item) => (
+          <Link
+            key={item.href}
+            href={`/listings?locality=${item.locality}&listingType=${listingTypeSelected}`}
+            className="rounded-full border border-white/20 bg-white/10 px-3.5 py-1.5 text-xs font-semibold text-white/80 backdrop-blur transition-all duration-200 hover:bg-white/20 hover:text-white"
+          >
+            {item.locality}
+          </Link>
+        ))}
+      </div>
+
+      <button type="submit" hidden>
+        Search
+      </button>
+    </form>
   );
 }
