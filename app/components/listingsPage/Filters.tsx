@@ -1,8 +1,7 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { PropertyTypeFilter } from "@/app/components/PropertyTypeFilter";
-import { Divider } from "@tremor/react";
 import {
   areaLandMaxOptions,
   areaLandMinOptions,
@@ -23,6 +22,51 @@ import { FromToFilter } from "./FromToFilter";
 import { RadioGroupCustom } from "../RadioGroupCustom";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { formatEuroPrice } from "@/app/lib/formatPrice";
+import {
+  BanknotesIcon,
+  CalendarDaysIcon,
+  HomeModernIcon,
+  Squares2X2Icon,
+  TagIcon,
+} from "@heroicons/react/24/outline";
+
+type FilterSectionProps = {
+  icon: React.ReactNode;
+  title: string;
+  description?: string;
+  children: React.ReactNode;
+};
+
+const FilterSection = ({
+  icon,
+  title,
+  description,
+  children,
+}: FilterSectionProps) => (
+  <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+    <div className="mb-4 flex gap-3">
+      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#EAF2FF] text-[#1F5FD6]">
+        {icon}
+      </span>
+      <div>
+        <h3 className="text-sm font-black text-[#1F2937]">{title}</h3>
+        {description && (
+          <p className="mt-1 text-xs leading-5 text-[#64748B]">{description}</p>
+        )}
+      </div>
+    </div>
+    {children}
+  </section>
+);
+
+const isActiveMin = (value?: string | number) =>
+  value !== undefined && value !== "0" && value !== 0;
+
+const isActiveMax = (value?: string | number) =>
+  value !== undefined && value !== NO_MAX;
+
+const isActiveListedSince = (value?: string | number) =>
+  value !== undefined && value !== 0 && value !== "0";
 
 export function Filters({ onParamsChange, listingType, locality }: any) {
   const pathname = usePathname();
@@ -59,7 +103,9 @@ export function Filters({ onParamsChange, listingType, locality }: any) {
         min: urlParams.get("bedroomsMin") || undefined,
         max: urlParams.get("bedroomsMax") || undefined,
       },
-      listedSince: urlParams.get("listedSince") ? Number(urlParams.get("listedSince")) : undefined,
+      listedSince: urlParams.get("listedSince")
+        ? Number(urlParams.get("listedSince"))
+        : undefined,
     };
   });
 
@@ -76,7 +122,10 @@ export function Filters({ onParamsChange, listingType, locality }: any) {
         qp.set("priceMax", String(filters.priceRange.max));
       if (filters.livingAreaRange?.min && filters.livingAreaRange.min !== "0")
         qp.set("areaLivingMin", String(filters.livingAreaRange.min));
-      if (filters.livingAreaRange?.max && filters.livingAreaRange.max !== NO_MAX)
+      if (
+        filters.livingAreaRange?.max &&
+        filters.livingAreaRange.max !== NO_MAX
+      )
         qp.set("areaLivingMax", String(filters.livingAreaRange.max));
       if (filters.areaTotal?.min && filters.areaTotal.min !== "0")
         qp.set("areaTotalMin", String(filters.areaTotal.min));
@@ -98,33 +147,64 @@ export function Filters({ onParamsChange, listingType, locality }: any) {
   );
 
   const [clearKey, setClearKey] = useState(0);
+  const hasMounted = useRef(false);
 
-  const defaultFilterValues = useMemo(() => ({
-    listingType: listingType || undefined,
-    propertyType: [],
-    priceRange: { min: undefined, max: undefined },
-    livingAreaRange: { min: undefined, max: undefined },
-    areaTotal: { min: undefined, max: undefined },
-    roomRange: { min: undefined, max: undefined },
-    bedroomRange: { min: undefined, max: undefined },
-    listedSince: undefined,
-  }), [listingType]);
+  const defaultFilterValues = useMemo(
+    () => ({
+      listingType: listingType || undefined,
+      propertyType: [],
+      priceRange: { min: undefined, max: undefined },
+      livingAreaRange: { min: undefined, max: undefined },
+      areaTotal: { min: undefined, max: undefined },
+      roomRange: { min: undefined, max: undefined },
+      bedroomRange: { min: undefined, max: undefined },
+      listedSince: undefined,
+    }),
+    [listingType],
+  );
+
+  useEffect(() => {
+    if (!hasMounted.current) {
+      hasMounted.current = true;
+      return;
+    }
+
+    setFilterValues(defaultFilterValues);
+    setClearKey((key) => key + 1);
+  }, [defaultFilterValues]);
 
   const hasActiveFilters = useMemo(() => {
     return (
       filterValues.propertyType?.length > 0 ||
-      filterValues.priceRange.min !== undefined ||
-      filterValues.priceRange.max !== undefined ||
-      filterValues.livingAreaRange.min !== undefined ||
-      filterValues.livingAreaRange.max !== undefined ||
-      filterValues.areaTotal.min !== undefined ||
-      filterValues.areaTotal.max !== undefined ||
-      filterValues.roomRange.min !== undefined ||
-      filterValues.roomRange.max !== undefined ||
-      filterValues.bedroomRange.min !== undefined ||
-      filterValues.bedroomRange.max !== undefined ||
-      filterValues.listedSince !== undefined
+      isActiveMin(filterValues.priceRange.min) ||
+      isActiveMax(filterValues.priceRange.max) ||
+      isActiveMin(filterValues.livingAreaRange.min) ||
+      isActiveMax(filterValues.livingAreaRange.max) ||
+      isActiveMin(filterValues.areaTotal.min) ||
+      isActiveMax(filterValues.areaTotal.max) ||
+      isActiveMin(filterValues.roomRange.min) ||
+      isActiveMax(filterValues.roomRange.max) ||
+      isActiveMin(filterValues.bedroomRange.min) ||
+      isActiveMax(filterValues.bedroomRange.max) ||
+      isActiveListedSince(filterValues.listedSince)
     );
+  }, [filterValues]);
+
+  const activeFilterCount = useMemo(() => {
+    return [
+      filterValues.propertyType?.length ? filterValues.propertyType.length : 0,
+      isActiveMin(filterValues.priceRange.min) ? 1 : 0,
+      isActiveMax(filterValues.priceRange.max) ? 1 : 0,
+      isActiveMin(filterValues.livingAreaRange.min) ? 1 : 0,
+      isActiveMax(filterValues.livingAreaRange.max) ? 1 : 0,
+      isActiveMin(filterValues.areaTotal.min) ? 1 : 0,
+      isActiveMax(filterValues.areaTotal.max) ? 1 : 0,
+      isActiveMin(filterValues.roomRange.min) ? 1 : 0,
+      isActiveMax(filterValues.roomRange.max) ? 1 : 0,
+      isActiveMin(filterValues.bedroomRange.min) ? 1 : 0,
+      isActiveMax(filterValues.bedroomRange.max) ? 1 : 0,
+      isActiveListedSince(filterValues.listedSince) ? 1 : 0,
+    ].reduce((count, value) => count + value, 0);
   }, [filterValues]);
 
   const clearFilters = useCallback(() => {
@@ -202,138 +282,185 @@ export function Filters({ onParamsChange, listingType, locality }: any) {
   };
 
   return (
-    <>
-      <div className="flex items-center justify-between mb-4">
-        <p className="font-bold">Price Range</p>
+    <div className="space-y-4">
+      <div className="flex items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-[#F8FAFC] p-3">
+        <div>
+          <p className="text-sm font-black text-[#1F2937]">
+            {activeFilterCount
+              ? `${activeFilterCount} active filter${activeFilterCount === 1 ? "" : "s"}`
+              : "No active filters"}
+          </p>
+          <p className="mt-0.5 text-xs text-[#64748B]">
+            {listingType === "RENT" ? "Rental search" : "Purchase search"}
+          </p>
+        </div>
         {hasActiveFilters && (
           <button
             type="button"
             onClick={clearFilters}
-            className="text-xs font-medium text-[#717D96] hover:text-[#2D3648] underline underline-offset-2 transition-colors"
+            className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-bold text-[#334155] transition hover:border-[#CFE0FF] hover:text-[#1F5FD6]"
           >
-            Clear filters
+            Clear
           </button>
         )}
       </div>
-      {listingType === "SELL" && (
+
+      <FilterSection
+        icon={<BanknotesIcon className="h-5 w-5" />}
+        title="Price range"
+        description={
+          listingType === "RENT"
+            ? "Monthly rent in euro"
+            : "Asking price in euro"
+        }
+      >
+        {listingType === "SELL" && (
+          <FromToFilter
+            key={"price-sell-" + clearKey}
+            valuesTo={priceSellMaxOptions}
+            valuesFrom={priceSellMinOptions}
+            initialFrom={filterValues.priceRange.min || "0"}
+            initialTo={filterValues.priceRange.max || NO_MAX}
+            onChangeFrom={(value) =>
+              handlePriceChange(value, filterValues.priceRange.max)
+            }
+            onChangeTo={(value) =>
+              handlePriceChange(filterValues.priceRange.min, value)
+            }
+            formatValue={formatPriceFilterValue}
+            id={"priceFilter"}
+          />
+        )}
+        {listingType === "RENT" && (
+          <FromToFilter
+            key={"price-rent-" + clearKey}
+            valuesTo={priceRentMaxOptions}
+            valuesFrom={priceRentMinOptions}
+            initialFrom={filterValues.priceRange.min || "0"}
+            initialTo={filterValues.priceRange.max || NO_MAX}
+            onChangeFrom={(value) =>
+              handlePriceChange(value, filterValues.priceRange.max)
+            }
+            onChangeTo={(value) =>
+              handlePriceChange(filterValues.priceRange.min, value)
+            }
+            formatValue={formatPriceFilterValue}
+            id={"priceFilter"}
+          />
+        )}
+      </FilterSection>
+
+      <FilterSection
+        icon={<TagIcon className="h-5 w-5" />}
+        title="Property type"
+        description="Select one or more categories"
+      >
+        <PropertyTypeFilter
+          key={"prop-type-" + clearKey}
+          selectedValues={filterValues.propertyType}
+          onChange={handlePropertyTypeChange}
+          id={"propertyTypeFilter"}
+        />
+      </FilterSection>
+
+      <FilterSection
+        icon={<Squares2X2Icon className="h-5 w-5" />}
+        title="Living area"
+        description="Interior square meters"
+      >
         <FromToFilter
-          key={"price-sell-" + clearKey}
-          valuesTo={priceSellMaxOptions}
-          valuesFrom={priceSellMinOptions}
-          initialFrom={filterValues.priceRange.min || "0"}
-          initialTo={filterValues.priceRange.max || NO_MAX}
+          key={"living-area-" + clearKey}
+          valuesTo={areaLivingMaxOptions}
+          valuesFrom={areaLivingMinOptions}
+          initialFrom={filterValues.livingAreaRange.min || "0"}
+          initialTo={filterValues.livingAreaRange.max || NO_MAX}
           onChangeFrom={(value) =>
-            handlePriceChange(value, filterValues.priceRange.max)
+            handleLivingAreaChange(value, filterValues.livingAreaRange.max)
           }
           onChangeTo={(value) =>
-            handlePriceChange(filterValues.priceRange.min, value)
+            handleLivingAreaChange(filterValues.livingAreaRange.min, value)
           }
-          formatValue={formatPriceFilterValue}
-          id={"priceFilter"}
+          id={"livingAreaRangeFilter"}
         />
-      )}
-      {listingType === "RENT" && (
+      </FilterSection>
+
+      <FilterSection
+        icon={<Squares2X2Icon className="h-5 w-5" />}
+        title="Property area"
+        description="Total property or plot size"
+      >
         <FromToFilter
-          key={"price-rent-" + clearKey}
-          valuesTo={priceRentMaxOptions}
-          valuesFrom={priceRentMinOptions}
-          initialFrom={filterValues.priceRange.min || "0"}
-          initialTo={filterValues.priceRange.max || NO_MAX}
+          key={"area-total-" + clearKey}
+          initialFrom={filterValues.areaTotal.min || "0"}
+          initialTo={filterValues.areaTotal.max || NO_MAX}
+          valuesFrom={areaLandMinOptions}
+          valuesTo={areaLandMaxOptions}
           onChangeFrom={(value) =>
-            handlePriceChange(value, filterValues.priceRange.max)
+            handleLivingLandChange(value, filterValues.areaTotal.max)
           }
           onChangeTo={(value) =>
-            handlePriceChange(filterValues.priceRange.min, value)
+            handleLivingLandChange(filterValues.areaTotal.min, value)
           }
-          formatValue={formatPriceFilterValue}
-          id={"priceFilter"}
+          id={"areaTotalFilter"}
         />
-      )}
-      <Divider className="my-6" />
-      <p className={"font-bold mb-4 text-[#2D3648]"}>Property type</p>
-      <PropertyTypeFilter
-        key={"prop-type-" + clearKey}
-        selectedValues={filterValues.propertyType}
-        onChange={handlePropertyTypeChange}
-        id={"propertyTypeFilter"}
-      />
-      <Divider className="my-6" />
-      <p className={"font-bold mb-4 text-[#2D3648]"}>
-        Square meters living area
-      </p>
-      <FromToFilter
-        key={"living-area-" + clearKey}
-        valuesTo={areaLivingMaxOptions}
-        valuesFrom={areaLivingMinOptions}
-        initialFrom={filterValues.livingAreaRange.min || "0"}
-        initialTo={filterValues.livingAreaRange.max || NO_MAX}
-        onChangeFrom={(value) =>
-          handleLivingAreaChange(value, filterValues.livingAreaRange.max)
-        }
-        onChangeTo={(value) =>
-          handleLivingAreaChange(filterValues.livingAreaRange.min, value)
-        }
-        id={"livingAreaRangeFilter"}
-      />
-      <Divider className="my-6" />
-      <p className={"font-bold text-base mb-4"}>Square meters property</p>
-      <FromToFilter
-        key={"area-total-" + clearKey}
-        initialFrom={filterValues.areaTotal.min || "0"}
-        initialTo={filterValues.areaTotal.max || NO_MAX}
-        valuesFrom={areaLandMinOptions}
-        valuesTo={areaLandMaxOptions}
-        onChangeFrom={(value) =>
-          handleLivingLandChange(value, filterValues.areaTotal.max)
-        }
-        onChangeTo={(value) =>
-          handleLivingLandChange(filterValues.areaTotal.min, value)
-        }
-        id={"areaTotalFilter"}
-      />
-      <Divider className="my-6" />
-      <p className={"font-bold mb-4 text-[#2D3648]"}>Rooms</p>
-      <FromToFilter
-        key={"rooms-" + clearKey}
-        initialFrom={filterValues.roomRange.min || "0"}
-        initialTo={filterValues.roomRange.max || NO_MAX}
-        valuesFrom={minRoomsOptions}
-        valuesTo={maxRoomsOptions}
-        onChangeFrom={(value) =>
-          handleRoomChange(value, filterValues.roomRange.max)
-        }
-        onChangeTo={(value) =>
-          handleRoomChange(filterValues.roomRange.min, value)
-        }
-        id={"roomRangeFilter"}
-      />
-      <Divider className="my-6" />
-      <p className={"font-bold mb-4 text-[#2D3648]"}>Bedrooms</p>
-      <FromToFilter
-        key={"bedrooms-" + clearKey}
-        initialFrom={filterValues.bedroomRange.min || "0"}
-        initialTo={filterValues.bedroomRange.max || NO_MAX}
-        valuesFrom={minBedroomsOptions}
-        valuesTo={maxBedroomsOptions}
-        onChangeFrom={(value) =>
-          handleBedroomChange(value, filterValues.bedroomRange.max)
-        }
-        onChangeTo={(value) =>
-          handleBedroomChange(filterValues.bedroomRange.min, value)
-        }
-        id={"bedroomRangeFilter"}
-      />
-      <Divider className="my-6" />
-      <p className={"font-bold mb-4 text-[#2D3648]"}>Listed since</p>
-      <RadioGroupCustom
-        key={"listed-since-" + clearKey}
-        options={listedSinceOptions}
-        onChange={handleListedSince}
-        id={"listedSinceFilter"}
-        initialValue={filterValues.listedSince ?? null}
-      />
-      <Divider className="my-6" />
-    </>
+      </FilterSection>
+
+      <FilterSection
+        icon={<HomeModernIcon className="h-5 w-5" />}
+        title="Rooms"
+        description="Total rooms in the property"
+      >
+        <FromToFilter
+          key={"rooms-" + clearKey}
+          initialFrom={filterValues.roomRange.min || "0"}
+          initialTo={filterValues.roomRange.max || NO_MAX}
+          valuesFrom={minRoomsOptions}
+          valuesTo={maxRoomsOptions}
+          onChangeFrom={(value) =>
+            handleRoomChange(value, filterValues.roomRange.max)
+          }
+          onChangeTo={(value) =>
+            handleRoomChange(filterValues.roomRange.min, value)
+          }
+          id={"roomRangeFilter"}
+        />
+      </FilterSection>
+
+      <FilterSection
+        icon={<HomeModernIcon className="h-5 w-5" />}
+        title="Bedrooms"
+        description="Dedicated sleeping rooms"
+      >
+        <FromToFilter
+          key={"bedrooms-" + clearKey}
+          initialFrom={filterValues.bedroomRange.min || "0"}
+          initialTo={filterValues.bedroomRange.max || NO_MAX}
+          valuesFrom={minBedroomsOptions}
+          valuesTo={maxBedroomsOptions}
+          onChangeFrom={(value) =>
+            handleBedroomChange(value, filterValues.bedroomRange.max)
+          }
+          onChangeTo={(value) =>
+            handleBedroomChange(filterValues.bedroomRange.min, value)
+          }
+          id={"bedroomRangeFilter"}
+        />
+      </FilterSection>
+
+      <FilterSection
+        icon={<CalendarDaysIcon className="h-5 w-5" />}
+        title="Listed since"
+        description="Focus on newer listings"
+      >
+        <RadioGroupCustom
+          key={"listed-since-" + clearKey}
+          options={listedSinceOptions}
+          onChange={handleListedSince}
+          id={"listedSinceFilter"}
+          initialValue={filterValues.listedSince ?? null}
+        />
+      </FilterSection>
+    </div>
   );
 }
 

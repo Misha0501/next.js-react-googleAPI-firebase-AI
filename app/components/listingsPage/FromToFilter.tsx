@@ -26,11 +26,12 @@ export const FromToFilter = ({
   };
 
   return (
-    <div className="flex items-center justify-center gap-3">
+    <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-2">
       <Select
         value={String(initialFrom)}
         onValueChange={onChangeFrom}
         id={id ? id + "Min" : ""}
+        className="w-full"
       >
         {valuesFrom.map((item, index) => (
           <SelectItem value={String(item)} key={index}>
@@ -38,11 +39,11 @@ export const FromToFilter = ({
           </SelectItem>
         ))}
       </Select>
-      <span className="text-sm font-medium text-[#717D96]">to</span>
+      <span className="text-xs font-bold uppercase text-[#94A3B8]">to</span>
       <Select
         value={String(initialTo)}
         onValueChange={onChangeTo}
-        className={"text-sm"}
+        className="w-full text-sm"
         id={id ? id + "Max" : ""}
       >
         {valuesTo.map((item, index) => (

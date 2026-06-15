@@ -1,36 +1,56 @@
-import React, { useState } from "react";
-import { RadioButton } from "@/app/components/RadioButton";
+import React, { useEffect, useState } from "react";
+import { CheckCircleIcon } from "@heroicons/react/24/outline";
 
 type Props = {
   options: { label: string; value: string | number }[];
-  onChange?: (value: string) => void;
+  onChange?: (value: string | number) => void;
   id?: string;
   initialValue?: string | number | null;
 };
-export const RadioGroupCustom = ({ options, onChange, id, initialValue = null }: Props) => {
-  const [selectedValue, setSelectedValue] = useState<string | number | null>(initialValue);
 
-  const handleOnChange = (value: any) => {
+export const RadioGroupCustom = ({
+  options,
+  onChange,
+  id,
+  initialValue = null,
+}: Props) => {
+  const [selectedValue, setSelectedValue] = useState<string | number | null>(
+    initialValue,
+  );
+
+  useEffect(() => {
+    setSelectedValue(initialValue);
+  }, [initialValue]);
+
+  const handleOnChange = (value: string | number) => {
     setSelectedValue(value);
-    if (onChange) {
-      onChange(value);
-    }
+    onChange?.(value);
   };
 
   return (
-    <div className="flex flex-col gap-2" id={id}>
-      {options &&
-        options.map((item, index) => (
-          <RadioButton
-            checked={item.value === selectedValue}
-            key={index}
-            label={item.label}
-            id={id ? id + index : ""}
-            value={item.value}
-            onChange={() => handleOnChange(item.value)}
-            name={"listedSince"}
-          />
-        ))}
+    <div className="grid gap-2" id={id} role="radiogroup">
+      {options.map((item, index) => {
+        const isSelected = item.value === selectedValue;
+
+        return (
+          <button
+            key={item.value}
+            type="button"
+            role="radio"
+            aria-checked={isSelected}
+            id={id ? `${id}${index}` : undefined}
+            onClick={() => handleOnChange(item.value)}
+            className={`flex min-h-11 items-center justify-between gap-3 rounded-xl border px-3 py-2 text-left text-sm font-bold transition ${
+              isSelected
+                ? "border-[#1F5FD6] bg-[#F6F9FF] text-[#1F5FD6]"
+                : "border-slate-200 bg-white text-[#334155] hover:border-[#CFE0FF] hover:bg-[#F8FAFC] hover:text-[#1F5FD6]"
+            }`}
+          >
+            <span>{item.label}</span>
+            {isSelected && <CheckCircleIcon className="h-5 w-5 shrink-0" />}
+          </button>
+        );
+      })}
     </div>
   );
 };

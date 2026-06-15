@@ -1,9 +1,13 @@
-import { Button } from "@tremor/react";
 import { useState } from "react";
 import { ListingType } from "@/types";
 import Filters from "@/app/components/listingsPage/Filters";
 import { useRouter, useSearchParams } from "next/navigation";
-import { XMarkIcon } from "@heroicons/react/24/solid";
+import {
+  AdjustmentsHorizontalIcon,
+  BuildingOffice2Icon,
+  HomeModernIcon,
+  XMarkIcon,
+} from "@heroicons/react/24/outline";
 
 type Props = {
   onParamsChange: (data: any) => void;
@@ -22,99 +26,125 @@ export const ListingsPageFilters = ({
   const [listingType, setListingType] = useState<ListingType | any>(
     params.get("listingType") || "SELL",
   );
-  const [filterValues, setFilterValues] = useState({});
+
+  const defaultFilters = (type: ListingType) => ({
+    listingType: type,
+    propertyType: [],
+    priceRange: { min: undefined, max: undefined },
+    livingAreaRange: { min: undefined, max: undefined },
+    areaTotal: { min: undefined, max: undefined },
+    roomRange: { min: undefined, max: undefined },
+    bedroomRange: { min: undefined, max: undefined },
+    listedSince: undefined,
+  });
 
   const handleTabChange = (newType: "SELL" | "RENT") => {
+    if (newType === listingType) return;
+
     setListingType(newType);
-    const qp = new URLSearchParams(params.toString());
+    onListingTypeChange(newType);
+    onParamsChange(defaultFilters(newType));
+
+    const qp = new URLSearchParams();
+    const currentLocality = locality || params.get("locality");
+    if (currentLocality) qp.set("locality", currentLocality);
     qp.set("listingType", newType);
-    qp.delete("page");
     router.replace(`/listings?${qp.toString()}`);
   };
 
   const onChange = (data: any) => {
     onParamsChange(data);
-    setFilterValues(data);
     onListingTypeChange(listingType);
   };
 
-  const tabBase =
-    "flex min-h-11 flex-1 items-center justify-center whitespace-nowrap truncate rounded-t-lg border-b-2 px-4 pb-2 pt-3 text-sm font-semibold outline-none transition duration-150 focus-visible:ring-2 focus-visible:ring-[#1F5FD6]/25";
-  const tabActive = "border-[#1F5FD6] bg-[#1F5FD6]/5 text-[#1F5FD6]";
-  const tabInactive =
-    "border-transparent text-gray-500 hover:bg-gray-50 hover:text-gray-700";
+  const tabs = [
+    {
+      label: "Buy",
+      value: "SELL" as ListingType,
+      icon: HomeModernIcon,
+    },
+    {
+      label: "Rent",
+      value: "RENT" as ListingType,
+      icon: BuildingOffice2Icon,
+    },
+  ];
 
   return (
     <>
-      <div className="mb-5 flex items-center justify-between lg:hidden">
-        <div>
-          <p className="text-lg font-bold text-[#222222]">Filters</p>
-          <p className="text-sm text-[#717D96]">Refine your search</p>
+      <div className="mb-6 flex items-center justify-between lg:hidden">
+        <div className="flex items-center gap-3">
+          <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#EAF2FF] text-[#1F5FD6]">
+            <AdjustmentsHorizontalIcon className="h-5 w-5" />
+          </span>
+          <div>
+            <p className="text-lg font-bold text-[#1F2937]">Filters</p>
+            <p className="text-sm text-[#717D96]">Refine your search</p>
+          </div>
         </div>
         <button
           type="button"
           onClick={showFiltersMobile}
-          className="flex h-10 w-10 items-center justify-center rounded-lg border border-slate-200 bg-white text-[#2D3648]"
+          className="flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white text-[#2D3648] transition hover:border-[#CFE0FF] hover:text-[#1F5FD6]"
         >
           <XMarkIcon className="h-5 w-5" />
         </button>
       </div>
 
-      <div className="mb-7 hidden lg:block">
-        <p className="text-lg font-bold text-[#222222]">Filters</p>
-        <p className="text-sm text-[#717D96]">Refine your search</p>
+      <div className="mb-7 hidden lg:flex lg:items-center lg:gap-3">
+        <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#EAF2FF] text-[#1F5FD6]">
+          <AdjustmentsHorizontalIcon className="h-5 w-5" />
+        </span>
+        <div>
+          <p className="text-lg font-bold text-[#1F2937]">Filters</p>
+          <p className="text-sm text-[#717D96]">Refine your search</p>
+        </div>
       </div>
 
       <div className="mb-8">
         <div
-          className="flex w-full justify-start overflow-x-auto border-b border-gray-200 pb-2 sm:overflow-x-visible"
+          className="grid grid-cols-2 gap-2 rounded-2xl bg-[#F1F5F9] p-1.5"
           role="tablist"
         >
-          <button
-            type="button"
-            role="tab"
-            aria-selected={listingType === "SELL"}
-            className={`${tabBase} ${listingType === "SELL" ? tabActive : tabInactive}`}
-            onClick={() => handleTabChange("SELL")}
-          >
-            Buy
-          </button>
-          <button
-            type="button"
-            role="tab"
-            aria-selected={listingType === "RENT"}
-            className={`${tabBase} ${listingType === "RENT" ? tabActive : tabInactive}`}
-            onClick={() => handleTabChange("RENT")}
-          >
-            Rent
-          </button>
+          {tabs.map((item) => {
+            const Icon = item.icon;
+            const isActive = listingType === item.value;
+
+            return (
+              <button
+                key={item.value}
+                type="button"
+                role="tab"
+                aria-selected={isActive}
+                className={`flex min-h-[48px] items-center justify-center gap-2 rounded-xl px-3 py-2 text-sm font-black transition ${
+                  isActive
+                    ? "bg-[#1F5FD6] text-white shadow-sm"
+                    : "text-[#334155] hover:bg-white hover:text-[#1F5FD6]"
+                }`}
+                onClick={() => handleTabChange(item.value)}
+              >
+                <Icon className="h-5 w-5" />
+                {item.label}
+              </button>
+            );
+          })}
         </div>
-        <div role="tabpanel">
-          {listingType === "SELL" && (
-            <Filters
-              listingType={listingType}
-              onParamsChange={onChange}
-              locality={locality}
-            />
-          )}
-          {listingType === "RENT" && (
-            <Filters
-              listingType={listingType}
-              onParamsChange={onChange}
-              locality={locality}
-            />
-          )}
+        <div className="mt-6" role="tabpanel">
+          <Filters
+            listingType={listingType}
+            onParamsChange={onChange}
+            locality={locality}
+          />
         </div>
       </div>
 
-      <Button
+      <button
         type="button"
         onClick={showFiltersMobile}
-        variant={"primary"}
-        className={"w-full lg:hidden"}
+        className="inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-[#1F5FD6] px-4 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-[#184FB5] lg:hidden"
       >
         Search
-      </Button>
+      </button>
     </>
   );
 };

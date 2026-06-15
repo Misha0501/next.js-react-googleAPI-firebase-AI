@@ -18,7 +18,9 @@ export const ListingsPageContent = () => {
   const { authToken } = useAuthContext();
   const param = useSearchParams();
   const [search, setSearch] = useState(null);
-  const [listingType, setListingType] = useState<ListingType>("SELL");
+  const [listingType, setListingType] = useState<ListingType>(
+    (param.get("listingType") as ListingType) || "SELL",
+  );
   const [locality, setLocality] = useState(param.get("locality") || "");
   const createSavedSearches = useCreateSavedSearches({ authToken });
   let [showAuthModal, setShowAuthModal] = useState(false);
@@ -132,7 +134,7 @@ export const ListingsPageContent = () => {
                 : "fixed inset-0 z-[70] overflow-y-auto bg-[#F8FAFC] px-4 pb-24 pt-4 lg:static lg:block lg:w-[320px] lg:shrink-0 lg:overflow-visible lg:bg-transparent lg:p-0 xl:w-[340px]"
             }`}
           >
-            <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm lg:sticky lg:top-28">
+            <div className="lg:sticky lg:top-28">
               <ListingsPageFilters
                 onListingTypeChange={(e) => setListingType(e)}
                 locality={locality}
