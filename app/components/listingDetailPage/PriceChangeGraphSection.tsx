@@ -1,6 +1,14 @@
 "use client";
 
-import { AreaChart } from "@tremor/react";
+import {
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  Tooltip,
+  CartesianGrid,
+  ResponsiveContainer,
+} from "recharts";
 import { ListingPrice } from "@/types";
 import { formatEuroPrice } from "@/app/lib/formatPrice";
 import {
@@ -103,21 +111,76 @@ export const PriceChangeGraphSection = ({ listingPriceArray }: Prop) => {
           </div>
 
           {/* Chart */}
-          <AreaChart
-            className="mt-2"
-            data={chartData}
-            index="date"
-            categories={["Price"]}
-            colors={["blue"]}
-            valueFormatter={formatEuroPrice}
-            yAxisWidth={88}
-            curveType="step"
-            minValue={yAxisMin}
-            maxValue={yAxisMax}
-            showLegend={false}
-            showAnimation
-            data-testid="priceChangeGraph"
-          />
+          <div className="mt-2" data-testid="priceChangeGraph">
+            <ResponsiveContainer width="100%" height={250}>
+              <AreaChart
+                data={chartData}
+                margin={{ top: 4, right: 4, left: 0, bottom: 0 }}
+              >
+                <defs>
+                  <linearGradient
+                    id="priceGradient"
+                    x1="0"
+                    y1="0"
+                    x2="0"
+                    y2="1"
+                  >
+                    <stop
+                      offset="5%"
+                      stopColor="#3b82f6"
+                      stopOpacity={0.15}
+                    />
+                    <stop
+                      offset="95%"
+                      stopColor="#3b82f6"
+                      stopOpacity={0}
+                    />
+                  </linearGradient>
+                </defs>
+                <CartesianGrid
+                  strokeDasharray="3 3"
+                  stroke="#e2e8f0"
+                  vertical={false}
+                />
+                <XAxis
+                  dataKey="date"
+                  tick={{ fontSize: 12, fill: "#94a3b8" }}
+                  axisLine={false}
+                  tickLine={false}
+                />
+                <YAxis
+                  width={88}
+                  domain={[yAxisMin, yAxisMax]}
+                  tickFormatter={(v) => formatEuroPrice(v as number)}
+                  tick={{ fontSize: 11, fill: "#94a3b8" }}
+                  axisLine={false}
+                  tickLine={false}
+                />
+                <Tooltip
+                  formatter={(value) => [
+                    formatEuroPrice(value as number),
+                    "Price",
+                  ]}
+                  contentStyle={{
+                    borderRadius: "0.75rem",
+                    border: "1px solid #e2e8f0",
+                    padding: "8px 12px",
+                    fontSize: 12,
+                  }}
+                  labelStyle={{ color: "#717D96", marginBottom: 4 }}
+                />
+                <Area
+                  type="step"
+                  dataKey="Price"
+                  stroke="#3b82f6"
+                  fill="url(#priceGradient)"
+                  strokeWidth={2}
+                  dot={false}
+                  activeDot={{ r: 4, fill: "#3b82f6" }}
+                />
+              </AreaChart>
+            </ResponsiveContainer>
+          </div>
         </div>
       </div>
     </section>

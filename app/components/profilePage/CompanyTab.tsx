@@ -6,7 +6,6 @@ import { useAuthContext } from "@/app/context/AuthContext";
 import { useCompanyMemberships } from "@/providers/Memberships";
 import * as Yup from "yup";
 import { useFormik } from "formik";
-import { Button, TextInput } from "@tremor/react";
 import { AddressAutocomplete } from "@/app/components/propertyPlacementEdit/AddressAutocomplete";
 import { useCreateCompany, useUpdateCompany } from "@/providers/Companies";
 import { AutocompleteAddress } from "@/types";
@@ -67,6 +66,13 @@ const initialCompanyState: FormValues = {
   },
 };
 
+const inputClass = (hasError?: boolean) =>
+  `h-10 w-full rounded-xl border bg-white px-3 text-sm text-[#2D3648] outline-none transition focus:ring-2 disabled:bg-[#F8FAFC] disabled:text-[#64748B] ${
+    hasError
+      ? "border-red-400 focus:border-red-400 focus:ring-red-400/15"
+      : "border-slate-200 focus:border-[#1F5FD6] focus:ring-[#1F5FD6]/15"
+  }`;
+
 export const CompanyTab = () => {
   const { authToken } = useAuthContext();
   const companyMemberships = useCompanyMemberships({ authToken });
@@ -85,7 +91,6 @@ export const CompanyTab = () => {
 
   const handleAddressChange = (address: AutocompleteAddress) => {
     if (!address) return;
-
     const addressId = formik.values.address.id;
     formik.setFieldValue("address", { id: addressId, ...address });
     setShowAddress(true);
@@ -98,7 +103,6 @@ export const CompanyTab = () => {
         toast.success("Company updated successfully");
         return;
       }
-
       await createCompany.mutateAsync(values);
       toast.success("Company created successfully");
     } catch (error) {
@@ -111,14 +115,10 @@ export const CompanyTab = () => {
 
   useEffect(() => {
     if (!companyMemberships.isSuccess || !companyMemberships?.data) return;
-
     const membershipCompany = companyMemberships.data?.company;
     if (!membershipCompany) return;
     const companyAddress = membershipCompany.Address?.[0];
-
-    if (companyAddress?.locality) {
-      setShowAddress(true);
-    }
+    if (companyAddress?.locality) setShowAddress(true);
     setFormSubmitMethod("PUT");
     setCompany({
       ...membershipCompany,
@@ -141,9 +141,7 @@ export const CompanyTab = () => {
           </div>
           <div>
             <h3 className="font-semibold text-[#2D3648]">
-              {formSubmitMethod === "PUT"
-                ? "Company details"
-                : "Create company"}
+              {formSubmitMethod === "PUT" ? "Company details" : "Create company"}
             </h3>
             <p className="mt-1 text-sm leading-6 text-[#717D96]">
               Use this profile for agency-owned listings and company contact
@@ -159,18 +157,19 @@ export const CompanyTab = () => {
             <BuildingOffice2Icon className="h-4 w-4 text-[#1F5FD6]" />
             Company name
           </span>
-          <TextInput
+          <input
+            type="text"
             value={formik.values.name}
-            onChange={(event) => {
-              formik.setFieldValue("name", event.target.value, true);
-            }}
-            errorMessage={
-              formik.errors.name && formik.touched.name
-                ? formik.errors.name
-                : undefined
-            }
-            error={Boolean(formik.errors.name && formik.touched.name)}
+            onChange={(e) => formik.setFieldValue("name", e.target.value, true)}
+            onBlur={formik.handleBlur}
+            name="name"
+            className={inputClass(
+              Boolean(formik.errors.name && formik.touched.name),
+            )}
           />
+          {formik.errors.name && formik.touched.name && (
+            <p className="mt-1 text-sm text-red-600">{formik.errors.name}</p>
+          )}
         </label>
 
         <label className="block">
@@ -178,20 +177,23 @@ export const CompanyTab = () => {
             <PhoneIcon className="h-4 w-4 text-[#1F5FD6]" />
             Phone number
           </span>
-          <TextInput
+          <input
+            type="text"
             value={formik.values.phoneNumber}
-            onChange={(event) => {
-              formik.setFieldValue("phoneNumber", event.target.value, true);
-            }}
-            errorMessage={
-              formik.errors.phoneNumber && formik.touched.phoneNumber
-                ? formik.errors.phoneNumber
-                : undefined
+            onChange={(e) =>
+              formik.setFieldValue("phoneNumber", e.target.value, true)
             }
-            error={Boolean(
-              formik.errors.phoneNumber && formik.touched.phoneNumber,
+            onBlur={formik.handleBlur}
+            name="phoneNumber"
+            className={inputClass(
+              Boolean(formik.errors.phoneNumber && formik.touched.phoneNumber),
             )}
           />
+          {formik.errors.phoneNumber && formik.touched.phoneNumber && (
+            <p className="mt-1 text-sm text-red-600">
+              {formik.errors.phoneNumber}
+            </p>
+          )}
         </label>
 
         <label className="block md:col-span-2">
@@ -199,18 +201,21 @@ export const CompanyTab = () => {
             <EnvelopeIcon className="h-4 w-4 text-[#1F5FD6]" />
             Email
           </span>
-          <TextInput
+          <input
+            type="email"
             value={formik.values.email}
-            onChange={(event) => {
-              formik.setFieldValue("email", event.target.value, true);
-            }}
-            errorMessage={
-              formik.errors.email && formik.touched.email
-                ? formik.errors.email
-                : undefined
+            onChange={(e) =>
+              formik.setFieldValue("email", e.target.value, true)
             }
-            error={Boolean(formik.errors.email && formik.touched.email)}
+            onBlur={formik.handleBlur}
+            name="email"
+            className={inputClass(
+              Boolean(formik.errors.email && formik.touched.email),
+            )}
           />
+          {formik.errors.email && formik.touched.email && (
+            <p className="mt-1 text-sm text-red-600">{formik.errors.email}</p>
+          )}
         </label>
       </div>
 
@@ -237,7 +242,8 @@ export const CompanyTab = () => {
               <span className="mb-2 block text-sm font-semibold text-[#2D3648]">
                 House number
               </span>
-              <TextInput
+              <input
+                type="text"
                 value={formik.values.address.streetNumber}
                 onChange={(e) =>
                   formik.setFieldValue(
@@ -246,47 +252,75 @@ export const CompanyTab = () => {
                     true,
                   )
                 }
+                className={inputClass()}
               />
             </label>
             <label className="block">
               <span className="mb-2 block text-sm font-semibold text-[#2D3648]">
                 Street
               </span>
-              <TextInput value={formik.values.address.route} disabled />
+              <input
+                type="text"
+                value={formik.values.address.route}
+                disabled
+                className={inputClass()}
+              />
             </label>
             <label className="block">
               <span className="mb-2 block text-sm font-semibold text-[#2D3648]">
                 City
               </span>
-              <TextInput value={formik.values.address.locality} disabled />
+              <input
+                type="text"
+                value={formik.values.address.locality}
+                disabled
+                className={inputClass()}
+              />
             </label>
             <label className="block">
               <span className="mb-2 block text-sm font-semibold text-[#2D3648]">
                 Administrative area
               </span>
-              <TextInput
+              <input
+                type="text"
                 value={formik.values.address.administrativeArea}
                 disabled
+                className={inputClass()}
               />
             </label>
             <label className="block">
               <span className="mb-2 block text-sm font-semibold text-[#2D3648]">
                 Postal code
               </span>
-              <TextInput value={formik.values.address.postalCode} disabled />
+              <input
+                type="text"
+                value={formik.values.address.postalCode}
+                disabled
+                className={inputClass()}
+              />
             </label>
             <div className="grid grid-cols-2 gap-3">
               <label className="block">
                 <span className="mb-2 block text-sm font-semibold text-[#2D3648]">
                   Latitude
                 </span>
-                <TextInput value={formik.values.address.latitude} disabled />
+                <input
+                  type="text"
+                  value={formik.values.address.latitude}
+                  disabled
+                  className={inputClass()}
+                />
               </label>
               <label className="block">
                 <span className="mb-2 block text-sm font-semibold text-[#2D3648]">
                   Longitude
                 </span>
-                <TextInput value={formik.values.address.longitude} disabled />
+                <input
+                  type="text"
+                  value={formik.values.address.longitude}
+                  disabled
+                  className={inputClass()}
+                />
               </label>
             </div>
           </div>
@@ -301,16 +335,16 @@ export const CompanyTab = () => {
           </span>
           <textarea
             value={formik.values.description}
-            onChange={(event) => {
-              formik.setFieldValue("description", event.target.value, true);
-            }}
+            onChange={(e) =>
+              formik.setFieldValue("description", e.target.value, true)
+            }
             className="min-h-[150px] w-full resize-y rounded-xl border border-slate-200 bg-white p-3 text-sm text-[#4A5468] outline-0 transition focus:border-[#1F5FD6] focus:ring-2 focus:ring-[#1F5FD6]/15"
           />
-          {formik.errors.description && formik.touched.description ? (
-            <div className="mt-2 text-sm text-rose-600">
+          {formik.errors.description && formik.touched.description && (
+            <p className="mt-2 text-sm text-rose-600">
               {formik.errors.description}
-            </div>
-          ) : null}
+            </p>
+          )}
         </label>
       </div>
 
@@ -323,13 +357,17 @@ export const CompanyTab = () => {
       )}
 
       <div className="flex justify-end border-t border-slate-100 px-5 py-5 sm:px-6">
-        <Button type="submit" disabled={isSubmitting}>
+        <button
+          type="submit"
+          disabled={isSubmitting}
+          className="inline-flex items-center justify-center rounded-xl bg-[#1F5FD6] px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-[#184FB5] disabled:opacity-50"
+        >
           {isSubmitting
             ? "Saving..."
             : formSubmitMethod === "PUT"
               ? "Save company"
               : "Create company"}
-        </Button>
+        </button>
       </div>
     </form>
   );

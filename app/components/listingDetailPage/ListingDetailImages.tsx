@@ -3,7 +3,6 @@
 import { useMemo, useState } from "react";
 import { ListingImage } from "@/types";
 import Image from "next/image";
-import { Button } from "@tremor/react";
 import { PhotoIcon } from "@heroicons/react/24/outline";
 import { PhotosIcon, VerticaleMap } from "@/app/components/ui/Icons";
 import Link from "next/link";
@@ -137,15 +136,14 @@ export const ListingDetailImages = ({ images }: Props) => {
         </div>
 
         {images[2]?.url && (
-          <Button
+          <button
             onClick={() => handleOpenLightBox(1)}
-            className="absolute bottom-5 right-5 border border-white/80 bg-white text-[#2D3648] shadow-lg hover:bg-slate-50"
-            icon={PhotoIcon}
+            className="absolute bottom-5 right-5 inline-flex items-center gap-2 rounded-xl border border-white/80 bg-white px-4 py-2 text-sm font-semibold text-[#2D3648] shadow-lg transition hover:bg-slate-50"
             data-testid="viewAllPhotos"
-            variant="secondary"
           >
+            <PhotoIcon className="h-4 w-4" />
             View all photos
-          </Button>
+          </button>
         )}
       </div>
 
@@ -168,22 +166,19 @@ export const ListingDetailImages = ({ images }: Props) => {
         )}
         <div className="rounded-b-2xl border border-slate-200 bg-white shadow-sm">
           <div className="grid grid-cols-2 divide-x divide-slate-200 py-2">
-            <Button
-              icon={PhotosIcon}
+            <button
               onClick={() => setOpenLightBox(true)}
-              variant="light"
-              className="flex justify-center gap-1 border-0 bg-transparent text-[#1F5FD6] hover:bg-[#EAF2FF]"
+              className="flex items-center justify-center gap-1.5 py-2 text-sm font-semibold text-[#1F5FD6] transition hover:bg-[#EAF2FF]"
             >
+              <PhotosIcon className="h-4 w-4" />
               Photos
-            </Button>
-            <Link href="#mapSection">
-              <Button
-                icon={VerticaleMap}
-                variant="light"
-                className="flex w-full justify-center gap-1 border-0 bg-transparent text-[#1F5FD6] hover:bg-[#EAF2FF]"
-              >
-                Location
-              </Button>
+            </button>
+            <Link
+              href="#mapSection"
+              className="flex items-center justify-center gap-1.5 py-2 text-sm font-semibold text-[#1F5FD6] transition hover:bg-[#EAF2FF]"
+            >
+              <VerticaleMap className="h-4 w-4" />
+              Location
             </Link>
           </div>
         </div>

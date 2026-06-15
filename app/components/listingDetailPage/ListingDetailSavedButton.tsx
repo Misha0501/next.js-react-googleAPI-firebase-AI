@@ -1,7 +1,6 @@
 "use client";
 
 import { SavedListing } from "@/types";
-import { Button, Icon } from "@tremor/react";
 import { HeartIcon as HeartIconSolid } from "@heroicons/react/24/solid";
 import { HeartIcon } from "@heroicons/react/24/outline";
 import { useMemo, useState } from "react";
@@ -89,16 +88,19 @@ export const ListingDetailSavedButton = ({
   return (
     <>
       {showOnDesktop && (
-        <Button
-          icon={isListingSaved ? HeartIconSolid : HeartIcon}
-          variant={"secondary"}
+        <button
           disabled={savedIconIsLoading}
-          className={"hidden border-slate-200 bg-white shadow-sm lg:flex"}
+          className="hidden items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-[#2D3648] shadow-sm transition hover:bg-slate-50 disabled:opacity-50 lg:flex"
           onClick={handleSavedIconClick}
           data-testid="favouriteButton"
         >
+          {isListingSaved ? (
+            <HeartIconSolid className="h-4 w-4 text-rose-500" />
+          ) : (
+            <HeartIcon className="h-4 w-4" />
+          )}
           {savedIconIsLoading ? "Loading..." : "Favourite"}
-        </Button>
+        </button>
       )}
 
       {!showOnDesktop && (
@@ -106,12 +108,16 @@ export const ListingDetailSavedButton = ({
           {savedIconIsLoading ? (
             <div className="h-7 w-7 animate-spin rounded-full border-2 border-slate-200 border-t-[#1F5FD6]" />
           ) : (
-            <Icon
-              size="sm"
+            <button
               onClick={handleSavedIconClick}
-              className="h-10 w-10 justify-center rounded-full border border-solid border-slate-200 bg-white text-[#1F5FD6] shadow-sm hover:cursor-pointer"
-              icon={isListingSaved ? HeartIconSolid : HeartIcon}
-            />
+              className="flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-white text-[#1F5FD6] shadow-sm transition hover:bg-slate-50"
+            >
+              {isListingSaved ? (
+                <HeartIconSolid className="h-5 w-5 text-rose-500" />
+              ) : (
+                <HeartIcon className="h-5 w-5" />
+              )}
+            </button>
           )}
         </div>
       )}

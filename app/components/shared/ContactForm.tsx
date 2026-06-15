@@ -1,6 +1,5 @@
 "use client";
 
-import { Button, TextInput } from "@tremor/react";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import { toast } from "react-toastify";
@@ -18,7 +17,7 @@ interface FormValues {
 type Props = {
   emailTo?: string;
   subject?: string;
-}
+};
 
 const ContactFormSchema = Yup.object().shape({
   name: Yup.string().required("Required"),
@@ -29,7 +28,13 @@ const ContactFormSchema = Yup.object().shape({
   message: Yup.string().required("Required"),
 });
 
-export const ContactForm = ({emailTo, subject} : Props) => {
+const inputClass =
+  "h-10 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm text-[#2D3648] outline-none transition focus:border-[#1F5FD6] focus:ring-2 focus:ring-[#1F5FD6]/15";
+
+const inputErrorClass =
+  "h-10 w-full rounded-xl border border-red-400 bg-white px-3 text-sm text-[#2D3648] outline-none transition focus:border-red-400 focus:ring-2 focus:ring-red-400/15";
+
+export const ContactForm = ({ emailTo, subject }: Props) => {
   const sendEmail = useSendEmail({});
 
   const initialValues: FormValues = {
@@ -49,7 +54,6 @@ export const ContactForm = ({emailTo, subject} : Props) => {
 
   const handleFormSubmit = async (values: FormValues) => {
     try {
-      // send email
       await sendEmail.mutateAsync(values);
       formik.resetForm();
       toast.success("Your message has been sent!");
@@ -58,93 +62,108 @@ export const ContactForm = ({emailTo, subject} : Props) => {
     }
   };
 
+  const nameError = formik.errors.name && formik.touched.name;
+  const emailError = formik.errors.email && formik.touched.email;
+  const phoneError = formik.errors.phoneNumber && formik.touched.phoneNumber;
+  const messageError = formik.errors.message && formik.touched.message;
+
   return (
     <form className="flex flex-col gap-6" onSubmit={formik.handleSubmit}>
       <div className="flex flex-col gap-2">
-        <label htmlFor="name">Name</label>
-        <TextInput
-          type={"text"}
-          id={"name"}
-          name={"name"}
-          defaultValue={formik.values.name}
-          placeholder={"Your name"}
-          onChange={(event) => {
-            formik.values.name = event.target.value;
-          }}
-          errorMessage={
-            formik.errors.name && formik.touched.name
-              ? formik.errors.name
-              : undefined
-          }
-          error={formik.errors.name && formik.touched.name ? true : undefined}
-        />
-      </div>
-      <div className="flex flex-col gap-2">
-        <label htmlFor="email">Email</label>
-        <TextInput
-          type="email"
-          placeholder={"Your email"}
-          id="email"
-          name="email"
-          onChange={(event) => {
-            formik.values.email = event.target.value;
-          }}
-          errorMessage={
-            formik.errors.email && formik.touched.email
-              ? formik.errors.email
-              : undefined
-          }
-          error={formik.errors.email && formik.touched.email ? true : undefined}
-        />
-      </div>
-      <div className="flex flex-col gap-2">
-        <label htmlFor="email">Phone number</label>
-        <TextInput
+        <label className="text-sm font-semibold text-[#2D3648]" htmlFor="name">
+          Name
+        </label>
+        <input
           type="text"
-          placeholder={"Your phone number"}
-          id="phone"
-          name="phone"
-          onChange={(event) => {
-            formik.values.phoneNumber = event.target.value;
-          }}
-          errorMessage={
-            formik.errors.phoneNumber && formik.touched.phoneNumber
-              ? formik.errors.phoneNumber
-              : undefined
-          }
-          error={
-            formik.errors.phoneNumber && formik.touched.phoneNumber
-              ? true
-              : undefined
-          }
+          id="name"
+          name="name"
+          value={formik.values.name}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          placeholder="Your name"
+          className={nameError ? inputErrorClass : inputClass}
         />
-      </div>
-      <div className="flex flex-col gap-2">
-        <label htmlFor="message">Message</label>
-        <div
-          className={
-            "tremor-TextInput-root relative w-full flex items-center min-w-[10rem] outline-none rounded-tremor-default shadow-tremor-input dark:shadow-dark-tremor-input bg-tremor-background dark:bg-dark-tremor-background hover:bg-tremor-background-muted dark:hover:bg-dark-tremor-background-muted text-tremor-content dark:text-dark-tremor-content border-tremor-border dark:border-dark-tremor-border border"
-          }
-        >
-          <textarea
-            className={
-              "h-52 resize-none tremor-TextInput-input w-full focus:outline-none focus:ring-0 border-none bg-transparent text-tremor-default text-tremor-content-emphasis dark:text-dark-tremor-content-emphasis [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none pl-3 pr-4 py-2 placeholder:text-tremor-content dark:placeholder:text-dark-tremor-content"
-            }
-            id="message"
-            placeholder={"Type your message here"}
-            name="message"
-            onChange={(event) => {
-              formik.values.message = event.target.value;
-            }}
-          ></textarea>
-        </div>
-        {formik.errors.message && formik.touched.message && (
-          <div className="text-sm text-red-500">{formik.errors.message}</div>
+        {nameError && (
+          <p className="text-sm text-red-600">{formik.errors.name}</p>
         )}
       </div>
-      <Button type={"submit"} disabled={sendEmail.isLoading}>
+
+      <div className="flex flex-col gap-2">
+        <label
+          className="text-sm font-semibold text-[#2D3648]"
+          htmlFor="email"
+        >
+          Email
+        </label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          value={formik.values.email}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          placeholder="Your email"
+          className={emailError ? inputErrorClass : inputClass}
+        />
+        {emailError && (
+          <p className="text-sm text-red-600">{formik.errors.email}</p>
+        )}
+      </div>
+
+      <div className="flex flex-col gap-2">
+        <label
+          className="text-sm font-semibold text-[#2D3648]"
+          htmlFor="phoneNumber"
+        >
+          Phone number
+        </label>
+        <input
+          type="text"
+          id="phoneNumber"
+          name="phoneNumber"
+          value={formik.values.phoneNumber}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          placeholder="Your phone number"
+          className={phoneError ? inputErrorClass : inputClass}
+        />
+        {phoneError && (
+          <p className="text-sm text-red-600">{formik.errors.phoneNumber}</p>
+        )}
+      </div>
+
+      <div className="flex flex-col gap-2">
+        <label
+          className="text-sm font-semibold text-[#2D3648]"
+          htmlFor="message"
+        >
+          Message
+        </label>
+        <textarea
+          id="message"
+          name="message"
+          value={formik.values.message}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          placeholder="Type your message here"
+          className={`h-52 resize-none rounded-xl border bg-white p-3 text-sm text-[#2D3648] outline-none transition focus:ring-2 ${
+            messageError
+              ? "border-red-400 focus:border-red-400 focus:ring-red-400/15"
+              : "border-slate-200 focus:border-[#1F5FD6] focus:ring-[#1F5FD6]/15"
+          }`}
+        />
+        {messageError && (
+          <p className="text-sm text-red-600">{formik.errors.message}</p>
+        )}
+      </div>
+
+      <button
+        type="submit"
+        disabled={sendEmail.isLoading}
+        className="inline-flex items-center justify-center rounded-xl bg-[#1F5FD6] px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-[#184FB5] disabled:opacity-50"
+      >
         {sendEmail.isLoading ? "Sending..." : "Send"}
-      </Button>
+      </button>
     </form>
   );
 };

@@ -4,7 +4,6 @@ import React, { useEffect, useState } from "react";
 import { useAuthContext } from "@/app/context/AuthContext";
 import * as Yup from "yup";
 import { useFormik } from "formik";
-import { Button, TextInput } from "@tremor/react";
 import { toast } from "react-toastify";
 import { useUpdateUser, useUserOwnData } from "@/providers/Users";
 import { useRouter } from "next/navigation";
@@ -36,6 +35,13 @@ interface FormValues {
   newPassword: string;
 }
 
+const inputClass = (hasError: boolean) =>
+  `h-10 w-full rounded-xl border bg-white px-3 text-sm text-[#2D3648] outline-none transition focus:ring-2 ${
+    hasError
+      ? "border-red-400 focus:border-red-400 focus:ring-red-400/15"
+      : "border-slate-200 focus:border-[#1F5FD6] focus:ring-[#1F5FD6]/15"
+  }`;
+
 export const PersonalDetailsTab = () => {
   const { authToken } = useAuthContext();
   const [personalDetails, setPersonalDetails] = useState<FormValues>({
@@ -65,8 +71,12 @@ export const PersonalDetailsTab = () => {
         await signOut(firebaseClientAuth);
         router.push("/signin");
       }
-    } catch (error: any) {
-      toast.error(error?.message || "Something went wrong. Please try again");
+    } catch (error: unknown) {
+      toast.error(
+        error instanceof Error
+          ? error.message
+          : "Something went wrong. Please try again",
+      );
     }
   };
 
@@ -79,6 +89,16 @@ export const PersonalDetailsTab = () => {
       });
     }
   }, [userData.data, userData.isSuccess]);
+
+  const displayNameError = Boolean(
+    formik.errors.displayName && formik.touched.displayName,
+  );
+  const phoneError = Boolean(
+    formik.errors.phoneNumber && formik.touched.phoneNumber,
+  );
+  const passwordError = Boolean(
+    formik.errors.newPassword && formik.touched.newPassword,
+  );
 
   return (
     <form
@@ -106,20 +126,21 @@ export const PersonalDetailsTab = () => {
             <UserCircleIcon className="h-4 w-4 text-[#1F5FD6]" />
             Display name
           </span>
-          <TextInput
+          <input
+            type="text"
             value={formik.values.displayName}
-            onChange={(event) => {
-              formik.setFieldValue("displayName", event.target.value, true);
-            }}
-            errorMessage={
-              formik.errors.displayName && formik.touched.displayName
-                ? formik.errors.displayName
-                : undefined
+            onChange={(e) =>
+              formik.setFieldValue("displayName", e.target.value, true)
             }
-            error={Boolean(
-              formik.errors.displayName && formik.touched.displayName,
-            )}
+            onBlur={formik.handleBlur}
+            name="displayName"
+            className={inputClass(displayNameError)}
           />
+          {displayNameError && (
+            <p className="mt-1 text-sm text-red-600">
+              {formik.errors.displayName}
+            </p>
+          )}
         </label>
 
         <label className="block">
@@ -127,20 +148,21 @@ export const PersonalDetailsTab = () => {
             <PhoneIcon className="h-4 w-4 text-[#1F5FD6]" />
             Phone number
           </span>
-          <TextInput
+          <input
+            type="text"
             value={formik.values.phoneNumber}
-            onChange={(event) => {
-              formik.setFieldValue("phoneNumber", event.target.value, true);
-            }}
-            errorMessage={
-              formik.errors.phoneNumber && formik.touched.phoneNumber
-                ? formik.errors.phoneNumber
-                : undefined
+            onChange={(e) =>
+              formik.setFieldValue("phoneNumber", e.target.value, true)
             }
-            error={Boolean(
-              formik.errors.phoneNumber && formik.touched.phoneNumber,
-            )}
+            onBlur={formik.handleBlur}
+            name="phoneNumber"
+            className={inputClass(phoneError)}
           />
+          {phoneError && (
+            <p className="mt-1 text-sm text-red-600">
+              {formik.errors.phoneNumber}
+            </p>
+          )}
         </label>
       </div>
 
@@ -160,21 +182,21 @@ export const PersonalDetailsTab = () => {
             <KeyIcon className="h-4 w-4 text-[#1F5FD6]" />
             New password
           </span>
-          <TextInput
+          <input
             type="password"
             value={formik.values.newPassword}
-            onChange={(event) => {
-              formik.setFieldValue("newPassword", event.target.value, true);
-            }}
-            errorMessage={
-              formik.errors.newPassword && formik.touched.newPassword
-                ? formik.errors.newPassword
-                : undefined
+            onChange={(e) =>
+              formik.setFieldValue("newPassword", e.target.value, true)
             }
-            error={Boolean(
-              formik.errors.newPassword && formik.touched.newPassword,
-            )}
+            onBlur={formik.handleBlur}
+            name="newPassword"
+            className={inputClass(passwordError)}
           />
+          {passwordError && (
+            <p className="mt-1 text-sm text-red-600">
+              {formik.errors.newPassword}
+            </p>
+          )}
         </label>
       </div>
 
@@ -186,9 +208,13 @@ export const PersonalDetailsTab = () => {
       )}
 
       <div className="flex justify-end border-t border-slate-100 px-5 py-5 sm:px-6">
-        <Button type="submit" disabled={updateUser.isLoading}>
+        <button
+          type="submit"
+          disabled={updateUser.isLoading}
+          className="inline-flex items-center justify-center rounded-xl bg-[#1F5FD6] px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-[#184FB5] disabled:opacity-50"
+        >
           {updateUser.isLoading ? "Saving..." : "Save changes"}
-        </Button>
+        </button>
       </div>
     </form>
   );

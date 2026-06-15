@@ -2,7 +2,6 @@
 import { useEffect, useRef, useState } from "react";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 import { AutocompleteAddress } from "@/types";
-import { Button, Icon } from "@tremor/react";
 import { useGooglePlaces } from "@/app/lib/hooks/useGoogleServices";
 
 const PRESET_CITIES = [
@@ -167,11 +166,7 @@ const AutoComplete = ({
             : "h-16 rounded-lg border-[#CBD2E0] py-2 pl-3 pr-2"
         }`}
       >
-        <Icon
-          icon={MagnifyingGlassIcon}
-          size="lg"
-          className="flex shrink-0 text-[#1F5FD6]"
-        />
+        <MagnifyingGlassIcon className="h-5 w-5 shrink-0 text-[#1F5FD6]" />
         <input
           ref={inputRef}
           className={`w-full border-none bg-transparent pl-0 text-[#1F2937] outline-none placeholder:text-[#9AA3B2] focus:outline-none lg:pl-2 ${
@@ -195,17 +190,16 @@ const AutoComplete = ({
           }}
           autoComplete="off"
         />
-        <Button
+        <button
           type="submit"
-          variant="primary"
           className={
             isHero
-              ? "min-h-12 rounded-xl bg-[#1F5FD6] px-5 text-sm font-bold hover:bg-[#184FB5]"
-              : undefined
+              ? "self-stretch flex items-center justify-center rounded-xl bg-[#1F5FD6] px-6 text-base font-bold text-white transition hover:bg-[#184FB5]"
+              : "h-12 shrink-0 rounded-xl bg-[#1F5FD6] px-5 text-sm font-semibold text-white transition hover:bg-[#184FB5]"
           }
         >
           Search
-        </Button>
+        </button>
       </div>
 
       {showPresets && (
