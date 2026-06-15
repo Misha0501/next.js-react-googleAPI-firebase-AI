@@ -158,7 +158,8 @@ export const ListingsPageContent = () => {
         show={showAuthModal}
         onClose={() => setShowAuthModal(false)}
         onCancelClick={() => setShowAuthModal(false)}
-        onSubmitClick={() => router.push("/signin")}
+        confirmLabel="Sign in / Sign up"
+        onConfirm={() => router.push("/signin")}
       />
       <Modal
         show={savedSearchConfirmationModal}

@@ -167,7 +167,7 @@ Rewrote `app/components/shared/Modal.tsx` with a generic API:
 - `title`, `description`, `children` for content
 - `confirmLabel` + `onConfirm` + `confirmDanger` for action buttons
 - `onCancelClick` + `cancelLabel` for cancel button
-- `onSubmitClick` kept for backward compat (used by ListingItem and ListingDetailSavedButton for auth redirect)
+- `onSubmitClick` kept for backward compat; auth redirects now use `confirmLabel` + `onConfirm`
 
 Replaced all 4 inline `Dialog + Transition` blocks:
 - `app/components/listingsPage/ListingsPageContent.tsx` — Dialog → Modal (save search confirmation)
@@ -205,12 +205,13 @@ Removed all `@tremor/react` imports from touched files:
 
 **Goal:** Break up oversized components. Highest risk — do last.
 
-### 5a — Split `app/components/ListingItem.tsx` (~698 lines)
-Extract into:
-- `ListingItem.tsx` — orchestrator only (data wiring, hooks)
-- `ListingItemCard.tsx` — visual layout (image, price, address, feature grid)
-- `ListingItemSaveButton.tsx` — saved/unsaved toggle with mutation
-- `ListingItemFeatures.tsx` — bedrooms/bathrooms/area icon row
+### 5a — Split `app/components/ListingItem.tsx` (~698 lines) ✅ DONE
+Extracted into:
+- `app/components/ListingItem.tsx` — public orchestrator only (data wiring, route navigation, lazy render)
+- `app/components/listingItem/ListingItemCard.tsx` — visual layout (image, price, address, owner actions)
+- `app/components/listingItem/ListingItemSaveButton.tsx` — saved/unsaved toggle with auth modal and mutation state
+- `app/components/listingItem/ListingItemFeatures.tsx` — feature chip row
+- `app/components/listingItem/ListingItemData.tsx` — labels, icons, and feature derivation helpers
 
 ### 5b — Split `app/components/editProperty/EditForm.tsx` (~848 lines)
 Check whether sub-step components in `app/components/propertyPlacementEdit/` can be shared between the property placement flow and the edit flow. The two flows (place + edit) share the same sub-step data but differ only in the submit mutation. If shared, `EditForm.tsx` shrinks to a thin orchestrator.
