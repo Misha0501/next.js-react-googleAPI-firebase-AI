@@ -37,7 +37,7 @@ const StepsTopInfo: React.FC<StepsTopInfoProps> = ({
               {description}
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              {step > 0 && (
+              {(step ?? 0) > 0 && (
                 <button
                   type="button"
                   onClick={handleBack}

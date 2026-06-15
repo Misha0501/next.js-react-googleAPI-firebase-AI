@@ -98,6 +98,7 @@ const AutoComplete = ({
   };
 
   const handleSuggestionSelect = async (suggestion: google.maps.places.AutocompleteSuggestion) => {
+    if (!suggestion.placePrediction) return;
     const place = suggestion.placePrediction.toPlace();
     await place.fetchFields({
       fields: ["addressComponents", "location", "displayName"],
@@ -113,22 +114,22 @@ const AutoComplete = ({
     for (const component of place.addressComponents ?? []) {
       switch (component.types[0]) {
         case "street_number":
-          streetNumber = component.longText;
+          streetNumber = component.longText ?? "";
           break;
         case "route":
-          route = component.longText;
+          route = component.longText ?? "";
           break;
         case "neighborhood":
-          neighborhood = component.longText;
+          neighborhood = component.longText ?? "";
           break;
         case "postal_code":
-          postalCode = component.longText;
+          postalCode = component.longText ?? "";
           break;
         case "locality":
-          locality = component.longText;
+          locality = component.longText ?? "";
           break;
         case "administrative_area_level_1":
-          administrativeAreaLevelOne = component.longText;
+          administrativeAreaLevelOne = component.longText ?? "";
           break;
       }
     }

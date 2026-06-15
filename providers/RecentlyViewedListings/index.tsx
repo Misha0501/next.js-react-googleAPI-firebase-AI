@@ -28,8 +28,8 @@ export function useCreateRecentlyViewedListing(
   any,
   RecentlyViewedListingsProvider.CreateMutationPayload
 > {
-  return useMutation((payload) => api.create({ ...props, data: payload }), {
-    mutationKey: `${KEY} | Create`,
-    retry: 0
-  });
+  return useMutation<RecentlyViewedListing, any, RecentlyViewedListingsProvider.CreateMutationPayload>(
+    (payload) => api.create({ ...props, data: payload }) as Promise<RecentlyViewedListing>,
+    { mutationKey: `${KEY} | Create`, retry: 0 }
+  );
 }

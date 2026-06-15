@@ -27,10 +27,10 @@ export function useCreateCompanyMembershipInvites(
   any,
   CompanyMembershipInvitesProvider.CreateMutationPayload
 > {
-  return useMutation((payload) => api.create({ ...props, data: payload }), {
-    mutationKey: `${KEY} | Create`,
-    retry: 0,
-  });
+  return useMutation<CompanyMembershipInvite, any, CompanyMembershipInvitesProvider.CreateMutationPayload>(
+    (payload) => api.create({ ...props, data: payload }) as Promise<CompanyMembershipInvite>,
+    { mutationKey: `${KEY} | Create`, retry: 0 }
+  );
 }
 
 // Decline
@@ -41,10 +41,10 @@ export function useDeclineCompanyMembershipInvite(
   any,
   CompanyMembershipInvitesProvider.DeclineMutationPayload
 > {
-  return useMutation((payload) => api.decline({ ...props, data: payload }), {
-    mutationKey: `${KEY} | Decline`,
-    retry: 0,
-  });
+  return useMutation<CompanyMembershipInvite, any, CompanyMembershipInvitesProvider.DeclineMutationPayload>(
+    (payload) => api.decline({ ...props, data: payload }) as Promise<CompanyMembershipInvite>,
+    { mutationKey: `${KEY} | Decline`, retry: 0 }
+  );
 }
 
 // Delete
@@ -55,8 +55,8 @@ export function useDeleteCompanyMembershipInvite(
   any,
   CompanyMembershipInvitesProvider.DeleteMutationPayload
 > {
-  return useMutation((payload) => api.deleteItem({ ...props, data: payload }), {
-    mutationKey: `${KEY} | Delete`,
-    retry: 0,
-  });
+  return useMutation<null, any, CompanyMembershipInvitesProvider.DeleteMutationPayload>(
+    (payload) => api.deleteItem({ ...props, data: payload }) as Promise<null>,
+    { mutationKey: `${KEY} | Delete`, retry: 0 }
+  );
 }

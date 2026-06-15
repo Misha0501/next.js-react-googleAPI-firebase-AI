@@ -79,9 +79,9 @@ const getInviteStatus = (invite: CompanyMembershipInvite) => {
 
 export const InvitesTab = () => {
   const { authToken } = useAuthContext();
-  const companyMemberships = useCompanyMemberships({ authToken });
+  const companyMemberships = useCompanyMemberships({ authToken: authToken ?? undefined });
   const companyMembershipInvites = useCompanyMembershipInvites({
-    authToken,
+    authToken: authToken ?? undefined,
   });
   const [showModal, setShowModal] = useState(false);
   const [inviteToDecline, setInviteToDecline] =

@@ -23,6 +23,15 @@ import {
   validatePlacementValues,
   applyStepErrors,
 } from "./validation";
+import type {
+  ListingType,
+  PropertyType,
+  CurrencyType,
+  InteriorType,
+  UpkeepType,
+  HeatingType,
+  BuildingType,
+} from "@/types";
 
 interface CreatePropertyComponentPropInterface {
   formik: FormikProps<PlacementFormValues>;
@@ -107,28 +116,31 @@ function Confirmation({
       return;
     }
 
+    const toNum = (v: string | number | undefined) =>
+      v !== undefined && v !== "" ? Number(v) : undefined;
+
     const payload: ListingProvider.CreateMutationPayload = {
-      listingType: values.listingType || null,
-      propertyType: values.propertyType || null,
-      currency: values.currency,
-      price: values.price,
-      rooms: values.rooms,
-      bedrooms: values.bedrooms,
-      bathrooms: values.bathrooms,
-      areaTotal: values.totalArea,
-      areaLiving: values.livingArea,
+      listingType: (values.listingType as ListingType) || undefined,
+      propertyType: (values.propertyType as PropertyType) || undefined,
+      currency: values.currency as CurrencyType,
+      price: Number(values.price),
+      rooms: toNum(values.rooms),
+      bedrooms: toNum(values.bedrooms),
+      bathrooms: toNum(values.bathrooms),
+      areaTotal: toNum(values.totalArea),
+      areaLiving: toNum(values.livingArea),
       areaOutside: values.areaOutside,
       areaGarage: values.areaGarage,
-      volume: values.volume,
-      parking: values.parking,
-      interiorType: values.interiorType || null,
-      upkeepType: values.upkeepType || null,
-      heatingType: values.heatingType || null,
-      constructedYear: values.constructedYear,
-      numberOfFloorsCommon: values.numberOfFloorsCommon,
-      floorNumber: values.floorNumber,
-      buildingType: values.buildingType || null,
-      characteristics: values.characteristics,
+      volume: toNum(values.volume),
+      parking: toNum(values.parking),
+      interiorType: (values.interiorType as InteriorType) || undefined,
+      upkeepType: (values.upkeepType as UpkeepType) || undefined,
+      heatingType: (values.heatingType as HeatingType) || undefined,
+      constructedYear: values.constructedYear !== undefined ? String(values.constructedYear) : undefined,
+      numberOfFloorsCommon: toNum(values.numberOfFloorsCommon),
+      floorNumber: toNum(values.floorNumber),
+      buildingType: (values.buildingType as BuildingType) || undefined,
+      characteristics: values.characteristics ? [values.characteristics] : undefined,
       description: values.description,
       address: {
         route: values.route,

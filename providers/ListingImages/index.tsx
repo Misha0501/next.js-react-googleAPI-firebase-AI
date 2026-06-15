@@ -9,8 +9,8 @@ const KEY = "ListingImages";
 export function useDeleteListingImage(
   props: AuthProps,
 ): UseMutationResult<null, Error, ListingsImagesProvider.DeleteMutationProps> {
-  return useMutation((payload) => api.deleteItem({ ...props, data: payload }), {
-    mutationKey: `${KEY} | Delete`,
-    retry: 0
-  });
+  return useMutation<null, Error, ListingsImagesProvider.DeleteMutationProps>(
+    (payload) => api.deleteItem({ ...props, data: payload }) as Promise<null>,
+    { mutationKey: `${KEY} | Delete`, retry: 0 }
+  );
 }

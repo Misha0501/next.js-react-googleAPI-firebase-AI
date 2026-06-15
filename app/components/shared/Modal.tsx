@@ -69,15 +69,13 @@ export const Modal = ({
                 {children && <div className="mt-2">{children}</div>}
 
                 <div className="mt-6 flex justify-end gap-3">
-                  {(onCancelClick ?? onClose) && (
-                    <button
-                      type="button"
-                      className="inline-flex justify-center rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-[#2D3648] hover:bg-slate-50"
-                      onClick={onCancelClick ?? onClose}
-                    >
-                      {cancelLabel}
-                    </button>
-                  )}
+                  <button
+                    type="button"
+                    className="inline-flex justify-center rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-[#2D3648] hover:bg-slate-50"
+                    onClick={onCancelClick ?? onClose}
+                  >
+                    {cancelLabel}
+                  </button>
 
                   {onConfirm && confirmLabel && (
                     <button

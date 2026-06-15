@@ -147,9 +147,9 @@ export async function PUT(req: Request) {
 
     ensureUserHasListingAccess(applicationUser, listing);
 
-    if (images) await handleImagesUpdate(id, images);
+    if (images) await handleImagesUpdate(id, images as Parameters<typeof handleImagesUpdate>[1]);
 
-    await handleAddressUpdate(id, address);
+    await handleAddressUpdate(id, address as Parameters<typeof handleAddressUpdate>[1]);
     await handlePriceUpdate(id, price, currency);
 
     const updatedListing = await prisma.listing.update({

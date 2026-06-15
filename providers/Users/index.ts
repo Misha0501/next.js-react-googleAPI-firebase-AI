@@ -13,10 +13,8 @@ const KEY = "Users";
 export function getKeyFromProps(
   props: ApplicationUserProvider.GetProps,
   type: "OWN DATA" | "DETAIL",
-): string[] {
-  const key = [KEY, type];
-  key.push(props);
-  return key;
+): (string | ApplicationUserProvider.GetProps)[] {
+  return [KEY, type, props];
 }
 
 export function useUserDetail(

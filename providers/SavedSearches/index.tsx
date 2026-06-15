@@ -27,17 +27,17 @@ export function useCreateSavedSearches(
   Error,
   SavedSearchesProvider.CreateMutationPayload
 > {
-  return useMutation((payload) => api.create({ ...props, data: payload }), {
-    mutationKey: `${KEY} | Create`,
-    retry: 0,
-  });
+  return useMutation<SavedSearch, Error, SavedSearchesProvider.CreateMutationPayload>(
+    (payload) => api.create({ ...props, data: payload }) as Promise<SavedSearch>,
+    { mutationKey: `${KEY} | Create`, retry: 0 }
+  );
 }
 
 export function useDeleteSavedSearch(
   props: AuthProps,
 ): UseMutationResult<null, Error, SavedSearchesProvider.DeleteMutationPayload> {
-  return useMutation((payload) => api.deleteItem({ ...props, data: payload }), {
-    mutationKey: `${KEY} | Delete`,
-    retry: 0,
-  });
+  return useMutation<null, Error, SavedSearchesProvider.DeleteMutationPayload>(
+    (payload) => api.deleteItem({ ...props, data: payload }) as Promise<null>,
+    { mutationKey: `${KEY} | Delete`, retry: 0 }
+  );
 }
