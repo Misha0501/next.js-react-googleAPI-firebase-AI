@@ -33,9 +33,13 @@ export default function RootLayout({
       </head>
       <body className={`${inter.className} min-h-screen flex flex-col`}>
         <Navigation />
-        <main className="flex-1 pb-12 md:pb-0">
+        <main className="flex-1 pb-28 lg:pb-0">
           <AuthContextProvider>
-            <ToastContainer position="top-right" autoClose={8000} transition={Bounce} />
+            <ToastContainer
+              position="top-right"
+              autoClose={8000}
+              transition={Bounce}
+            />
             <ReactQueryProvider>{children}</ReactQueryProvider>
           </AuthContextProvider>
         </main>

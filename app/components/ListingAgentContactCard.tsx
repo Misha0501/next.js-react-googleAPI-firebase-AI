@@ -3,7 +3,6 @@
 import React, { useState } from "react";
 import { Listing } from "@/types";
 import Link from "next/link";
-import { Button } from "@tremor/react";
 import { ListingContactAgentForm } from "@/app/components/ListingContactAgentForm";
 import { useRouter } from "next/navigation";
 import { useListigDetailContext } from "@/app/context/ListingDetailContext";
@@ -40,38 +39,38 @@ export const ListingAgentContactCard = ({ listing }: Props) => {
     router.push("#contactAgentForm");
   };
 
+  const phoneHref = contactNumber.replace(/\s+/g, "");
+
   return (
     <>
-      <div className="w-full rounded-2xl border border-slate-200 bg-white px-6 py-7 shadow-sm">
-        {/* Price */}
-        <div className="mb-6 border-b border-slate-100 pb-6">
-          <p className="mb-1 text-xs font-semibold uppercase text-[#717D96]">
-            Asking Price
+      <div className="w-full rounded-3xl border border-slate-200 bg-white p-2 shadow-[0_18px_45px_rgba(15,23,42,0.08)]">
+        <div className="rounded-[1.35rem] bg-[#F8FAFC] px-5 py-5">
+          <p className="mb-1 text-xs font-black uppercase tracking-[0.18em] text-[#717D96]">
+            Asking price
           </p>
           <span className="sr-only" data-testid="priceCurrencySignDesktop">
             €
           </span>
           <span
-            className="text-3xl font-semibold text-[#2D3648]"
+            className="text-3xl font-black tracking-tight text-[#2D3648]"
             data-testid="priceDesktop"
           >
             {formatEuroPrice(listing?.price)}
           </span>
         </div>
 
-        {/* Agent info */}
-        <div className="mb-6">
-          <p className="mb-3 text-xs font-semibold uppercase text-[#717D96]">
+        <div className="px-4 py-5">
+          <p className="mb-3 text-xs font-black uppercase tracking-[0.18em] text-[#717D96]">
             Listed by{" "}
             {listing?.company?.name ? "real estate agent" : "private owner"}
           </p>
           <Link
             href={`/users/${listing?.applicationUser?.id}`}
             data-testid="userName"
-            className="group flex items-center justify-between rounded-xl border border-slate-200 bg-[#F8FAFC] px-4 py-3 transition-colors hover:border-[#CFE0FF] hover:bg-[#EAF2FF]"
+            className="group flex items-center justify-between rounded-2xl border border-slate-200 bg-white px-4 py-3 transition-colors hover:border-[#CFE0FF] hover:bg-[#EAF2FF]"
           >
             <div>
-              <p className="font-semibold text-[#2D3648] transition-colors group-hover:text-[#1F5FD6]">
+              <p className="font-black text-[#2D3648] transition-colors group-hover:text-[#1F5FD6]">
                 {listing?.applicationUser?.displayName}
               </p>
               {listing?.company?.name && (
@@ -85,39 +84,38 @@ export const ListingAgentContactCard = ({ listing }: Props) => {
         </div>
 
         {/* Actions */}
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-3 px-4 pb-5">
           {contactNumber &&
             (agentContactState !== contactNumber ? (
-              <Button
+              <button
+                type="button"
                 onClick={showContact}
-                className="w-full"
-                variant="secondary"
+                className="inline-flex min-h-[52px] w-full items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-black text-[#334155] transition hover:border-[#CFE0FF] hover:bg-[#EAF2FF] hover:text-[#1F5FD6] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1F5FD6]/25"
                 data-testid="contactPhoneNumberButton"
-                icon={PhoneIcon}
               >
+                <PhoneIcon className="h-5 w-5" aria-hidden="true" />
                 Show Phone Number
-              </Button>
+              </button>
             ) : (
-              <a href={`tel:${contactNumber}`} className="w-full">
-                <Button
-                  className="w-full"
-                  variant="secondary"
+              <a href={`tel:${phoneHref}`} className="w-full">
+                <span
+                  className="inline-flex min-h-[52px] w-full items-center justify-center gap-2 rounded-2xl border border-[#CFE0FF] bg-[#EAF2FF] px-4 py-3 text-sm font-black text-[#1F5FD6] transition hover:bg-[#DDEAFF] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1F5FD6]/25"
                   data-testid="contactPhoneNumberButton"
-                  icon={PhoneIcon}
                 >
+                  <PhoneIcon className="h-5 w-5" aria-hidden="true" />
                   {agentContactState}
-                </Button>
+                </span>
               </a>
             ))}
-          <Button
+          <button
+            type="button"
             onClick={handleContactAgentClick}
-            variant="primary"
-            className="w-full"
+            className="inline-flex min-h-[52px] w-full items-center justify-center gap-2 rounded-2xl bg-[#1F5FD6] px-4 py-3 text-sm font-black text-white shadow-[0_16px_30px_rgba(31,95,214,0.24)] transition hover:bg-[#184FB5] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1F5FD6]/25 focus-visible:ring-offset-2"
             data-testid="contactSellerButton"
-            icon={EnvelopeIcon}
           >
+            <EnvelopeIcon className="h-5 w-5" aria-hidden="true" />
             Contact seller
-          </Button>
+          </button>
         </div>
       </div>
 
