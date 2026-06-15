@@ -1,6 +1,5 @@
-import { useState } from "react";
 import { ListingType } from "@/types";
-import Filters, { FilterValues } from "@/app/components/listingsPage/Filters";
+import Filters from "@/app/components/listingsPage/Filters";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
   AdjustmentsHorizontalIcon,
@@ -10,51 +9,26 @@ import {
 } from "@heroicons/react/24/outline";
 
 type Props = {
-  onParamsChange: (data: FilterValues) => void;
-  onListingTypeChange: (listingType: ListingType) => void;
+  listingType: ListingType;
   locality?: string;
   showFiltersMobile: () => void;
 };
 export const ListingsPageFilters = ({
-  onParamsChange,
-  onListingTypeChange,
+  listingType,
   locality,
   showFiltersMobile,
 }: Props) => {
   const params = useSearchParams();
   const router = useRouter();
-  const [listingType, setListingType] = useState<ListingType>(
-    (params.get("listingType") as ListingType) || "SELL",
-  );
-
-  const defaultFilters = (type: ListingType) => ({
-    listingType: type,
-    propertyType: [],
-    priceRange: { min: undefined, max: undefined },
-    livingAreaRange: { min: undefined, max: undefined },
-    areaTotal: { min: undefined, max: undefined },
-    roomRange: { min: undefined, max: undefined },
-    bedroomRange: { min: undefined, max: undefined },
-    listedSince: undefined,
-  });
 
   const handleTabChange = (newType: "SELL" | "RENT") => {
     if (newType === listingType) return;
-
-    setListingType(newType);
-    onListingTypeChange(newType);
-    onParamsChange(defaultFilters(newType));
 
     const qp = new URLSearchParams();
     const currentLocality = locality || params.get("locality");
     if (currentLocality) qp.set("locality", currentLocality);
     qp.set("listingType", newType);
     router.replace(`/listings?${qp.toString()}`);
-  };
-
-  const onChange = (data: FilterValues) => {
-    onParamsChange(data);
-    onListingTypeChange(listingType);
   };
 
   const tabs = [
@@ -132,7 +106,6 @@ export const ListingsPageFilters = ({
         <div className="mt-6" role="tabpanel">
           <Filters
             listingType={listingType}
-            onParamsChange={onChange}
             locality={locality || ""}
           />
         </div>

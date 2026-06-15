@@ -2,7 +2,7 @@
 import { ListingsMain } from "@/app/components/listingsPage/ListingsMain";
 import { ListingsPageHeader } from "@/app/components/listingsPage/ListingsPageHeader";
 import { ListingsPageFilters } from "@/app/components/listingsPage/ListingsPageFilters";
-import { useCallback, useState } from "react";
+import { useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useAuthContext } from "@/app/context/AuthContext";
 import { NO_MAX } from "@/app/lib/constants/filters";
@@ -11,16 +11,31 @@ import { useCreateSavedSearches } from "@/providers/SavedSearches";
 import { toast } from "react-toastify";
 import { Modal } from "@/app/components/shared/Modal";
 import { ListingType } from "@/types";
-import type { FilterValues } from "@/app/components/listingsPage/Filters";
+import {
+  getFilterValuesFromSearchParams,
+  type FilterValues,
+} from "@/app/components/listingsPage/Filters";
+
+const getListingTypeFromSearchParams = (
+  params: Pick<URLSearchParams, "get">,
+): ListingType => {
+  return params.get("listingType") === "RENT" ? "RENT" : "SELL";
+};
 
 export const ListingsPageContent = () => {
   const { authToken } = useAuthContext();
   const param = useSearchParams();
-  const [search, setSearch] = useState<FilterValues | null>(null);
-  const [listingType, setListingType] = useState<ListingType>(
-    (param.get("listingType") as ListingType) || "SELL",
+  const queryString = param.toString();
+  const listingType = getListingTypeFromSearchParams(param);
+  const locality = param.get("locality") || "";
+  const search = useMemo(
+    () =>
+      getFilterValuesFromSearchParams(
+        new URLSearchParams(queryString),
+        listingType,
+      ),
+    [listingType, queryString],
   );
-  const [locality, setLocality] = useState(param.get("locality") || "");
   const createSavedSearches = useCreateSavedSearches({ authToken });
   let [showAuthModal, setShowAuthModal] = useState(false);
 
@@ -29,57 +44,55 @@ export const ListingsPageContent = () => {
   let [savedSearchError, setSavedSearchError] = useState("");
   const router = useRouter();
 
-  const onParamsChange = useCallback((data: FilterValues) => {
-    setSearch(data);
-  }, []);
-
   const handleSelectedLocalityChange = (newLocality: string) => {
-    setLocality(newLocality);
-    const params = new URLSearchParams(param.toString());
+    const params = new URLSearchParams(queryString);
     if (newLocality) {
       params.set("locality", newLocality);
     } else {
       params.delete("locality");
     }
     params.delete("page");
-    router.replace(`/listings?${params.toString()}`);
+    const nextQueryString = params.toString();
+    router.replace(
+      nextQueryString ? `/listings?${nextQueryString}` : "/listings",
+    );
   };
 
   const [showFiltersMobile, setShowFiltersMobile] = useState(false);
 
   // Create a proper saved search object from the filter values
   const getSavedSearchesBodyObjectFromFilters = (
-    filterValues: FilterValues | null,
+    filterValues: FilterValues,
   ) => {
     return {
-      priceMin: filterValues?.priceRange.min,
+      priceMin: filterValues.priceRange.min,
       priceMax:
-        filterValues?.priceRange.max === NO_MAX
+        filterValues.priceRange.max === NO_MAX
           ? undefined
-          : filterValues?.priceRange.max,
-      listedSince: filterValues?.listedSince,
-      areaLivingMin: filterValues?.livingAreaRange.min,
+          : filterValues.priceRange.max,
+      listedSince: filterValues.listedSince,
+      areaLivingMin: filterValues.livingAreaRange.min,
       areaLivingMax:
-        filterValues?.livingAreaRange.max === NO_MAX
+        filterValues.livingAreaRange.max === NO_MAX
           ? undefined
-          : filterValues?.livingAreaRange.max,
-      areaTotalMin: filterValues?.areaTotal.min,
+          : filterValues.livingAreaRange.max,
+      areaTotalMin: filterValues.areaTotal.min,
       areaTotalMax:
-        filterValues?.areaTotal.max === NO_MAX
+        filterValues.areaTotal.max === NO_MAX
           ? undefined
-          : filterValues?.areaTotal.max,
-      roomsMin: filterValues?.roomRange.min,
+          : filterValues.areaTotal.max,
+      roomsMin: filterValues.roomRange.min,
       roomsMax:
-        filterValues?.roomRange.max === NO_MAX
+        filterValues.roomRange.max === NO_MAX
           ? undefined
-          : filterValues?.roomRange.max,
-      bedroomsMin: filterValues?.bedroomRange.min,
+          : filterValues.roomRange.max,
+      bedroomsMin: filterValues.bedroomRange.min,
       bedroomsMax:
-        filterValues?.bedroomRange.max === NO_MAX
+        filterValues.bedroomRange.max === NO_MAX
           ? undefined
-          : filterValues?.bedroomRange.max,
-      propertyType: filterValues?.propertyType,
-      listingType: filterValues?.listingType,
+          : filterValues.bedroomRange.max,
+      propertyType: filterValues.propertyType,
+      listingType: filterValues.listingType,
       locality: locality || undefined,
     };
   };
@@ -137,9 +150,8 @@ export const ListingsPageContent = () => {
           >
             <div className="lg:sticky lg:top-28">
               <ListingsPageFilters
-                onListingTypeChange={(e) => setListingType(e)}
+                listingType={listingType}
                 locality={locality}
-                onParamsChange={onParamsChange}
                 showFiltersMobile={() =>
                   setShowFiltersMobile(!showFiltersMobile)
                 }

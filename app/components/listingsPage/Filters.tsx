@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useMemo } from "react";
 import { PropertyTypeFilter } from "@/app/components/shared/PropertyTypeFilter";
 import {
   areaLandMaxOptions,
@@ -86,45 +86,59 @@ export type FilterValues = {
 };
 
 type FiltersProps = {
-  onParamsChange: (data: FilterValues) => void;
   listingType: string;
   locality: string;
 };
 
-export function Filters({ onParamsChange, listingType, locality }: FiltersProps) {
+type FilterSearchParamsReader = Pick<URLSearchParams, "get" | "getAll">;
+
+export const getFilterValuesFromSearchParams = (
+  params: FilterSearchParamsReader,
+  listingType: string,
+): FilterValues => {
+  return {
+    listingType: listingType || undefined,
+    propertyType: getArraySearchParam(params, "propertyType"),
+    priceRange: {
+      min: params.get("priceMin") || undefined,
+      max: params.get("priceMax") || undefined,
+    },
+    livingAreaRange: {
+      min: params.get("areaLivingMin") || undefined,
+      max: params.get("areaLivingMax") || undefined,
+    },
+    areaTotal: {
+      min: params.get("areaTotalMin") || undefined,
+      max: params.get("areaTotalMax") || undefined,
+    },
+    roomRange: {
+      min: params.get("roomsMin") || undefined,
+      max: params.get("roomsMax") || undefined,
+    },
+    bedroomRange: {
+      min: params.get("bedroomsMin") || undefined,
+      max: params.get("bedroomsMax") || undefined,
+    },
+    listedSince: params.get("listedSince")
+      ? Number(params.get("listedSince"))
+      : undefined,
+  };
+};
+
+export function Filters({ listingType, locality }: FiltersProps) {
   const pathname = usePathname();
   const router = useRouter();
   const urlParams = useSearchParams();
-
-  const [filterValues, setFilterValues] = useState<FilterValues>(() => {
-    return {
-      listingType: listingType || undefined,
-      propertyType: getArraySearchParam(urlParams, "propertyType"),
-      priceRange: {
-        min: urlParams.get("priceMin") || undefined,
-        max: urlParams.get("priceMax") || undefined,
-      },
-      livingAreaRange: {
-        min: urlParams.get("areaLivingMin") || undefined,
-        max: urlParams.get("areaLivingMax") || undefined,
-      },
-      areaTotal: {
-        min: urlParams.get("areaTotalMin") || undefined,
-        max: urlParams.get("areaTotalMax") || undefined,
-      },
-      roomRange: {
-        min: urlParams.get("roomsMin") || undefined,
-        max: urlParams.get("roomsMax") || undefined,
-      },
-      bedroomRange: {
-        min: urlParams.get("bedroomsMin") || undefined,
-        max: urlParams.get("bedroomsMax") || undefined,
-      },
-      listedSince: urlParams.get("listedSince")
-        ? Number(urlParams.get("listedSince"))
-        : undefined,
-    };
-  });
+  const urlQueryString = urlParams.toString();
+  const filterValues = useMemo(
+    () =>
+      getFilterValuesFromSearchParams(
+        new URLSearchParams(urlQueryString),
+        listingType,
+      ),
+    [listingType, urlQueryString],
+  );
+  const filterKey = urlQueryString || "default";
 
   const buildUrl = useCallback(
     (filters: typeof filterValues) => {
@@ -162,33 +176,6 @@ export function Filters({ onParamsChange, listingType, locality }: FiltersProps)
     [locality, listingType],
   );
 
-  const [clearKey, setClearKey] = useState(0);
-  const hasMounted = useRef(false);
-
-  const defaultFilterValues = useMemo(
-    () => ({
-      listingType: listingType || undefined,
-      propertyType: [],
-      priceRange: { min: undefined, max: undefined },
-      livingAreaRange: { min: undefined, max: undefined },
-      areaTotal: { min: undefined, max: undefined },
-      roomRange: { min: undefined, max: undefined },
-      bedroomRange: { min: undefined, max: undefined },
-      listedSince: undefined,
-    }),
-    [listingType],
-  );
-
-  useEffect(() => {
-    if (!hasMounted.current) {
-      hasMounted.current = true;
-      return;
-    }
-
-    setFilterValues(defaultFilterValues);
-    setClearKey((key) => key + 1);
-  }, [defaultFilterValues]);
-
   const hasActiveFilters = useMemo(() => {
     return (
       filterValues.propertyType?.length > 0 ||
@@ -224,18 +211,16 @@ export function Filters({ onParamsChange, listingType, locality }: FiltersProps)
   }, [filterValues]);
 
   const clearFilters = useCallback(() => {
-    setFilterValues(defaultFilterValues);
-    setClearKey((k) => k + 1);
     const qp = new URLSearchParams();
     if (locality) qp.set("locality", locality);
     if (listingType) qp.set("listingType", listingType);
     router.replace(`${pathname}?${qp.toString()}`);
-  }, [defaultFilterValues, locality, listingType, pathname, router]);
+  }, [locality, listingType, pathname, router]);
 
   const applyFilters = useCallback(
     (newValues: typeof filterValues) => {
-      setFilterValues(newValues);
-      router.replace(`${pathname}?${buildUrl(newValues)}`);
+      const queryString = buildUrl(newValues);
+      router.replace(queryString ? `${pathname}?${queryString}` : pathname);
     },
     [buildUrl, pathname, router],
   );
@@ -293,10 +278,6 @@ export function Filters({ onParamsChange, listingType, locality }: FiltersProps)
     [filterValues, applyFilters],
   );
 
-  useEffect(() => {
-    onParamsChange(filterValues);
-  }, [filterValues, onParamsChange]);
-
   const formatPriceFilterValue = (value: string | number) => {
     return value === NO_MAX ? NO_MAX : formatEuroPrice(value);
   };
@@ -336,7 +317,7 @@ export function Filters({ onParamsChange, listingType, locality }: FiltersProps)
       >
         {listingType === "SELL" && (
           <FromToFilter
-            key={"price-sell-" + clearKey}
+            key={"price-sell-" + filterKey}
             valuesTo={priceSellMaxOptions}
             valuesFrom={priceSellMinOptions}
             initialFrom={filterValues.priceRange.min || "0"}
@@ -353,7 +334,7 @@ export function Filters({ onParamsChange, listingType, locality }: FiltersProps)
         )}
         {listingType === "RENT" && (
           <FromToFilter
-            key={"price-rent-" + clearKey}
+            key={"price-rent-" + filterKey}
             valuesTo={priceRentMaxOptions}
             valuesFrom={priceRentMinOptions}
             initialFrom={filterValues.priceRange.min || "0"}
@@ -376,7 +357,7 @@ export function Filters({ onParamsChange, listingType, locality }: FiltersProps)
         description="Select one or more categories"
       >
         <PropertyTypeFilter
-          key={"prop-type-" + clearKey}
+          key={"prop-type-" + filterKey}
           selectedValues={filterValues.propertyType}
           onChange={handlePropertyTypeChange}
           id={"propertyTypeFilter"}
@@ -389,7 +370,7 @@ export function Filters({ onParamsChange, listingType, locality }: FiltersProps)
         description="Interior square meters"
       >
         <FromToFilter
-          key={"living-area-" + clearKey}
+          key={"living-area-" + filterKey}
           valuesTo={areaLivingMaxOptions}
           valuesFrom={areaLivingMinOptions}
           initialFrom={filterValues.livingAreaRange.min || "0"}
@@ -410,7 +391,7 @@ export function Filters({ onParamsChange, listingType, locality }: FiltersProps)
         description="Total property or plot size"
       >
         <FromToFilter
-          key={"area-total-" + clearKey}
+          key={"area-total-" + filterKey}
           initialFrom={filterValues.areaTotal.min || "0"}
           initialTo={filterValues.areaTotal.max || NO_MAX}
           valuesFrom={areaLandMinOptions}
@@ -431,7 +412,7 @@ export function Filters({ onParamsChange, listingType, locality }: FiltersProps)
         description="Total rooms in the property"
       >
         <FromToFilter
-          key={"rooms-" + clearKey}
+          key={"rooms-" + filterKey}
           initialFrom={filterValues.roomRange.min || "0"}
           initialTo={filterValues.roomRange.max || NO_MAX}
           valuesFrom={minRoomsOptions}
@@ -452,7 +433,7 @@ export function Filters({ onParamsChange, listingType, locality }: FiltersProps)
         description="Dedicated sleeping rooms"
       >
         <FromToFilter
-          key={"bedrooms-" + clearKey}
+          key={"bedrooms-" + filterKey}
           initialFrom={filterValues.bedroomRange.min || "0"}
           initialTo={filterValues.bedroomRange.max || NO_MAX}
           valuesFrom={minBedroomsOptions}
@@ -473,7 +454,7 @@ export function Filters({ onParamsChange, listingType, locality }: FiltersProps)
         description="Focus on newer properties"
       >
         <RadioGroupCustom
-          key={"listed-since-" + clearKey}
+          key={"listed-since-" + filterKey}
           options={listedSinceOptions}
           onChange={handleListedSince}
           id={"listedSinceFilter"}

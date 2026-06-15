@@ -1,5 +1,5 @@
 "use client";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo } from "react";
 import { ListingItem, ListingItemSkeleton } from "@/app/components/ListingItem";
 import { usePropertyListing } from "@/providers/Listing";
 import { useAuthContext } from "@/app/context/AuthContext";
@@ -11,7 +11,7 @@ import { useSavedListings } from "@/providers/SavedListings";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 type Props = {
-  searchParams: FilterValues | null;
+  searchParams: FilterValues;
   listingType: string;
   locality: string;
 };
@@ -44,9 +44,9 @@ export const ListingsMain = ({
     () => getPageFromSearchParams(new URLSearchParams(urlQueryString)),
     [urlQueryString],
   );
-  const [page, setPage] = useState(currentUrlPage);
+  const page = currentUrlPage;
   const pageSize = LISTINGS_PAGE_SIZE;
-  const [sortBy, setSortBy] = useState(undefined);
+  const sortBy = urlSearchParams.get("sortBy") || undefined;
   const { data: savedListingsData, isLoading: savedListingsIsLoading } =
     useSavedListings({ authToken });
 
@@ -56,33 +56,33 @@ export const ListingsMain = ({
     isError,
     isSuccess,
   } = usePropertyListing({
-    priceMin: searchParams?.priceRange.min,
+    priceMin: searchParams.priceRange.min,
     priceMax:
-      searchParams?.priceRange.max === NO_MAX
+      searchParams.priceRange.max === NO_MAX
         ? undefined
-        : searchParams?.priceRange.max,
-    listedSince: searchParams?.listedSince,
-    areaLivingMin: searchParams?.livingAreaRange.min,
+        : searchParams.priceRange.max,
+    listedSince: searchParams.listedSince,
+    areaLivingMin: searchParams.livingAreaRange.min,
     areaLivingMax:
-      searchParams?.livingAreaRange.max === NO_MAX
+      searchParams.livingAreaRange.max === NO_MAX
         ? undefined
-        : searchParams?.livingAreaRange.max,
-    areaTotalMin: searchParams?.areaTotal.min,
+        : searchParams.livingAreaRange.max,
+    areaTotalMin: searchParams.areaTotal.min,
     areaTotalMax:
-      searchParams?.areaTotal.max === NO_MAX
+      searchParams.areaTotal.max === NO_MAX
         ? undefined
-        : searchParams?.areaTotal.max,
-    roomsMin: searchParams?.roomRange.min,
+        : searchParams.areaTotal.max,
+    roomsMin: searchParams.roomRange.min,
     roomsMax:
-      searchParams?.roomRange.max === NO_MAX
+      searchParams.roomRange.max === NO_MAX
         ? undefined
-        : searchParams?.roomRange.max,
-    bedroomsMin: searchParams?.bedroomRange.min,
+        : searchParams.roomRange.max,
+    bedroomsMin: searchParams.bedroomRange.min,
     bedroomsMax:
-      searchParams?.bedroomRange.max === NO_MAX
+      searchParams.bedroomRange.max === NO_MAX
         ? undefined
-        : searchParams?.bedroomRange.max,
-    propertyType: searchParams?.propertyType,
+        : searchParams.bedroomRange.max,
+    propertyType: searchParams.propertyType,
     listingType: listingType,
     locality: locality,
     sortBy: sortBy,
@@ -107,7 +107,6 @@ export const ListingsMain = ({
 
   const handlePageChange = useCallback(
     (value: number) => {
-      setPage(value);
       updatePageUrl(value);
     },
     [updatePageUrl],
@@ -160,12 +159,6 @@ export const ListingsMain = ({
     });
     return populatedListings;
   }, [savedListings, listings]);
-
-  useEffect(() => {
-    setPage((previousPage) =>
-      previousPage === currentUrlPage ? previousPage : currentUrlPage,
-    );
-  }, [currentUrlPage]);
 
   if (isError) {
     return (
