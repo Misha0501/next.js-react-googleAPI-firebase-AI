@@ -1,12 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import StepsTopInfo from "./StepsTopInfo";
 import property1 from "@/public/property1.png";
 import {
   ArrowLeftIcon,
   ChatBubbleLeftRightIcon,
   PhotoIcon,
+  SparklesIcon,
 } from "@heroicons/react/24/outline";
-
 import { ListingImage } from "@/types";
 import { PlacingPropertyImagesHandler } from "@/app/components/propertyPlacementEdit/PlacingPropertyImagesHandler";
 import { useGenerateDescription } from "@/providers/GenerateDescription";
@@ -35,7 +35,6 @@ type SectionProps = {
 
 const ErrorText = ({ children }: { children?: React.ReactNode }) => {
   if (!children) return null;
-
   return <p className="mt-2 text-sm font-semibold text-red-600">{children}</p>;
 };
 
@@ -65,7 +64,8 @@ function DescriptionAndImages({
 }: CreatePropertyComponentPropInterface) {
   const [show, setShow] = useState(true);
   const [showError, setShowErrors] = useState(false);
-  const generate = useGenerateDescription();
+  const [streamingText, setStreamingText] = useState<string | null>(null);
+  const { generate, isLoading, isError } = useGenerateDescription();
 
   const handleImagesChange = (images: ListingImage[]) => {
     formik.setFieldValue("images", images, true);
@@ -73,29 +73,34 @@ function DescriptionAndImages({
   };
 
   const generateDescription = async () => {
-    const generatedDescription = await generate.mutateAsync({
-      listingType: formik.values.listingType || null,
-      propertyType: formik.values.propertyType || null,
-      interiorType: formik.values.interiorType || null,
-      currency: formik.values.currency,
-      price: formik.values.price,
-      rooms: formik.values.rooms,
-      bathrooms: formik.values.bathrooms,
-      bedrooms: formik.values.bedrooms,
-      floorNumber: formik.values.floorNumber,
-      numberOfFloorsCommon: formik.values.numberOfFloorsCommon,
-      heatingType: formik.values.heatingType || null,
-      areaLand: formik.values.totalArea,
-      areaLiving: formik.values.livingArea,
-      areaTotal: formik.values.totalArea,
-      upkeepType: formik.values.upkeepType || null,
-      constructedYear: formik.values.constructedYear,
-      buildingType: formik.values.buildingType || null,
-      areaOutside: formik.values.areaOutside,
-      areaGarage: formik.values.areaGarage,
-    });
-
-    await formik.setFieldValue("description", generatedDescription, true);
+    setStreamingText("");
+    const finalText = await generate(
+      {
+        listingType: formik.values.listingType || null,
+        propertyType: formik.values.propertyType || null,
+        interiorType: formik.values.interiorType || null,
+        currency: formik.values.currency,
+        price: formik.values.price,
+        rooms: formik.values.rooms,
+        bathrooms: formik.values.bathrooms,
+        bedrooms: formik.values.bedrooms,
+        floorNumber: formik.values.floorNumber,
+        numberOfFloorsCommon: formik.values.numberOfFloorsCommon,
+        heatingType: formik.values.heatingType || null,
+        areaLand: formik.values.totalArea,
+        areaLiving: formik.values.livingArea,
+        areaTotal: formik.values.totalArea,
+        upkeepType: formik.values.upkeepType || null,
+        constructedYear: formik.values.constructedYear,
+        areaOutside: formik.values.areaOutside,
+        areaGarage: formik.values.areaGarage,
+        locality: formik.values.locality,
+        neighborhood: formik.values.neighborhood,
+      },
+      (accumulated) => setStreamingText(accumulated),
+    );
+    formik.setFieldValue("description", finalText, false);
+    setStreamingText(null);
   };
 
   const handleContinue = () => {
@@ -110,7 +115,7 @@ function DescriptionAndImages({
     setShowErrors(true);
   };
 
-  const description = formik.values.description || "";
+  const description = streamingText !== null ? streamingText : (formik.values.description || "");
   const stepNumber = "Step 3";
 
   return (
@@ -169,36 +174,17 @@ function DescriptionAndImages({
                     {description.trim().length} characters
                   </span>
                 </div>
-                {false && (
-                  <div className="mb-4 rounded-xl border border-[#CFE0FF] bg-[#F6F9FF] p-4">
-                    <p className="text-sm text-[#596579]">
-                      Generate a first draft from the property details. It can
-                      take up to 30 seconds.
-                    </p>
-                    <button
-                      disabled={generate.isLoading}
-                      type="button"
-                      onClick={generateDescription}
-                      className="mt-3 inline-flex rounded-xl border border-[#1F5FD6] px-4 py-2 text-sm font-bold text-[#1F5FD6] transition hover:bg-[#1F5FD6] hover:text-white disabled:opacity-50"
-                    >
-                      {generate.isLoading ? "Generating..." : "Generate"}
-                    </button>
-                    {generate.isError && (
-                      <p className="mt-3 text-sm font-semibold text-red-600">
-                        Oops. Something went wrong. Please try again later.
-                      </p>
-                    )}
-                  </div>
-                )}
+
+                <AIGenerateBox
+                  isLoading={isLoading}
+                  isError={isError}
+                  onGenerate={generateDescription}
+                />
 
                 <textarea
-                  disabled={generate.isLoading}
+                  disabled={isLoading}
                   onChange={(event) => {
-                    formik.setFieldValue(
-                      "description",
-                      event.target.value,
-                      true,
-                    );
+                    formik.setFieldValue("description", event.target.value, true);
                   }}
                   onBlur={formik.handleBlur}
                   value={description}
@@ -226,11 +212,93 @@ function DescriptionAndImages({
             <button
               type="button"
               onClick={handleContinue}
-              disabled={generate.isLoading}
+              disabled={isLoading}
               className="inline-flex min-h-[50px] w-full items-center justify-center rounded-xl bg-[#1F5FD6] px-6 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-[#184FB5] disabled:opacity-50 sm:w-auto"
             >
               Continue to review
             </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+export function AIGenerateBox({
+  isLoading,
+  isError,
+  onGenerate,
+}: {
+  isLoading: boolean;
+  isError: boolean;
+  onGenerate: () => void;
+}) {
+  const [elapsed, setElapsed] = useState(0);
+
+  useEffect(() => {
+    if (!isLoading) {
+      setElapsed(0);
+      return;
+    }
+    const id = setInterval(() => setElapsed((s) => s + 1), 1000);
+    return () => clearInterval(id);
+  }, [isLoading]);
+
+  const loadingPhase =
+    elapsed < 5
+      ? "Analysing property details…"
+      : elapsed < 15
+        ? "Writing your description… this usually takes ~20 s"
+        : "Almost there…";
+
+  return (
+    <div className="mb-4 rounded-xl border border-[#CFE0FF] bg-gradient-to-r from-[#F0F5FF] to-[#F6F9FF] p-4">
+      <div className="flex items-start justify-between gap-4">
+        <div className="flex items-start gap-3">
+          <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#1F5FD6] text-white">
+            <SparklesIcon className="h-4 w-4" />
+          </span>
+          <div>
+            <p className="text-sm font-bold text-[#1F2937]">Generate with AI</p>
+            <p className="mt-0.5 text-xs text-[#596579]">
+              {isLoading
+                ? loadingPhase
+                : "Create a first draft from the property details you've filled in."}
+            </p>
+            {isError && (
+              <p className="mt-1.5 text-xs font-semibold text-red-600">
+                Something went wrong. Please try again.
+              </p>
+            )}
+          </div>
+        </div>
+        <button
+          type="button"
+          onClick={onGenerate}
+          disabled={isLoading}
+          className="inline-flex shrink-0 items-center gap-1.5 rounded-lg bg-[#1F5FD6] px-3.5 py-2 text-xs font-bold text-white transition hover:bg-[#184FB5] disabled:opacity-60"
+        >
+          {isLoading ? (
+            <>
+              <span className="h-3 w-3 animate-spin rounded-full border-2 border-white/30 border-t-white" />
+              {elapsed}s
+            </>
+          ) : (
+            <>
+              <SparklesIcon className="h-3.5 w-3.5" />
+              Generate
+            </>
+          )}
+        </button>
+      </div>
+
+      {isLoading && (
+        <div className="mt-3">
+          <div className="h-1 w-full overflow-hidden rounded-full bg-[#CFE0FF]">
+            <div
+              className="h-full rounded-full bg-[#1F5FD6] transition-all duration-1000 ease-linear"
+              style={{ width: `${Math.min((elapsed / 20) * 100, 95)}%` }}
+            />
           </div>
         </div>
       )}

@@ -1,20 +1,12 @@
-import { NextResponse } from "next/server";
-import OpenAI from "openai";
-import { openAISchema } from "@/app/lib/validations/openAI";
-import {
-  generateUserMessageContent,
-  getOpenAICompletion,
-  validateOpenAIResponse,
-} from "@/app/api/generateDescription/_utils";
-import { handleAPIError } from "@/app/lib/api/handleError";
+import gemini from "@/app/lib/gemini";
 import { getDecodedIdToken } from "@/app/lib/getDecodedIdToken";
 import { checkRateLimit } from "@/app/lib/redis/rateLimit";
+import { handleAPIError } from "@/app/lib/api/handleError";
+import { buildGeminiPrompt } from "./_utils";
 
 export const maxDuration = 60;
-export async function POST(request: Request) {
-  // TODO: re-enable generate description
-  return new Response("Feature temporarily disabled", { status: 503 });
 
+export async function POST(request: Request) {
   try {
     const decodedToken = await getDecodedIdToken();
 
@@ -22,23 +14,35 @@ export async function POST(request: Request) {
       return new Response("Too many requests", { status: 429 });
     }
 
-    const parsedValues = openAISchema.parse(await request.json());
+    const body = await request.json();
+    const prompt = buildGeminiPrompt(body);
 
-    const userMessageContent = generateUserMessageContent(parsedValues);
+    const result = await gemini.models.generateContentStream({
+      model: "gemini-2.5-flash",
+      contents: prompt,
+      config: {
+        thinkingConfig: { thinkingBudget: 0 },
+      },
+    });
 
-    const completion = await getOpenAICompletion(userMessageContent);
+    const stream = new ReadableStream({
+      async start(controller) {
+        const encoder = new TextEncoder();
+        try {
+          for await (const chunk of result) {
+            const text = chunk.text;
+            if (text) controller.enqueue(encoder.encode(text));
+          }
+        } finally {
+          controller.close();
+        }
+      },
+    });
 
-    validateOpenAIResponse(completion);
-
-    let content = completion.choices[0].message.content;
-
-    return NextResponse.json(content);
+    return new Response(stream, {
+      headers: { "Content-Type": "text/plain; charset=utf-8" },
+    });
   } catch (error) {
-    if (error instanceof OpenAI.APIError) {
-      console.error(error);
-      return new Response((error as any).name, { status: (error as any).status });
-    }
-
     return handleAPIError(error);
   }
 }

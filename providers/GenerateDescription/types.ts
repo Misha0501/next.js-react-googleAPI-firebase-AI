@@ -23,6 +23,8 @@ export namespace Description {
     buildingType?: string | null;
     areaOutside?: string | number;
     areaGarage?: string | number;
+    locality?: string | null;
+    neighborhood?: string | null;
   };
   export interface CreateAPIPayload extends CreateProps {
     data: CreateMutationPayload;

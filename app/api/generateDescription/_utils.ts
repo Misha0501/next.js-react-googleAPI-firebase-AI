@@ -1,59 +1,75 @@
-import openAI from "@/app/lib/openAI";
-import { ResponseError } from "@/app/lib/classes/ResponseError";
-import { ChatCompletion } from "openai/resources/chat/completions";
+type DescriptionPayload = Record<string, unknown>;
 
-/**
- * Generate the user message content for OpenAI API.
- * @param {any} parsedValues - The parsed values.
- * @returns {string} - Returns the generated message content.
- */
-export const generateUserMessageContent = (parsedValues: Record<string, unknown>): string => {
-  return `Hi there, provide a description of a property for sale/rent (depending on the listingType). 
-    Imagine you are the owner of the property. Try to include something about the location of the property. 
-    The property data: ${JSON.stringify(parsedValues)})}`;
+const LISTING_TYPE_LABELS: Record<string, string> = {
+  SELL: "for sale",
+  RENT: "for rent",
 };
 
-/**
- * Call OpenAI API to get completion.
- * @param {string} userMessageContent - The user message content for OpenAI API.
- * @returns {Promise<any>} - Returns the completion result.
- */
-export const getOpenAICompletion = async (
-  userMessageContent: string,
-): Promise<ChatCompletion> => {
-  return openAI.chat.completions.create({
-    model: "gpt-3.5-turbo",
-    temperature: 0.8,
-    n: 1,
-    stream: false,
-    messages: [
-      {
-        role: "system",
-        content: `When responding, ignore fields that are null or unset. Limit the response to 200 characters`,
-      },
-      {
-        role: "user",
-        content: userMessageContent,
-      },
-    ],
-  });
+const UPKEEP_LABELS: Record<string, string> = {
+  EXCELLENT: "excellent condition",
+  GOOD: "good condition",
+  FAIR: "fair condition",
+  POOR: "needs renovation",
 };
 
-/**
- * Check if the OpenAI response is valid.
- * @param {any} completion - The completion result from OpenAI.
- * @throws Will throw an error if the response is invalid.
- */
-export const validateOpenAIResponse = (completion: ChatCompletion): void => {
-  if (
-    !completion ||
-    !completion.choices ||
-    !completion.choices[0] ||
-    !completion.choices[0].message
-  ) {
-    throw new ResponseError(
-      "Something went wrong, please try again later.",
-      500,
-    );
-  }
+const INTERIOR_LABELS: Record<string, string> = {
+  FURNISHED: "furnished",
+  UNFURNISHED: "unfurnished",
 };
+
+const HEATING_LABELS: Record<string, string> = {
+  BOILER: "individual boiler heating",
+  CENTRAL: "central heating",
+};
+
+export function buildGeminiPrompt(data: DescriptionPayload): string {
+  const lines: string[] = [];
+
+  const add = (label: string, value: unknown, suffix = "") => {
+    if (value !== null && value !== undefined && value !== "" && value !== 0) {
+      lines.push(`- ${label}: ${value}${suffix}`);
+    }
+  };
+
+  add("Listing", LISTING_TYPE_LABELS[String(data.listingType)] ?? data.listingType);
+  add("Property type", String(data.propertyType ?? "").toLowerCase());
+  add("Price", data.price, ` ${data.currency ?? ""}`);
+  add("City", data.locality);
+  add("Neighborhood", data.neighborhood);
+  add("Rooms", data.rooms);
+  add("Bedrooms", data.bedrooms);
+  add("Bathrooms", data.bathrooms);
+  add("Parking spaces", data.parking);
+  add("Total area", data.areaTotal, " m²");
+  add("Living area", data.areaLiving, " m²");
+  add("Garden / outside area", data.areaOutside, " m²");
+  add("Garage area", data.areaGarage, " m²");
+
+  if (data.interiorType) add("Interior", INTERIOR_LABELS[String(data.interiorType)] ?? data.interiorType);
+  if (data.upkeepType) add("Condition", UPKEEP_LABELS[String(data.upkeepType)] ?? data.upkeepType);
+  if (data.heatingType) add("Heating", HEATING_LABELS[String(data.heatingType)] ?? data.heatingType);
+
+  if (data.constructedYear) add("Year built", data.constructedYear);
+
+  const floor = data.floorNumber;
+  const totalFloors = data.numberOfFloorsCommon;
+  if (floor && totalFloors) add("Floor", `${floor} of ${totalFloors}`);
+  else if (floor) add("Floor", floor);
+
+  return `You are a professional real estate copywriter for a Bulgarian property platform.
+
+Write a compelling, natural-sounding property listing description in English based on the details below.
+
+Property details:
+${lines.join("\n")}
+
+Requirements:
+- 180–280 words
+- Warm, professional tone — write as if you are the listing agent
+- Open with the property's strongest feature or location advantage
+- Flow naturally through space, condition, practicalities, and setting
+- End with a subtle invitation to book a viewing
+- Only use the details provided — do not invent anything
+- Omit any detail that is missing or zero
+- Output the description only — no title, no bullet points, no headers`;
+}

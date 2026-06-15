@@ -26,6 +26,14 @@ export const handleAPIError = (error: unknown): Response => {
   if (
     typeof error === "object" &&
     error !== null &&
+    "status" in error &&
+    (error as { status?: unknown }).status === 429
+  ) {
+    return new Response("AI quota exceeded. Please try again in a moment.", { status: 503 });
+  }
+  if (
+    typeof error === "object" &&
+    error !== null &&
     "errorInfo" in error &&
     typeof (error as { errorInfo?: unknown }).errorInfo === "object" &&
     (error as { errorInfo: { code?: unknown } }).errorInfo?.code
