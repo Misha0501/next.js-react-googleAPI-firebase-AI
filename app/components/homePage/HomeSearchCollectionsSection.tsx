@@ -5,6 +5,7 @@ import {
   MapIcon,
   SparklesIcon,
 } from "@heroicons/react/24/outline";
+import { appendArraySearchParam } from "@/app/lib/searchParamsArray";
 
 type CollectionSearchParams = {
   listingType?: "SELL" | "RENT";
@@ -23,9 +24,7 @@ const getListingsHref = ({
     params.set("locality", locality);
   }
 
-  if (propertyType?.length) {
-    params.set("propertyType", JSON.stringify(propertyType));
-  }
+  appendArraySearchParam(params, "propertyType", propertyType);
 
   return `/listings?${params.toString()}`;
 };

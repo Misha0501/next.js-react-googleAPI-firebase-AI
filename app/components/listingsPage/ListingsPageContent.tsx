@@ -48,7 +48,9 @@ export const ListingsPageContent = () => {
   const [showFiltersMobile, setShowFiltersMobile] = useState(false);
 
   // Create a proper saved search object from the filter values
-  const getSavedSearchesBodyObjectFromFilters = (filterValues: FilterValues) => {
+  const getSavedSearchesBodyObjectFromFilters = (
+    filterValues: FilterValues | null,
+  ) => {
     return {
       priceMin: filterValues?.priceRange.min,
       priceMax:

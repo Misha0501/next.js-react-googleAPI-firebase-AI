@@ -19,6 +19,7 @@ import {
   MapPinIcon,
   TrashIcon,
 } from "@heroicons/react/24/outline";
+import { appendArraySearchParam } from "@/app/lib/searchParamsArray";
 
 type SearchDetail = {
   label: string;
@@ -44,9 +45,7 @@ const getSavedSearchHref = (item: SavedSearch) => {
   if (item.priceMin) params.set("priceMin", String(item.priceMin));
   if (item.priceMax) params.set("priceMax", String(item.priceMax));
   if (item.listingType) params.set("listingType", item.listingType);
-  if (item.propertyType?.length) {
-    params.set("propertyType", JSON.stringify(item.propertyType));
-  }
+  appendArraySearchParam(params, "propertyType", item.propertyType);
   if (item.areaTotalMin) params.set("areaTotalMin", String(item.areaTotalMin));
   if (item.areaTotalMax) params.set("areaTotalMax", String(item.areaTotalMax));
   if (item.areaLivingMin) {

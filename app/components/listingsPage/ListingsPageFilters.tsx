@@ -133,7 +133,7 @@ export const ListingsPageFilters = ({
           <Filters
             listingType={listingType}
             onParamsChange={onChange}
-            locality={locality}
+            locality={locality || ""}
           />
         </div>
       </div>

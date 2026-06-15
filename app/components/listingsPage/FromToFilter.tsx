@@ -2,8 +2,8 @@ import { Select, SelectItem } from "@tremor/react";
 import type { ReactNode } from "react";
 
 type Props = {
-  initialFrom: string;
-  initialTo: string;
+  initialFrom: string | number;
+  initialTo: string | number;
   onChangeFrom: (value: string) => void;
   onChangeTo: (value: string) => void;
   valuesFrom: (string | number)[];

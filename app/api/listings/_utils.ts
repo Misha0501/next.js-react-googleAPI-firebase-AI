@@ -1,6 +1,7 @@
 import { NextRequest } from "next/server";
 import { valuesFromSearchParams } from "@/app/lib/validations/valuesFromSearchParams";
 import { listingsSearchParamSchema, type ListingSearchParams } from "@/app/lib/validations/listing";
+import { getArraySearchParam } from "@/app/lib/searchParamsArray";
 import {
   prismaQueryConditionsFromArray,
   prismaQueryConditionsFromMinMaxValidDateStringValue,
@@ -21,6 +22,14 @@ import { ResponseError } from "@/app/lib/classes/ResponseError";
 export const extractParametersGET = (req: NextRequest): ListingSearchParams => {
   const url = new URL(req.url);
   const values = valuesFromSearchParams(url.searchParams);
+  const propertyType = getArraySearchParam(url.searchParams, "propertyType");
+
+  if (propertyType.length) {
+    values.propertyType = propertyType;
+  } else {
+    delete values.propertyType;
+  }
+
   return listingsSearchParamSchema.parse(values);
 };
 

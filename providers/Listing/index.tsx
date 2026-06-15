@@ -14,8 +14,8 @@ const KEY = "PropertyListing";
 export function getKeyFromProps(
   props: unknown,
   type: "LISTING" | "DETAIL",
-): string[] {
-  const key = [KEY, type];
+): unknown[] {
+  const key: unknown[] = [KEY, type];
   key.push(props);
   return key;
 }

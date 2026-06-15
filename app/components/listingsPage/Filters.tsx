@@ -29,6 +29,10 @@ import {
   Squares2X2Icon,
   TagIcon,
 } from "@heroicons/react/24/outline";
+import {
+  appendArraySearchParam,
+  getArraySearchParam,
+} from "@/app/lib/searchParamsArray";
 
 type FilterSectionProps = {
   icon: React.ReactNode;
@@ -93,15 +97,9 @@ export function Filters({ onParamsChange, listingType, locality }: FiltersProps)
   const urlParams = useSearchParams();
 
   const [filterValues, setFilterValues] = useState<FilterValues>(() => {
-    let propertyType: string[] = [];
-    try {
-      const raw = urlParams.get("propertyType");
-      if (raw) propertyType = JSON.parse(raw);
-    } catch {}
-
     return {
       listingType: listingType || undefined,
-      propertyType,
+      propertyType: getArraySearchParam(urlParams, "propertyType"),
       priceRange: {
         min: urlParams.get("priceMin") || undefined,
         max: urlParams.get("priceMax") || undefined,
@@ -133,8 +131,7 @@ export function Filters({ onParamsChange, listingType, locality }: FiltersProps)
       const qp = new URLSearchParams();
       if (locality) qp.set("locality", locality);
       if (listingType) qp.set("listingType", listingType);
-      if (filters.propertyType?.length)
-        qp.set("propertyType", JSON.stringify(filters.propertyType));
+      appendArraySearchParam(qp, "propertyType", filters.propertyType);
       if (filters.priceRange?.min && filters.priceRange.min !== "0")
         qp.set("priceMin", String(filters.priceRange.min));
       if (filters.priceRange?.max && filters.priceRange.max !== NO_MAX)
@@ -286,8 +283,12 @@ export function Filters({ onParamsChange, listingType, locality }: FiltersProps)
   );
 
   const handleListedSince = useCallback(
-    (value: number) => {
-      applyFilters({ ...filterValues, listedSince: value });
+    (value: string | number) => {
+      const listedSince = Number(value);
+      applyFilters({
+        ...filterValues,
+        listedSince: Number.isNaN(listedSince) ? undefined : listedSince,
+      });
     },
     [filterValues, applyFilters],
   );

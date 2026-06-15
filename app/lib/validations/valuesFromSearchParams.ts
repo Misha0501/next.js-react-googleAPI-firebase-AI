@@ -3,7 +3,11 @@
  * @param searchParams
  */
 export const valuesFromSearchParams = (searchParams: URLSearchParams) => {
-    return Array.from(searchParams.keys()).reduce((values, key) => ({
-        ...values, [key]: searchParams.getAll(key)
-    }), {} as Record<string, Array<string> | string>)
-}
+  return Array.from(searchParams.keys()).reduce(
+    (values, key) => ({
+      ...values,
+      [key]: searchParams.getAll(key),
+    }),
+    {} as Record<string, string[]>,
+  );
+};

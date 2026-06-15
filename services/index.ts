@@ -28,12 +28,28 @@ interface IAPArgs {
   method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT";
   body?: Record<string, unknown> | FormData | null;
   headers?: Record<string, string>;
-  queryParams?: Record<string, string | number | boolean | null | undefined>;
+  queryParams?: Record<string, QueryParamValue> | null;
   noAuth?: boolean;
   formData?: boolean;
   baseDomain?: string;
   parseJSON?: boolean;
 }
+
+type QueryParamPrimitive = string | number | boolean;
+type QueryParamValue =
+  | QueryParamPrimitive
+  | null
+  | undefined
+  | (QueryParamPrimitive | null | undefined)[];
+
+const appendQueryParamValue = (
+  params: URLSearchParams,
+  key: string,
+  value: QueryParamPrimitive | null | undefined,
+) => {
+  if (value == null || value === "") return;
+  params.append(key, String(value));
+};
 
 async function service<T = unknown>(args: IAPArgs): Promise<T> {
   const {
@@ -45,48 +61,58 @@ async function service<T = unknown>(args: IAPArgs): Promise<T> {
     formData = false,
     baseDomain,
     parseJSON = true,
-    ...extraProps
+    noAuth = false,
   } = args;
 
-  const props = {
-    body,
-    method,
-    headers: { ...defaultHeaders, ...headers },
-    ...extraProps
+  const requestHeaders: Record<string, string> = {
+    ...defaultHeaders,
+    ...headers,
   };
 
-  if (method === "GET") {
-    props.body = null;
+  if (noAuth) {
+    delete requestHeaders.Authorization;
   }
 
-  if (!formData && method !== "GET") {
-    props.body = JSON.stringify(body);
-  }
-
-  if (extraProps.noAuth) {
-    delete props.headers.Authorization;
-  }
   if (formData) {
-    const { "Content-Type": _ct, ...rest } = props.headers;
-    props.headers = rest;
+    delete requestHeaders["Content-Type"];
+  }
+
+  const props: RequestInit = {
+    method,
+    headers: requestHeaders,
+  };
+
+  if (method !== "GET") {
+    props.body = formData
+      ? body instanceof FormData
+        ? body
+        : undefined
+      : JSON.stringify(body ?? {});
   }
 
   let fetchUrl = baseDomain || getFetchUrl(url);
 
   if (queryParams) {
-    const params = new URLSearchParams(
-      Object.entries(queryParams)
-        .filter(([, v]) => v != null)
-        .map(([k, v]) => [k, String(v)]),
-    );
-    fetchUrl = `${fetchUrl}?${params.toString()}`;
+    const params = new URLSearchParams();
+
+    Object.entries(queryParams).forEach(([key, value]) => {
+      if (Array.isArray(value)) {
+        value.forEach((item) => appendQueryParamValue(params, key, item));
+        return;
+      }
+
+      appendQueryParamValue(params, key, value);
+    });
+
+    const queryString = params.toString();
+    if (queryString) fetchUrl = `${fetchUrl}?${queryString}`;
   }
 
   const data = await fetch(fetchUrl, props);
 
   if (!data.ok) {
     if (data.status === 422) {
-      const json = await data.json()
+      const json = await data.json();
       console.error(json);
       throw new Error("Something went wrong please try again later");
     }
