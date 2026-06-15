@@ -25,7 +25,7 @@ const navigationItems = [
     icon: HomeModernIcon,
   },
   {
-    label: "Listings",
+    label: "Properties",
     href: "/listings",
     icon: ListBulletIcon,
   },

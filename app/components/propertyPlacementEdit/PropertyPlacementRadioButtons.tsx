@@ -27,7 +27,7 @@ export default function PropertyPlacementRadioButtons({
 
   return (
     <RadioGroup value={value} onChange={handleOnChange}>
-      <RadioGroup.Label className="sr-only">Listing type</RadioGroup.Label>
+      <RadioGroup.Label className="sr-only">Offer type</RadioGroup.Label>
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
         {options.map((item) => {
           const Icon = item === "RENT" ? KeyIcon : HomeModernIcon;

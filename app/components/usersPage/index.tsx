@@ -102,7 +102,9 @@ function UserPageMain() {
                     <span className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-widest px-2.5 py-1 rounded-full bg-white/10 text-white/70 border border-white/15">
                       <HomeModernIcon className="h-3.5 w-3.5" />
                       {populatedListings.length}{" "}
-                      {populatedListings.length === 1 ? "listing" : "listings"}
+                      {populatedListings.length === 1
+                        ? "property"
+                        : "properties"}
                     </span>
                   )}
                 </div>
@@ -207,7 +209,7 @@ function UserPageMain() {
             <div className="mb-14">
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-2xl font-bold text-[#2D3648]">
-                  {isCompany ? "Company listings" : "Listings"}
+                  {isCompany ? "Company properties" : "Properties"}
                 </h2>
                 {populatedListings.length > 0 && (
                   <span className="text-sm text-[#717D96]">
@@ -230,7 +232,9 @@ function UserPageMain() {
               ) : (
                 <div className="flex flex-col items-center justify-center py-16 bg-gray-50 rounded-2xl border border-gray-100">
                   <HomeModernIcon className="h-10 w-10 text-gray-300 mb-3" />
-                  <p className="text-[#717D96] font-medium">No listings yet</p>
+                  <p className="text-[#717D96] font-medium">
+                    No properties yet
+                  </p>
                 </div>
               )}
             </div>

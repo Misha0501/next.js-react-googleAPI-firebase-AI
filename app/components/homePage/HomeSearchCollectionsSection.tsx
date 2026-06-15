@@ -88,7 +88,7 @@ function HomeSearchCollectionsSection() {
             href="/listings"
             className="inline-flex items-center justify-center rounded-lg border border-[#1F5FD6] px-5 py-3 text-sm font-bold text-[#1F5FD6] transition-colors hover:bg-[#1F5FD6] hover:text-white"
           >
-            View all listings
+            View all properties
           </Link>
         </div>
 

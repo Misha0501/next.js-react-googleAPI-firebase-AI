@@ -22,7 +22,7 @@ export const fetchImageById = async (
   const listingId = image?.listingId;
   if (!listingId)
     throw new ResponseError(
-      "Listing with provided image id wasn't found.",
+      "Property with provided image id wasn't found.",
       404,
     );
   return { image, listingId };
@@ -48,7 +48,7 @@ export const ensureListingAndUserPermissions = async (
   });
   if (!listing)
     throw new ResponseError(
-      "Listing with provided image id wasn't found.",
+      "Property with provided image id wasn't found.",
       404,
     );
   const applicationUserCompanyId = getApplicationUserCompanyId(applicationUser);

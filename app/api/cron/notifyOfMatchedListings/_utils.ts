@@ -49,9 +49,10 @@ export const getMatchedListingsAndSearches = (
 
     const matchedSearches = savedSearches.filter((search: SavedSearch) => {
       return (
-        (search.applicationUserId !== listing.applicationUserId) &&
+        search.applicationUserId !== listing.applicationUserId &&
         (!search.listingType || search.listingType === listing.listingType) &&
-        (!search.locality || search.locality == listing.Address?.[0]?.locality) &&
+        (!search.locality ||
+          search.locality == listing.Address?.[0]?.locality) &&
         (!search.priceMax || search.priceMax >= listing.price) &&
         (!search.priceMin || search.priceMin <= listing.price) &&
         (!search.areaTotalMin || search.areaTotalMin <= listing.areaTotal) &&
@@ -60,22 +61,36 @@ export const getMatchedListingsAndSearches = (
         (!search.areaLivingMax || search.areaLivingMax >= listing.areaLiving) &&
         (!search.areaLandMin || search.areaLandMin <= listing.areaLand) &&
         (!search.areaLandMax || search.areaLandMax >= listing.areaLand) &&
-        (!search.upkeepType || !search.upkeepType.length || search.upkeepType.includes(listing.upkeepType)) &&
-        (!search.interiorType || !search.interiorType.length || search.interiorType.includes(listing.interiorType)) &&
-        (!search.propertyType || !search.propertyType.length || search.propertyType.includes(listing.propertyType)) &&
-        (!search.heatingType || !search.heatingType.length || search.heatingType.includes(listing.heatingType)) &&
+        (!search.upkeepType ||
+          !search.upkeepType.length ||
+          search.upkeepType.includes(listing.upkeepType)) &&
+        (!search.interiorType ||
+          !search.interiorType.length ||
+          search.interiorType.includes(listing.interiorType)) &&
+        (!search.propertyType ||
+          !search.propertyType.length ||
+          search.propertyType.includes(listing.propertyType)) &&
+        (!search.heatingType ||
+          !search.heatingType.length ||
+          search.heatingType.includes(listing.heatingType)) &&
         (!search.roomsMin || search.roomsMin <= listing.rooms) &&
         (!search.roomsMax || search.roomsMax >= listing.rooms) &&
         (!search.bedroomsMin || search.bedroomsMin <= listing.bedrooms) &&
         (!search.bedroomsMax || search.bedroomsMax >= listing.bedrooms) &&
-        (!search.constructedYearMin || search.constructedYearMin <= listing.constructedYear) &&
-        (!search.constructedYearMax || search.constructedYearMax >= listing.constructedYear) &&
+        (!search.constructedYearMin ||
+          search.constructedYearMin <= listing.constructedYear) &&
+        (!search.constructedYearMax ||
+          search.constructedYearMax >= listing.constructedYear) &&
         (!search.bathroomsMin || search.bathroomsMin <= listing.bathrooms) &&
         (!search.bathroomsMax || search.bathroomsMax >= listing.bathrooms) &&
-        (!search.areaOutsideMin || search.areaOutsideMin <= listing.areaOutside) &&
-        (!search.areaOutsideMax || search.areaOutsideMax >= listing.areaOutside) &&
-        (!search.constructedYearMin || search.constructedYearMin <= listing.constructedYear) &&
-        (!search.constructedYearMax || search.constructedYearMax >= listing.constructedYear)
+        (!search.areaOutsideMin ||
+          search.areaOutsideMin <= listing.areaOutside) &&
+        (!search.areaOutsideMax ||
+          search.areaOutsideMax >= listing.areaOutside) &&
+        (!search.constructedYearMin ||
+          search.constructedYearMin <= listing.constructedYear) &&
+        (!search.constructedYearMax ||
+          search.constructedYearMax >= listing.constructedYear)
       );
     });
     results.push({ listing, matchedSearches });
@@ -110,7 +125,7 @@ export const sendEmailsToMatchedListingsSearches = async (
             <h1>Hi there!</h1>
             <p>A property that matches your saved search has been posted!</p>
             <p>View the property via the below link:</p>
-            <a href="http://localhost:3000/listings/${matchedListing.id}">View listing</a>
+            <a href="http://localhost:3000/listings/${matchedListing.id}">View property</a>
           `,
         });
 

@@ -162,7 +162,7 @@ function Confirmation({
   }, [createProperty?.isError]);
 
   const overviewItems: SummaryItem[] = [
-    { label: "Listing intent", value: labelize(values.listingType) },
+    { label: "Offer type", value: labelize(values.listingType) },
     { label: "Property type", value: labelize(values.propertyType) },
     {
       label: "Asking price",
@@ -236,7 +236,7 @@ function Confirmation({
               Review and publish
             </h2>
             <p className="mt-3 text-sm leading-6 text-[#64748B] md:text-base">
-              Check the listing details before it goes live. Use Back if
+              Check the property details before it goes live. Use Back if
               anything needs adjusting.
             </p>
           </div>
@@ -358,7 +358,7 @@ function Confirmation({
             onClick={confirmBtnHandler}
             className="inline-flex min-h-[50px] w-full items-center justify-center rounded-xl bg-[#1F5FD6] px-6 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-[#184FB5] disabled:opacity-50 sm:w-auto"
           >
-            {createProperty.isLoading ? "Publishing..." : "Publish listing"}
+            {createProperty.isLoading ? "Publishing..." : "Publish property"}
           </button>
         </div>
         {createError && (

@@ -105,7 +105,7 @@ export const ListingDetailContent = ({ listing }: Prop) => {
         title: "Price",
         value: formatEuroPrice(listing?.price, { fallback: "-" }),
       },
-      { title: "Listing type", value: humanize(listing?.listingType) },
+      { title: "Offer type", value: humanize(listing?.listingType) },
       { title: "Property type", value: humanize(listing?.propertyType) },
       { title: "Offered since", value: formatDate(listing?.createdAt) },
       { title: "Rooms", value: listing?.rooms },

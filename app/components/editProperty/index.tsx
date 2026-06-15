@@ -62,16 +62,16 @@ export default function EditProperty() {
           <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
             <div>
               <h1 className="max-w-3xl text-3xl font-bold tracking-tight text-[#1F2937] md:text-5xl">
-                Edit your property listing.
+                Edit your property.
               </h1>
               <p className="mt-4 max-w-2xl text-sm leading-6 text-[#596579] md:text-base">
-                Update the live listing details, images and description from one
-                focused editor.
+                Update the live property details, images and description from
+                one focused editor.
               </p>
             </div>
             {listing?.id && (
               <div className="rounded-xl border border-[#CFE0FF] bg-[#EAF2FF] px-4 py-3 text-sm font-semibold text-[#1F5FD6]">
-                Listing #{listing.id}
+                Property #{listing.id}
               </div>
             )}
           </div>

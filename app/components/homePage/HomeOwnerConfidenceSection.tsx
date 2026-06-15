@@ -13,8 +13,8 @@ const ownerBenefits = [
     icon: CameraIcon,
   },
   {
-    title: "Better listing quality",
-    description: "Helpful prompts make the listing easier to compare.",
+    title: "Better property quality",
+    description: "Helpful prompts make the property easier to compare.",
     icon: ClipboardDocumentCheckIcon,
   },
   {
@@ -41,9 +41,9 @@ function HomeOwnerConfidenceSection() {
             Place your property with a sharper first impression
           </h2>
           <p className="mt-4 max-w-xl text-[#717D96]">
-            A stronger listing helps serious buyers and renters understand the
-            property faster, compare it fairly, and take the next step with
-            confidence.
+            A stronger property presentation helps serious buyers and renters
+            understand the home faster, compare it fairly, and take the next
+            step with confidence.
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
             <Link

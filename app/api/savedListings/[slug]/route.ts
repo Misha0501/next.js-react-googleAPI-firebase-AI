@@ -1,7 +1,11 @@
 import { ResponseError } from "@/app/lib/classes/ResponseError";
 import { getApplicationUserServer } from "@/app/lib/getApplicationUserServer";
 import { ApplicationUser } from "@/types";
-import { deleteSavedListing, fetchSavedListing, validateUserAuthorization } from "@/app/api/savedListings/_utils";
+import {
+  deleteSavedListing,
+  fetchSavedListing,
+  validateUserAuthorization,
+} from "@/app/api/savedListings/_utils";
 import { handleAPIError } from "@/app/lib/api/handleError";
 
 /**
@@ -26,7 +30,7 @@ export async function DELETE(
 
     if (!savedListing) {
       throw new ResponseError(
-        "Saved listing with provided id wasn't found.",
+        "Saved property with provided id wasn't found.",
         404,
       );
     }

@@ -5,9 +5,9 @@ import { getApplicationUserServer } from "@/app/lib/getApplicationUserServer";
 import { ApplicationUser } from "@/types";
 import { getAveragePriceInNeighborhood } from "@/app/lib/listing/getAveragePriceInNeighborhood";
 import {
-    deleteListingAndAssociatedEntities,
-    ensureUserHasListingAccess,
-    validateListingExistence
+  deleteListingAndAssociatedEntities,
+  ensureUserHasListingAccess,
+  validateListingExistence,
 } from "@/app/api/listings/_utils";
 import { handleAPIError } from "@/app/lib/api/handleError";
 import { validateParamId } from "@/app/lib/api/validateParamId";
@@ -18,40 +18,44 @@ import { validateParamId } from "@/app/lib/api/validateParamId";
  * @constructor
  * @param request
  */
-export async function GET(request: Request, { params }: { params: Promise<{ slug: string }> }) {
-    try {
-        const { slug } = await params;
-        const id = validateParamId(slug);
+export async function GET(
+  request: Request,
+  { params }: { params: Promise<{ slug: string }> },
+) {
+  try {
+    const { slug } = await params;
+    const id = validateParamId(slug);
 
-        const listing = await prisma.listing.findUnique({
-            where: {
-                id,
-                deleted: null,
-            },
-            include: {
-                applicationUser: true,
-                company: true,
-                ListingImage: true,
-                Address: true,
-                ListingPrice: {
-                    orderBy: {
-                        createdAt: "asc",
-                    },
-                },
-            },
-        });
+    const listing = await prisma.listing.findUnique({
+      where: {
+        id,
+        deleted: null,
+      },
+      include: {
+        applicationUser: true,
+        company: true,
+        ListingImage: true,
+        Address: true,
+        ListingPrice: {
+          orderBy: {
+            createdAt: "asc",
+          },
+        },
+      },
+    });
 
-        if (!listing) throw new ResponseError("Listing with provided id wasn't found.", 404)
+    if (!listing)
+      throw new ResponseError("Property with provided id wasn't found.", 404);
 
-        // Get average price in the neighborhood of the listing
-        listing.averagePriceInNeighborhood = await getAveragePriceInNeighborhood(listing);
+    // Get average price in the neighborhood of the listing
+    listing.averagePriceInNeighborhood =
+      await getAveragePriceInNeighborhood(listing);
 
-        return NextResponse.json(listing);
-    } catch (error) {
-        return handleAPIError(error);
-    }
+    return NextResponse.json(listing);
+  } catch (error) {
+    return handleAPIError(error);
+  }
 }
-
 
 /**
  * DELETE Route to delete a listing.
@@ -59,21 +63,25 @@ export async function GET(request: Request, { params }: { params: Promise<{ slug
  * @constructor
  * @param request
  */
-export async function DELETE(request: Request, { params }: { params: Promise<{ slug: string }> }) {
-    try {
-        const { slug } = await params;
-        const id = validateParamId(slug);
+export async function DELETE(
+  request: Request,
+  { params }: { params: Promise<{ slug: string }> },
+) {
+  try {
+    const { slug } = await params;
+    const id = validateParamId(slug);
 
-        const applicationUser: ApplicationUser = await getApplicationUserServer(true);
+    const applicationUser: ApplicationUser =
+      await getApplicationUserServer(true);
 
-        const listing = await validateListingExistence(id);
+    const listing = await validateListingExistence(id);
 
-        ensureUserHasListingAccess(applicationUser, listing);
+    ensureUserHasListingAccess(applicationUser, listing);
 
-        await deleteListingAndAssociatedEntities(id);
+    await deleteListingAndAssociatedEntities(id);
 
-        return new Response(null, { status: 204 });
-    } catch (error) {
-        return handleAPIError(error);
-    }
+    return new Response(null, { status: 204 });
+  } catch (error) {
+    return handleAPIError(error);
+  }
 }

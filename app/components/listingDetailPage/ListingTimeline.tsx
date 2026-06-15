@@ -77,7 +77,7 @@ export const ListingTimeline = ({ listing }: Prop) => {
     const isExpired = new Date(listing.activeUntil) < new Date();
     events.push({
       date: listing.activeUntil,
-      label: isExpired ? "Listing expired" : "Active until",
+      label: isExpired ? "Property expired" : "Active until",
       type: "expiry",
     });
   }
@@ -95,7 +95,7 @@ export const ListingTimeline = ({ listing }: Prop) => {
           <div className="mb-8 flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
             <div>
               <p className="text-lg font-semibold text-[#2D3648] sm:text-xl">
-                Listing history
+                Property history
               </p>
               <p className="mt-1 text-sm text-[#717D96]">
                 Price and availability changes over time

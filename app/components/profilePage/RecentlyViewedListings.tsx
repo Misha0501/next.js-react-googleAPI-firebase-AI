@@ -89,7 +89,7 @@ export const RecentlyViewedListings = () => {
               No recently viewed properties
             </h3>
             <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-[#717D96]">
-              Open listings while browsing and they will appear here for quick
+              Open properties while browsing and they will appear here for quick
               access.
             </p>
             <Link

@@ -94,7 +94,7 @@ const getSearchDetails = (item: SavedSearch): SearchDetail[] => {
   }
   if (item.listingType) {
     details.push({
-      label: "Listing type",
+      label: "Offer type",
       value: item.listingType === "SELL" ? "Buy" : "Rent",
     });
   }
@@ -207,7 +207,7 @@ export const SavedSearches = () => {
                 No saved searches yet
               </h3>
               <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-[#717D96]">
-                Save search filters from the listings page and return to them
+                Save search filters from the properties page and return to them
                 here.
               </p>
               <Link

@@ -84,7 +84,7 @@ export const SavedListings = () => {
               No saved properties yet
             </h3>
             <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-[#717D96]">
-              Save listings while browsing to compare them later from this
+              Save properties while browsing to compare them later from this
               account area.
             </p>
             <Link

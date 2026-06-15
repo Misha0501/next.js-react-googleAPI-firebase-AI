@@ -118,8 +118,8 @@ function DescriptionAndImages({
       {isShow && show ? (
         <StepsTopInfo
           stepNumber={stepNumber}
-          title="Make the listing feel complete"
-          description="Add photos if they are available and write a clear description. This is the part that turns property data into a listing people can picture themselves visiting."
+          title="Make the property feel complete"
+          description="Add photos if they are available and write a clear description. This is the part that turns property data into a page people can picture themselves visiting."
           imageSrc={property1}
           step={step}
           handleBack={handleBack}
@@ -144,7 +144,7 @@ function DescriptionAndImages({
             <SectionRow
               icon={<PhotoIcon className="h-5 w-5" />}
               title="Property photos"
-              description="Photos are optional. If you upload any, the first image becomes the main listing image."
+              description="Photos are optional. If you upload any, the first image becomes the main property image."
             >
               <PlacingPropertyImagesHandler
                 initialImages={formik.values.images || []}
@@ -163,7 +163,7 @@ function DescriptionAndImages({
                     className="block text-sm font-bold text-[#1F2937]"
                     htmlFor="description"
                   >
-                    Listing description
+                    Property description
                   </label>
                   <span className="text-xs font-semibold text-[#64748B]">
                     {description.trim().length} characters
@@ -172,7 +172,7 @@ function DescriptionAndImages({
                 {false && (
                   <div className="mb-4 rounded-xl border border-[#CFE0FF] bg-[#F6F9FF] p-4">
                     <p className="text-sm text-[#596579]">
-                      Generate a first draft from the listing details. It can
+                      Generate a first draft from the property details. It can
                       take up to 30 seconds.
                     </p>
                     <button

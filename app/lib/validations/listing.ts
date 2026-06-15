@@ -6,18 +6,30 @@ import {
   INTERIOR_TYPES,
   LISTING_TYPES,
   UPKEEP_TYPES,
-    PROPERTY_TYPES
+  PROPERTY_TYPES,
 } from "../constants";
 const tenYearsFromNow = new Date();
 tenYearsFromNow.setFullYear(tenYearsFromNow.getFullYear() + 10);
 
 export const listingSchema = z.object({
   listingType: z.enum(LISTING_TYPES as any),
-  interiorType: z.enum(INTERIOR_TYPES as any).optional().nullable(),
-  propertyType: z.enum(PROPERTY_TYPES as any).optional().nullable(),
-  upkeepType: z.enum(UPKEEP_TYPES as any).optional().nullable(),
+  interiorType: z
+    .enum(INTERIOR_TYPES as any)
+    .optional()
+    .nullable(),
+  propertyType: z
+    .enum(PROPERTY_TYPES as any)
+    .optional()
+    .nullable(),
+  upkeepType: z
+    .enum(UPKEEP_TYPES as any)
+    .optional()
+    .nullable(),
   price: z.number().min(0),
-  currency: z.enum(CURRENCIES as any).optional().nullable(),
+  currency: z
+    .enum(CURRENCIES as any)
+    .optional()
+    .nullable(),
   address: z
     .object({
       streetNumber: z.string().optional(),
@@ -57,11 +69,11 @@ export const listingSchema = z.object({
     .array(
       z.object({
         title: z.string().max(150, {
-          message: "Listing's key point title must not exceed 150 characters",
+          message: "Property key point title must not exceed 150 characters",
         }),
         description: z.string().max(250, {
           message:
-            "Listing's key point description must not exceed 250 characters",
+            "Property key point description must not exceed 250 characters",
         }),
       }),
     )
@@ -124,7 +136,10 @@ export const listingSchema = z.object({
   floorNumber: z.number().optional().nullable(),
   numberOfFloorsProperty: z.number().optional().nullable(),
   numberOfFloorsCommon: z.number().optional().nullable(),
-  heatingType: z.enum(HEATING_TYPES as any).optional().nullable(),
+  heatingType: z
+    .enum(HEATING_TYPES as any)
+    .optional()
+    .nullable(),
 });
 
 export const listingSchemaPutRequest = listingSchema.extend({
@@ -204,7 +219,9 @@ export const listingsSearchParamSchema = z.object({
     .refine(
       (userInputArray) =>
         userInputArray.every((el) => HEATING_TYPES.includes(el as any)),
-      { message: `Invalid heating type input. Allowed values: ${HEATING_TYPES}` },
+      {
+        message: `Invalid heating type input. Allowed values: ${HEATING_TYPES}`,
+      },
     )
     .optional(),
   currencyType: searchParamSchema
@@ -213,7 +230,7 @@ export const listingsSearchParamSchema = z.object({
     .refine(
       (userInputArray) =>
         userInputArray.every((el) => CURRENCIES.includes(el as any)),
-      { message: `Invalid listing type input. Allowed values: ${CURRENCIES}` },
+      { message: `Invalid currency input. Allowed values: ${CURRENCIES}` },
     )
     .optional(),
   listingType: searchParamSchema
@@ -222,7 +239,7 @@ export const listingsSearchParamSchema = z.object({
     .refine(
       (userInputArray) =>
         userInputArray.every((el) => LISTING_TYPES.includes(el as any)),
-      { message: `Invalid listing type input. Allowed values: ${LISTING_TYPES}` },
+      { message: `Invalid offer type input. Allowed values: ${LISTING_TYPES}` },
     )
     .optional(),
   interiorType: searchParamSchema
@@ -231,7 +248,9 @@ export const listingsSearchParamSchema = z.object({
     .refine(
       (userInputArray) =>
         userInputArray.every((el) => INTERIOR_TYPES.includes(el as any)),
-      { message: `Invalid interior type input. Allowed values: ${INTERIOR_TYPES}` },
+      {
+        message: `Invalid interior type input. Allowed values: ${INTERIOR_TYPES}`,
+      },
     )
     .optional(),
   propertyType: searchParamSchema
@@ -240,7 +259,9 @@ export const listingsSearchParamSchema = z.object({
     .refine(
       (userInputArray) =>
         userInputArray.every((el) => PROPERTY_TYPES.includes(el as any)),
-      { message: `Invalid interior type input. Allowed values: ${PROPERTY_TYPES}` },
+      {
+        message: `Invalid interior type input. Allowed values: ${PROPERTY_TYPES}`,
+      },
     )
     .optional(),
   upkeepType: searchParamSchema
@@ -275,20 +296,22 @@ export const listingsSearchParamSchema = z.object({
     .max(1)
     .transform((arr) => arr[0] ?? "")
     .pipe(
-      z.string().refine(
-        (v) => isValidDateFromString(v),
-        { message: "Invalid plain date, should be the next format 2023-12-31" },
-      ),
+      z
+        .string()
+        .refine((v) => isValidDateFromString(v), {
+          message: "Invalid plain date, should be the next format 2023-12-31",
+        }),
     )
     .optional(),
   constructedYearMax: searchParamSchema
     .max(1)
     .transform((arr) => arr[0] ?? "")
     .pipe(
-      z.string().refine(
-        (v) => isValidDateFromString(v),
-        { message: "Invalid plain date, should be the next format 2023-12-31" },
-      ),
+      z
+        .string()
+        .refine((v) => isValidDateFromString(v), {
+          message: "Invalid plain date, should be the next format 2023-12-31",
+        }),
     )
     .optional(),
 });

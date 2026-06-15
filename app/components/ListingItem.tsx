@@ -564,8 +564,8 @@ export const ListingItem = ({
                     className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/70 bg-white/95 text-[#1F5FD6] shadow-sm transition hover:bg-[#EAF2FF]"
                     aria-label={
                       listingItem?.savedListingId
-                        ? "Remove saved listing"
-                        : "Save listing"
+                        ? "Remove saved property"
+                        : "Save property"
                     }
                   >
                     {listingItem?.savedListingId ? (

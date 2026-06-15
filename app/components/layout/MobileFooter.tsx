@@ -27,7 +27,7 @@ const MOBILE_NAV_ITEMS: MobileNavItem[] = [
     match: (pathname) => pathname === "/",
   },
   {
-    title: "Listings",
+    title: "Properties",
     icon: ListBulletIcon,
     link: "/listings",
   },

@@ -140,8 +140,8 @@ const GeneralInfo = ({
       {isShow && show ? (
         <StepsTopInfo
           stepNumber={stepNumber}
-          title="Start with the core listing details"
-          description="Set the intent, choose the property type, select the real address, and add the asking price. These details drive how the listing is presented and searched."
+          title="Start with the core property details"
+          description="Set the offer type, choose the property type, select the real address, and add the asking price. These details drive how the property is presented and searched."
           imageSrc={property1}
           step={step}
           onClick={() => setShow(false)}
@@ -164,7 +164,7 @@ const GeneralInfo = ({
           <div className="mt-4">
             <SectionRow
               icon={<HomeModernIcon className="h-5 w-5" />}
-              title="Listing intent"
+              title="Offer type"
               description="Choose whether this property is being sold or offered for rent."
             >
               <PropertyPlacementRadioButtons

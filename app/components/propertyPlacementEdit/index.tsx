@@ -26,7 +26,7 @@ const steps = [
   },
   {
     title: "Description & images",
-    description: "Photos and listing copy",
+    description: "Photos and description",
     icon: PhotoIcon,
   },
   {
@@ -157,11 +157,12 @@ export default function MultiForm() {
                 <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
                   <div>
                     <h1 className="max-w-3xl text-3xl font-bold tracking-tight text-[#1F2937] md:text-5xl">
-                      Create a listing that feels ready for serious buyers.
+                      Create a property page that feels ready for serious
+                      buyers.
                     </h1>
                     <p className="mt-4 max-w-2xl text-sm leading-6 text-[#596579] md:text-base">
                       Work through the details step by step. Required fields are
-                      checked before you move forward, so the final listing is
+                      checked before you move forward, so the final property is
                       complete before it is published.
                     </p>
                   </div>

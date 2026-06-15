@@ -43,7 +43,7 @@ export const NeighbourhoodPriceCallout = ({ listing }: Prop) => {
 
       <div className="flex items-center justify-between text-sm">
         <div>
-          <p className="mb-0.5 text-[#717D96]">This listing</p>
+          <p className="mb-0.5 text-[#717D96]">This property</p>
           <p className="font-semibold text-[#2D3648]">
             {formatEuroPrice(price)}
           </p>

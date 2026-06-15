@@ -450,7 +450,7 @@ export function Filters({ onParamsChange, listingType, locality }: any) {
       <FilterSection
         icon={<CalendarDaysIcon className="h-5 w-5" />}
         title="Listed since"
-        description="Focus on newer listings"
+        description="Focus on newer properties"
       >
         <RadioGroupCustom
           key={"listed-since-" + clearKey}

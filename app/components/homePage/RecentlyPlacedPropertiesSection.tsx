@@ -23,7 +23,7 @@ function RecentlyPlacedPropertiesSection() {
               Recently placed properties
             </h3>
             <p className="text-[#717D96] mt-3">
-              Fresh listings from owners and agencies.
+              Fresh properties from owners and agencies.
             </p>
           </div>
           <Link

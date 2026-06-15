@@ -337,7 +337,7 @@ const EditForm = ({ formik, addressId, id, loading }: EditFormProps) => {
 
   const submitHandler = async () => {
     if (!id) {
-      toast.error("Listing id is missing.");
+      toast.error("Property id is missing.");
       return;
     }
 
@@ -426,14 +426,14 @@ const EditForm = ({ formik, addressId, id, loading }: EditFormProps) => {
     >
       <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8 lg:p-10">
         <div className="mb-3 text-sm font-bold uppercase tracking-wide text-[#1F5FD6]">
-          Edit listing
+          Edit property
         </div>
         <div className="max-w-3xl">
           <h1 className="text-3xl font-bold tracking-tight text-[#1F2937] md:text-4xl">
             Update property details
           </h1>
           <p className="mt-3 text-sm leading-6 text-[#64748B] md:text-base">
-            Keep the listing accurate and complete. Changes are saved to the
+            Keep the property accurate and complete. Changes are saved to the
             live property after review.
           </p>
         </div>
@@ -441,7 +441,7 @@ const EditForm = ({ formik, addressId, id, loading }: EditFormProps) => {
         <div className="mt-4">
           <SectionRow
             icon={<HomeModernIcon className="h-5 w-5" />}
-            title="Listing intent"
+            title="Offer type"
             description="Update whether this property is offered for sale or rent."
           >
             <PropertyPlacementRadioButtons
@@ -460,7 +460,7 @@ const EditForm = ({ formik, addressId, id, loading }: EditFormProps) => {
           <SectionRow
             icon={<TagIcon className="h-5 w-5" />}
             title="Property type"
-            description="Choose the current category used by listing filters."
+            description="Choose the current category used by property filters."
           >
             <select
               id="propertyType"
@@ -489,7 +489,7 @@ const EditForm = ({ formik, addressId, id, loading }: EditFormProps) => {
           <SectionRow
             icon={<MapPinIcon className="h-5 w-5" />}
             title="Location"
-            description="Edit the stored address and coordinates for the listing."
+            description="Edit the stored address and coordinates for the property."
           >
             <div className="grid gap-4 sm:grid-cols-2">
               <TextField
@@ -622,7 +622,7 @@ const EditForm = ({ formik, addressId, id, loading }: EditFormProps) => {
             title="Dimensions"
             description={
               isLand
-                ? "Land listings only need the total plot area."
+                ? "Land properties only need the total plot area."
                 : "Use total area for the headline and add supporting spaces where relevant."
             }
           >
@@ -778,7 +778,7 @@ const EditForm = ({ formik, addressId, id, loading }: EditFormProps) => {
           <SectionRow
             icon={<PhotoIcon className="h-5 w-5" />}
             title="Photos"
-            description="Photos are optional. If present, the first image remains the main listing image."
+            description="Photos are optional. If present, the first image remains the main property image."
           >
             <PlacingPropertyImagesHandler
               initialImages={formik.values.images || []}
@@ -791,7 +791,7 @@ const EditForm = ({ formik, addressId, id, loading }: EditFormProps) => {
           <SectionRow
             icon={<ChatBubbleLeftRightIcon className="h-5 w-5" />}
             title="Description"
-            description="Keep the public listing copy accurate and useful for buyers."
+            description="Keep the public property copy accurate and useful for buyers."
           >
             <div>
               <div className="mb-3 flex items-center justify-between gap-4">
@@ -799,7 +799,7 @@ const EditForm = ({ formik, addressId, id, loading }: EditFormProps) => {
                   className="block text-sm font-bold text-[#1F2937]"
                   htmlFor="description"
                 >
-                  Listing description
+                  Property description
                 </label>
                 <span className="text-xs font-semibold text-[#64748B]">
                   {description.trim().length} characters

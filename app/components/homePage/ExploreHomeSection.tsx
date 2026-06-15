@@ -15,7 +15,7 @@ const featuredMarket = {
   eyebrow: "Most searched",
   title: "Sofia city homes",
   description:
-    "Explore apartments and houses in Bulgaria's capital with clear euro pricing and practical listing details.",
+    "Explore apartments and houses in Bulgaria's capital with clear euro pricing and practical property details.",
   highlights: ["Capital market", "Strong demand", "Urban living"],
 };
 
@@ -66,7 +66,7 @@ function ExploreHomeSection() {
             href="/listings?listingType=SELL"
             className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl border border-slate-300 bg-white px-5 py-3 text-sm font-bold text-[#334155] shadow-sm transition hover:border-[#1F5FD6] hover:text-[#1F5FD6] sm:w-auto"
           >
-            View all listings
+            View all properties
             <ArrowRightIcon className="h-4 w-4" />
           </Link>
         </div>

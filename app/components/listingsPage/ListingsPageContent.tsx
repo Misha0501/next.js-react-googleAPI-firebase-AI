@@ -208,8 +208,8 @@ export const ListingsPageContent = () => {
                       </Dialog.Title>
                       <div className="mt-2">
                         <p className="text-sm text-gray-500">
-                          You will be notified via email when new listings match
-                          your search criteria.
+                          You will be notified via email when new properties
+                          match your search criteria.
                         </p>
                         <p className="text-sm text-gray-500">
                           You can manage your saved searches in your&nbsp;

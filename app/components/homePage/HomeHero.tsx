@@ -43,7 +43,7 @@ export default function HomeHero() {
           </span>
           <span className="inline-flex items-center gap-2">
             <SparklesIcon className="h-5 w-5 text-[#AFC7FF]" />
-            Premium listing presentation
+            Premium property presentation
           </span>
         </div>
       </div>

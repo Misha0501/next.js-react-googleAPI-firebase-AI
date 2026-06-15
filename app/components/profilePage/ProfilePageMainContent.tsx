@@ -48,7 +48,7 @@ const PROFILE_TABS: ProfileTab[] = [
     href: "/profile/myProperties",
     label: "Properties",
     title: "My properties",
-    description: "Manage your published listings and company portfolio.",
+    description: "Manage your published properties and company portfolio.",
     icon: <HomeModernIcon className="h-5 w-5" />,
   },
   {
@@ -201,7 +201,7 @@ export const ProfilePageMainContent = ({ tab, view }: Props) => {
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:min-w-[420px]">
               <div className="rounded-2xl border border-slate-200 bg-[#F8FAFC] px-4 py-3">
                 <p className="text-xs font-semibold uppercase text-[#717D96]">
-                  Listings
+                  Properties
                 </p>
                 <p className="mt-1 text-2xl font-semibold text-[#2D3648]">
                   {showSkeleton ? "-" : ownListings.length}

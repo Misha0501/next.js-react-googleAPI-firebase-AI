@@ -157,7 +157,7 @@ const MoreDetails = ({
         <StepsTopInfo
           stepNumber={stepNumber}
           title="Add the details buyers compare"
-          description="Add the size, layout, condition and building information. Land listings stay focused on area, while homes and apartments include comfort and building details."
+          description="Add the size, layout, condition and building information. Land properties stay focused on area, while homes and apartments include comfort and building details."
           imageSrc={property1}
           step={step}
           handleBack={handleBack}
@@ -219,7 +219,7 @@ const MoreDetails = ({
               title="Dimensions"
               description={
                 isLand
-                  ? "Land listings only need the total plot area."
+                  ? "Land properties only need the total plot area."
                   : "Use total area for the headline and add supporting spaces where relevant."
               }
             >
@@ -277,7 +277,7 @@ const MoreDetails = ({
                 <SectionRow
                   icon={<RectangleGroupIcon className="h-5 w-5" />}
                   title="Interior and condition"
-                  description="These fields make the listing easier to understand before a viewing."
+                  description="These fields make the property easier to understand before a viewing."
                 >
                   <div className="grid gap-6">
                     <div>

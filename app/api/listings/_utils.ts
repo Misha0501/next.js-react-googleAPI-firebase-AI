@@ -4,7 +4,7 @@ import { listingsSearchParamSchema } from "@/app/lib/validations/listing";
 import {
   prismaQueryConditionsFromArray,
   prismaQueryConditionsFromMinMaxValidDateStringValue,
-  prismaQueryConditionsFromMinMaxValue
+  prismaQueryConditionsFromMinMaxValue,
 } from "@/app/lib/db";
 import { prisma } from "@/app/lib/db/client";
 import { getApplicationUserCompanyId } from "@/app/lib/listing/getApplicationUserCompanyId";
@@ -277,7 +277,7 @@ export const validateListingExistence = async (id: number) => {
     },
   });
   if (!listing)
-    throw new ResponseError("Listing with provided id wasn't found.", 404);
+    throw new ResponseError("Property with provided id wasn't found.", 404);
   return listing;
 };
 

@@ -71,7 +71,7 @@ export const PlacingPropertyImagesHandler = ({
         await uploadBytes(imageRef, file, {
           customMetadata: {
             firebaseUID: uid,
-            activity: "Property listing",
+            activity: "Property placement",
           },
         });
 
