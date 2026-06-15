@@ -4,7 +4,7 @@ import type { AuthProps } from "@/providers/types";
 
 type DeleteProps = AuthProps & { data: ListingsImagesProvider.DeleteMutationProps };
 
-export async function deleteItem(props: DeleteProps) {
+export async function deleteItem(props: DeleteProps): Promise<null> {
   return service({
     method: "DELETE",
     parseJSON: false,

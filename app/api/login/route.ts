@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
 import { loginSchema } from "@/app/lib/validations/auth";
-import { z } from "zod";
-import { ResponseError } from "@/app/lib/classes/ResponseError";
 import { authenticateWithFirebaseIdentityToolkit, setAuthCookiesForOneDay } from "@/app/api/login/_utils";
+import { handleAPIError } from "@/app/lib/api/handleError";
+import { checkRateLimit } from "@/app/lib/redis/rateLimit";
 
 /**
  * POST Route to login
@@ -11,6 +11,11 @@ import { authenticateWithFirebaseIdentityToolkit, setAuthCookiesForOneDay } from
  */
 export async function POST(req: Request) {
   try {
+    const ip = req.headers.get("x-forwarded-for") ?? "unknown";
+    if (!(await checkRateLimit(`rate:login:${ip}`, 10, 60))) {
+      return new Response("Too many requests", { status: 429 });
+    }
+
     const parsedValues = loginSchema.parse(await req.json());
 
     const { email, password } = parsedValues;
@@ -31,16 +36,6 @@ export async function POST(req: Request) {
       refreshToken,
     });
   } catch (error) {
-    if (error instanceof z.ZodError) {
-      return new Response(error.issues.map((i) => i.message).join("; "), { status: 422 });
-    }
-
-    if (error instanceof ResponseError && error.status === 400) {
-      return new Response("Username or password is incorrect.", { status: 400 });
-    }
-
-    return new Response("Something went wrong please try again later", {
-      status: 500,
-    });
+    return handleAPIError(error);
   }
 }

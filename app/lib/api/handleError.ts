@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { Prisma } from "@prisma/client";
 import { ResponseError } from "@/app/lib/classes/ResponseError";
 
 /**
@@ -16,6 +17,11 @@ export const handleAPIError = (error: unknown): Response => {
   }
   if (error instanceof ResponseError) {
     return new Response(error.message, { status: error.status });
+  }
+  if (error instanceof Prisma.PrismaClientKnownRequestError) {
+    if (error.code === "P2025") {
+      return new Response("The requested record was not found.", { status: 404 });
+    }
   }
   if (
     typeof error === "object" &&

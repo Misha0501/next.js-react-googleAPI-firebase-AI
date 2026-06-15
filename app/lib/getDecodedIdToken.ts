@@ -31,5 +31,5 @@ export const getDecodedIdToken = async () => {
         throw new ResponseError("User is not authenticated.", 401)
     }
 
-    return firebaseAdmin.auth().verifyIdToken(cookieToken || headerAuthorizationToken || '');
+    return firebaseAdmin.auth().verifyIdToken(headerAuthorizationToken || cookieToken || '');
 }

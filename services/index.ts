@@ -3,25 +3,12 @@ import { getFetchUrl } from "@/app/lib/getFetchUrl";
 interface IDefaultHeadersProps {
   medium: string;
   "Content-Type": string;
-  Authorization?: string;
 }
 
 const defaultHeaders: IDefaultHeadersProps = {
   medium: "platform-web",
-  "Content-Type": "application/json"
+  "Content-Type": "application/json",
 };
-
-export function setAuthenticationHeader(token: string): void {
-  defaultHeaders.Authorization = `Bearer ${token}`;
-}
-
-export function getAuthenticationToken(): string | undefined {
-  return defaultHeaders?.Authorization;
-}
-
-export function removeAuthenticationHeader(): void {
-  delete defaultHeaders.Authorization;
-}
 
 interface IAPArgs {
   url: string;

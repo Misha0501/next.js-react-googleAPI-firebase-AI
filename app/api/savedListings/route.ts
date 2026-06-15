@@ -15,7 +15,11 @@ export async function GET(req: NextRequest) {
     const applicationUser: ApplicationUser =
       await getApplicationUserServer(true);
 
-    const savedListings = await getSavedListings(applicationUser.id);
+    const { searchParams } = new URL(req.url);
+    const page = Number(searchParams.get("page") ?? 1);
+    const pageSize = Number(searchParams.get("pageSize") ?? 20);
+
+    const savedListings = await getSavedListings(applicationUser.id, page, pageSize);
 
     return NextResponse.json(savedListings);
   } catch (error) {

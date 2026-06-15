@@ -7,33 +7,35 @@ import { ResponseError } from "@/app/lib/classes/ResponseError";
  * @param {number} userId - The ID of the user.
  * @returns {Promise<{total: number, results: any[]}>} - An object containing the total number of saved listings and the saved listings themselves.
  */
-export const getSavedListings = async (userId: number): Promise<any> => {
-  const savedListingsCount = await prisma.savedListing.count({
-    where: {
-      applicationUserId: userId,
-    },
-  });
+const DEFAULT_PAGE_SIZE = 20;
 
-  const savedListings = await prisma.savedListing.findMany({
-    include: {
-      listing: {
-        include: {
-          ListingImage: true,
-          Address: true,
-          ListingPrice: {
-            orderBy: {
-              createdAt: "asc",
-            },
+export const getSavedListings = async (
+  userId: number,
+  page: number = 1,
+  pageSize: number = DEFAULT_PAGE_SIZE,
+): Promise<any> => {
+  const skip = (page - 1) * pageSize;
+
+  const [savedListingsCount, savedListings] = await Promise.all([
+    prisma.savedListing.count({ where: { applicationUserId: userId } }),
+    prisma.savedListing.findMany({
+      skip,
+      take: pageSize,
+      where: { applicationUserId: userId },
+      orderBy: { createdAt: "desc" },
+      include: {
+        listing: {
+          include: {
+            ListingImage: true,
+            Address: true,
+            ListingPrice: { orderBy: { createdAt: "asc" } },
           },
         },
       },
-    },
-    where: {
-      applicationUserId: userId,
-    },
-  });
+    }),
+  ]);
 
-  return { total: savedListingsCount, results: savedListings };
+  return { page, pageSize, total: savedListingsCount, results: savedListings };
 };
 
 /**

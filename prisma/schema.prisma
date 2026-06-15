@@ -37,6 +37,8 @@ model Membership {
   applicationUserRole String
   createdAt           DateTime        @default(now())
   updatedAt           DateTime        @updatedAt
+
+  @@index([companyId])
 }
 
 model Company {
@@ -82,6 +84,8 @@ model Address {
   Listing                    Listing? @relation(fields: [listingId], references: [id])
   companyId                  Int?
   Company                    Company? @relation(fields: [companyId], references: [id])
+
+  @@index([listingId])
 }
 
 model SubscriptionPlan {
@@ -214,6 +218,11 @@ model Listing {
   Address                     Address[]
   SentNotificationSavedSearch SentNotificationSavedSearch[]
   RecentlyViewedListing       RecentlyViewedListing[]
+
+  @@index([applicationUserId])
+  @@index([companyId])
+  @@index([deleted])
+  @@index([applicationUserId, deleted])
 }
 
 model ListingDescriptionKeyPoint {
@@ -240,6 +249,8 @@ model ListingPrice {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([listingId])
 }
 
 model SavedListing {
@@ -250,6 +261,8 @@ model SavedListing {
   applicationUser   ApplicationUser @relation(fields: [applicationUserId], references: [id])
   createdAt         DateTime        @default(now())
   updatedAt         DateTime        @updatedAt
+
+  @@index([applicationUserId])
 }
 
 model SavedSearch {
@@ -280,6 +293,8 @@ model SavedSearch {
   createdAt                   DateTime                      @default(now())
   updatedAt                   DateTime                      @updatedAt
   SentNotificationSavedSearch SentNotificationSavedSearch[]
+
+  @@index([applicationUserId])
 }
 
 model SentNotificationSavedSearch {

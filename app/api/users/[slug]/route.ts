@@ -1,101 +1,82 @@
-import { ResponseError } from "@/app/lib/classes/ResponseError";
 import { NextResponse } from "next/server";
 import { prisma } from "@/app/lib/db/client";
 import { getApplicationUserCompanyId } from "@/app/lib/listing/getApplicationUserCompanyId";
+import { handleAPIError } from "@/app/lib/api/handleError";
+import { validateParamId } from "@/app/lib/api/validateParamId";
 
-/**
- * GET Route to retrieve application user with provided id.
- * @param req
- * @constructor
- * @param request
- */
+const listingInclude = {
+  ListingImage: true,
+  Address: true,
+  ListingPrice: {
+    orderBy: {
+      createdAt: "asc" as const,
+    },
+  },
+} as const;
+
 export async function GET(
   request: Request,
   { params }: { params: Promise<{ slug: string }> },
 ) {
   try {
     const { slug } = await params;
-    const id = Number(slug);
+    const id = validateParamId(slug);
 
-    if (isNaN(id)) throw new ResponseError("ID must be a valid number", 422);
-
-    // Get application user
     const applicationUser = await prisma.applicationUser.findUnique({
       where: { id },
-      include: {
-        Membership: true,
+      select: {
+        id: true,
+        email: true,
+        displayName: true,
+        phoneNumber: true,
+        createdAt: true,
+        Membership: {
+          select: {
+            companyId: true,
+            applicationUserRole: true,
+            isActive: true,
+          },
+        },
         Listing: {
-          include: {
-            ListingImage: true,
-            Address: true,
-            ListingPrice: {
-              orderBy: {
-                createdAt: "asc",
-              },
-            },
-          },
-          where: {
-            deleted: null,
-          },
+          where: { deleted: null },
+          include: listingInclude,
         },
       },
     });
 
-    let applicationUserCompanyId = getApplicationUserCompanyId(applicationUser);
+    const applicationUserCompanyId = getApplicationUserCompanyId(applicationUser);
 
-    // if applicationUserCompanyId exists get all available info about that company
     if (applicationUserCompanyId) {
-      applicationUser.Company = await prisma.company.findUnique({
-        where: {
-          id: applicationUserCompanyId,
-        },
-        include: {
+      const company = await prisma.company.findUnique({
+        where: { id: applicationUserCompanyId },
+        select: {
+          id: true,
+          name: true,
+          phoneNumber: true,
+          description: true,
+          email: true,
+          createdAt: true,
           Address: true,
           Listing: {
-            include: {
-              ListingImage: true,
-              Address: true,
-              ListingPrice: {
-                orderBy: {
-                  createdAt: "asc",
-                },
-              },
-            },
-            where: {
-              deleted: null,
-            },
+            where: { deleted: null },
+            include: listingInclude,
           },
         },
       });
+
+      return NextResponse.json({
+        ...applicationUser,
+        Membership: undefined,
+        Listing: undefined,
+        Company: company,
+      });
     }
 
-    // if user is part of a company then show only company's listigs
-    if (applicationUser?.Company) {
-      delete applicationUser?.Listing;
-    }
-
-    // delete all unnecessary for end user properties
-    delete applicationUser?.Membership;
-    delete applicationUser?.firebaseUID;
-    delete applicationUser?.providerId;
-    delete applicationUser?.updatedAt;
-
-    return NextResponse.json(applicationUser);
-  } catch (error) {
-    console.error(error);
-    if (error instanceof ResponseError) {
-      return new Response(error.message, { status: error.status });
-    }
-
-    if ((error as any).errorInfo && (error as any).errorInfo.code) {
-      return new Response(
-        "Your auth token is invalid or it has expired. Get a new auth token and try again.",
-        { status: 400 },
-      );
-    }
-
-    return new Response("Something went wrong please try again later", {
-      status: 500,
+    return NextResponse.json({
+      ...applicationUser,
+      Membership: undefined,
     });
+  } catch (error) {
+    return handleAPIError(error);
   }
 }

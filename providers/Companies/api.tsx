@@ -1,11 +1,12 @@
 import service from "@/services";
 import { CompanyProvider } from "./types";
 import type { AuthProps } from "@/providers/types";
+import type { Company } from "@/types";
 
 type CreateProps = AuthProps & { data: CompanyProvider.CreateMutation };
 type UpdateProps = AuthProps & { data: CompanyProvider.UpdateMutation };
 
-export async function create(props: CreateProps) {
+export async function create(props: CreateProps): Promise<Company> {
   return service({
     method: "POST",
     url: `/api/companies`,
@@ -14,7 +15,7 @@ export async function create(props: CreateProps) {
   });
 }
 
-export async function update(props: UpdateProps) {
+export async function update(props: UpdateProps): Promise<Company> {
   return service({
     method: "PUT",
     url: `/api/companies`,
@@ -22,4 +23,3 @@ export async function update(props: UpdateProps) {
     headers: { Authorization: props.authToken ?? "" },
   });
 }
-

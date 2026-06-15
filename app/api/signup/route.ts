@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/app/lib/db/client";
+import { handleAPIError } from "@/app/lib/api/handleError";
 
 /**
  * POST Route to register new users. it's only invoked be Google functions
@@ -29,10 +30,7 @@ export async function POST(req: Request) {
       },
     });
     return NextResponse.json({ applicationUser });
-  } catch (e) {
-    console.error(e);
-    return new Response("Something went wrong please try again later", {
-      status: 500,
-    });
+  } catch (error) {
+    return handleAPIError(error);
   }
 }

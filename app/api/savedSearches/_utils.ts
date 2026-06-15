@@ -25,11 +25,15 @@ export const fetchSavedSearchesCount = async (
  */
 export const fetchSavedSearches = async (
   applicationUserId: number,
+  page: number = 1,
+  pageSize: number = 20,
 ): Promise<any[]> => {
+  const skip = (page - 1) * pageSize;
   return await prisma.savedSearch.findMany({
-    where: {
-      applicationUserId,
-    },
+    where: { applicationUserId },
+    orderBy: { createdAt: "desc" },
+    skip,
+    take: pageSize,
   });
 };
 

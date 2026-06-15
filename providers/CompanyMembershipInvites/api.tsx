@@ -1,12 +1,13 @@
 import service from "../../services";
 import { CompanyMembershipInvitesProvider } from "./types";
+import type { CompanyMembershipInvite } from "@/types";
 
 type ReadProps = CompanyMembershipInvitesProvider.POSTProps;
 type CreateProps = ReadProps & { data: CompanyMembershipInvitesProvider.CreateMutationPayload };
 type DeclineProps = ReadProps & { data: CompanyMembershipInvitesProvider.DeclineMutationPayload };
 type DeleteProps = ReadProps & { data: CompanyMembershipInvitesProvider.DeleteMutationPayload };
 
-export async function companyMembershipInvites(props?: ReadProps) {
+export async function companyMembershipInvites(props?: ReadProps): Promise<CompanyMembershipInvite[]> {
   return service({
     method: "GET",
     url: `/api/companyMembershipInvites`,
@@ -14,7 +15,7 @@ export async function companyMembershipInvites(props?: ReadProps) {
   });
 }
 
-export async function create(props: CreateProps) {
+export async function create(props: CreateProps): Promise<CompanyMembershipInvite> {
   return service({
     method: "POST",
     url: `/api/companyMembershipInvites`,
@@ -23,7 +24,7 @@ export async function create(props: CreateProps) {
   });
 }
 
-export async function decline(props: DeclineProps) {
+export async function decline(props: DeclineProps): Promise<CompanyMembershipInvite> {
   return service({
     method: "POST",
     url: `/api/companyMembershipInvites/decline`,
@@ -32,7 +33,7 @@ export async function decline(props: DeclineProps) {
   });
 }
 
-export async function deleteItem(props: DeleteProps) {
+export async function deleteItem(props: DeleteProps): Promise<null> {
   return service({
     method: "DELETE",
     parseJSON: false,

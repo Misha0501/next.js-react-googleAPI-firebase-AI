@@ -8,16 +8,27 @@ const FIREBASE_API_KEY = process.env.NEXT_PUBLIC_FIREBASE_API_KEY;
 if (!IDENTITYTOOLKIT_URL || !FIREBASE_API_KEY) {
   throw new Error("Environment variables for Firebase are missing.");
 }
-const ONE_DAY = 24 * 60 * 60 * 1000;
+const ONE_DAY_MS = 24 * 60 * 60 * 1000;
 
 export const setAuthCookiesForOneDay = async (
   authToken: string,
   refreshToken: string,
 ): Promise<void> => {
   const cookieStore = await cookies();
-  cookieStore.set("authToken", authToken, { expires: Date.now() + ONE_DAY });
+  const expiresAt = new Date(Date.now() + ONE_DAY_MS);
+  const isProduction = process.env.NODE_ENV === "production";
+
+  cookieStore.set("authToken", authToken, {
+    httpOnly: true,
+    sameSite: "strict",
+    secure: isProduction,
+    expires: expiresAt,
+  });
+  // refreshToken is read client-side for token refresh, so httpOnly is intentionally omitted
   cookieStore.set("refreshToken", refreshToken, {
-    expires: Date.now() + ONE_DAY,
+    sameSite: "strict",
+    secure: isProduction,
+    expires: expiresAt,
   });
 };
 

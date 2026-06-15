@@ -17,13 +17,18 @@ export async function GET(req: NextRequest) {
     const applicationUser: ApplicationUser =
       await getApplicationUserServer(true);
 
-    const savedSearchesCount = await fetchSavedSearchesCount(
-      applicationUser.id,
-    );
+    const { searchParams } = new URL(req.url);
+    const page = Number(searchParams.get("page") ?? 1);
+    const pageSize = Number(searchParams.get("pageSize") ?? 20);
 
-    const savedSearches = await fetchSavedSearches(applicationUser.id);
+    const [savedSearchesCount, savedSearches] = await Promise.all([
+      fetchSavedSearchesCount(applicationUser.id),
+      fetchSavedSearches(applicationUser.id, page, pageSize),
+    ]);
 
     return NextResponse.json({
+      page,
+      pageSize,
       total: savedSearchesCount,
       results: savedSearches,
     });

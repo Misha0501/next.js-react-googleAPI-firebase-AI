@@ -1,5 +1,6 @@
 import * as z from "zod";
 import { isValidDateFromString } from "@/app/lib/validations/isValidDate";
+import { baseAddressSchema } from "@/app/lib/validations/shared";
 import {
   CURRENCIES,
   HEATING_TYPES,
@@ -38,19 +39,7 @@ export const listingSchema = z.object({
     .enum(CURRENCIES as [CurrencyType, ...CurrencyType[]])
     .optional()
     .nullable(),
-  address: z
-    .object({
-      streetNumber: z.string().optional(),
-      route: z.string().optional(),
-      locality: z.string().optional(),
-      postalCode: z.string().optional(),
-      neighborhood: z.string().optional(),
-      latitude: z.string().optional(),
-      longitude: z.string().optional(),
-      administrativeAreaLevelOne: z.string().optional(),
-      showExactLocation: z.boolean().optional(),
-    })
-    .optional(),
+  address: baseAddressSchema.optional(),
   images: z
     .array(
       z.object({
@@ -157,20 +146,7 @@ export const listingSchemaPutRequest = listingSchema.extend({
   propertyType: z.enum(PROPERTY_TYPES as [PropertyType, ...PropertyType[]]).optional(),
   price: z.number().min(0).optional(),
   currency: z.enum(CURRENCIES as [CurrencyType, ...CurrencyType[]]).optional(),
-  address: z
-    .object({
-      id: z.number(),
-      streetNumber: z.string().nullable().optional(),
-      route: z.string().nullable().optional(),
-      locality: z.string().nullable().optional(),
-      postalCode: z.string().nullable().optional(),
-      neighborhood: z.string().nullable().optional(),
-      latitude: z.string().nullable().optional(),
-      longitude: z.string().nullable().optional(),
-      showExactLocation: z.boolean().optional(),
-      administrativeAreaLevelOne: z.string().nullable().optional(),
-    })
-    .optional(),
+  address: baseAddressSchema.extend({ id: z.number() }).optional(),
   upkeepType: z.enum(UPKEEP_TYPES as [UpkeepType, ...UpkeepType[]]).optional(),
   images: z
     .array(
