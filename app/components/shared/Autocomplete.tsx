@@ -98,7 +98,7 @@ const AutoComplete = ({
     if (onLocalityChange) onLocalityChange(city);
   };
 
-  const handleSuggestionSelect = async (suggestion: any) => {
+  const handleSuggestionSelect = async (suggestion: google.maps.places.AutocompleteSuggestion) => {
     const place = suggestion.placePrediction.toPlace();
     await place.fetchFields({
       fields: ["addressComponents", "location", "displayName"],

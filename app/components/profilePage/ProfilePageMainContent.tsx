@@ -14,7 +14,6 @@ import { PersonalDetailsTab } from "@/app/components/profilePage/PersonalDetails
 import { PropertiesTab } from "@/app/components/profilePage/PropertiesTab";
 import { ProfilePageOwnListings } from "@/app/components/profilePage/ProfilePageOwnListings";
 import { useUserOwnData } from "@/providers/Users";
-import { CircularProgress, Skeleton } from "@mui/material";
 import { Listing } from "@/types";
 import {
   ArrowRightOnRectangleIcon,
@@ -157,7 +156,7 @@ export const ProfilePageMainContent = ({ tab, view }: Props) => {
   if (isLoggingOut) {
     return (
       <div className="flex min-h-[60vh] items-center justify-center bg-[#F8FAFC]">
-        <CircularProgress />
+        <div className="h-10 w-10 animate-spin rounded-full border-2 border-slate-200 border-t-[#1F5FD6]" />
       </div>
     );
   }
@@ -241,8 +240,8 @@ export const ProfilePageMainContent = ({ tab, view }: Props) => {
                 <div className="min-w-0">
                   {showSkeleton ? (
                     <>
-                      <Skeleton variant="text" width={130} height={24} />
-                      <Skeleton variant="text" width={170} height={20} />
+                      <div className="mb-1 h-6 w-[130px] animate-pulse rounded bg-slate-200" />
+                      <div className="h-5 w-[170px] animate-pulse rounded bg-slate-200" />
                     </>
                   ) : error ? (
                     <p className="text-sm font-semibold text-red-500">

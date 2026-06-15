@@ -1,28 +1,22 @@
 import service from "../../services";
+import { MembershipsProvider } from "./types";
+import type { AuthProps } from "@/providers/types";
 
-export async function companyMemberships(props?: any): Promise<any> {
+type CreateProps = AuthProps & { data: MembershipsProvider.CreateMutationPayload };
+
+export async function companyMemberships(props?: AuthProps) {
   return service({
     method: "GET",
     url: `/api/memberships`,
-    headers: {
-      //@ts-ignore
-      Authorization: props.authToken,
-    },
+    headers: { Authorization: props?.authToken ?? "" },
   });
 }
 
-// Create
-export async function create(
-  props: any,
-  authToken?: string
-){
+export async function create(props: CreateProps) {
   return service({
     method: "POST",
     url: `/api/memberships`,
-    body: props.data,
-    headers: {
-      //@ts-ignore
-      Authorization: props.authToken,
-    },
+    body: props.data as Record<string, unknown>,
+    headers: { Authorization: props.authToken ?? "" },
   });
 }

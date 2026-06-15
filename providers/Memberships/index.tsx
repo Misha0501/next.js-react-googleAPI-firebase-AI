@@ -12,7 +12,7 @@ const KEY = "companyMemberships";
 
 // RecentlyViewed Listings
 export function useCompanyMemberships(
-  props: any
+  props: MembershipsProvider.CreateProps,
 ): UseQueryResult<Membership> {
   return useQuery(`${KEY} | Items`, () => api.companyMemberships(props), {
     enabled: !!props?.authToken,

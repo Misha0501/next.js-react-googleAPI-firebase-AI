@@ -1,41 +1,35 @@
 import service from "../../services";
 import { SavedListingsProvider } from "@/providers/SavedListings/types";
 import { SavedListing } from "@/types";
+import type { AuthProps } from "@/providers/types";
+
+type CreateProps = AuthProps & { data: SavedListingsProvider.CreateMutationPayload };
+type DeleteProps = AuthProps & { data: SavedListingsProvider.DeleteMutationPayload };
 
 export async function savedListings(
-  props?: any,
+  props?: AuthProps,
 ): Promise<SavedListingsProvider.ReadResponse> {
-  return service({
+  return service<SavedListingsProvider.ReadResponse>({
     method: "GET",
     url: `/api/savedListings`,
-    headers: {
-      //@ts-ignore
-      Authorization: props.authToken,
-    },
+    headers: { Authorization: props?.authToken ?? "" },
   });
 }
 
-export async function create(props: any): Promise<SavedListing> {
-  return service({
+export async function create(props: CreateProps): Promise<SavedListing> {
+  return service<SavedListing>({
     method: "POST",
     url: `/api/savedListings`,
-    body: props.data,
-    headers: {
-      //@ts-ignore
-      Authorization: props.authToken,
-    },
+    body: props.data as Record<string, unknown>,
+    headers: { Authorization: props.authToken ?? "" },
   });
 }
 
-export async function deleteItem(props: any): Promise<null> {
-  return service({
+export async function deleteItem(props: DeleteProps): Promise<null> {
+  return service<null>({
     method: "DELETE",
     parseJSON: false,
     url: `/api/savedListings/${props.data.id}`,
-    body: props.data,
-    headers: {
-      //@ts-ignore
-      Authorization: props.authToken,
-    },
+    headers: { Authorization: props.authToken ?? "" },
   });
 }

@@ -8,26 +8,34 @@ import {
   UPKEEP_TYPES,
   PROPERTY_TYPES,
 } from "../constants";
+import type {
+  CurrencyType,
+  HeatingType,
+  InteriorType,
+  ListingType,
+  PropertyType,
+  UpkeepType,
+} from "@/types";
 const tenYearsFromNow = new Date();
 tenYearsFromNow.setFullYear(tenYearsFromNow.getFullYear() + 10);
 
 export const listingSchema = z.object({
-  listingType: z.enum(LISTING_TYPES as any),
+  listingType: z.enum(LISTING_TYPES as [ListingType, ...ListingType[]]),
   interiorType: z
-    .enum(INTERIOR_TYPES as any)
+    .enum(INTERIOR_TYPES as [InteriorType, ...InteriorType[]])
     .optional()
     .nullable(),
   propertyType: z
-    .enum(PROPERTY_TYPES as any)
+    .enum(PROPERTY_TYPES as [PropertyType, ...PropertyType[]])
     .optional()
     .nullable(),
   upkeepType: z
-    .enum(UPKEEP_TYPES as any)
+    .enum(UPKEEP_TYPES as [UpkeepType, ...UpkeepType[]])
     .optional()
     .nullable(),
   price: z.number().min(0),
   currency: z
-    .enum(CURRENCIES as any)
+    .enum(CURRENCIES as [CurrencyType, ...CurrencyType[]])
     .optional()
     .nullable(),
   address: z
@@ -137,18 +145,18 @@ export const listingSchema = z.object({
   numberOfFloorsProperty: z.number().optional().nullable(),
   numberOfFloorsCommon: z.number().optional().nullable(),
   heatingType: z
-    .enum(HEATING_TYPES as any)
+    .enum(HEATING_TYPES as [HeatingType, ...HeatingType[]])
     .optional()
     .nullable(),
 });
 
 export const listingSchemaPutRequest = listingSchema.extend({
   id: z.number(),
-  listingType: z.enum(LISTING_TYPES as any).optional(),
-  interiorType: z.enum(INTERIOR_TYPES as any).optional(),
-  propertyType: z.enum(PROPERTY_TYPES as any).optional(),
+  listingType: z.enum(LISTING_TYPES as [ListingType, ...ListingType[]]).optional(),
+  interiorType: z.enum(INTERIOR_TYPES as [InteriorType, ...InteriorType[]]).optional(),
+  propertyType: z.enum(PROPERTY_TYPES as [PropertyType, ...PropertyType[]]).optional(),
   price: z.number().min(0).optional(),
-  currency: z.enum(CURRENCIES as any).optional(),
+  currency: z.enum(CURRENCIES as [CurrencyType, ...CurrencyType[]]).optional(),
   address: z
     .object({
       id: z.number(),
@@ -163,7 +171,7 @@ export const listingSchemaPutRequest = listingSchema.extend({
       administrativeAreaLevelOne: z.string().nullable().optional(),
     })
     .optional(),
-  upkeepType: z.enum(UPKEEP_TYPES as any).optional(),
+  upkeepType: z.enum(UPKEEP_TYPES as [UpkeepType, ...UpkeepType[]]).optional(),
   images: z
     .array(
       z.object({
@@ -218,7 +226,7 @@ export const listingsSearchParamSchema = z.object({
     .max(HEATING_TYPES.length)
     .refine(
       (userInputArray) =>
-        userInputArray.every((el) => HEATING_TYPES.includes(el as any)),
+        userInputArray.every((el) => HEATING_TYPES.includes(el as HeatingType)),
       {
         message: `Invalid heating type input. Allowed values: ${HEATING_TYPES}`,
       },
@@ -229,7 +237,7 @@ export const listingsSearchParamSchema = z.object({
     .max(CURRENCIES.length)
     .refine(
       (userInputArray) =>
-        userInputArray.every((el) => CURRENCIES.includes(el as any)),
+        userInputArray.every((el) => CURRENCIES.includes(el as CurrencyType)),
       { message: `Invalid currency input. Allowed values: ${CURRENCIES}` },
     )
     .optional(),
@@ -238,7 +246,7 @@ export const listingsSearchParamSchema = z.object({
     .max(LISTING_TYPES.length)
     .refine(
       (userInputArray) =>
-        userInputArray.every((el) => LISTING_TYPES.includes(el as any)),
+        userInputArray.every((el) => LISTING_TYPES.includes(el as ListingType)),
       { message: `Invalid offer type input. Allowed values: ${LISTING_TYPES}` },
     )
     .optional(),
@@ -247,7 +255,7 @@ export const listingsSearchParamSchema = z.object({
     .max(INTERIOR_TYPES.length)
     .refine(
       (userInputArray) =>
-        userInputArray.every((el) => INTERIOR_TYPES.includes(el as any)),
+        userInputArray.every((el) => INTERIOR_TYPES.includes(el as InteriorType)),
       {
         message: `Invalid interior type input. Allowed values: ${INTERIOR_TYPES}`,
       },
@@ -258,7 +266,7 @@ export const listingsSearchParamSchema = z.object({
     .max(PROPERTY_TYPES.length)
     .refine(
       (userInputArray) =>
-        userInputArray.every((el) => PROPERTY_TYPES.includes(el as any)),
+        userInputArray.every((el) => PROPERTY_TYPES.includes(el as PropertyType)),
       {
         message: `Invalid interior type input. Allowed values: ${PROPERTY_TYPES}`,
       },
@@ -269,7 +277,7 @@ export const listingsSearchParamSchema = z.object({
     .max(UPKEEP_TYPES.length)
     .refine(
       (userInputArray) =>
-        userInputArray.every((el) => UPKEEP_TYPES.includes(el as any)),
+        userInputArray.every((el) => UPKEEP_TYPES.includes(el as UpkeepType)),
       { message: `Invalid upkeep type input. Allowed values: ${UPKEEP_TYPES}` },
     )
     .optional(),
@@ -315,3 +323,5 @@ export const listingsSearchParamSchema = z.object({
     )
     .optional(),
 });
+
+export type ListingSearchParams = z.infer<typeof listingsSearchParamSchema>;

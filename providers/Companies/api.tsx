@@ -1,29 +1,25 @@
 import service from "@/services";
+import { CompanyProvider } from "./types";
+import type { AuthProps } from "@/providers/types";
 
-export async function create(props: any, authToken?: string) {
+type CreateProps = AuthProps & { data: CompanyProvider.CreateMutation };
+type UpdateProps = AuthProps & { data: CompanyProvider.UpdateMutation };
+
+export async function create(props: CreateProps) {
   return service({
     method: "POST",
     url: `/api/companies`,
-    body: props.data,
-    headers: {
-      //@ts-ignore
-      Authorization: props.authToken,
-    },
+    body: props.data as Record<string, unknown>,
+    headers: { Authorization: props.authToken ?? "" },
   });
 }
 
-export async function update(
-  props: any,
-  authToken?: string
-) {
+export async function update(props: UpdateProps) {
   return service({
     method: "PUT",
     url: `/api/companies`,
-    body: props.data,
-    headers: {
-      //@ts-ignore
-      Authorization: props.authToken,
-    },
+    body: props.data as Record<string, unknown>,
+    headers: { Authorization: props.authToken ?? "" },
   });
 }
 

@@ -91,7 +91,7 @@ export async function PUT(req: Request) {
         401,
       );
 
-    let transactions: any[] = [];
+    let transactions: Prisma.PrismaPromise<unknown>[] = [];
 
     if (address) {
       transactions.push(

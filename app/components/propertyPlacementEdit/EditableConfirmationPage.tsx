@@ -32,8 +32,7 @@ function EditableConfirmationPage({
       <div className="detail_single_box">
         <div className="flex justify-between">
           <p className={"font-bold text-lg mb-2"}>Renting or Selling</p>
-          {/* <Icon icon={PencilSquareIcon} /> */}
-        </div>
+                  </div>
         <div className="max-w-lg">
           <PropertyPlacementRadioButtons
             value={formik.values.listingType}
@@ -47,11 +46,9 @@ function EditableConfirmationPage({
       <div className="detail_single_box flex gap-2 flex-col">
         <div className="flex justify-between">
           <p className={"font-bold text-lg mb-2"}>Property type</p>
-          {/* <Icon icon={PencilSquareIcon} /> */}
-        </div>
+                  </div>
         <div className="max-w-lg">
           <Select
-            // defaultValue={formik.values.propertyType}
             value={formik.values.propertyType}
             id="propertyType"
             onChange={(e) => formik.setFieldValue("propertyType", e, true)}
@@ -338,8 +335,7 @@ function EditableConfirmationPage({
           <div className="detail_single_box flex gap-2 flex-col">
             <div className="flex justify-between">
               <p className={"font-bold text-lg mb-2"}>Interior type</p>
-              {/* <Icon icon={PencilSquareIcon} /> */}
-            </div>
+                          </div>
             <div className="max-w-lg">
               <SingleSelectRadioButton
                 onBlur={formik.handleBlur}
@@ -355,8 +351,7 @@ function EditableConfirmationPage({
           <div className="detail_single_box flex gap-2 flex-col">
             <div className="flex justify-between">
               <p className={"font-bold text-lg mb-2"}>Property condition</p>
-              {/* <Icon icon={PencilSquareIcon} /> */}
-            </div>
+                          </div>
             <div className="max-w-lg">
               <SingleSelectRadioButton
                 value={formik.values.upkeepType}
@@ -370,8 +365,7 @@ function EditableConfirmationPage({
           <div className="detail_single_box flex gap-2 flex-col">
             <div className="flex justify-between">
               <p className={"font-bold text-lg mb-2"}>Heating type</p>
-              {/* <Icon icon={PencilSquareIcon} /> */}
-            </div>
+                          </div>
             <div className="max-w-lg">
               <SingleSelectRadioButton
                 value={formik.values.heatingType}
@@ -464,8 +458,7 @@ function EditableConfirmationPage({
       <Divider />
       <div className="detail_single_box flex flex-col gap-6">
         <p className={"font-bold text-lg mb-2"}>Property description</p>
-        {/* <Icon icon={PencilSquareIcon} /> */}
-
+        
         <div className=" flex flex-col gap-4">
           <span className="font-bold text-lg">Description</span>
 

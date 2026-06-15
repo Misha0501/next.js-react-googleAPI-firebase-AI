@@ -1,31 +1,35 @@
 import { useEffect, useState } from 'react';
 import { loadJS } from "@/app/lib/loadJS";
 
-let googleInstance: any;
+type GoogleInstance = typeof google;
 
-export const useGooglePlaces = (): [any | undefined, boolean, string | null] => {
-  const [google, setGoogle] = useState<any>(googleInstance);
+let googleInstance: GoogleInstance | undefined;
+
+export const useGooglePlaces = (): [GoogleInstance | undefined, boolean, string | null] => {
+  const [googleState, setGoogleState] = useState<GoogleInstance | undefined>(googleInstance);
   const [loading, setLoading] = useState(!googleInstance);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (googleInstance) return;
 
-    if ((window as any).google?.maps?.places?.AutocompleteSuggestion) {
-      googleInstance = (window as any).google;
-      setGoogle(googleInstance);
+    const win = window as Window & { google?: GoogleInstance; initGoogleServices?: (...args: unknown[]) => Promise<void> };
+
+    if (win.google?.maps?.places?.AutocompleteSuggestion) {
+      googleInstance = win.google;
+      setGoogleState(googleInstance);
       setLoading(false);
       return;
     }
 
     // Maps JS already loaded (e.g. by GoogleMap.tsx) but places not imported yet.
     // importLibrary directly rather than waiting for a callback that already fired.
-    if ((window as any).google?.maps) {
-      (window as any).google.maps.importLibrary("places").then(() => {
-        googleInstance = (window as any).google;
-        setGoogle(googleInstance);
+    if (win.google?.maps) {
+      win.google.maps.importLibrary("places").then(() => {
+        googleInstance = win.google;
+        setGoogleState(googleInstance);
         setLoading(false);
-      }).catch((err: any) => {
+      }).catch((err: unknown) => {
         console.error("Failed to import Places library:", err);
         setError("Something went wrong please try again later");
         setLoading(false);
@@ -35,12 +39,12 @@ export const useGooglePlaces = (): [any | undefined, boolean, string | null] => 
 
     // Script not yet loaded — chain onto any existing callback so only one
     // script tag is ever injected per page.
-    const prev = (window as any).initGoogleServices;
-    (window as any).initGoogleServices = async () => {
+    const prev = win.initGoogleServices;
+    win.initGoogleServices = async () => {
       if (prev) await prev();
-      await (window as any).google.maps.importLibrary("places");
-      googleInstance = (window as any).google;
-      setGoogle(googleInstance);
+      await win.google!.maps.importLibrary("places");
+      googleInstance = win.google;
+      setGoogleState(googleInstance);
       setLoading(false);
     };
 
@@ -57,5 +61,5 @@ export const useGooglePlaces = (): [any | undefined, boolean, string | null] => 
     }
   }, []);
 
-  return [google, loading, error];
+  return [googleState, loading, error];
 };

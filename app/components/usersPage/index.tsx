@@ -1,12 +1,11 @@
 "use client";
 
 import React, { useMemo } from "react";
-import { ListingContactAgentForm } from "../ListingContactAgentForm";
-import GoogleMap from "../GoogleMap";
+import { ListingContactAgentForm } from "../listingDetailPage/ListingContactAgentForm";
+import GoogleMap from "../shared/GoogleMap";
 import { ListingItem } from "../ListingItem";
 import { useUserDetail } from "@/providers/Users";
 import { useParams, useRouter } from "next/navigation";
-import { CircularProgress } from "@mui/material";
 import FloatingContactBar from "../listingDetailPage/FloatingContactBar";
 import {
   EnvelopeIcon,
@@ -71,7 +70,7 @@ function UserPageMain() {
     <div className="pb-32">
       {userDetail?.isFetching ? (
         <div className="flex items-center justify-center mt-20">
-          <CircularProgress />
+          <div className="h-10 w-10 animate-spin rounded-full border-2 border-slate-200 border-t-[#1F5FD6]" />
         </div>
       ) : (
         <>

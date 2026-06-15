@@ -9,7 +9,7 @@ import { ResponseError } from "@/app/lib/classes/ResponseError";
  * @param {any} error - The error object thrown during API operations.
  * @returns {Response} - The constructed response object based on the error.
  */
-export const handleAPIError = (error: any): Response => {
+export const handleAPIError = (error: unknown): Response => {
   console.error(error);
   if (error instanceof z.ZodError) {
     return new Response(error.issues.map((i) => i.message).join("; "), { status: 422 });
@@ -17,7 +17,13 @@ export const handleAPIError = (error: any): Response => {
   if (error instanceof ResponseError) {
     return new Response(error.message, { status: error.status });
   }
-  if (error.errorInfo && error.errorInfo.code) {
+  if (
+    typeof error === "object" &&
+    error !== null &&
+    "errorInfo" in error &&
+    typeof (error as { errorInfo?: unknown }).errorInfo === "object" &&
+    (error as { errorInfo: { code?: unknown } }).errorInfo?.code
+  ) {
     return new Response(
       "Your auth token is invalid or it has expired. Get a new auth token and try again.",
       { status: 400 },

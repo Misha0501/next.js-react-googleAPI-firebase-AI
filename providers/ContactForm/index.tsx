@@ -4,8 +4,8 @@ import { ContactFormProvider } from "@/providers/ContactForm/types";
 
 // Create
 export function useSendEmail(
-  props: any,
-): UseMutationResult<null, any, ContactFormProvider.CreateMutationPayload> {
+  props?: Record<string, never>,
+): UseMutationResult<null, Error, ContactFormProvider.CreateMutationPayload> {
   return useMutation((payload) => api.create({ ...props, data: payload }), {
     mutationKey: `Send Email`,
     retry: 0,

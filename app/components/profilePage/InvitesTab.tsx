@@ -1,6 +1,6 @@
 "use client";
 
-import React, { Fragment, useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useAuthContext } from "@/app/context/AuthContext";
 import {
   useCompanyMemberships,
@@ -12,12 +12,12 @@ import {
   useDeclineCompanyMembershipInvite,
   useDeleteCompanyMembershipInvite,
 } from "@/providers/CompanyMembershipInvites";
-import { Button, Select, SelectItem, TextInput } from "@tremor/react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
 import { CompanyMembershipInvite } from "@/types";
-import { Dialog, Transition } from "@headlessui/react";
+import { Modal } from "@/app/components/shared/Modal";
+import { formatDate } from "@/app/lib/formatDate";
 import { COMPANY_MEMBERSHIP_ROLE } from "../../lib/constants";
 import {
   CheckCircleIcon,
@@ -40,20 +40,6 @@ interface FormValues {
   applicationUserEmailReceiver: string;
   applicationUserRole: string;
 }
-
-const formatDate = (value?: string | null) => {
-  if (!value) return "-";
-
-  const date = new Date(value);
-
-  if (Number.isNaN(date.getTime())) return value;
-
-  return date.toLocaleDateString("en-GB", {
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-  });
-};
 
 const getInviteStatus = (invite: CompanyMembershipInvite) => {
   if (invite.accepted) {
@@ -264,53 +250,52 @@ export const InvitesTab = () => {
                 <EnvelopeIcon className="h-4 w-4 text-[#1F5FD6]" />
                 Receiver email
               </span>
-              <TextInput
-                value={formik.values.applicationUserEmailReceiver}
-                onChange={(event) => {
-                  formik.setFieldValue(
-                    "applicationUserEmailReceiver",
-                    event.target.value,
-                    true,
-                  );
-                }}
-                errorMessage={
+              <input
+                type="email"
+                placeholder="colleague@company.com"
+                className={`block w-full rounded-xl border px-3 py-2.5 text-sm text-[#2D3648] placeholder:text-slate-400 focus:outline-none focus:ring-1 ${
                   formik.errors.applicationUserEmailReceiver &&
                   formik.touched.applicationUserEmailReceiver
-                    ? formik.errors.applicationUserEmailReceiver
-                    : undefined
-                }
-                error={Boolean(
-                  formik.errors.applicationUserEmailReceiver &&
-                  formik.touched.applicationUserEmailReceiver,
-                )}
+                    ? "border-rose-400 focus:border-rose-500 focus:ring-rose-500"
+                    : "border-slate-200 focus:border-[#1F5FD6] focus:ring-[#1F5FD6]"
+                }`}
+                {...formik.getFieldProps("applicationUserEmailReceiver")}
               />
+              {formik.errors.applicationUserEmailReceiver &&
+                formik.touched.applicationUserEmailReceiver && (
+                  <p className="mt-1.5 text-sm text-rose-600">
+                    {formik.errors.applicationUserEmailReceiver}
+                  </p>
+                )}
             </label>
 
             <label className="block">
               <span className="mb-2 block text-sm font-semibold text-[#2D3648]">
                 Role
               </span>
-              <Select
-                onBlur={formik.handleBlur}
+              <select
                 id="applicationUserRole"
-                onChange={(value) =>
-                  formik.setFieldValue("applicationUserRole", value, true)
-                }
-                className="text-sm"
-                value={formik.values.applicationUserRole}
+                className={`block w-full rounded-xl border px-3 py-2.5 text-sm text-[#2D3648] focus:outline-none focus:ring-1 ${
+                  formik.errors.applicationUserRole &&
+                  formik.touched.applicationUserRole
+                    ? "border-rose-400 focus:border-rose-500 focus:ring-rose-500"
+                    : "border-slate-200 focus:border-[#1F5FD6] focus:ring-[#1F5FD6]"
+                }`}
+                {...formik.getFieldProps("applicationUserRole")}
               >
+                <option value="">Select role...</option>
                 {COMPANY_MEMBERSHIP_ROLE.map((item, index) => (
-                  <SelectItem value={item} key={index}>
+                  <option value={item} key={index}>
                     {item}
-                  </SelectItem>
+                  </option>
                 ))}
-              </Select>
+              </select>
               {formik.errors.applicationUserRole &&
-              formik.touched.applicationUserRole ? (
-                <div className="mt-2 text-sm text-rose-600">
-                  {formik.errors.applicationUserRole}
-                </div>
-              ) : null}
+                formik.touched.applicationUserRole && (
+                  <p className="mt-2 text-sm text-rose-600">
+                    {formik.errors.applicationUserRole}
+                  </p>
+                )}
             </label>
           </div>
 
@@ -321,15 +306,16 @@ export const InvitesTab = () => {
           )}
 
           <div className="flex justify-end border-t border-slate-100 px-5 py-5 sm:px-6">
-            <Button
+            <button
               type="submit"
               disabled={createCompanyMembershipInvite.isLoading}
-              icon={PaperAirplaneIcon}
+              className="inline-flex items-center gap-2 rounded-xl bg-[#1F5FD6] px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#184FB5] disabled:opacity-50"
             >
+              <PaperAirplaneIcon className="h-4 w-4" />
               {createCompanyMembershipInvite.isLoading
                 ? "Sending..."
                 : "Send invite"}
-            </Button>
+            </button>
           </div>
         </form>
       )}
@@ -413,15 +399,16 @@ export const InvitesTab = () => {
                                 <XCircleIcon className="h-4 w-4" />
                                 Decline
                               </button>
-                              <Button
-                                variant="primary"
-                                icon={CheckCircleIcon}
+                              <button
+                                type="button"
+                                className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#1F5FD6] px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#184FB5]"
                                 onClick={() =>
                                   acceptInvite(companyMembershipInvite)
                                 }
                               >
+                                <CheckCircleIcon className="h-4 w-4" />
                                 Accept
-                              </Button>
+                              </button>
                             </>
                           )}
                         </div>
@@ -470,65 +457,20 @@ export const InvitesTab = () => {
         </div>
       </section>
 
-      <Transition appear show={showModal} as={Fragment}>
-        <Dialog as="div" className="relative z-10" onClose={closeModal}>
-          <Transition.Child
-            as={Fragment}
-            enter="ease-out duration-300"
-            enterFrom="opacity-0"
-            enterTo="opacity-100"
-            leave="ease-in duration-200"
-            leaveFrom="opacity-100"
-            leaveTo="opacity-0"
-          >
-            <div className="fixed inset-0 bg-black bg-opacity-25" />
-          </Transition.Child>
-
-          <div className="fixed inset-0 overflow-y-auto">
-            <div className="flex min-h-full items-center justify-center p-4 text-center">
-              <Transition.Child
-                as={Fragment}
-                enter="ease-out duration-300"
-                enterFrom="opacity-0 scale-95"
-                enterTo="opacity-100 scale-100"
-                leave="ease-in duration-200"
-                leaveFrom="opacity-100 scale-100"
-                leaveTo="opacity-0 scale-95"
-              >
-                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-                  <Dialog.Title
-                    as="h3"
-                    className="text-lg font-semibold leading-6 text-[#2D3648]"
-                  >
-                    {inviteToDecline && "Decline this invitation?"}
-                    {inviteToDelete && "Delete this invitation?"}
-                  </Dialog.Title>
-                  <p className="mt-2 text-sm text-[#717D96]">
-                    This will update the invitation status for everyone
-                    involved.
-                  </p>
-                  <div className="mt-6 flex justify-end gap-3">
-                    <button
-                      type="button"
-                      className="inline-flex justify-center rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-[#2D3648] hover:bg-slate-50"
-                      onClick={closeModal}
-                    >
-                      Cancel
-                    </button>
-                    <button
-                      type="button"
-                      className="inline-flex justify-center rounded-xl border border-transparent bg-rose-600 px-4 py-2 text-sm font-semibold text-white hover:bg-rose-700"
-                      onClick={handleModalConfirm}
-                    >
-                      Confirm
-                    </button>
-                  </div>
-                </Dialog.Panel>
-              </Transition.Child>
-            </div>
-          </div>
-        </Dialog>
-      </Transition>
+      <Modal
+        show={showModal}
+        onClose={closeModal}
+        title={
+          inviteToDecline
+            ? "Decline this invitation?"
+            : "Delete this invitation?"
+        }
+        description="This will update the invitation status for everyone involved."
+        onCancelClick={closeModal}
+        confirmLabel="Confirm"
+        onConfirm={handleModalConfirm}
+        confirmDanger
+      />
     </div>
   );
 };

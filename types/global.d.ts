@@ -1,6 +1,6 @@
 declare global {
   interface Window {
-    initGoogleServices: () => void;
-    google: any;
+    initGoogleServices: (...args: unknown[]) => Promise<void>;
+    google?: typeof google;
   }
 }

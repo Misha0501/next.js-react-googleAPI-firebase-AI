@@ -157,7 +157,7 @@ export type ApplicationUser = {
   Listing: Listing[];
   SavedListing: SavedListing[];
   Membership: Membership[];
-  SavedSearch: any[];
+  SavedSearch: SavedSearch[];
   createdAt: string;
   displayName: string;
   email: string;

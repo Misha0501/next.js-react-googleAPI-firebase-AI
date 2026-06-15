@@ -1,6 +1,6 @@
 "use client";
 
-import { PROPERTY_TYPES } from "../lib/constants";
+import { PROPERTY_TYPES } from "@/app/lib/constants";
 import {
   BuildingOffice2Icon,
   CheckCircleIcon,
@@ -10,8 +10,8 @@ import {
 } from "@heroicons/react/24/outline";
 
 type Props = {
-  onChange: (value: any) => void;
-  selectedValues: any[];
+  onChange: (value: string[]) => void;
+  selectedValues: string[];
   id?: string;
 };
 

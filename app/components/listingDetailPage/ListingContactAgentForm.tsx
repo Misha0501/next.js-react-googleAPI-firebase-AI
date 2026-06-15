@@ -1,4 +1,4 @@
-import { ContactForm } from "@/app/components/ContactForm";
+import { ContactForm } from "@/app/components/shared/ContactForm";
 
 interface PropInterface {
   name: string;

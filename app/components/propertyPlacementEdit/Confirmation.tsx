@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import NextToConfirmationPage from "./NextToConfirmationPage";
 import { useCreateProperty } from "@/providers/Listing";
+import type { ListingProvider } from "@/providers/Listing/types";
 import { useAuthContext } from "@/app/context/AuthContext";
 import { Listing, ListingImage } from "@/types";
 import { toast } from "react-toastify";
@@ -106,7 +107,7 @@ function Confirmation({
       return;
     }
 
-    const payload: any = {
+    const payload: ListingProvider.CreateMutationPayload = {
       listingType: values.listingType || null,
       propertyType: values.propertyType || null,
       currency: values.currency,

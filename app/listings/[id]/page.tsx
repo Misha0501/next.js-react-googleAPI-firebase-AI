@@ -5,7 +5,7 @@ import { KeyHighlightsBar } from "@/app/components/listingDetailPage/KeyHighligh
 import { ListingMainInfo } from "@/app/components/listingDetailPage/ListingMainInfo";
 import { ListingDetailContent } from "@/app/components/listingDetailPage/ListingDetailContent";
 import { MapsSection } from "@/app/components/listingDetailPage/MapsSection";
-import { ListingAgentContactCard } from "@/app/components/ListingAgentContactCard";
+import { ListingAgentContactCard } from "@/app/components/listingDetailPage/ListingAgentContactCard";
 import { NeighbourhoodPriceCallout } from "@/app/components/listingDetailPage/NeighbourhoodPriceCallout";
 import { ListingTimeline } from "@/app/components/listingDetailPage/ListingTimeline";
 import { PriceChangeGraphSection } from "@/app/components/listingDetailPage/PriceChangeGraphSection";
@@ -14,6 +14,7 @@ import { ListingDetailRecentlyViewedFunctionality } from "@/app/components/listi
 import { ListigDetailContextProvider } from "@/app/context/ListingDetailContext";
 import { notFound } from "next/navigation";
 import { getFetchUrl } from "@/app/lib/getFetchUrl";
+import type { Listing } from "@/types";
 
 export const dynamic = "force-dynamic";
 
@@ -40,7 +41,7 @@ const fetchListing = async (listingId: number) => {
 async function ListingPage({ params }: Props) {
   const { id } = await params;
   const listingId = Number(id);
-  let listing: any = null;
+  let listing: Listing | null = null;
 
   if (!Number.isInteger(listingId) || listingId <= 0) {
     return notFound();

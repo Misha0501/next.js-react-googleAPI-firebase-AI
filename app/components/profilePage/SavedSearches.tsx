@@ -1,16 +1,16 @@
 "use client";
 
-import { Fragment, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { useAuthContext } from "@/app/context/AuthContext";
 import { SavedSearch } from "@/types";
-import { Dialog, Transition } from "@headlessui/react";
+import { Modal } from "@/app/components/shared/Modal";
 import {
   useDeleteSavedSearch,
   useSavedSearches,
-} from "@/providers/SavedSearaches";
+} from "@/providers/SavedSearches";
 import { toast } from "react-toastify";
-import { CircularProgress } from "@mui/material";
 import Link from "next/link";
+import { formatDate } from "@/app/lib/formatDate";
 import { formatEuroPriceRange } from "@/app/lib/formatPrice";
 import {
   AdjustmentsHorizontalIcon,
@@ -33,20 +33,6 @@ const formatRange = (
   if (!min && !max) return null;
 
   return `From ${min || "-"} to ${max || "-"}${suffix}`;
-};
-
-const formatDate = (value?: string | null) => {
-  if (!value) return "-";
-
-  const date = new Date(value);
-
-  if (Number.isNaN(date.getTime())) return value;
-
-  return date.toLocaleDateString("en-GB", {
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-  });
 };
 
 const getSearchTitle = (item: SavedSearch) => item.locality || "Bulgaria";
@@ -167,7 +153,7 @@ export const SavedSearches = () => {
     <div className="w-full">
       {(deleteSavedSearch.isLoading || isLoading) && (
         <div className="rounded-2xl border border-slate-200 bg-white px-5 py-4 shadow-sm">
-          <CircularProgress size={24} />
+          <div className="h-6 w-6 animate-spin rounded-full border-2 border-slate-200 border-t-[#1F5FD6]" />
         </div>
       )}
 
@@ -286,63 +272,16 @@ export const SavedSearches = () => {
         </div>
       )}
 
-      <Transition appear show={deleteConfirmationModalOpen} as={Fragment}>
-        <Dialog as="div" className="relative z-10" onClose={closeModal}>
-          <Transition.Child
-            as={Fragment}
-            enter="ease-out duration-300"
-            enterFrom="opacity-0"
-            enterTo="opacity-100"
-            leave="ease-in duration-200"
-            leaveFrom="opacity-100"
-            leaveTo="opacity-0"
-          >
-            <div className="fixed inset-0 bg-black bg-opacity-25" />
-          </Transition.Child>
-
-          <div className="fixed inset-0 overflow-y-auto">
-            <div className="flex min-h-full items-center justify-center p-4 text-center">
-              <Transition.Child
-                as={Fragment}
-                enter="ease-out duration-300"
-                enterFrom="opacity-0 scale-95"
-                enterTo="opacity-100 scale-100"
-                leave="ease-in duration-200"
-                leaveFrom="opacity-100 scale-100"
-                leaveTo="opacity-0 scale-95"
-              >
-                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-                  <Dialog.Title
-                    as="h3"
-                    className="text-lg font-semibold leading-6 text-[#2D3648]"
-                  >
-                    Delete this saved search?
-                  </Dialog.Title>
-                  <p className="mt-2 text-sm text-[#717D96]">
-                    You will stop seeing this search in your saved profile area.
-                  </p>
-                  <div className="mt-6 flex justify-end gap-3">
-                    <button
-                      type="button"
-                      className="inline-flex justify-center rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-[#2D3648] hover:bg-slate-50"
-                      onClick={closeModal}
-                    >
-                      Cancel
-                    </button>
-                    <button
-                      type="button"
-                      className="inline-flex justify-center rounded-xl border border-transparent bg-rose-600 px-4 py-2 text-sm font-semibold text-white hover:bg-rose-700"
-                      onClick={confirmDelete}
-                    >
-                      Yes, delete
-                    </button>
-                  </div>
-                </Dialog.Panel>
-              </Transition.Child>
-            </div>
-          </div>
-        </Dialog>
-      </Transition>
+      <Modal
+        show={deleteConfirmationModalOpen}
+        onClose={closeModal}
+        title="Delete this saved search?"
+        description="You will stop seeing this search in your saved profile area."
+        onCancelClick={closeModal}
+        confirmLabel="Yes, delete"
+        onConfirm={confirmDelete}
+        confirmDanger
+      />
     </div>
   );
 };

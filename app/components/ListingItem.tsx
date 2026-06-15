@@ -32,13 +32,12 @@ import {
   type KeyboardEvent,
   type ReactNode,
 } from "react";
-import { CircularProgress, Skeleton } from "@mui/material";
 import {
   formatEuroPrice,
   formatEuroPricePerSquareMeter,
 } from "@/app/lib/formatPrice";
 import { roundNumberTwoDecimal } from "@/app/lib/roundNumberTwoDecimal";
-import { Modal } from "@/app/components/Modal";
+import { Modal } from "@/app/components/shared/Modal";
 import {
   useCreateSavedListing,
   useDeleteSavedListing,
@@ -139,17 +138,17 @@ const pluralize = (value: number, singular: string, plural: string) => {
 export const ListingItemSkeleton = () => {
   return (
     <div className="h-fit overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-      <Skeleton animation="wave" variant="rectangular" height={242} />
+      <div className="h-[242px] w-full animate-pulse bg-slate-200" />
       <div className="flex min-h-[180px] justify-between gap-2 p-5">
         <div className="flex w-full flex-col">
           <div className="mb-4">
-            <Skeleton animation="wave" width={180} />
-            <Skeleton animation="wave" width={130} />
+            <div className="mb-2 h-5 w-[180px] animate-pulse rounded bg-slate-200" />
+            <div className="h-5 w-[130px] animate-pulse rounded bg-slate-200" />
           </div>
           <div className="flex flex-wrap gap-2">
-            <Skeleton animation="wave" width={130} height={34} />
-            <Skeleton animation="wave" width={120} height={34} />
-            <Skeleton animation="wave" width={150} height={34} />
+            <div className="h-[34px] w-[130px] animate-pulse rounded bg-slate-200" />
+            <div className="h-[34px] w-[120px] animate-pulse rounded bg-slate-200" />
+            <div className="h-[34px] w-[150px] animate-pulse rounded bg-slate-200" />
           </div>
         </div>
       </div>
@@ -512,7 +511,7 @@ export const ListingItem = ({
         className="group h-fit cursor-pointer animate-listing-card-enter overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition duration-300 hover:-translate-y-0.5 hover:border-[#CFE0FF] hover:shadow-[0_20px_45px_rgba(15,23,42,0.12)] focus:outline-none focus:ring-2 focus:ring-[#1F5FD6]/30 focus:ring-offset-2"
       >
         {isLoading ? (
-          <Skeleton animation="wave" variant="rectangular" height={242} />
+          <div className="h-[242px] w-full animate-pulse bg-slate-200" />
         ) : (
           <div className="image-wrapper relative h-[242px] w-full overflow-hidden bg-slate-100">
             <Image
@@ -583,7 +582,7 @@ export const ListingItem = ({
                     className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/70 bg-white/95 shadow-sm"
                     onClick={(event) => event.stopPropagation()}
                   >
-                    <CircularProgress size={18} />
+                    <div className="h-[18px] w-[18px] animate-spin rounded-full border-2 border-slate-200 border-t-[#1F5FD6]" />
                   </div>
                 )}
             </div>
@@ -602,7 +601,7 @@ export const ListingItem = ({
             <div className="mb-4">
               <div className="mb-2 flex flex-wrap items-baseline gap-x-2 gap-y-1">
                 {isLoading ? (
-                  <Skeleton animation="wave" width={170} />
+                  <div className="h-5 w-[170px] animate-pulse rounded bg-slate-200" />
                 ) : (
                   <>
                     <span className="text-2xl font-semibold tracking-tight text-[#2D3648]">
@@ -617,7 +616,7 @@ export const ListingItem = ({
                 )}
               </div>
               {isLoading ? (
-                <Skeleton animation="wave" width={140} />
+                <div className="h-5 w-[140px] animate-pulse rounded bg-slate-200" />
               ) : (
                 <>
                   <p className="truncate text-base font-semibold text-[#2D3648]">
@@ -636,7 +635,7 @@ export const ListingItem = ({
             </div>
             <div className="flex flex-wrap gap-2">
               {isLoading ? (
-                <Skeleton animation="wave" width={260} height={34} />
+                <div className="h-[34px] w-[260px] animate-pulse rounded bg-slate-200" />
               ) : (
                 <>
                   {visibleFeatures.map((feature) => (

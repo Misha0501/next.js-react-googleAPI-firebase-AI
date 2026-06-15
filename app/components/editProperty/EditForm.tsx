@@ -29,7 +29,7 @@ import {
   TagIcon,
 } from "@heroicons/react/24/outline";
 import { FormikProps } from "formik";
-import { ListingImage } from "@/types";
+import { Listing, ListingImage } from "@/types";
 
 export type EditPropertyValues = {
   listingType?: string;
@@ -351,7 +351,7 @@ const EditForm = ({ formik, addressId, id, loading }: EditFormProps) => {
     }
 
     const constructedYear = toPayloadNumber(formik.values.constructedYear);
-    const values: any = {
+    const values: Record<string, unknown> = {
       id,
       listingType: formik.values.listingType,
       propertyType: formik.values.propertyType,
@@ -398,7 +398,7 @@ const EditForm = ({ formik, addressId, id, loading }: EditFormProps) => {
     });
 
     try {
-      await updateProperty.mutateAsync(values);
+      await updateProperty.mutateAsync(values as Listing);
       toast.success("Property updated successfully");
       router.push("/profile/myProperties");
     } catch (error) {

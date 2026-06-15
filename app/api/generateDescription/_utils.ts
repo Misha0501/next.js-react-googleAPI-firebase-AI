@@ -7,7 +7,7 @@ import { ChatCompletion } from "openai/resources/chat/completions";
  * @param {any} parsedValues - The parsed values.
  * @returns {string} - Returns the generated message content.
  */
-export const generateUserMessageContent = (parsedValues: any): string => {
+export const generateUserMessageContent = (parsedValues: Record<string, unknown>): string => {
   return `Hi there, provide a description of a property for sale/rent (depending on the listingType). 
     Imagine you are the owner of the property. Try to include something about the location of the property. 
     The property data: ${JSON.stringify(parsedValues)})}`;

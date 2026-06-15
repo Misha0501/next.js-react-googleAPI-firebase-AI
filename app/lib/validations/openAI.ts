@@ -1,12 +1,13 @@
 import * as z from "zod";
 import {CURRENCIES, HEATING_TYPES, INTERIOR_TYPES, LISTING_TYPES, PROPERTY_TYPES, UPKEEP_TYPES} from "../constants";
+import type { CurrencyType, HeatingType, InteriorType, ListingType, PropertyType, UpkeepType } from "@/types";
 
 export const openAISchema = z.object({
-  listingType: z.enum(LISTING_TYPES as any).optional().nullable(),
-  interiorType: z.enum(INTERIOR_TYPES as any).optional().nullable(),
-  propertyType: z.enum(PROPERTY_TYPES as any).optional().nullable(),
+  listingType: z.enum(LISTING_TYPES as [ListingType, ...ListingType[]]).optional().nullable(),
+  interiorType: z.enum(INTERIOR_TYPES as [InteriorType, ...InteriorType[]]).optional().nullable(),
+  propertyType: z.enum(PROPERTY_TYPES as [PropertyType, ...PropertyType[]]).optional().nullable(),
   price: z.number().min(0).optional().nullable(),
-  currency: z.enum(CURRENCIES as any).optional().nullable(),
+  currency: z.enum(CURRENCIES as [CurrencyType, ...CurrencyType[]]).optional().nullable(),
   address: z
     .object({
       streetNumber: z.string().optional(),
@@ -20,7 +21,7 @@ export const openAISchema = z.object({
       administrativeAreaLevelOne: z.string().optional(),
     })
     .optional(),
-  upkeepType: z.enum(UPKEEP_TYPES as any).optional().nullable(),
+  upkeepType: z.enum(UPKEEP_TYPES as [UpkeepType, ...UpkeepType[]]).optional().nullable(),
   areaTotal: z
     .number()
     .max(1000000, {
@@ -68,5 +69,5 @@ export const openAISchema = z.object({
   floorNumber: z.number().optional().nullable(),
   numberOfFloorsProperty: z.number().optional().nullable(),
   numberOfFloorsCommon: z.number().optional().nullable(),
-  heatingType: z.enum(HEATING_TYPES as any).optional().nullable(),
+  heatingType: z.enum(HEATING_TYPES as [HeatingType, ...HeatingType[]]).optional().nullable(),
 });

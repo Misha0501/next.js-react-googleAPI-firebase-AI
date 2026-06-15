@@ -1,21 +1,24 @@
-"use client";
 import Link from "next/link";
-import { Button } from "@tremor/react";
 
 export default function NotFound() {
   return (
-    <div className={"container"}>
+    <div className="container">
       <div className="py-32 text-center">
-        <h2 className={"text-2xl mb-8"}>
+        <h2 className="mb-8 text-2xl">
           Oops we could not find the page you are looking for...
         </h2>
-        <div className="flex flex-col gap-4">
-          <Link href="/">
-            <Button>Go to home page</Button>
+        <div className="flex flex-col items-center gap-4">
+          <Link
+            href="/"
+            className="inline-flex items-center justify-center rounded-xl bg-[#1F5FD6] px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#184FB5]"
+          >
+            Go to home page
           </Link>
-
-          <Link href="/listings">
-            <Button>View all properties</Button>
+          <Link
+            href="/listings"
+            className="inline-flex items-center justify-center rounded-xl bg-[#1F5FD6] px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#184FB5]"
+          >
+            View all properties
           </Link>
         </div>
       </div>

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { ListingType } from "@/types";
-import Filters from "@/app/components/listingsPage/Filters";
+import Filters, { FilterValues } from "@/app/components/listingsPage/Filters";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
   AdjustmentsHorizontalIcon,
@@ -10,7 +10,7 @@ import {
 } from "@heroicons/react/24/outline";
 
 type Props = {
-  onParamsChange: (data: any) => void;
+  onParamsChange: (data: FilterValues) => void;
   onListingTypeChange: (listingType: ListingType) => void;
   locality?: string;
   showFiltersMobile: () => void;
@@ -23,8 +23,8 @@ export const ListingsPageFilters = ({
 }: Props) => {
   const params = useSearchParams();
   const router = useRouter();
-  const [listingType, setListingType] = useState<ListingType | any>(
-    params.get("listingType") || "SELL",
+  const [listingType, setListingType] = useState<ListingType>(
+    (params.get("listingType") as ListingType) || "SELL",
   );
 
   const defaultFilters = (type: ListingType) => ({
@@ -52,7 +52,7 @@ export const ListingsPageFilters = ({
     router.replace(`/listings?${qp.toString()}`);
   };
 
-  const onChange = (data: any) => {
+  const onChange = (data: FilterValues) => {
     onParamsChange(data);
     onListingTypeChange(listingType);
   };

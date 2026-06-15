@@ -8,9 +8,9 @@ import {
 
 type PropertyPlacementRadioButtonsProps = {
   options: string[];
-  onChange?: (item: any) => void;
+  onChange?: (item: string) => void;
   id: string;
-  value?: any;
+  value?: string;
   defaultValue?: string;
 };
 export default function PropertyPlacementRadioButtons({

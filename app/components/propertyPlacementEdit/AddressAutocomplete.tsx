@@ -66,7 +66,7 @@ export const AddressAutocomplete = ({
     };
   }, [inputValue, googleInstance]);
 
-  const handleSuggestionSelect = async (suggestion: any) => {
+  const handleSuggestionSelect = async (suggestion: google.maps.places.AutocompleteSuggestion) => {
     if (firstUpdate.current) firstUpdate.current = false;
 
     const place = suggestion.placePrediction.toPlace();

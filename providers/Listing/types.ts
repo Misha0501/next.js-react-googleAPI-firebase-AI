@@ -26,7 +26,23 @@ export namespace ListingProvider {
   };
   export interface ListingAPIPayload extends ListingsProps {}
 
-  export type CreateProps = {};
+  export type ListingsResponse = {
+    results: Listing[];
+    total: number;
+  };
+
+  export type DetailProps = {
+    id: number | string;
+  };
+
+  export type DeleteProps = {
+    authToken?: string | null;
+    data: { id: number };
+  };
+
+  export type CreateProps = {
+    authToken?: string | null;
+  };
 
   export type CreateResponse = {};
 

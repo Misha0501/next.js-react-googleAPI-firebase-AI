@@ -1,14 +1,14 @@
 import service from "../../services";
+import { ListingsImagesProvider } from "./types";
+import type { AuthProps } from "@/providers/types";
 
-export async function deleteItem(props: any) {
+type DeleteProps = AuthProps & { data: ListingsImagesProvider.DeleteMutationProps };
+
+export async function deleteItem(props: DeleteProps) {
   return service({
     method: "DELETE",
     parseJSON: false,
     url: `/api/images/${props.data.id}`,
-    body: props.data,
-    headers: {
-      //@ts-ignore
-      Authorization: props.authToken,
-    },
+    headers: { Authorization: props.authToken ?? "" },
   });
 }

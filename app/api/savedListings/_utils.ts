@@ -87,7 +87,7 @@ export const fetchSavedListing = async (id: number): Promise<any> => {
  */
 export const validateUserAuthorization = (
   applicationUserId: number,
-  savedListing: any,
+  savedListing: { applicationUserId: number },
 ): void => {
   if (applicationUserId !== savedListing.applicationUserId) {
     throw new ResponseError("You aren't allowed to change this property", 401);

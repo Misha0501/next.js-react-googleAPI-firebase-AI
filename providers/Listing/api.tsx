@@ -4,7 +4,7 @@ import { ListingProvider } from "@/providers/Listing/types";
 
 export async function listing(
   props?: ListingProvider.ListingAPIPayload,
-): Promise<any> {
+): Promise<ListingProvider.ListingsResponse> {
   return service({
     method: "GET",
     url: `/api/listings`,
@@ -13,7 +13,7 @@ export async function listing(
 }
 
 export async function listingDetailPage(
-  props?: any
+  props?: ListingProvider.DetailProps,
 ): Promise<Listing> {
   return service({
     method: "GET",
@@ -29,8 +29,7 @@ export async function create(
     url: `/api/listings`,
     body: props.data,
     headers: {
-      //@ts-ignore
-      Authorization: props.authToken,
+      Authorization: props.authToken ?? "",
     },
   });
 }
@@ -43,22 +42,19 @@ export async function updateProperty(
     url: `/api/listings`,
     body: props.data,
     headers: {
-      //@ts-ignore
-      Authorization: props.authToken,
+      Authorization: props.authToken ?? "",
     },
   });
 }
 
-
-export async function deleteItem(props: any) {
+export async function deleteItem(props: ListingProvider.DeleteProps): Promise<null> {
   return service({
     method: "DELETE",
     parseJSON: false,
     url: `/api/listings/${props.data.id}`,
     body: props.data,
     headers: {
-      //@ts-ignore
-      Authorization: props.authToken,
+      Authorization: props.authToken ?? "",
     },
   });
 }

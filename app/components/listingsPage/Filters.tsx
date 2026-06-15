@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { PropertyTypeFilter } from "@/app/components/PropertyTypeFilter";
+import { PropertyTypeFilter } from "@/app/components/shared/PropertyTypeFilter";
 import {
   areaLandMaxOptions,
   areaLandMinOptions,
@@ -19,7 +19,7 @@ import {
   priceSellMinOptions,
 } from "@/app/lib/constants/filters";
 import { FromToFilter } from "./FromToFilter";
-import { RadioGroupCustom } from "../RadioGroupCustom";
+import { RadioGroupCustom } from "../shared/RadioGroupCustom";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { formatEuroPrice } from "@/app/lib/formatPrice";
 import {
@@ -68,13 +68,32 @@ const isActiveMax = (value?: string | number) =>
 const isActiveListedSince = (value?: string | number) =>
   value !== undefined && value !== 0 && value !== "0";
 
-export function Filters({ onParamsChange, listingType, locality }: any) {
+export type RangeValue = string | number | undefined;
+
+export type FilterValues = {
+  listingType: string | undefined;
+  propertyType: string[];
+  priceRange: { min: RangeValue; max: RangeValue };
+  livingAreaRange: { min: RangeValue; max: RangeValue };
+  areaTotal: { min: RangeValue; max: RangeValue };
+  roomRange: { min: RangeValue; max: RangeValue };
+  bedroomRange: { min: RangeValue; max: RangeValue };
+  listedSince: number | undefined;
+};
+
+type FiltersProps = {
+  onParamsChange: (data: FilterValues) => void;
+  listingType: string;
+  locality: string;
+};
+
+export function Filters({ onParamsChange, listingType, locality }: FiltersProps) {
   const pathname = usePathname();
   const router = useRouter();
   const urlParams = useSearchParams();
 
-  const [filterValues, setFilterValues] = useState(() => {
-    let propertyType: any[] = [];
+  const [filterValues, setFilterValues] = useState<FilterValues>(() => {
+    let propertyType: string[] = [];
     try {
       const raw = urlParams.get("propertyType");
       if (raw) propertyType = JSON.parse(raw);
@@ -225,49 +244,49 @@ export function Filters({ onParamsChange, listingType, locality }: any) {
   );
 
   const handlePropertyTypeChange = useCallback(
-    (values: any) => {
+    (values: string[]) => {
       applyFilters({ ...filterValues, propertyType: values });
     },
     [filterValues, applyFilters],
   );
 
   const handleLivingAreaChange = useCallback(
-    (min: any, max: any) => {
+    (min: RangeValue, max: RangeValue) => {
       applyFilters({ ...filterValues, livingAreaRange: { min, max } });
     },
     [filterValues, applyFilters],
   );
 
   const handleLivingLandChange = useCallback(
-    (min: any, max: any) => {
+    (min: RangeValue, max: RangeValue) => {
       applyFilters({ ...filterValues, areaTotal: { min, max } });
     },
     [filterValues, applyFilters],
   );
 
   const handlePriceChange = useCallback(
-    (min: any, max: any) => {
+    (min: RangeValue, max: RangeValue) => {
       applyFilters({ ...filterValues, priceRange: { min, max } });
     },
     [filterValues, applyFilters],
   );
 
   const handleRoomChange = useCallback(
-    (min: any, max: any) => {
+    (min: RangeValue, max: RangeValue) => {
       applyFilters({ ...filterValues, roomRange: { min, max } });
     },
     [filterValues, applyFilters],
   );
 
   const handleBedroomChange = useCallback(
-    (min: any, max: any) => {
+    (min: RangeValue, max: RangeValue) => {
       applyFilters({ ...filterValues, bedroomRange: { min, max } });
     },
     [filterValues, applyFilters],
   );
 
   const handleListedSince = useCallback(
-    (value: any) => {
+    (value: number) => {
       applyFilters({ ...filterValues, listedSince: value });
     },
     [filterValues, applyFilters],

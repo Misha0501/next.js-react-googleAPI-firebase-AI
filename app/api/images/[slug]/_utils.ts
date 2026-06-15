@@ -1,6 +1,6 @@
 import { prisma } from "@/app/lib/db/client";
 import { ResponseError } from "@/app/lib/classes/ResponseError";
-import { ApplicationUser } from "@/types";
+import { ApplicationUser, ListingImage } from "@/types";
 import { getApplicationUserCompanyId } from "@/app/lib/listing/getApplicationUserCompanyId";
 import { userAllowedManipulateListing } from "@/app/lib/listing/userAllowedManipulateListing";
 
@@ -13,7 +13,7 @@ import { userAllowedManipulateListing } from "@/app/lib/listing/userAllowedManip
  */
 export const fetchImageById = async (
   id: number,
-): Promise<{ image: any; listingId: number | undefined }> => {
+): Promise<{ image: ListingImage | null; listingId: number }> => {
   const image = await prisma.listingImage.findUnique({
     where: {
       id,

@@ -1,12 +1,12 @@
 "use client";
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import { setCookie } from "cookies-next";
-import { onAuthStateChanged } from "firebase/auth";
+import { onAuthStateChanged, type User } from "firebase/auth";
 import { firebaseClientAuth } from "@/app/lib/firebase/configClient";
 
 interface ContextProps {
   authToken: string | null;
-  user: any;
+  user: User | null;
 }
 
 export const AuthContext = createContext<ContextProps>({
@@ -16,9 +16,8 @@ export const AuthContext = createContext<ContextProps>({
 
 export const useAuthContext = () => useContext(AuthContext);
 
-// @ts-ignore
-export const AuthContextProvider = ({ children }) => {
-  const [user, setUser] = useState<any>(null);
+export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
+  const [user, setUser] = useState<User | null>(null);
   const [authToken, setAuthToken] = useState<string | null>(null);
 
   useEffect(() => {

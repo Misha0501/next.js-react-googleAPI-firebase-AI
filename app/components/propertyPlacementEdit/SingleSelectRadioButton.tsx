@@ -1,12 +1,13 @@
+import type { FocusEventHandler } from "react";
 import { RadioGroup } from "@headlessui/react";
 import { CheckCircleIcon } from "@heroicons/react/24/solid";
 
 type PropertyPlacementRadioButtonsProps = {
   options: string[];
-  onChange?: (item: any) => void;
+  onChange?: (item: string) => void;
   id: string;
-  value?: any;
-  onBlur?: any;
+  value?: string;
+  onBlur?: FocusEventHandler;
 };
 export default function SingleSelectRadioButton({
   options,

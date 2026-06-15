@@ -1,9 +1,3 @@
-/**
- * This is a generic service that can be used to make API calls.
- */
-// @ts-ignore
-import omit from "lodash/omit";
-import qs from "query-string";
 import { getFetchUrl } from "@/app/lib/getFetchUrl";
 
 interface IDefaultHeadersProps {
@@ -32,16 +26,16 @@ export function removeAuthenticationHeader(): void {
 interface IAPArgs {
   url: string;
   method: "GET" | "POST" | "PATCH" | "DELETE" | "PUT";
-  body?: any;
-  headers?: any;
-  queryParams?: Record<string, any>;
+  body?: Record<string, unknown> | FormData | null;
+  headers?: Record<string, string>;
+  queryParams?: Record<string, string | number | boolean | null | undefined>;
   noAuth?: boolean;
   formData?: boolean;
   baseDomain?: string;
   parseJSON?: boolean;
 }
 
-async function service(args: IAPArgs): Promise<any> {
+async function service<T = unknown>(args: IAPArgs): Promise<T> {
   const {
     url,
     method = "GET",
@@ -73,13 +67,19 @@ async function service(args: IAPArgs): Promise<any> {
     delete props.headers.Authorization;
   }
   if (formData) {
-    props.headers = omit(props.headers, ["Content-Type"]);
+    const { "Content-Type": _ct, ...rest } = props.headers;
+    props.headers = rest;
   }
 
   let fetchUrl = baseDomain || getFetchUrl(url);
 
   if (queryParams) {
-    fetchUrl = `${fetchUrl}?${qs.stringify(queryParams)}`;
+    const params = new URLSearchParams(
+      Object.entries(queryParams)
+        .filter(([, v]) => v != null)
+        .map(([k, v]) => [k, String(v)]),
+    );
+    fetchUrl = `${fetchUrl}?${params.toString()}`;
   }
 
   const data = await fetch(fetchUrl, props);

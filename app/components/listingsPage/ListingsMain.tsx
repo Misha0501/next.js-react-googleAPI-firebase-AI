@@ -5,12 +5,13 @@ import { usePropertyListing } from "@/providers/Listing";
 import { useAuthContext } from "@/app/context/AuthContext";
 import { Listing, SavedListing } from "@/types";
 import { NO_MAX } from "@/app/lib/constants/filters";
-import { Pagination } from "@mui/material";
+import type { FilterValues } from "./Filters";
+import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import { useSavedListings } from "@/providers/SavedListings";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 type Props = {
-  searchParams: any;
+  searchParams: FilterValues | null;
   listingType: string;
   locality: string;
 };
@@ -105,7 +106,7 @@ export const ListingsMain = ({
   );
 
   const handlePageChange = useCallback(
-    (event: React.ChangeEvent<unknown>, value: number) => {
+    (value: number) => {
       setPage(value);
       updatePageUrl(value);
     },
@@ -212,15 +213,51 @@ export const ListingsMain = ({
             ))}
       </div>
       {numberOfPages > 1 && (
-        <div className="mx-auto w-fit rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm">
-          <Pagination
-            shape="rounded"
-            count={numberOfPages}
-            page={page}
-            onChange={handlePageChange}
-            variant="outlined"
-            color="primary"
-          />
+        <div className="mx-auto flex w-fit items-center gap-1 rounded-xl border border-slate-200 bg-white px-3 py-2 shadow-sm">
+          <button
+            type="button"
+            disabled={page <= 1}
+            onClick={() => handlePageChange(page - 1)}
+            className="flex h-9 w-9 items-center justify-center rounded-lg text-[#4A5468] transition hover:bg-[#F1F5F9] disabled:opacity-40 disabled:cursor-not-allowed"
+            aria-label="Previous page"
+          >
+            <ChevronLeftIcon className="h-4 w-4" />
+          </button>
+          {Array.from({ length: numberOfPages }, (_, i) => i + 1)
+            .filter((p) => p === 1 || p === numberOfPages || Math.abs(p - page) <= 1)
+            .reduce<(number | "…")[]>((acc, p, idx, arr) => {
+              if (idx > 0 && p - (arr[idx - 1] as number) > 1) acc.push("…");
+              acc.push(p);
+              return acc;
+            }, [])
+            .map((p, idx) =>
+              p === "…" ? (
+                <span key={`ellipsis-${idx}`} className="flex h-9 w-9 items-center justify-center text-sm text-[#717D96]">…</span>
+              ) : (
+                <button
+                  key={p}
+                  type="button"
+                  onClick={() => handlePageChange(p as number)}
+                  className={`flex h-9 w-9 items-center justify-center rounded-lg text-sm font-semibold transition ${
+                    page === p
+                      ? "bg-[#1F5FD6] text-white"
+                      : "text-[#4A5468] hover:bg-[#F1F5F9]"
+                  }`}
+                  aria-current={page === p ? "page" : undefined}
+                >
+                  {p}
+                </button>
+              ),
+            )}
+          <button
+            type="button"
+            disabled={page >= numberOfPages}
+            onClick={() => handlePageChange(page + 1)}
+            className="flex h-9 w-9 items-center justify-center rounded-lg text-[#4A5468] transition hover:bg-[#F1F5F9] disabled:opacity-40 disabled:cursor-not-allowed"
+            aria-label="Next page"
+          >
+            <ChevronRightIcon className="h-4 w-4" />
+          </button>
         </div>
       )}
     </div>

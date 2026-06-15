@@ -5,13 +5,14 @@ import {
   UseQueryResult,
 } from "react-query";
 import * as api from "./api";
-import { SavedSearchesProvider } from "@/providers/SavedSearaches/types";
+import { SavedSearchesProvider } from "@/providers/SavedSearches/types";
 import { SavedSearch } from "@/types";
+import type { AuthProps } from "@/providers/types";
 
 const KEY = "SavedSearches";
 
 export function useSavedSearches(
-  props: any,
+  props: AuthProps,
 ): UseQueryResult<SavedSearchesProvider.ReadResponse> {
   return useQuery(`${KEY} | Items`, () => api.savedSearches(props), {
     enabled: !!props?.authToken,
@@ -20,10 +21,10 @@ export function useSavedSearches(
 }
 
 export function useCreateSavedSearches(
-  props: any,
+  props: AuthProps,
 ): UseMutationResult<
   SavedSearch,
-  any,
+  Error,
   SavedSearchesProvider.CreateMutationPayload
 > {
   return useMutation((payload) => api.create({ ...props, data: payload }), {
@@ -33,8 +34,8 @@ export function useCreateSavedSearches(
 }
 
 export function useDeleteSavedSearch(
-  props: any
-): UseMutationResult<null, any, SavedSearchesProvider.DeleteMutationPayload>{
+  props: AuthProps,
+): UseMutationResult<null, Error, SavedSearchesProvider.DeleteMutationPayload> {
   return useMutation((payload) => api.deleteItem({ ...props, data: payload }), {
     mutationKey: `${KEY} | Delete`,
     retry: 0,

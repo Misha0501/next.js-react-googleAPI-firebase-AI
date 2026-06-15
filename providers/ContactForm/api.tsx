@@ -1,9 +1,10 @@
 import service from "@/services";
+import { ContactFormProvider } from "./types";
 
-export async function create(props: any) {
+export async function create(props: { data: ContactFormProvider.CreateMutationPayload }) {
   return service({
     method: "POST",
     url: `/api/contactForm`,
-    body: props.data,
+    body: props.data as Record<string, unknown>,
   });
 }

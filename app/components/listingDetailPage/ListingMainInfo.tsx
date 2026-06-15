@@ -4,7 +4,7 @@ import {
   ArrowsPointingOutIcon,
   Squares2X2Icon,
 } from "@heroicons/react/24/outline";
-import { BedRoomIcon } from "@/public/Icons";
+import { BedRoomIcon } from "@/app/components/ui/Icons";
 import { formatToDayAndMonthWithName } from "@/app/lib/formatToDayAndMonthWithName";
 import Link from "next/link";
 import { ListingDetailSavedButton } from "@/app/components/listingDetailPage/ListingDetailSavedButton";

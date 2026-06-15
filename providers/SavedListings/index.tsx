@@ -7,12 +7,12 @@ import {
 import * as api from "./api";
 import { SavedListingsProvider } from "@/providers/SavedListings/types";
 import { SavedListing } from "@/types";
+import type { AuthProps } from "@/providers/types";
 
 const KEY = "SavedListings";
 
-// Saved listings results
 export function useSavedListings(
-  props: any,
+  props: AuthProps,
 ): UseQueryResult<SavedListingsProvider.ReadResponse> {
   return useQuery(`${KEY} | Items`, () => api.savedListings(props), {
     enabled: !!props?.authToken,
@@ -20,12 +20,11 @@ export function useSavedListings(
   });
 }
 
-// Create
 export function useCreateSavedListing(
-  props: any,
+  props: AuthProps,
 ): UseMutationResult<
   SavedListing,
-  any,
+  Error,
   SavedListingsProvider.CreateMutationPayload
 > {
   return useMutation((payload) => api.create({ ...props, data: payload }), {
@@ -34,10 +33,9 @@ export function useCreateSavedListing(
   });
 }
 
-// Delete
 export function useDeleteSavedListing(
-  props: any,
-): UseMutationResult<null, any, SavedListingsProvider.DeleteMutationPayload> {
+  props: AuthProps,
+): UseMutationResult<null, Error, SavedListingsProvider.DeleteMutationPayload> {
   return useMutation((payload) => api.deleteItem({ ...props, data: payload }), {
     mutationKey: `${KEY} | Delete`,
     retry: 0,

@@ -12,7 +12,7 @@ import { Listing } from "@/types";
 const KEY = "PropertyListing";
 
 export function getKeyFromProps(
-  props: any,
+  props: unknown,
   type: "LISTING" | "DETAIL",
 ): string[] {
   const key = [KEY, type];
@@ -23,14 +23,14 @@ export function getKeyFromProps(
 //Listing
 export function usePropertyListing(
   props: ListingProvider.ListingsProps,
-): UseQueryResult<any> {
+): UseQueryResult<ListingProvider.ListingsResponse> {
   return useQuery(getKeyFromProps(props, "LISTING"), () => api.listing(props), {
     retry: 0,
   });
 }
 
 //ListingDetailPage
-export function useListingDetailPage(props: any): UseQueryResult<Listing, any> {
+export function useListingDetailPage(props: ListingProvider.DetailProps): UseQueryResult<Listing, Error> {
   return useQuery(
     getKeyFromProps(props, "DETAIL"),
     () => api.listingDetailPage(props),
@@ -57,7 +57,7 @@ export function useCreateProperty(
 // Update
 export function useUpdateProperty(
   props: ListingProvider.UpdatePropertyProp,
-): UseMutationResult<Listing, any, Listing> {
+): UseMutationResult<Listing, Error, Listing> {
   const queryClient = useQueryClient();
   return useMutation(
     (payload) => api.updateProperty({ ...props, data: payload }),
@@ -75,7 +75,9 @@ export function useUpdateProperty(
 }
 
 // Delete
-export function useDeleteListing(props: any): UseMutationResult<null, any> {
+export function useDeleteListing(
+  props: ListingProvider.UpdatePropertyProp,
+): UseMutationResult<null, Error, ListingProvider.DeleteProps["data"]> {
   return useMutation((payload) => api.deleteItem({ ...props, data: payload }), {
     mutationKey: `${KEY} | Delete`,
     retry: 0,

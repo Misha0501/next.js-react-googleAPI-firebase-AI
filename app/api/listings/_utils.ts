@@ -1,6 +1,6 @@
 import { NextRequest } from "next/server";
 import { valuesFromSearchParams } from "@/app/lib/validations/valuesFromSearchParams";
-import { listingsSearchParamSchema } from "@/app/lib/validations/listing";
+import { listingsSearchParamSchema, type ListingSearchParams } from "@/app/lib/validations/listing";
 import {
   prismaQueryConditionsFromArray,
   prismaQueryConditionsFromMinMaxValidDateStringValue,
@@ -9,7 +9,7 @@ import {
 import { prisma } from "@/app/lib/db/client";
 import { getApplicationUserCompanyId } from "@/app/lib/listing/getApplicationUserCompanyId";
 import { userAllowedManipulateListing } from "@/app/lib/listing/userAllowedManipulateListing";
-import { ApplicationUser } from "@/types";
+import { ApplicationUser, Listing, ListingImage, Address } from "@/types";
 import { ResponseError } from "@/app/lib/classes/ResponseError";
 
 /**
@@ -18,7 +18,7 @@ import { ResponseError } from "@/app/lib/classes/ResponseError";
  * @param {NextRequest} req - The request object.
  * @returns {any} - The parsed and validated parameters.
  */
-export const extractParametersGET = (req: NextRequest): any => {
+export const extractParametersGET = (req: NextRequest): ListingSearchParams => {
   const url = new URL(req.url);
   const values = valuesFromSearchParams(url.searchParams);
   return listingsSearchParamSchema.parse(values);
@@ -30,7 +30,7 @@ export const extractParametersGET = (req: NextRequest): any => {
  * @param {any} params - The parameters to be used for creating the query conditions.
  * @returns - The Prisma query conditions.
  */
-export const buildPrismaQueryConditions = (params: any) => {
+export const buildPrismaQueryConditions = (params: ListingSearchParams) => {
   // Extract parameters
   const {
     locality,
@@ -64,8 +64,9 @@ export const buildPrismaQueryConditions = (params: any) => {
   } = params;
 
   // Prisma where object that that will be field with conditions
-  let prismaQueryConditions: any = {
-    AND: [],
+  const andConditions: Record<string, unknown>[] = [];
+  const prismaQueryConditions: Record<string, unknown> = {
+    AND: andConditions,
   };
 
   const heatingTypeWhereObj = prismaQueryConditionsFromArray(
@@ -164,7 +165,7 @@ export const buildPrismaQueryConditions = (params: any) => {
     };
   }
 
-  prismaQueryConditions.AND.push(
+  andConditions.push(
     heatingTypeWhereObj,
     listingTypeWhereObj,
     interiorTypeWhereObj,
@@ -206,7 +207,7 @@ export const buildPrismaOrderBy = (sortBy?: string) => {
  * @param {number} id - The listing id.
  * @param {any[]} images - Array of images to be updated.
  */
-export const handleImagesUpdate = async (id: number, images: any[]) => {
+export const handleImagesUpdate = async (id: number, images: Partial<ListingImage>[]) => {
   for (const image of images) {
     if (!image.id) {
       await prisma.listingImage.create({
@@ -227,7 +228,7 @@ export const handleImagesUpdate = async (id: number, images: any[]) => {
  * @param {number} id - The listing id.
  * @param {any} address - The address to be updated.
  */
-export const handleAddressUpdate = async (id: number, address: any) => {
+export const handleAddressUpdate = async (id: number, address: Partial<Address> | undefined) => {
   if (address) {
     await prisma.address.update({
       where: { id: address.id, listingId: id },
@@ -289,7 +290,7 @@ export const validateListingExistence = async (id: number) => {
  */
 export const ensureUserHasListingAccess = (
   applicationUser: ApplicationUser,
-  listing: any,
+  listing: Listing,
 ) => {
   const applicationUserId = applicationUser.id;
   const applicationUserCompanyId = getApplicationUserCompanyId(applicationUser);

@@ -2,7 +2,7 @@
 import { FormEvent, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import Autocomplete from "@/app/components/Autocomplete";
+import Autocomplete from "@/app/components/shared/Autocomplete";
 import {
   BuildingOffice2Icon,
   HomeModernIcon,

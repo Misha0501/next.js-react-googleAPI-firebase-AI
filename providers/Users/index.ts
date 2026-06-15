@@ -11,7 +11,7 @@ import { ApplicationUser } from "@/types";
 const KEY = "Users";
 
 export function getKeyFromProps(
-  props: any,
+  props: ApplicationUserProvider.GetProps,
   type: "OWN DATA" | "DETAIL",
 ): string[] {
   const key = [KEY, type];
@@ -45,8 +45,8 @@ export function useUserOwnData(
 }
 
 export function useUpdateUser(
-  props: any,
-): UseMutationResult<ApplicationUser, any, ApplicationUserProvider.UpdatePropsMutation> {
+  props: ApplicationUserProvider.GetProps,
+): UseMutationResult<ApplicationUser, Error, ApplicationUserProvider.UpdatePropsMutation> {
   return useMutation((payload) => api.update({ ...props, data: payload }), {
     mutationKey: `${KEY} | Update`,
     retry: 0,

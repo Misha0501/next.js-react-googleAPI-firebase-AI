@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { loginSchema } from "@/app/lib/validations/auth";
 import { z } from "zod";
-import { AxiosError } from "axios";
+import { ResponseError } from "@/app/lib/classes/ResponseError";
 import { authenticateWithFirebaseIdentityToolkit, setAuthCookiesForOneDay } from "@/app/api/login/_utils";
 
 /**
@@ -20,13 +20,13 @@ export async function POST(req: Request) {
       password,
     );
 
-    const authToken = response.data.idToken;
-    const refreshToken = response.data.refreshToken;
+    const authToken = response.idToken;
+    const refreshToken = response.refreshToken;
 
     await setAuthCookiesForOneDay(authToken, refreshToken);
 
     return NextResponse.json({
-      email: response.data.email,
+      email: response.email,
       authToken,
       refreshToken,
     });
@@ -35,15 +35,8 @@ export async function POST(req: Request) {
       return new Response(error.issues.map((i) => i.message).join("; "), { status: 422 });
     }
 
-    if (
-      error instanceof AxiosError &&
-      error.response &&
-      error.response.status === 400
-    ) {
-      // The request was made and the server responded with a status code 400
-      return new Response("Username or password is incorrect.", {
-        status: 400,
-      });
+    if (error instanceof ResponseError && error.status === 400) {
+      return new Response("Username or password is incorrect.", { status: 400 });
     }
 
     return new Response("Something went wrong please try again later", {

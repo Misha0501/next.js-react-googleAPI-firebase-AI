@@ -5,13 +5,13 @@
  * @param valueName
  */
 export const prismaQueryConditionsFromMinMaxValue = (minValue: number | null | undefined, maxValue: number | null | undefined, valueName: string) => {
-    let result: any = {};
+    const result: Record<string, unknown> = {};
 
     if (minValue == null && maxValue == null) return result;
 
     if (minValue != null) result[valueName] = {gte: minValue}
 
-    if (maxValue != null) result[valueName] = {...result[valueName], lte: maxValue}
+    if (maxValue != null) result[valueName] = {...result[valueName] as object, lte: maxValue}
 
     return result;
 }
@@ -23,13 +23,13 @@ export const prismaQueryConditionsFromMinMaxValue = (minValue: number | null | u
  * @param valueName
  */
 export const prismaQueryConditionsFromMinMaxValidDateStringValue = (minValue: string | null | undefined, maxValue: string | null | undefined, valueName: string) => {
-    let result: any = {};
+    const result: Record<string, unknown> = {};
 
     if (minValue == null && maxValue == null) return result;
 
     if (minValue != null) result[valueName] = {gte: new Date(minValue)}
 
-    if (maxValue != null) result[valueName] = {...result[valueName], lte: new Date(maxValue)}
+    if (maxValue != null) result[valueName] = {...result[valueName] as object, lte: new Date(maxValue)}
 
     return result;
 }
@@ -40,33 +40,23 @@ export const prismaQueryConditionsFromMinMaxValidDateStringValue = (minValue: st
  * @param singleValueName
  * @param isNumber
  */
-export const prismaQueryConditionsFromArray = (valueArray: any[] | undefined, singleValueName: string, isNumber = false) => {
+export const prismaQueryConditionsFromArray = (valueArray: (string | number)[] | undefined, singleValueName: string, isNumber = false) => {
     if (!valueArray) return {};
-    let result: any = {
-        OR: [],
-    };
+    const orConditions: Record<string, unknown>[] = [];
+    const result: Record<string, unknown> = { OR: orConditions };
     if (valueArray.length === 0) return result;
 
     if (valueArray.length === 1) {
-        if(isNumber) {
-            result[singleValueName] = Number(valueArray[0]);
-        } else {
-            result[singleValueName] = valueArray[0];
-        }
-        return result;
+        const singleResult: Record<string, unknown> = {};
+        singleResult[singleValueName] = isNumber ? Number(valueArray[0]) : valueArray[0];
+        return singleResult;
     }
 
-    if (valueArray.length > 1) {
-        valueArray.forEach((val: any) => {
-            const tempObj: any = {}
-            if(isNumber) {
-                tempObj[singleValueName] = Number(val);
-            } else {
-                tempObj[singleValueName] = val;
-            }
-            result.OR.push(tempObj);
-        })
-    }
+    valueArray.forEach((val) => {
+        const tempObj: Record<string, unknown> = {};
+        tempObj[singleValueName] = isNumber ? Number(val) : val;
+        orConditions.push(tempObj);
+    });
 
     return result;
 }

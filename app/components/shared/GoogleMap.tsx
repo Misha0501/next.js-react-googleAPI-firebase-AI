@@ -16,13 +16,14 @@ const GoogleMap = ({ location, "data-testid": dataTestId }: GoogleMapProps) => {
   useEffect(() => {
     const lat = Number(location.lat);
     const lng = Number(location.lng);
+    const win = window as Window & { google?: typeof google; initGoogleServices?: (...args: unknown[]) => Promise<void> };
 
     const initMap = async () => {
-      if (!containerRef.current || !(window as any).google?.maps) return;
-      const { google } = window as any;
+      if (!containerRef.current || !win.google?.maps) return;
+      const g = win.google;
       const center = { lat, lng };
 
-      const map = new google.maps.Map(containerRef.current, {
+      const map = new g.maps.Map(containerRef.current, {
         center,
         zoom: 14,
         mapId: "DEMO_MAP_ID",
@@ -31,21 +32,21 @@ const GoogleMap = ({ location, "data-testid": dataTestId }: GoogleMapProps) => {
       // Use AdvancedMarkerElement if available, fall back to Marker
       try {
         const { AdvancedMarkerElement } =
-          await google.maps.importLibrary("marker");
+          await g.maps.importLibrary("marker");
         new AdvancedMarkerElement({ position: center, map });
       } catch {
-        new google.maps.Marker({ position: center, map });
+        new g.maps.Marker({ position: center, map });
       }
     };
 
-    if ((window as any).google?.maps) {
+    if (win.google?.maps) {
       initMap();
       return;
     }
 
     // Chain onto the existing Maps JS callback so we don't load the script twice.
-    const prev = (window as any).initGoogleServices;
-    (window as any).initGoogleServices = async (...args: unknown[]) => {
+    const prev = win.initGoogleServices;
+    win.initGoogleServices = async (...args: unknown[]) => {
       if (prev) await prev(...args);
       await initMap();
     };

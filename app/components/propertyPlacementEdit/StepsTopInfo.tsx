@@ -10,7 +10,7 @@ interface StepsTopInfoProps {
   imageSrc?: StaticImageData;
   onClick?: () => void;
   handleBack?: () => void;
-  step?: any;
+  step?: number;
 }
 
 const StepsTopInfo: React.FC<StepsTopInfoProps> = ({

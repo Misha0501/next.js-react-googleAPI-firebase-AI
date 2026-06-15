@@ -1,11 +1,17 @@
 "use client";
-import Autocomplete from "@/app/components/Autocomplete";
+import type { FormEvent } from "react";
+import Autocomplete from "@/app/components/shared/Autocomplete";
+
+type Props = {
+  onLocalityChange: (locality: string) => void;
+  initialLocality: string;
+};
 
 export const ListingsPageHeader = ({
   onLocalityChange,
   initialLocality,
-}: any) => {
-  const handleOnSubmit = (e: any) => {
+}: Props) => {
+  const handleOnSubmit = (e: FormEvent<HTMLFormElement>) => {
     // get the value from input with name="locality"
     e.preventDefault();
     const locality = e.target?.locality?.value;

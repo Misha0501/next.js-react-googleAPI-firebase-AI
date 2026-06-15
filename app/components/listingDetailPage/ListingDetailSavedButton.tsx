@@ -12,9 +12,8 @@ import {
 } from "@/providers/SavedListings";
 import { useAuthContext } from "@/app/context/AuthContext";
 import { toast } from "react-toastify";
-import { Modal } from "@/app/components/Modal";
+import { Modal } from "@/app/components/shared/Modal";
 import { useRouter } from "next/navigation";
-import { CircularProgress } from "@mui/material";
 
 type Prop = {
   listingId: number;
@@ -105,7 +104,7 @@ export const ListingDetailSavedButton = ({
       {!showOnDesktop && (
         <div>
           {savedIconIsLoading ? (
-            <CircularProgress size={28} />
+            <div className="h-7 w-7 animate-spin rounded-full border-2 border-slate-200 border-t-[#1F5FD6]" />
           ) : (
             <Icon
               size="sm"

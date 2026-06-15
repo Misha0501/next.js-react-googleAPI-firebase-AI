@@ -1,7 +1,7 @@
 "use client";
 
 import { Address } from "@/types";
-import GoogleMap from "@/app/components/GoogleMap";
+import GoogleMap from "@/app/components/shared/GoogleMap";
 
 type Prop = {
   address: Address;

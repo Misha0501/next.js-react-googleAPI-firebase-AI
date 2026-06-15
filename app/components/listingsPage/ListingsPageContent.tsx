@@ -2,22 +2,21 @@
 import { ListingsMain } from "@/app/components/listingsPage/ListingsMain";
 import { ListingsPageHeader } from "@/app/components/listingsPage/ListingsPageHeader";
 import { ListingsPageFilters } from "@/app/components/listingsPage/ListingsPageFilters";
-import { Fragment, useCallback, useState } from "react";
+import { useCallback, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Button } from "@tremor/react";
 import { useAuthContext } from "@/app/context/AuthContext";
 import { NO_MAX } from "@/app/lib/constants/filters";
-import { Dialog, Transition } from "@headlessui/react";
 import Link from "next/link";
-import { useCreateSavedSearches } from "@/providers/SavedSearaches";
+import { useCreateSavedSearches } from "@/providers/SavedSearches";
 import { toast } from "react-toastify";
-import { Modal } from "@/app/components/Modal";
+import { Modal } from "@/app/components/shared/Modal";
 import { ListingType } from "@/types";
+import type { FilterValues } from "@/app/components/listingsPage/Filters";
 
 export const ListingsPageContent = () => {
   const { authToken } = useAuthContext();
   const param = useSearchParams();
-  const [search, setSearch] = useState(null);
+  const [search, setSearch] = useState<FilterValues | null>(null);
   const [listingType, setListingType] = useState<ListingType>(
     (param.get("listingType") as ListingType) || "SELL",
   );
@@ -30,7 +29,7 @@ export const ListingsPageContent = () => {
   let [savedSearchError, setSavedSearchError] = useState("");
   const router = useRouter();
 
-  const onParamsChange = useCallback((data: any) => {
+  const onParamsChange = useCallback((data: FilterValues) => {
     setSearch(data);
   }, []);
 
@@ -49,7 +48,7 @@ export const ListingsPageContent = () => {
   const [showFiltersMobile, setShowFiltersMobile] = useState(false);
 
   // Create a proper saved search object from the filter values
-  const getSavedSearchesBodyObjectFromFilters = (filterValues: any) => {
+  const getSavedSearchesBodyObjectFromFilters = (filterValues: FilterValues) => {
     return {
       priceMin: filterValues?.priceRange.min,
       priceMax:
@@ -109,21 +108,21 @@ export const ListingsPageContent = () => {
         initialLocality={locality}
       />
       <div className="mx-auto flex w-full max-w-screen-xl items-center justify-between gap-3 px-4 pt-6 sm:px-6 lg:px-8">
-        <Button
-          className="lg:hidden border-slate-200 bg-white text-[#2D3648] shadow-sm hover:bg-slate-50"
-          variant={"secondary"}
+        <button
+          type="button"
+          className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-[#2D3648] shadow-sm hover:bg-slate-50 lg:hidden"
           onClick={() => setShowFiltersMobile(true)}
         >
           Filters
-        </Button>
-        <Button
-          variant={"secondary"}
-          className="border-slate-200 bg-white text-[#2D3648] shadow-sm hover:bg-slate-50"
+        </button>
+        <button
+          type="button"
+          className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-[#2D3648] shadow-sm hover:bg-slate-50 disabled:opacity-50"
           onClick={handleSaveSearch}
           disabled={createSavedSearches.isLoading}
         >
           {createSavedSearches.isLoading ? "Saving..." : "Save search"}
-        </Button>
+        </button>
       </div>
       <section className="mx-auto w-full max-w-screen-xl px-4 pb-20 pt-6 text-black sm:px-6 lg:px-8">
         <div className="flex items-start justify-between gap-6 lg:gap-8 xl:gap-10">
@@ -159,87 +158,24 @@ export const ListingsPageContent = () => {
         onCancelClick={() => setShowAuthModal(false)}
         onSubmitClick={() => router.push("/signin")}
       />
-      {/* Confirmation modal*/}
-      <Transition appear show={savedSearchConfirmationModal} as={Fragment}>
-        <Dialog
-          as="div"
-          className="relative z-10"
-          onClose={() => setSavedSearchConfirmationModal(false)}
-        >
-          <Transition.Child
-            as={Fragment}
-            enter="ease-out duration-300"
-            enterFrom="opacity-0"
-            enterTo="opacity-100"
-            leave="ease-in duration-200"
-            leaveFrom="opacity-100"
-            leaveTo="opacity-0"
-          >
-            <div className="fixed inset-0 bg-black bg-opacity-25" />
-          </Transition.Child>
-
-          <div className="fixed inset-0 overflow-y-auto">
-            <div className="flex min-h-full items-center justify-center p-4 text-center">
-              <Transition.Child
-                as={Fragment}
-                enter="ease-out duration-300"
-                enterFrom="opacity-0 scale-95"
-                enterTo="opacity-100 scale-100"
-                leave="ease-in duration-200"
-                leaveFrom="opacity-100 scale-100"
-                leaveTo="opacity-0 scale-95"
-              >
-                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-                  {savedSearchError && (
-                    <Dialog.Title
-                      as="h3"
-                      className="text-lg font-medium leading-6 text-gray-900"
-                    >
-                      Oops! Something went wrong. Please try again later.
-                    </Dialog.Title>
-                  )}
-                  {!savedSearchError && (
-                    <div>
-                      <Dialog.Title
-                        as="h3"
-                        className="text-lg font-medium leading-6 text-gray-900"
-                      >
-                        Your search has been saved! 🎉
-                      </Dialog.Title>
-                      <div className="mt-2">
-                        <p className="text-sm text-gray-500">
-                          You will be notified via email when new properties
-                          match your search criteria.
-                        </p>
-                        <p className="text-sm text-gray-500">
-                          You can manage your saved searches in your&nbsp;
-                          <Link
-                            href={"/profile"}
-                            className={"text-blue-500 underline"}
-                          >
-                            profile
-                          </Link>
-                          .
-                        </p>
-                      </div>
-                    </div>
-                  )}
-
-                  <div className="flex justify-between mt-4">
-                    <button
-                      type="button"
-                      className="inline-flex justify-center rounded-md border border-transparent bg-tremor-brand px-4 py-2 text-sm font-medium text-tremor-brand-inverted hover:bg-tremor-brand-emphasis focus:outline-none focus-visible:ring-2 focus-visible:ring-tremor-brand focus-visible:ring-offset-2"
-                      onClick={() => setSavedSearchConfirmationModal(false)}
-                    >
-                      Got it!
-                    </button>
-                  </div>
-                </Dialog.Panel>
-              </Transition.Child>
-            </div>
-          </div>
-        </Dialog>
-      </Transition>
+      <Modal
+        show={savedSearchConfirmationModal}
+        onClose={() => setSavedSearchConfirmationModal(false)}
+        title={savedSearchError ? "Oops! Something went wrong. Please try again later." : "Your search has been saved! 🎉"}
+        description={savedSearchError ? undefined : "You will be notified via email when new properties match your search criteria."}
+        confirmLabel="Got it!"
+        onConfirm={() => setSavedSearchConfirmationModal(false)}
+      >
+        {!savedSearchError && (
+          <p className="text-sm text-[#717D96]">
+            You can manage your saved searches in your{" "}
+            <Link href="/profile" className="text-[#1F5FD6] underline">
+              profile
+            </Link>
+            .
+          </p>
+        )}
+      </Modal>
     </div>
   );
 };
