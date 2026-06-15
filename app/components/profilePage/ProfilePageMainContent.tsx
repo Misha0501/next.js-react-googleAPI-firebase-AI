@@ -200,7 +200,7 @@ export const ProfilePageMainContent = ({ tab, view }: Props) => {
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:min-w-[420px]">
               <div className="rounded-2xl border border-slate-200 bg-[#F8FAFC] px-4 py-3">
                 <p className="text-xs font-semibold uppercase text-[#717D96]">
-                  Properties
+                  Own properties
                 </p>
                 <p className="mt-1 text-2xl font-semibold text-[#2D3648]">
                   {showSkeleton ? "-" : ownListings.length}
@@ -216,7 +216,7 @@ export const ProfilePageMainContent = ({ tab, view }: Props) => {
               </div>
               <div className="col-span-2 rounded-2xl border border-slate-200 bg-[#F8FAFC] px-4 py-3 sm:col-span-1">
                 <p className="text-xs font-semibold uppercase text-[#717D96]">
-                  Portfolio
+                  Total portfolio
                 </p>
                 <p className="mt-1 text-2xl font-semibold text-[#2D3648]">
                   {showSkeleton
