@@ -14,8 +14,6 @@ type Props = {
   confirmLabel?: string;
   onConfirm?: () => void;
   confirmDanger?: boolean;
-  /** @deprecated use onConfirm + confirmLabel instead */
-  onSubmitClick?: () => void;
 };
 
 export const Modal = ({
@@ -29,7 +27,6 @@ export const Modal = ({
   confirmLabel,
   onConfirm,
   confirmDanger = false,
-  onSubmitClick,
 }: Props) => {
   return (
     <Transition appear show={show} as={Fragment}>
@@ -79,16 +76,6 @@ export const Modal = ({
                       onClick={onCancelClick ?? onClose}
                     >
                       {cancelLabel}
-                    </button>
-                  )}
-
-                  {onSubmitClick && (
-                    <button
-                      type="button"
-                      className="inline-flex justify-center rounded-xl bg-[#1F5FD6] px-4 py-2 text-sm font-semibold text-white hover:bg-[#184FB5]"
-                      onClick={onSubmitClick}
-                    >
-                      Sign in / Sign up
                     </button>
                   )}
 
