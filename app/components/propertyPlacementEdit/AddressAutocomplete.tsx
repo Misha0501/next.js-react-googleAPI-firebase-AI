@@ -1,7 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { AutocompleteAddress } from "@/types";
-import { TextInput } from "@tremor/react";
 import { useGooglePlaces } from "@/app/lib/hooks/useGoogleServices";
 
 type AutocompleteProps = {
@@ -10,12 +9,16 @@ type AutocompleteProps = {
   initialValue?: string;
 };
 
+const inputClass =
+  "w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-[#1F2937] outline-none transition focus:border-[#1F5FD6] focus:ring-2 focus:ring-[#1F5FD6]/15";
+
 export const AddressAutocomplete = ({
   onLocalityChange,
   onAddressChange,
   initialValue,
 }: AutocompleteProps) => {
   const [inputValue, setInputValue] = useState(initialValue || "");
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [suggestions, setSuggestions] = useState<any[]>([]);
   const [showDropdown, setShowDropdown] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
@@ -102,7 +105,8 @@ export const AddressAutocomplete = ({
 
   return (
     <div ref={wrapperRef} className="relative w-full">
-      <TextInput
+      <input
+        type="text"
         name="address"
         id="address"
         value={inputValue}
@@ -110,6 +114,7 @@ export const AddressAutocomplete = ({
         onChange={(e) => setInputValue(e.target.value)}
         onFocus={() => suggestions.length > 0 && setShowDropdown(true)}
         autoComplete="off"
+        className={inputClass}
       />
 
       {isFetching && inputValue && (

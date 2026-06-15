@@ -213,8 +213,21 @@ Extracted into:
 - `app/components/listingItem/ListingItemFeatures.tsx` — feature chip row
 - `app/components/listingItem/ListingItemData.tsx` — labels, icons, and feature derivation helpers
 
-### 5b — Split `app/components/editProperty/EditForm.tsx` (~848 lines)
-Check whether sub-step components in `app/components/propertyPlacementEdit/` can be shared between the property placement flow and the edit flow. The two flows (place + edit) share the same sub-step data but differ only in the submit mutation. If shared, `EditForm.tsx` shrinks to a thin orchestrator.
+### 5b — Split `app/components/editProperty/EditForm.tsx` (~848 lines) ✅ DONE
+
+`EditForm.tsx` reduced from 848 → 417 lines. Extracted into:
+- `app/components/editProperty/types.ts` — `EditPropertyValues` + `ErrorMap` types (avoids circular imports)
+- `app/components/editProperty/editFormPrimitives.tsx` — shared UI primitives: `inputClass`, `ErrorText`, `SectionRow`, `NumberField`
+- `app/components/editProperty/EditLocationSection.tsx` — address section using `AddressAutocomplete` + disabled read-only fields (matches placement flow UX)
+- `app/components/editProperty/EditDetailsSection.tsx` — rooms, dimensions, interior/condition, heating, building details
+- `app/components/editProperty/EditMediaSection.tsx` — photos + description
+- `app/components/editProperty/EditForm.tsx` — slim orchestrator: offer type, property type, price sections inline + sub-component imports, validation, submit
+
+**Address UX change:** The edit form location section now uses `AddressAutocomplete` (Google Places) — the user can only change the address by selecting from autocomplete suggestions. The individual address fields (street number, street, neighborhood, city, administrative area, postal code) are shown as disabled read-only below the autocomplete, exactly matching the placement flow.
+
+**Tremor removal (bonus):** Removed `@tremor/react` `TextInput` from `AddressAutocomplete.tsx` → replaced with a plain Tailwind `<input>`.
+
+**Sub-step sharing verdict:** The placement step components (`GeneralInfo`, `MoreDetails`, `DescriptionAndImages`) use `PlacementFormValues` and include wizard chrome (StepsTopInfo, back/next buttons). The edit form needed a flat single-page layout. Rather than sharing the step components directly, the form content was extracted into edit-specific section components. Future work could extract the pure form content (without wizard chrome) into shared primitives if the placement components need similar decomposition.
 
 ---
 
