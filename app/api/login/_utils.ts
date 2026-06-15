@@ -19,7 +19,6 @@ export const setAuthCookiesForOneDay = async (
   const isProduction = process.env.NODE_ENV === "production";
 
   cookieStore.set("authToken", authToken, {
-    httpOnly: true,
     sameSite: "strict",
     secure: isProduction,
     expires: expiresAt,

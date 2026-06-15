@@ -1,7 +1,7 @@
 "use client";
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import { setCookie } from "cookies-next";
-import { onAuthStateChanged, type User } from "firebase/auth";
+import { onIdTokenChanged, type User } from "firebase/auth";
 import { firebaseClientAuth } from "@/app/lib/firebase/configClient";
 
 interface ContextProps {
@@ -21,16 +21,20 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
   const [authToken, setAuthToken] = useState<string | null>(null);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(firebaseClientAuth, async (user) => {
+    const unsubscribe = onIdTokenChanged(firebaseClientAuth, async (user) => {
       if (user) {
         setUser(user);
         const token = await user.getIdToken();
         setAuthToken(token);
-        setCookie("authToken", token);
+        setCookie("authToken", token, {
+          maxAge: 60 * 60, // 1 hour — matches Firebase token expiry
+          sameSite: "strict",
+          secure: process.env.NODE_ENV === "production",
+        });
       } else {
         setUser(null);
         setAuthToken(null);
-        setCookie("authToken", "");
+        setCookie("authToken", "", { maxAge: 0 });
       }
     });
 
