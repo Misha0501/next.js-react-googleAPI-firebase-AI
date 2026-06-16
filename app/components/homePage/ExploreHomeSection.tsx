@@ -11,7 +11,7 @@ import Link from "next/link";
 const featuredMarket = {
   locality: "Sofia",
   href: "/listings?locality=Sofia&listingType=SELL",
-  img: "/e1.png",
+  img: "/cities/sofia.jpg",
   eyebrow: "Most searched",
   title: "Sofia city homes",
   description:
@@ -23,23 +23,23 @@ const popularSearches = [
   {
     locality: "Plovdiv",
     href: "/listings?locality=Plovdiv&listingType=SELL",
-    img: "/e3.jpg",
+    img: "/cities/plovdiv.jpg",
     label: "Historic city living",
     meta: "Apartments and family homes",
   },
   {
     locality: "Varna",
     href: "/listings?locality=Varna&listingType=SELL",
-    img: "/e4.jpg",
+    img: "/cities/varna.jpg",
     label: "Black Sea market",
     meta: "Coastal homes and city flats",
   },
   {
-    locality: "Byala",
-    href: "/listings?locality=Byala&listingType=SELL",
-    img: "/e2.jpg",
-    label: "Coastal value",
-    meta: "Holiday homes and quiet streets",
+    locality: "Burgas",
+    href: "/listings?locality=Burgas&listingType=SELL",
+    img: "/cities/burgas.jpg",
+    label: "Sea city living",
+    meta: "Homes around Lazur, Sea Park and Slaveikov",
   },
 ];
 
