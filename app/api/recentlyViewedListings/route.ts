@@ -15,8 +15,14 @@ export async function GET(req: NextRequest) {
     const applicationUser: ApplicationUser =
       await getApplicationUserServer(true);
 
+    const { searchParams } = new URL(req.url);
+    const page = Number(searchParams.get("page") ?? 1);
+    const pageSize = Number(searchParams.get("pageSize") ?? 8);
+
     const recentlyViewedListings = await getRecentlyViewedListings(
       applicationUser.id,
+      page,
+      pageSize,
     );
 
     return NextResponse.json(recentlyViewedListings);

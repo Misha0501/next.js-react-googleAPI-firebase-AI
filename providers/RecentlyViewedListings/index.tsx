@@ -14,7 +14,8 @@ const KEY = "RecentlyViewedListing";
 export function useRecentlyViewedListings(
   props: RecentlyViewedListingsProvider.GetProps
 ): UseQueryResult<RecentlyViewedListingsProvider.GetResponse> {
-  return useQuery(`${KEY} | Listings`, () => api.recentlyViewedListings(props), {
+  const page = props.page ?? 1;
+  return useQuery([`${KEY} | Listings`, page], () => api.recentlyViewedListings(props), {
     enabled: !!props?.authToken,
     retry: 0,
   });

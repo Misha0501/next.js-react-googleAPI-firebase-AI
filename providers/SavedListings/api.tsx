@@ -7,11 +7,12 @@ type CreateProps = AuthProps & { data: SavedListingsProvider.CreateMutationPaylo
 type DeleteProps = AuthProps & { data: SavedListingsProvider.DeleteMutationPayload };
 
 export async function savedListings(
-  props?: AuthProps,
+  props?: AuthProps & { page?: number },
 ): Promise<SavedListingsProvider.ReadResponse> {
+  const page = props?.page ?? 1;
   return service<SavedListingsProvider.ReadResponse>({
     method: "GET",
-    url: `/api/savedListings`,
+    url: `/api/savedListings?page=${page}&pageSize=8`,
     headers: { Authorization: props?.authToken ?? "" },
   });
 }

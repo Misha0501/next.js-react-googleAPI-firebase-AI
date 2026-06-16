@@ -6,34 +6,40 @@ import { prisma } from "@/app/lib/db/client";
  * @param {number} userId - The ID of the user.
  * @returns {Promise<{total: number, results: any[]}>} - An object containing the total number of items and the actual listing items (up to 10).
  */
+const DEFAULT_PAGE_SIZE = 8;
+
 export const getRecentlyViewedListings = async (
   userId: number,
+  page: number = 1,
+  pageSize: number = DEFAULT_PAGE_SIZE,
 ): Promise<any> => {
-  const items = await prisma.recentlyViewedListing.findMany({
-    distinct: ["listingId"],
-    include: {
-      listing: {
-        include: {
-          ListingImage: true,
-          Address: true,
-          ListingPrice: {
-            orderBy: {
-              createdAt: "asc",
-            },
+  const skip = (page - 1) * pageSize;
+
+  const [allIds, items] = await Promise.all([
+    prisma.recentlyViewedListing.findMany({
+      distinct: ["listingId"],
+      where: { applicationUserId: userId },
+      select: { listingId: true },
+    }),
+    prisma.recentlyViewedListing.findMany({
+      distinct: ["listingId"],
+      include: {
+        listing: {
+          include: {
+            ListingImage: true,
+            Address: true,
+            ListingPrice: { orderBy: { createdAt: "asc" } },
           },
         },
       },
-    },
-    where: {
-      applicationUserId: userId,
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-    take: 10,
-  });
+      where: { applicationUserId: userId },
+      orderBy: { createdAt: "desc" },
+      skip,
+      take: pageSize,
+    }),
+  ]);
 
-  return { total: items.length, results: items };
+  return { page, pageSize, total: allIds.length, results: items };
 };
 
 /**

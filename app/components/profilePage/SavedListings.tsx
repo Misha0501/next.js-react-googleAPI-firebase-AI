@@ -1,26 +1,29 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { ListingItem, ListingItemSkeleton } from "@/app/components/ListingItem";
 import { useAuthContext } from "@/app/context/AuthContext";
 import { SavedListing } from "@/types";
 import { useSavedListings } from "@/providers/SavedListings";
+import { Pagination } from "@/app/components/shared/Pagination";
 import Link from "next/link";
 import { HeartIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 
+const PAGE_SIZE = 8;
+
 export const SavedListings = () => {
   const { authToken } = useAuthContext();
+  const [page, setPage] = useState(1);
 
   const {
     data: savedListingsData,
     isLoading,
     error,
     refetch,
-  } = useSavedListings({ authToken });
+  } = useSavedListings({ authToken, page });
 
   const savedListings = useMemo(() => {
     if (savedListingsData && savedListingsData.results) {
-      // Populated listings with saved data
       return savedListingsData.results.map((savedListing: SavedListing) => {
         savedListing.listing.savedListingId = savedListing.id;
         return savedListing;
@@ -28,6 +31,8 @@ export const SavedListings = () => {
     }
     return [];
   }, [savedListingsData]);
+
+  const totalPages = Math.ceil((savedListingsData?.total ?? 0) / PAGE_SIZE);
 
   if (error)
     return (
@@ -75,6 +80,7 @@ export const SavedListings = () => {
                 />
               ))}
         </div>
+
         {!isLoading && savedListings && !savedListings.length && (
           <div className="rounded-2xl border border-dashed border-slate-300 bg-white px-6 py-12 text-center shadow-sm">
             <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-[#EAF2FF] text-[#1F5FD6]">
@@ -94,6 +100,12 @@ export const SavedListings = () => {
               <MagnifyingGlassIcon className="h-4 w-4" />
               Browse properties
             </Link>
+          </div>
+        )}
+
+        {totalPages > 1 && (
+          <div className="mt-6">
+            <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />
           </div>
         )}
       </div>

@@ -8,6 +8,7 @@ import {
   useDeleteSavedSearch,
   useSavedSearches,
 } from "@/providers/SavedSearches";
+import { Pagination } from "@/app/components/shared/Pagination";
 import { toast } from "react-toastify";
 import Link from "next/link";
 import { formatDate } from "@/app/lib/formatDate";
@@ -20,6 +21,8 @@ import {
   TrashIcon,
 } from "@heroicons/react/24/outline";
 import { appendArraySearchParam } from "@/app/lib/searchParamsArray";
+
+const PAGE_SIZE = 8;
 
 type SearchDetail = {
   label: string;
@@ -100,6 +103,7 @@ const getSearchDetails = (item: SavedSearch): SearchDetail[] => {
 
 export const SavedSearches = () => {
   const { authToken } = useAuthContext();
+  const [page, setPage] = useState(1);
   const [deleteConfirmationModalOpen, setDeleteConfirmationModalOpen] =
     useState(false);
   const [searchToDelete, setSearchToDelete] = useState<SavedSearch | null>(
@@ -111,7 +115,7 @@ export const SavedSearches = () => {
     isLoading,
     refetch,
     error,
-  } = useSavedSearches({ authToken });
+  } = useSavedSearches({ authToken, page });
   const deleteSavedSearch = useDeleteSavedSearch({ authToken });
 
   const savedSearches = useMemo(() => {
@@ -120,6 +124,7 @@ export const SavedSearches = () => {
   }, [savedSearchesData]);
 
   const savedSearchesTotal = savedSearchesData?.total ?? 0;
+  const totalPages = Math.ceil(savedSearchesTotal / PAGE_SIZE);
 
   function closeModal() {
     setDeleteConfirmationModalOpen(false);
@@ -268,6 +273,10 @@ export const SavedSearches = () => {
               );
             })}
           </div>
+
+          {totalPages > 1 && (
+            <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />
+          )}
         </div>
       )}
 

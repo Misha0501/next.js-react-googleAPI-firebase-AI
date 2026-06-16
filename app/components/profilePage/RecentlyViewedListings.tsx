@@ -1,24 +1,29 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useAuthContext } from "@/app/context/AuthContext";
-import { Listing, RecentlyViewedListing } from "@/types";
+import { Listing } from "@/types";
 import { ListingItem, ListingItemSkeleton } from "@/app/components/ListingItem";
 import { useRecentlyViewedListings } from "@/providers/RecentlyViewedListings";
 import { useSavedListings } from "@/providers/SavedListings";
 import { getPopulatedListingsSaved } from "@/app/lib/listing/getPopulatedListingsSaved";
+import { Pagination } from "@/app/components/shared/Pagination";
 import Link from "next/link";
 import { ClockIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 
+const PAGE_SIZE = 8;
+
 export const RecentlyViewedListings = () => {
   const { authToken } = useAuthContext();
-  const [recentlyViewedListings, setRecentlyViewedListings] = useState<
-    RecentlyViewedListing[]
-  >([]);
+  const [page, setPage] = useState(1);
   const [populatedListings, setPopulatedListings] = useState<Listing[]>([]);
   const recentlyViewedListingsResponse = useRecentlyViewedListings({
     authToken,
+    page,
   });
   const savedListings = useSavedListings({ authToken });
+
+  const total = recentlyViewedListingsResponse.data?.total ?? 0;
+  const totalPages = Math.ceil(total / PAGE_SIZE);
 
   useEffect(() => {
     if (!recentlyViewedListingsResponse.isSuccess) return;
@@ -50,7 +55,7 @@ export const RecentlyViewedListings = () => {
           Oops! Something went wrong. Please try again.
         </p>
       )}
-      {populatedListings.length > 0 && (
+      {total > 0 && (
         <div className="mb-6 rounded-2xl border border-slate-200 bg-white px-5 py-4 shadow-sm">
           <div className="flex items-center gap-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#EAF2FF] text-[#1F5FD6]">
@@ -61,8 +66,8 @@ export const RecentlyViewedListings = () => {
                 Recently viewed
               </p>
               <p className="font-semibold text-[#2D3648]">
-                {populatedListings.length}{" "}
-                {populatedListings.length === 1 ? "property" : "properties"}
+                {total}{" "}
+                {total === 1 ? "property" : "properties"}
               </p>
             </div>
           </div>
@@ -101,6 +106,12 @@ export const RecentlyViewedListings = () => {
             </Link>
           </div>
         )}
+
+      {totalPages > 1 && (
+        <div className="mt-6">
+          <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />
+        </div>
+      )}
     </div>
   );
 };

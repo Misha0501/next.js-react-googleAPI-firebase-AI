@@ -8,9 +8,10 @@ type CreateProps = RecentlyViewedListingsProvider.CreateProps & {
 export async function recentlyViewedListings(
   props?: RecentlyViewedListingsProvider.GetProps,
 ): Promise<RecentlyViewedListingsProvider.GetResponse> {
+  const page = props?.page ?? 1;
   return service<RecentlyViewedListingsProvider.GetResponse>({
     method: "GET",
-    url: `/api/recentlyViewedListings`,
+    url: `/api/recentlyViewedListings?page=${page}&pageSize=8`,
     headers: { Authorization: props?.authToken ?? "" },
   });
 }

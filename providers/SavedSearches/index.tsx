@@ -12,9 +12,10 @@ import type { AuthProps } from "@/providers/types";
 const KEY = "SavedSearches";
 
 export function useSavedSearches(
-  props: AuthProps,
+  props: AuthProps & { page?: number },
 ): UseQueryResult<SavedSearchesProvider.ReadResponse> {
-  return useQuery(`${KEY} | Items`, () => api.savedSearches(props), {
+  const page = props.page ?? 1;
+  return useQuery([`${KEY} | Items`, page], () => api.savedSearches(props), {
     enabled: !!props?.authToken,
     retry: 0,
   });
