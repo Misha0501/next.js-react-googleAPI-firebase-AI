@@ -275,7 +275,11 @@ export const SavedSearches = () => {
           </div>
 
           {totalPages > 1 && (
-            <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />
+            <Pagination
+              page={page}
+              totalPages={totalPages}
+              onPageChange={setPage}
+            />
           )}
         </div>
       )}

@@ -47,7 +47,9 @@ export async function updateProperty(
   });
 }
 
-export async function deleteItem(props: ListingProvider.DeleteProps): Promise<null> {
+export async function deleteItem(
+  props: ListingProvider.DeleteProps,
+): Promise<null> {
   return service({
     method: "DELETE",
     parseJSON: false,
@@ -58,4 +60,3 @@ export async function deleteItem(props: ListingProvider.DeleteProps): Promise<nu
     },
   });
 }
-

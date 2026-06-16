@@ -2,7 +2,10 @@ import { NextRequest, NextResponse } from "next/server";
 import { ApplicationUser } from "@/types";
 import { getApplicationUserServer } from "@/app/lib/getApplicationUserServer";
 import { savedListingsSchema } from "@/app/lib/validations/savedListings";
-import { getSavedListings, handleSavedListingCreation } from "@/app/api/savedListings/_utils";
+import {
+  getSavedListings,
+  handleSavedListingCreation,
+} from "@/app/api/savedListings/_utils";
 import { handleAPIError } from "@/app/lib/api/handleError";
 
 /**
@@ -19,7 +22,11 @@ export async function GET(req: NextRequest) {
     const page = Number(searchParams.get("page") ?? 1);
     const pageSize = Number(searchParams.get("pageSize") ?? 20);
 
-    const savedListings = await getSavedListings(applicationUser.id, page, pageSize);
+    const savedListings = await getSavedListings(
+      applicationUser.id,
+      page,
+      pageSize,
+    );
 
     return NextResponse.json(savedListings);
   } catch (error) {

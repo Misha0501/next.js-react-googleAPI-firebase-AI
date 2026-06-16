@@ -30,12 +30,16 @@ export const getAveragePriceInNeighborhood = async (
     if (!listings || listings.length <= 1) return null;
 
     const prices: number[] = listings
-      .map((l: { ListingPrice: { price: number | null }[] }) => l.ListingPrice[0]?.price)
+      .map(
+        (l: { ListingPrice: { price: number | null }[] }) =>
+          l.ListingPrice[0]?.price,
+      )
       .filter((p: number | null | undefined): p is number => p != null);
 
     if (prices.length === 0) return null;
 
-    const average = prices.reduce((acc: number, p: number) => acc + p, 0) / prices.length;
+    const average =
+      prices.reduce((acc: number, p: number) => acc + p, 0) / prices.length;
     return Math.round(average * 100) / 100;
   } catch (error) {
     console.error(error);

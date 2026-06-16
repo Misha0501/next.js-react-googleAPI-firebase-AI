@@ -13,11 +13,7 @@ import {
 } from "@heroicons/react/24/outline";
 import { FormikProps } from "formik";
 import { Listing } from "@/types";
-import {
-  CURRENCIES,
-  LISTING_TYPES,
-  PROPERTY_TYPES,
-} from "../../lib/constants";
+import { CURRENCIES, LISTING_TYPES, PROPERTY_TYPES } from "../../lib/constants";
 import PropertyPlacementRadioButtons from "../propertyPlacementEdit/PropertyPlacementRadioButtons";
 import { EditPropertyValues, ErrorMap } from "./types";
 import { ErrorText, SectionRow, inputClass } from "./editFormPrimitives";
@@ -67,7 +63,8 @@ const validateEditForm = (values: EditPropertyValues) => {
   const isLand = values.propertyType === "LAND";
   const currentYear = new Date().getFullYear();
 
-  if (!values.listingType) errors.listingType = "Choose if this is for sale or rent";
+  if (!values.listingType)
+    errors.listingType = "Choose if this is for sale or rent";
   if (!values.propertyType) errors.propertyType = "Select a property type";
   if (!values.currency) errors.currency = "Select a currency";
   if (!isPositive(values.price)) errors.price = "Enter a price greater than 0";

@@ -8,6 +8,6 @@ export function useSendEmail(
 ): UseMutationResult<null, Error, ContactFormProvider.CreateMutationPayload> {
   return useMutation<null, Error, ContactFormProvider.CreateMutationPayload>(
     (payload) => api.create({ ...props, data: payload }) as Promise<null>,
-    { mutationKey: `Send Email`, retry: 0 }
+    { mutationKey: `Send Email`, retry: 0 },
   );
 }

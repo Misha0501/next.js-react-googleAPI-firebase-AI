@@ -64,7 +64,7 @@ function ExploreHomeSection() {
 
           <Link
             href="/listings?listingType=SELL"
-            className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl border border-slate-300 bg-white px-5 py-3 text-sm font-bold text-[#334155] shadow-sm transition hover:border-[#1F5FD6] hover:text-[#1F5FD6] sm:w-auto"
+            className="min-h-12 inline-flex w-full items-center justify-center gap-2 rounded-xl border border-slate-300 bg-white px-5 py-3 text-sm font-bold text-[#334155] shadow-sm transition hover:border-[#1F5FD6] hover:text-[#1F5FD6] sm:w-auto"
           >
             View all properties
             <ArrowRightIcon className="h-4 w-4" />
@@ -88,7 +88,7 @@ function ExploreHomeSection() {
             </div>
             <div className="absolute inset-0 flex flex-col justify-between p-5 sm:p-7">
               <div className="flex items-center justify-between gap-3">
-                <span className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/15 px-3 py-1.5 text-xs font-black uppercase tracking-wide text-white backdrop-blur">
+                <span className="bg-white/15 inline-flex items-center gap-2 rounded-full border border-white/25 px-3 py-1.5 text-xs font-black uppercase tracking-wide text-white backdrop-blur">
                   <SparklesIcon className="h-4 w-4" />
                   {featuredMarket.eyebrow}
                 </span>
@@ -102,7 +102,7 @@ function ExploreHomeSection() {
                   {featuredMarket.highlights.map((item) => (
                     <span
                       key={item}
-                      className="rounded-full border border-white/20 bg-white/12 px-3 py-1.5 text-xs font-bold text-white/90 backdrop-blur"
+                      className="bg-white/12 rounded-full border border-white/20 px-3 py-1.5 text-xs font-bold text-white/90 backdrop-blur"
                     >
                       {item}
                     </span>
@@ -134,7 +134,7 @@ function ExploreHomeSection() {
                     src={item.img}
                     alt={`${item.locality} properties`}
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/35 to-transparent sm:hidden" />
+                  <div className="from-slate-950/35 absolute inset-0 bg-gradient-to-t to-transparent sm:hidden" />
                 </div>
 
                 <div className="flex min-w-0 flex-col justify-between gap-5 p-5">

@@ -4,6 +4,6 @@
  * @param dateString
  */
 export const isValidDateFromString = (dateString: string) => {
-    // @ts-ignore
-    return !isNaN(new Date(dateString));
-}
+  // @ts-ignore
+  return !isNaN(new Date(dateString));
+};

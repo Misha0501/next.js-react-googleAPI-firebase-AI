@@ -45,7 +45,10 @@ export const authenticateWithFirebaseIdentityToolkit = async (
   );
 
   if (!response.ok) {
-    throw new ResponseError("Username or password is incorrect.", response.status);
+    throw new ResponseError(
+      "Username or password is incorrect.",
+      response.status,
+    );
   }
 
   return response.json() as Promise<FirebaseAPISignInAuthResponse>;

@@ -80,7 +80,9 @@ const getInviteStatus = (invite: CompanyMembershipInvite) => {
 
 export const InvitesTab = () => {
   const { authToken } = useAuthContext();
-  const companyMemberships = useCompanyMemberships({ authToken: authToken ?? undefined });
+  const companyMemberships = useCompanyMemberships({
+    authToken: authToken ?? undefined,
+  });
   const companyMembershipInvites = useCompanyMembershipInvites({
     authToken: authToken ?? undefined,
   });
@@ -307,7 +309,10 @@ export const InvitesTab = () => {
           )}
 
           <div className="flex justify-end border-t border-slate-100 px-5 py-5 sm:px-6">
-            <Button type="submit" loading={createCompanyMembershipInvite.isLoading}>
+            <Button
+              type="submit"
+              loading={createCompanyMembershipInvite.isLoading}
+            >
               <PaperAirplaneIcon className="h-4 w-4" />
               {createCompanyMembershipInvite.isLoading
                 ? "Sending..."

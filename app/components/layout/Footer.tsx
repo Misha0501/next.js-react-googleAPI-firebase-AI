@@ -36,7 +36,7 @@ const FooterLink = ({ href, label }: { href: string; label: string }) => (
   <li>
     <Link
       href={href}
-      className="text-sm text-slate-300 hover:text-white transition-colors"
+      className="text-sm text-slate-300 transition-colors hover:text-white"
     >
       {label}
     </Link>
@@ -47,20 +47,20 @@ function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-[#111827] text-white border-t border-slate-800">
-      <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 pt-14 pb-40 lg:pb-10">
+    <footer className="border-t border-slate-800 bg-[#111827] text-white">
+      <div className="mx-auto max-w-screen-xl px-4 pb-40 pt-14 sm:px-6 lg:px-8 lg:pb-10">
         <div className="grid grid-cols-1 gap-10 lg:grid-cols-[1.35fr_2fr]">
           <div className="max-w-md">
-            <Link href="/" className="inline-flex items-center mb-5">
+            <Link href="/" className="mb-5 inline-flex items-center">
               <Image
-                className="h-5 w-auto bg-white rounded-md px-3 py-2 box-content"
+                className="box-content h-5 w-auto rounded-md bg-white px-3 py-2"
                 width={112}
                 height={19}
                 src={logo}
                 alt="Homfli logo"
               />
             </Link>
-            <p className="text-slate-300 leading-7">
+            <p className="leading-7 text-slate-300">
               A focused real estate marketplace for finding, saving, and placing
               properties across Bulgaria.
             </p>

@@ -3,7 +3,10 @@ import { ApplicationUser } from "@/types";
 import { getApplicationUserServer } from "@/app/lib/getApplicationUserServer";
 import { recentlyViewedListingsSchema } from "@/app/lib/validations/recentlyViewedListings";
 import { handleAPIError } from "@/app/lib/api/handleError";
-import { getRecentlyViewedListings, handleRecentlyViewedCreation } from "@/app/api/recentlyViewedListings/_utils";
+import {
+  getRecentlyViewedListings,
+  handleRecentlyViewedCreation,
+} from "@/app/api/recentlyViewedListings/_utils";
 
 /**
  * GET recently viewed listings of the user

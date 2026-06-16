@@ -104,17 +104,14 @@ export const ListingsPageFilters = ({
           })}
         </div>
         <div className="mt-6" role="tabpanel">
-          <Filters
-            listingType={listingType}
-            locality={locality || ""}
-          />
+          <Filters listingType={listingType} locality={locality || ""} />
         </div>
       </div>
 
       <button
         type="button"
         onClick={showFiltersMobile}
-        className="inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-[#1F5FD6] px-4 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-[#184FB5] lg:hidden"
+        className="min-h-12 inline-flex w-full items-center justify-center rounded-xl bg-[#1F5FD6] px-4 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-[#184FB5] lg:hidden"
       >
         Search
       </button>

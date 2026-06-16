@@ -94,11 +94,7 @@ const formatFeatureNumber = (value: number) => {
     : roundedValue.toFixed(2);
 };
 
-export const pluralize = (
-  value: number,
-  singular: string,
-  plural: string,
-) => {
+export const pluralize = (value: number, singular: string, plural: string) => {
   return value === 1 ? singular : plural;
 };
 

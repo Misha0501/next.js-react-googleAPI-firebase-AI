@@ -18,9 +18,7 @@ type Props = {
 
 export const EditLocationSection = ({ formik, showError }: Props) => {
   const hasAddress = Boolean(
-    formik.values.route ||
-      formik.values.locality ||
-      formik.values.streetNumber,
+    formik.values.route || formik.values.locality || formik.values.streetNumber,
   );
 
   const initialAddressValue = useMemo(() => {

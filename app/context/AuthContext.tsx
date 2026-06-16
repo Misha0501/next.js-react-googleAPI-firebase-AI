@@ -1,5 +1,11 @@
 "use client";
-import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  type ReactNode,
+} from "react";
 import { setCookie } from "cookies-next";
 import { onIdTokenChanged, type User } from "firebase/auth";
 import { firebaseClientAuth } from "@/app/lib/firebase/configClient";

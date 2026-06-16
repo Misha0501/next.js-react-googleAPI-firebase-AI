@@ -28,9 +28,14 @@ export function useCreateSavedSearches(
   Error,
   SavedSearchesProvider.CreateMutationPayload
 > {
-  return useMutation<SavedSearch, Error, SavedSearchesProvider.CreateMutationPayload>(
-    (payload) => api.create({ ...props, data: payload }) as Promise<SavedSearch>,
-    { mutationKey: `${KEY} | Create`, retry: 0 }
+  return useMutation<
+    SavedSearch,
+    Error,
+    SavedSearchesProvider.CreateMutationPayload
+  >(
+    (payload) =>
+      api.create({ ...props, data: payload }) as Promise<SavedSearch>,
+    { mutationKey: `${KEY} | Create`, retry: 0 },
   );
 }
 
@@ -39,6 +44,6 @@ export function useDeleteSavedSearch(
 ): UseMutationResult<null, Error, SavedSearchesProvider.DeleteMutationPayload> {
   return useMutation<null, Error, SavedSearchesProvider.DeleteMutationPayload>(
     (payload) => api.deleteItem({ ...props, data: payload }) as Promise<null>,
-    { mutationKey: `${KEY} | Delete`, retry: 0 }
+    { mutationKey: `${KEY} | Delete`, retry: 0 },
   );
 }

@@ -73,7 +73,7 @@ export const ListingMainInfo = ({ listing }: Prop) => {
       {/* Mobile layout */}
       <div className="block rounded-2xl border border-slate-200 bg-white px-4 py-5 shadow-sm lg:hidden">
         <div className="price_details flex justify-between gap-4">
-          <div className="flex-1 min-w-0">
+          <div className="min-w-0 flex-1">
             <p className="text-xs font-semibold uppercase text-[#717D96]">
               Asking price
             </p>

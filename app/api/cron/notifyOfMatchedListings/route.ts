@@ -28,8 +28,6 @@ export async function GET(request: Request) {
 
     // Send emails to users with matched listings/saved searches
     await sendEmailsToMatchedListingsSearches(matchedListingsAndSearches);
-
-
   } catch (error) {
     return handleAPIError(error);
   }

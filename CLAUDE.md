@@ -32,6 +32,7 @@ npx playwright test __checks__/home-page.spec.ts  # Run a single test file
 ## Architecture
 
 ### Stack
+
 - **Next.js App Router** with TypeScript — pages in `app/`, API routes in `app/api/`
 - **Tailwind CSS** for styling; **MUI** only for CircularProgress and Box
 - **Firebase Auth** — client SDK (`app/lib/firebase/configClient.ts`) for sign-in; Admin SDK (`configAdmin.ts`) for server-side token verification
@@ -53,6 +54,7 @@ npx playwright test __checks__/home-page.spec.ts  # Run a single test file
 ### Request data flow
 
 **Client → API (authenticated):**
+
 ```
 Component → react-query hook (providers/<Resource>/index.tsx)
          → api function (providers/<Resource>/api.tsx)
@@ -74,6 +76,7 @@ All `api.tsx` functions must declare explicit return types (e.g. `Promise<Listin
 ### API routes (`app/api/`)
 
 Every route file follows the same pattern:
+
 1. Validate params with `validateParamId(slug)` for ID routes
 2. Authenticate with `getApplicationUserServer()` or `getDecodedIdToken()`
 3. Validate request body with a Zod schema from `app/lib/validations/`
@@ -89,11 +92,13 @@ Throw `new ResponseError(message, statusCode)` (`app/lib/classes/ResponseError.t
 **Schema changes**: This project uses `prisma db push` (no migration files). Run `npm run prisma-db-push-dev` for dev and `npm run prisma-db-push-remote` for production.
 
 **Query helpers** (`app/lib/db/index.ts`): Three utilities for building `where` clauses from URL search params:
+
 - `prismaQueryConditionsFromMinMaxValue` — numeric range
 - `prismaQueryConditionsFromMinMaxValidDateStringValue` — date range
 - `prismaQueryConditionsFromArray` — multi-value enum/string (IN filter)
 
 **Listing helpers** (`app/lib/listing/`):
+
 - `getPopulatedListingsSaved` — merges saved-listing state onto listing results using a Map (O(1) lookup)
 - `getAveragePriceInNeighborhood` — fetches only the latest price per listing using `take: 1` on nested `ListingPrice`
 - `getApplicationUserCompanyId` — extracts company ID from user's `Membership`
@@ -108,15 +113,15 @@ Each resource has its own schema file. `shared.ts` exports `baseAddressSchema` �
 
 ### Key environment variables
 
-| Variable | Purpose |
-|---|---|
-| `POSTGRES_PRISMA_URL` / `POSTGRES_URL_NON_POOLING` | Database (pooled vs direct) |
-| `REDIS_URL` | Redis (optional; rate limiting degrades gracefully without it) |
-| `NEXT_PUBLIC_FIREBASE_*` | Firebase client config |
-| `FIREBASE_ADMIN_*` | Firebase Admin SDK credentials |
-| `OPENAI_API_KEY` | OpenAI API (feature currently disabled) |
-| `IDENTITYTOOLKIT_GOOGLE_API_BASE_URL` | Firebase Identity Toolkit endpoint for login |
-| `API_URL` / `VERCEL_URL` | Base URL used by `getFetchUrl` on the server |
+| Variable                                           | Purpose                                                        |
+| -------------------------------------------------- | -------------------------------------------------------------- |
+| `POSTGRES_PRISMA_URL` / `POSTGRES_URL_NON_POOLING` | Database (pooled vs direct)                                    |
+| `REDIS_URL`                                        | Redis (optional; rate limiting degrades gracefully without it) |
+| `NEXT_PUBLIC_FIREBASE_*`                           | Firebase client config                                         |
+| `FIREBASE_ADMIN_*`                                 | Firebase Admin SDK credentials                                 |
+| `OPENAI_API_KEY`                                   | OpenAI API (feature currently disabled)                        |
+| `IDENTITYTOOLKIT_GOOGLE_API_BASE_URL`              | Firebase Identity Toolkit endpoint for login                   |
+| `API_URL` / `VERCEL_URL`                           | Base URL used by `getFetchUrl` on the server                   |
 
 ### Disabled features
 

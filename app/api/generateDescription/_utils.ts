@@ -31,7 +31,10 @@ export function buildGeminiPrompt(data: DescriptionPayload): string {
     }
   };
 
-  add("Listing", LISTING_TYPE_LABELS[String(data.listingType)] ?? data.listingType);
+  add(
+    "Listing",
+    LISTING_TYPE_LABELS[String(data.listingType)] ?? data.listingType,
+  );
   add("Property type", String(data.propertyType ?? "").toLowerCase());
   add("Price", data.price, ` ${data.currency ?? ""}`);
   add("City", data.locality);
@@ -45,9 +48,18 @@ export function buildGeminiPrompt(data: DescriptionPayload): string {
   add("Garden / outside area", data.areaOutside, " m²");
   add("Garage area", data.areaGarage, " m²");
 
-  if (data.interiorType) add("Interior", INTERIOR_LABELS[String(data.interiorType)] ?? data.interiorType);
-  if (data.upkeepType) add("Condition", UPKEEP_LABELS[String(data.upkeepType)] ?? data.upkeepType);
-  if (data.heatingType) add("Heating", HEATING_LABELS[String(data.heatingType)] ?? data.heatingType);
+  if (data.interiorType)
+    add(
+      "Interior",
+      INTERIOR_LABELS[String(data.interiorType)] ?? data.interiorType,
+    );
+  if (data.upkeepType)
+    add("Condition", UPKEEP_LABELS[String(data.upkeepType)] ?? data.upkeepType);
+  if (data.heatingType)
+    add(
+      "Heating",
+      HEATING_LABELS[String(data.heatingType)] ?? data.heatingType,
+    );
 
   if (data.constructedYear) add("Year built", data.constructedYear);
 

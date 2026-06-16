@@ -1,6 +1,9 @@
 import { NextRequest } from "next/server";
 import { valuesFromSearchParams } from "@/app/lib/validations/valuesFromSearchParams";
-import { listingsSearchParamSchema, type ListingSearchParams } from "@/app/lib/validations/listing";
+import {
+  listingsSearchParamSchema,
+  type ListingSearchParams,
+} from "@/app/lib/validations/listing";
 import { getArraySearchParam } from "@/app/lib/searchParamsArray";
 import {
   prismaQueryConditionsFromArray,
@@ -216,7 +219,10 @@ export const buildPrismaOrderBy = (sortBy?: string) => {
  * @param {number} id - The listing id.
  * @param {any[]} images - Array of images to be updated.
  */
-export const handleImagesUpdate = async (id: number, images: Partial<ListingImage>[]) => {
+export const handleImagesUpdate = async (
+  id: number,
+  images: Partial<ListingImage>[],
+) => {
   for (const image of images) {
     if (!image.id) {
       await prisma.listingImage.create({
@@ -237,7 +243,10 @@ export const handleImagesUpdate = async (id: number, images: Partial<ListingImag
  * @param {number} id - The listing id.
  * @param {any} address - The address to be updated.
  */
-export const handleAddressUpdate = async (id: number, address: Partial<Address> | undefined) => {
+export const handleAddressUpdate = async (
+  id: number,
+  address: Partial<Address> | undefined,
+) => {
   if (address) {
     await prisma.address.update({
       where: { id: address.id, listingId: id },

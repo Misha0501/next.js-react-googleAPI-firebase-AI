@@ -99,7 +99,7 @@ function HomeSearchCollectionsSection() {
               <Link
                 key={collection.title}
                 href={collection.href}
-                className="group flex min-h-[220px] flex-col justify-between rounded-lg border border-slate-200 bg-white p-6 shadow-sm transition-all hover:-translate-y-1 hover:border-[#1F5FD6]/35 hover:shadow-xl"
+                className="hover:border-[#1F5FD6]/35 group flex min-h-[220px] flex-col justify-between rounded-lg border border-slate-200 bg-white p-6 shadow-sm transition-all hover:-translate-y-1 hover:shadow-xl"
               >
                 <div>
                   <div className="mb-5 flex h-11 w-11 items-center justify-center rounded-lg bg-[#1F5FD6]/10 text-[#1F5FD6] transition-colors group-hover:bg-[#1F5FD6] group-hover:text-white">

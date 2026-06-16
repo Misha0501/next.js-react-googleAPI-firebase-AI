@@ -27,7 +27,7 @@ export default function HomeHero() {
           Find your next home in Bulgaria.
         </h1>
 
-        <p className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-white/68 md:text-lg">
+        <p className="text-white/68 mx-auto mt-5 max-w-xl text-base leading-relaxed md:text-lg">
           Browse homes for sale and rent across Bulgarian cities with clear euro
           pricing and filters built for confident decisions.
         </p>
@@ -36,7 +36,7 @@ export default function HomeHero() {
           <HomeHeroHeaderSearch />
         </div>
 
-        <div className="mt-10 flex flex-wrap justify-center gap-x-8 gap-y-3 text-sm font-semibold text-white/62">
+        <div className="text-white/62 mt-10 flex flex-wrap justify-center gap-x-8 gap-y-3 text-sm font-semibold">
           <span className="inline-flex items-center gap-2">
             <CheckBadgeIcon className="h-5 w-5 text-[#AFC7FF]" />
             Verified account flow

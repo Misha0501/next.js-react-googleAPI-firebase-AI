@@ -69,7 +69,11 @@ export const ContactForm = ({ emailTo, subject }: Props) => {
         onChange={formik.handleChange}
         onBlur={formik.handleBlur}
         placeholder="Your name"
-        error={formik.errors.name && formik.touched.name ? formik.errors.name : undefined}
+        error={
+          formik.errors.name && formik.touched.name
+            ? formik.errors.name
+            : undefined
+        }
       />
 
       <Input
@@ -81,7 +85,11 @@ export const ContactForm = ({ emailTo, subject }: Props) => {
         onChange={formik.handleChange}
         onBlur={formik.handleBlur}
         placeholder="Your email"
-        error={formik.errors.email && formik.touched.email ? formik.errors.email : undefined}
+        error={
+          formik.errors.email && formik.touched.email
+            ? formik.errors.email
+            : undefined
+        }
       />
 
       <Input
@@ -93,7 +101,11 @@ export const ContactForm = ({ emailTo, subject }: Props) => {
         onChange={formik.handleChange}
         onBlur={formik.handleBlur}
         placeholder="Your phone number"
-        error={formik.errors.phoneNumber && formik.touched.phoneNumber ? formik.errors.phoneNumber : undefined}
+        error={
+          formik.errors.phoneNumber && formik.touched.phoneNumber
+            ? formik.errors.phoneNumber
+            : undefined
+        }
       />
 
       <Textarea
@@ -105,7 +117,11 @@ export const ContactForm = ({ emailTo, subject }: Props) => {
         onBlur={formik.handleBlur}
         placeholder="Type your message here"
         className="h-52 resize-none"
-        error={formik.errors.message && formik.touched.message ? formik.errors.message : undefined}
+        error={
+          formik.errors.message && formik.touched.message
+            ? formik.errors.message
+            : undefined
+        }
       />
 
       <Button type="submit" loading={sendEmail.isLoading}>

@@ -34,7 +34,7 @@ function EditableConfirmationPage({
       <hr className="my-6 border-slate-200" />
       <div className="detail_single_box">
         <div className="flex justify-between">
-          <p className="font-bold text-lg mb-2">Renting or Selling</p>
+          <p className="mb-2 text-lg font-bold">Renting or Selling</p>
         </div>
         <div className="max-w-lg">
           <PropertyPlacementRadioButtons
@@ -46,9 +46,9 @@ function EditableConfirmationPage({
         </div>
       </div>
       <hr className="my-6 border-slate-200" />
-      <div className="detail_single_box flex gap-2 flex-col">
+      <div className="detail_single_box flex flex-col gap-2">
         <div className="flex justify-between">
-          <p className="font-bold text-lg mb-2">Property type</p>
+          <p className="mb-2 text-lg font-bold">Property type</p>
         </div>
         <div className="max-w-lg">
           <select
@@ -71,9 +71,9 @@ function EditableConfirmationPage({
       <hr className="my-6 border-slate-200" />
       <div className="detail_single_box">
         <div className="flex justify-between">
-          <p className="font-bold text-lg mb-2">Address</p>
+          <p className="mb-2 text-lg font-bold">Address</p>
         </div>
-        <p className="font-bold text-sm mt-4 mb-2">House Number</p>
+        <p className="mb-2 mt-4 text-sm font-bold">House Number</p>
         <input
           type="text"
           id="streetNumber"
@@ -82,7 +82,7 @@ function EditableConfirmationPage({
           onChange={formik.handleChange}
           className={inputClass}
         />
-        <p className="mt-4 mb-2 font-bold text-sm">Street</p>
+        <p className="mb-2 mt-4 text-sm font-bold">Street</p>
         <input
           type="text"
           id="route"
@@ -91,7 +91,7 @@ function EditableConfirmationPage({
           onChange={formik.handleChange}
           className={inputClass}
         />
-        <p className="mt-4 mb-2 font-bold text-sm">City</p>
+        <p className="mb-2 mt-4 text-sm font-bold">City</p>
         <input
           type="text"
           id="locality"
@@ -100,7 +100,7 @@ function EditableConfirmationPage({
           onChange={formik.handleChange}
           className={inputClass}
         />
-        <p className="mt-4 mb-2 font-bold text-sm">Administrative area</p>
+        <p className="mb-2 mt-4 text-sm font-bold">Administrative area</p>
         <input
           type="text"
           id="administrativeArea"
@@ -109,7 +109,7 @@ function EditableConfirmationPage({
           onChange={formik.handleChange}
           className={inputClass}
         />
-        <p className="mt-4 mb-2 font-bold text-sm">Postal Code</p>
+        <p className="mb-2 mt-4 text-sm font-bold">Postal Code</p>
         <input
           type="text"
           id="postalCode"
@@ -118,7 +118,7 @@ function EditableConfirmationPage({
           onChange={formik.handleChange}
           className={inputClass}
         />
-        <p className="mt-4 mb-2 font-bold text-sm">Latitude</p>
+        <p className="mb-2 mt-4 text-sm font-bold">Latitude</p>
         <input
           type="text"
           id="latitude"
@@ -127,7 +127,7 @@ function EditableConfirmationPage({
           onChange={formik.handleChange}
           className={inputClass}
         />
-        <p className="mt-4 mb-2 font-bold text-sm">Longitude</p>
+        <p className="mb-2 mt-4 text-sm font-bold">Longitude</p>
         <input
           type="text"
           id="longitude"
@@ -138,12 +138,12 @@ function EditableConfirmationPage({
         />
       </div>
       <hr className="my-6 border-slate-200" />
-      <div className="detail_single_box flex gap-4 flex-col">
+      <div className="detail_single_box flex flex-col gap-4">
         <div className="flex justify-between">
-          <p className="font-bold text-lg mb-2">Asking Price</p>
+          <p className="mb-2 text-lg font-bold">Asking Price</p>
         </div>
-        <div className="flex gap-2 flex-col">
-          <p className="mb-2 font-bold text-sm">Select the currency</p>
+        <div className="flex flex-col gap-2">
+          <p className="mb-2 text-sm font-bold">Select the currency</p>
           <select
             id="currency"
             onChange={(e) =>
@@ -159,8 +159,8 @@ function EditableConfirmationPage({
             ))}
           </select>
         </div>
-        <div className="flex gap-2 flex-col">
-          <p className="mb-2 font-bold text-sm">Type your price</p>
+        <div className="flex flex-col gap-2">
+          <p className="mb-2 text-sm font-bold">Type your price</p>
           <input
             type="number"
             className={numberInputClass}
@@ -182,9 +182,9 @@ function EditableConfirmationPage({
       </div>
       <hr className="my-6 border-slate-200" />
       {formik.values.propertyType !== "LAND" && (
-        <div className="detail_single_box flex gap-4 flex-col">
+        <div className="detail_single_box flex flex-col gap-4">
           <div>
-            <p className="font-bold text-lg mb-2">
+            <p className="mb-2 text-lg font-bold">
               General information about the property
             </p>
           </div>
@@ -196,8 +196,8 @@ function EditableConfirmationPage({
               ["parking", "Parking places"],
             ] as const
           ).map(([field, label]) => (
-            <div key={field} className="flex gap-1 flex-col">
-              <span className="mb-2 font-bold text-sm">{label}</span>
+            <div key={field} className="flex flex-col gap-1">
+              <span className="mb-2 text-sm font-bold">{label}</span>
               <input
                 type="number"
                 className={numberInputClass}
@@ -219,12 +219,12 @@ function EditableConfirmationPage({
         </div>
       )}
       <hr className="my-6 border-slate-200" />
-      <div className="detail_single_box flex gap-4 flex-col">
+      <div className="detail_single_box flex flex-col gap-4">
         <div className="flex justify-between">
-          <p className="font-bold text-lg mb-2">Property dimensions</p>
+          <p className="mb-2 text-lg font-bold">Property dimensions</p>
         </div>
-        <div className="flex gap-1 flex-col">
-          <span className="mb-2 font-bold text-sm">Total area</span>
+        <div className="flex flex-col gap-1">
+          <span className="mb-2 text-sm font-bold">Total area</span>
           <div className="flex items-center gap-2">
             <input
               type="number"
@@ -249,8 +249,8 @@ function EditableConfirmationPage({
                 ["areaGarage", "Garage"],
               ] as const
             ).map(([field, label]) => (
-              <div key={field} className="flex gap-1 flex-col">
-                <span className="mb-2 font-bold text-sm">{label}</span>
+              <div key={field} className="flex flex-col gap-1">
+                <span className="mb-2 text-sm font-bold">{label}</span>
                 <div className="flex items-center gap-2">
                   <input
                     type="number"
@@ -267,8 +267,8 @@ function EditableConfirmationPage({
                 </div>
               </div>
             ))}
-            <div className="flex gap-1 flex-col">
-              <span className="mb-2 font-bold text-sm">Volume</span>
+            <div className="flex flex-col gap-1">
+              <span className="mb-2 text-sm font-bold">Volume</span>
               <div className="flex items-center gap-2">
                 <input
                   type="number"
@@ -290,9 +290,9 @@ function EditableConfirmationPage({
       <hr className="my-6 border-slate-200" />
       {formik.values.propertyType !== "LAND" && (
         <>
-          <div className="detail_single_box flex gap-2 flex-col">
+          <div className="detail_single_box flex flex-col gap-2">
             <div className="flex justify-between">
-              <p className="font-bold text-lg mb-2">Interior type</p>
+              <p className="mb-2 text-lg font-bold">Interior type</p>
             </div>
             <div className="max-w-lg">
               <SingleSelectRadioButton
@@ -305,9 +305,9 @@ function EditableConfirmationPage({
             </div>
           </div>
           <hr className="my-6 border-slate-200" />
-          <div className="detail_single_box flex gap-2 flex-col">
+          <div className="detail_single_box flex flex-col gap-2">
             <div className="flex justify-between">
-              <p className="font-bold text-lg mb-2">Property condition</p>
+              <p className="mb-2 text-lg font-bold">Property condition</p>
             </div>
             <div className="max-w-lg">
               <SingleSelectRadioButton
@@ -319,9 +319,9 @@ function EditableConfirmationPage({
             </div>
           </div>
           <hr className="my-6 border-slate-200" />
-          <div className="detail_single_box flex gap-2 flex-col">
+          <div className="detail_single_box flex flex-col gap-2">
             <div className="flex justify-between">
-              <p className="font-bold text-lg mb-2">Heating type</p>
+              <p className="mb-2 text-lg font-bold">Heating type</p>
             </div>
             <div className="max-w-lg">
               <SingleSelectRadioButton
@@ -335,17 +335,27 @@ function EditableConfirmationPage({
           <hr className="my-6 border-slate-200" />
           <div className="detail_single_box flex flex-col gap-4">
             <div>
-              <p className="font-bold text-lg mb-2">Building specifications</p>
+              <p className="mb-2 text-lg font-bold">Building specifications</p>
             </div>
             {(
               [
                 ["constructedYear", "Year of built", 2010, 2040],
-                ["numberOfFloorsCommon", "Floors in the building", 0, undefined],
-                ["floorNumber", "Apartment located at floor number", 0, undefined],
+                [
+                  "numberOfFloorsCommon",
+                  "Floors in the building",
+                  0,
+                  undefined,
+                ],
+                [
+                  "floorNumber",
+                  "Apartment located at floor number",
+                  0,
+                  undefined,
+                ],
               ] as const
             ).map(([field, label, min, max]) => (
               <div key={field} className="flex flex-col gap-1">
-                <span className="mb-2 font-bold text-sm">{label}</span>
+                <span className="mb-2 text-sm font-bold">{label}</span>
                 <input
                   type="number"
                   className={numberInputClass}
@@ -374,7 +384,7 @@ function EditableConfirmationPage({
       <hr className="my-6 border-slate-200" />
       <div className="detail_single_box">
         <div className="flex justify-between">
-          <p className="font-bold text-[18px] mb-2">Images</p>
+          <p className="mb-2 text-[18px] font-bold">Images</p>
         </div>
         <div className="max-w-[500px]">
           <PlacingPropertyImagesHandler
@@ -385,16 +395,16 @@ function EditableConfirmationPage({
       </div>
       <hr className="my-6 border-slate-200" />
       <div className="detail_single_box flex flex-col gap-6">
-        <p className="font-bold text-lg mb-2">Property description</p>
+        <p className="mb-2 text-lg font-bold">Property description</p>
         <div className="flex flex-col gap-4">
-          <span className="font-bold text-lg">Description</span>
+          <span className="text-lg font-bold">Description</span>
           <textarea
             name="description"
             id="description"
             onChange={formik.handleChange}
             value={formik.values.description}
             placeholder="Type your description here"
-            className="border-2 border-[#97B6FF] rounded-md max-w-lg outline-0 h-48 max-h-64 min-h-fit p-3 text-gray-500 text-md"
+            className="text-md h-48 max-h-64 min-h-fit max-w-lg rounded-md border-2 border-[#97B6FF] p-3 text-gray-500 outline-0"
           />
         </div>
         <hr className="my-6 border-slate-200" />

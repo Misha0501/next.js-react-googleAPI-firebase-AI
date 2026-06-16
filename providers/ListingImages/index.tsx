@@ -11,6 +11,6 @@ export function useDeleteListingImage(
 ): UseMutationResult<null, Error, ListingsImagesProvider.DeleteMutationProps> {
   return useMutation<null, Error, ListingsImagesProvider.DeleteMutationProps>(
     (payload) => api.deleteItem({ ...props, data: payload }) as Promise<null>,
-    { mutationKey: `${KEY} | Delete`, retry: 0 }
+    { mutationKey: `${KEY} | Delete`, retry: 0 },
   );
 }

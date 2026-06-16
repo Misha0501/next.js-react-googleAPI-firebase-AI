@@ -13,14 +13,18 @@ import { ResponseError } from "@/app/lib/classes/ResponseError";
 export const handleAPIError = (error: unknown): Response => {
   console.error(error);
   if (error instanceof z.ZodError) {
-    return new Response(error.issues.map((i) => i.message).join("; "), { status: 422 });
+    return new Response(error.issues.map((i) => i.message).join("; "), {
+      status: 422,
+    });
   }
   if (error instanceof ResponseError) {
     return new Response(error.message, { status: error.status });
   }
   if (error instanceof Prisma.PrismaClientKnownRequestError) {
     if (error.code === "P2025") {
-      return new Response("The requested record was not found.", { status: 404 });
+      return new Response("The requested record was not found.", {
+        status: 404,
+      });
     }
   }
   if (
@@ -29,7 +33,9 @@ export const handleAPIError = (error: unknown): Response => {
     "status" in error &&
     (error as { status?: unknown }).status === 429
   ) {
-    return new Response("AI quota exceeded. Please try again in a moment.", { status: 503 });
+    return new Response("AI quota exceeded. Please try again in a moment.", {
+      status: 503,
+    });
   }
   if (
     typeof error === "object" &&

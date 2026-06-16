@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server";
 import { loginSchema } from "@/app/lib/validations/auth";
-import { authenticateWithFirebaseIdentityToolkit, setAuthCookiesForOneDay } from "@/app/api/login/_utils";
+import {
+  authenticateWithFirebaseIdentityToolkit,
+  setAuthCookiesForOneDay,
+} from "@/app/api/login/_utils";
 import { handleAPIError } from "@/app/lib/api/handleError";
 import { checkRateLimit } from "@/app/lib/redis/rateLimit";
 

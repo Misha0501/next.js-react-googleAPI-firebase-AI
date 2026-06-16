@@ -1,7 +1,11 @@
 import { ResponseError } from "@/app/lib/classes/ResponseError";
 import { getApplicationUserServer } from "@/app/lib/getApplicationUserServer";
 import { handleAPIError } from "@/app/lib/api/handleError";
-import { authorizeUser, deleteSavedSearch, fetchSavedSearch } from "@/app/api/savedSearches/_utils";
+import {
+  authorizeUser,
+  deleteSavedSearch,
+  fetchSavedSearch,
+} from "@/app/api/savedSearches/_utils";
 import { validateParamId } from "@/app/lib/api/validateParamId";
 
 /**

@@ -110,7 +110,10 @@ export const PlacingPropertyImagesHandler = ({
     const next = [...images];
     const [moved] = next.splice(fromIndex, 1);
     next.splice(toIndex, 0, moved);
-    const reindexed = next.map((img, i) => ({ ...img, positionInListing: i + 1 }));
+    const reindexed = next.map((img, i) => ({
+      ...img,
+      positionInListing: i + 1,
+    }));
     setImages(reindexed);
     onChange(reindexed);
   };

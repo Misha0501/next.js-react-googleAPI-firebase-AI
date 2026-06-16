@@ -141,9 +141,15 @@ export const listingSchema = z.object({
 
 export const listingSchemaPutRequest = listingSchema.extend({
   id: z.number(),
-  listingType: z.enum(LISTING_TYPES as [ListingType, ...ListingType[]]).optional(),
-  interiorType: z.enum(INTERIOR_TYPES as [InteriorType, ...InteriorType[]]).optional(),
-  propertyType: z.enum(PROPERTY_TYPES as [PropertyType, ...PropertyType[]]).optional(),
+  listingType: z
+    .enum(LISTING_TYPES as [ListingType, ...ListingType[]])
+    .optional(),
+  interiorType: z
+    .enum(INTERIOR_TYPES as [InteriorType, ...InteriorType[]])
+    .optional(),
+  propertyType: z
+    .enum(PROPERTY_TYPES as [PropertyType, ...PropertyType[]])
+    .optional(),
   price: z.number().min(0).optional(),
   currency: z.enum(CURRENCIES as [CurrencyType, ...CurrencyType[]]).optional(),
   address: baseAddressSchema.extend({ id: z.number() }).optional(),
@@ -231,7 +237,9 @@ export const listingsSearchParamSchema = z.object({
     .max(INTERIOR_TYPES.length)
     .refine(
       (userInputArray) =>
-        userInputArray.every((el) => INTERIOR_TYPES.includes(el as InteriorType)),
+        userInputArray.every((el) =>
+          INTERIOR_TYPES.includes(el as InteriorType),
+        ),
       {
         message: `Invalid interior type input. Allowed values: ${INTERIOR_TYPES}`,
       },
@@ -242,7 +250,9 @@ export const listingsSearchParamSchema = z.object({
     .max(PROPERTY_TYPES.length)
     .refine(
       (userInputArray) =>
-        userInputArray.every((el) => PROPERTY_TYPES.includes(el as PropertyType)),
+        userInputArray.every((el) =>
+          PROPERTY_TYPES.includes(el as PropertyType),
+        ),
       {
         message: `Invalid interior type input. Allowed values: ${PROPERTY_TYPES}`,
       },
@@ -280,22 +290,18 @@ export const listingsSearchParamSchema = z.object({
     .max(1)
     .transform((arr) => arr[0] ?? "")
     .pipe(
-      z
-        .string()
-        .refine((v) => isValidDateFromString(v), {
-          message: "Invalid plain date, should be the next format 2023-12-31",
-        }),
+      z.string().refine((v) => isValidDateFromString(v), {
+        message: "Invalid plain date, should be the next format 2023-12-31",
+      }),
     )
     .optional(),
   constructedYearMax: searchParamSchema
     .max(1)
     .transform((arr) => arr[0] ?? "")
     .pipe(
-      z
-        .string()
-        .refine((v) => isValidDateFromString(v), {
-          message: "Invalid plain date, should be the next format 2023-12-31",
-        }),
+      z.string().refine((v) => isValidDateFromString(v), {
+        message: "Invalid plain date, should be the next format 2023-12-31",
+      }),
     )
     .optional(),
 });

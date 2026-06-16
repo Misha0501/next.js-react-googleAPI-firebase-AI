@@ -12,7 +12,9 @@ export const ListingItemFeatures = ({
   isLoading,
 }: ListingItemFeaturesProps) => {
   if (isLoading) {
-    return <div className="h-[34px] w-[260px] animate-pulse rounded bg-slate-200" />;
+    return (
+      <div className="h-[34px] w-[260px] animate-pulse rounded bg-slate-200" />
+    );
   }
 
   return (

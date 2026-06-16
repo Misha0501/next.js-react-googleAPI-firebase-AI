@@ -2,10 +2,16 @@ import service from "../../services";
 import { SavedSearchesProvider } from "./types";
 import type { AuthProps } from "@/providers/types";
 
-type CreateProps = AuthProps & { data: SavedSearchesProvider.CreateMutationPayload };
-type DeleteProps = AuthProps & { data: SavedSearchesProvider.DeleteMutationPayload };
+type CreateProps = AuthProps & {
+  data: SavedSearchesProvider.CreateMutationPayload;
+};
+type DeleteProps = AuthProps & {
+  data: SavedSearchesProvider.DeleteMutationPayload;
+};
 
-export async function savedSearches(props?: AuthProps & { page?: number }): Promise<SavedSearchesProvider.ReadResponse> {
+export async function savedSearches(
+  props?: AuthProps & { page?: number },
+): Promise<SavedSearchesProvider.ReadResponse> {
   const page = props?.page ?? 1;
   return service<SavedSearchesProvider.ReadResponse>({
     method: "GET",

@@ -27,9 +27,17 @@ export function useCreateCompanyMembershipInvites(
   any,
   CompanyMembershipInvitesProvider.CreateMutationPayload
 > {
-  return useMutation<CompanyMembershipInvite, any, CompanyMembershipInvitesProvider.CreateMutationPayload>(
-    (payload) => api.create({ ...props, data: payload }) as Promise<CompanyMembershipInvite>,
-    { mutationKey: `${KEY} | Create`, retry: 0 }
+  return useMutation<
+    CompanyMembershipInvite,
+    any,
+    CompanyMembershipInvitesProvider.CreateMutationPayload
+  >(
+    (payload) =>
+      api.create({
+        ...props,
+        data: payload,
+      }) as Promise<CompanyMembershipInvite>,
+    { mutationKey: `${KEY} | Create`, retry: 0 },
   );
 }
 
@@ -41,9 +49,17 @@ export function useDeclineCompanyMembershipInvite(
   any,
   CompanyMembershipInvitesProvider.DeclineMutationPayload
 > {
-  return useMutation<CompanyMembershipInvite, any, CompanyMembershipInvitesProvider.DeclineMutationPayload>(
-    (payload) => api.decline({ ...props, data: payload }) as Promise<CompanyMembershipInvite>,
-    { mutationKey: `${KEY} | Decline`, retry: 0 }
+  return useMutation<
+    CompanyMembershipInvite,
+    any,
+    CompanyMembershipInvitesProvider.DeclineMutationPayload
+  >(
+    (payload) =>
+      api.decline({
+        ...props,
+        data: payload,
+      }) as Promise<CompanyMembershipInvite>,
+    { mutationKey: `${KEY} | Decline`, retry: 0 },
   );
 }
 
@@ -55,8 +71,12 @@ export function useDeleteCompanyMembershipInvite(
   any,
   CompanyMembershipInvitesProvider.DeleteMutationPayload
 > {
-  return useMutation<null, any, CompanyMembershipInvitesProvider.DeleteMutationPayload>(
-    (payload) => api.deleteItem({ ...props, data: payload }) as Promise<null>,
-    { mutationKey: `${KEY} | Delete`, retry: 0 }
-  );
+  return useMutation<
+    null,
+    any,
+    CompanyMembershipInvitesProvider.DeleteMutationPayload
+  >((payload) => api.deleteItem({ ...props, data: payload }) as Promise<null>, {
+    mutationKey: `${KEY} | Delete`,
+    retry: 0,
+  });
 }

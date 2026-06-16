@@ -125,16 +125,8 @@ export const PriceChangeGraphSection = ({ listingPriceArray }: Prop) => {
                     x2="0"
                     y2="1"
                   >
-                    <stop
-                      offset="5%"
-                      stopColor="#3b82f6"
-                      stopOpacity={0.15}
-                    />
-                    <stop
-                      offset="95%"
-                      stopColor="#3b82f6"
-                      stopOpacity={0}
-                    />
+                    <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.15} />
+                    <stop offset="95%" stopColor="#3b82f6" stopOpacity={0} />
                   </linearGradient>
                 </defs>
                 <CartesianGrid

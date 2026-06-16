@@ -32,7 +32,7 @@ export default function RootLayout({
           content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, user-scalable=no, viewport-fit=cover"
         />
       </head>
-      <body className={`${inter.className} min-h-screen flex flex-col`}>
+      <body className={`${inter.className} flex min-h-screen flex-col`}>
         <ScrollToTop />
         <Navigation />
         <main className="flex-1 pb-28 lg:pb-0">

@@ -1,19 +1,28 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 import { loadJS } from "@/app/lib/loadJS";
 
 type GoogleInstance = typeof google;
 
 let googleInstance: GoogleInstance | undefined;
 
-export const useGooglePlaces = (): [GoogleInstance | undefined, boolean, string | null] => {
-  const [googleState, setGoogleState] = useState<GoogleInstance | undefined>(googleInstance);
+export const useGooglePlaces = (): [
+  GoogleInstance | undefined,
+  boolean,
+  string | null,
+] => {
+  const [googleState, setGoogleState] = useState<GoogleInstance | undefined>(
+    googleInstance,
+  );
   const [loading, setLoading] = useState(!googleInstance);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (googleInstance) return;
 
-    const win = window as Window & { google?: GoogleInstance; initGoogleServices?: (...args: unknown[]) => Promise<void> };
+    const win = window as Window & {
+      google?: GoogleInstance;
+      initGoogleServices?: (...args: unknown[]) => Promise<void>;
+    };
 
     if (win.google?.maps?.places?.AutocompleteSuggestion) {
       googleInstance = win.google;
@@ -25,15 +34,18 @@ export const useGooglePlaces = (): [GoogleInstance | undefined, boolean, string 
     // Maps JS already loaded (e.g. by GoogleMap.tsx) but places not imported yet.
     // importLibrary directly rather than waiting for a callback that already fired.
     if (win.google?.maps) {
-      win.google.maps.importLibrary("places").then(() => {
-        googleInstance = win.google;
-        setGoogleState(googleInstance);
-        setLoading(false);
-      }).catch((err: unknown) => {
-        console.error("Failed to import Places library:", err);
-        setError("Something went wrong please try again later");
-        setLoading(false);
-      });
+      win.google.maps
+        .importLibrary("places")
+        .then(() => {
+          googleInstance = win.google;
+          setGoogleState(googleInstance);
+          setLoading(false);
+        })
+        .catch((err: unknown) => {
+          console.error("Failed to import Places library:", err);
+          setError("Something went wrong please try again later");
+          setLoading(false);
+        });
       return;
     }
 
@@ -56,7 +68,7 @@ export const useGooglePlaces = (): [GoogleInstance | undefined, boolean, string 
           console.error(`Failed to load Google Places Script: ${err}`);
           setError(`Something went wrong please try again later`);
           setLoading(false);
-        }
+        },
       );
     }
   }, []);

@@ -3,8 +3,12 @@ import { SavedListingsProvider } from "@/providers/SavedListings/types";
 import { SavedListing } from "@/types";
 import type { AuthProps } from "@/providers/types";
 
-type CreateProps = AuthProps & { data: SavedListingsProvider.CreateMutationPayload };
-type DeleteProps = AuthProps & { data: SavedListingsProvider.DeleteMutationPayload };
+type CreateProps = AuthProps & {
+  data: SavedListingsProvider.CreateMutationPayload;
+};
+type DeleteProps = AuthProps & {
+  data: SavedListingsProvider.DeleteMutationPayload;
+};
 
 export async function savedListings(
   props?: AuthProps & { page?: number },

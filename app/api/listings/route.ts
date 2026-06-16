@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import { listingSchema, listingSchemaPutRequest } from "@/app/lib/validations/listing";
+import {
+  listingSchema,
+  listingSchemaPutRequest,
+} from "@/app/lib/validations/listing";
 import { getApplicationUserServer } from "@/app/lib/getApplicationUserServer";
 import { prisma } from "@/app/lib/db/client";
 import { getApplicationUserCompanyId } from "@/app/lib/listing/getApplicationUserCompanyId";
@@ -11,7 +14,7 @@ import {
   handleAddressUpdate,
   handleImagesUpdate,
   handlePriceUpdate,
-  validateListingExistence
+  validateListingExistence,
 } from "@/app/api/listings/_utils";
 import { ApplicationUser } from "@/types";
 import { handleAPIError } from "@/app/lib/api/handleError";
@@ -147,9 +150,16 @@ export async function PUT(req: Request) {
 
     ensureUserHasListingAccess(applicationUser, listing);
 
-    if (images) await handleImagesUpdate(id, images as Parameters<typeof handleImagesUpdate>[1]);
+    if (images)
+      await handleImagesUpdate(
+        id,
+        images as Parameters<typeof handleImagesUpdate>[1],
+      );
 
-    await handleAddressUpdate(id, address as Parameters<typeof handleAddressUpdate>[1]);
+    await handleAddressUpdate(
+      id,
+      address as Parameters<typeof handleAddressUpdate>[1],
+    );
     await handlePriceUpdate(id, price, currency);
 
     const updatedListing = await prisma.listing.update({

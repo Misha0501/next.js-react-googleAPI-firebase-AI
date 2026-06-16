@@ -44,7 +44,7 @@ export const SavedItemsPageTabs = ({ activeView }: Props) => {
                 href={item.href}
                 role="tab"
                 aria-selected={active}
-                className={`flex min-h-11 items-center justify-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold transition ${
+                className={`min-h-11 flex items-center justify-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold transition ${
                   active
                     ? "bg-[#1F5FD6] text-white shadow-sm"
                     : "text-[#4A5468] hover:bg-[#F8FAFC] hover:text-[#1F5FD6]"

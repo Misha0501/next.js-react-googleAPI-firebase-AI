@@ -206,7 +206,7 @@ export default function SignInPageContent() {
               className="object-cover"
               sizes="(min-width: 1024px) 50vw, 100vw"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/55 to-slate-950/10" />
+            <div className="via-slate-950/55 absolute inset-0 bg-gradient-to-t from-slate-950 to-slate-950/10" />
             <div className="absolute inset-x-0 bottom-0 p-10 text-white">
               <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-sm font-medium backdrop-blur">
                 <ShieldCheckIcon className="h-5 w-5" />
@@ -223,15 +223,15 @@ export default function SignInPageContent() {
                   : "Create a free account to save properties, place properties, and manage your real estate activity."}
               </p>
               <div className="mt-8 grid grid-cols-3 gap-3">
-                <div className="rounded-lg border border-white/15 bg-white/10 p-4 backdrop-blur">
+                <div className="border-white/15 rounded-lg border bg-white/10 p-4 backdrop-blur">
                   <p className="text-2xl font-semibold">100+</p>
                   <p className="mt-1 text-sm text-white/75">listed homes</p>
                 </div>
-                <div className="rounded-lg border border-white/15 bg-white/10 p-4 backdrop-blur">
+                <div className="border-white/15 rounded-lg border bg-white/10 p-4 backdrop-blur">
                   <p className="text-2xl font-semibold">24/7</p>
                   <p className="mt-1 text-sm text-white/75">account access</p>
                 </div>
-                <div className="rounded-lg border border-white/15 bg-white/10 p-4 backdrop-blur">
+                <div className="border-white/15 rounded-lg border bg-white/10 p-4 backdrop-blur">
                   <p className="text-2xl font-semibold">EU</p>
                   <p className="mt-1 text-sm text-white/75">Euro pricing</p>
                 </div>
@@ -302,7 +302,7 @@ export default function SignInPageContent() {
                     <div>
                       <label
                         htmlFor="email"
-                        className="block text-sm font-medium text-slate-700 mb-1.5"
+                        className="mb-1.5 block text-sm font-medium text-slate-700"
                       >
                         Email address
                       </label>
@@ -322,7 +322,7 @@ export default function SignInPageContent() {
                     <div>
                       <label
                         htmlFor="password"
-                        className="block text-sm font-medium text-slate-700 mb-1.5"
+                        className="mb-1.5 block text-sm font-medium text-slate-700"
                       >
                         Password
                       </label>
@@ -345,7 +345,12 @@ export default function SignInPageContent() {
                       </p>
                     )}
 
-                    <Button type="submit" loading={isLoading} fullWidth className="rounded-lg">
+                    <Button
+                      type="submit"
+                      loading={isLoading}
+                      fullWidth
+                      className="rounded-lg"
+                    >
                       {isLoading ? "Signing in…" : "Sign in"}
                     </Button>
                   </form>
@@ -358,7 +363,7 @@ export default function SignInPageContent() {
                     <div>
                       <label
                         htmlFor="displayName"
-                        className="block text-sm font-medium text-slate-700 mb-1.5"
+                        className="mb-1.5 block text-sm font-medium text-slate-700"
                       >
                         Full name
                       </label>
@@ -377,7 +382,7 @@ export default function SignInPageContent() {
                     <div>
                       <label
                         htmlFor="signup-email"
-                        className="block text-sm font-medium text-slate-700 mb-1.5"
+                        className="mb-1.5 block text-sm font-medium text-slate-700"
                       >
                         Email address
                       </label>
@@ -397,7 +402,7 @@ export default function SignInPageContent() {
                     <div>
                       <label
                         htmlFor="signup-password"
-                        className="block text-sm font-medium text-slate-700 mb-1.5"
+                        className="mb-1.5 block text-sm font-medium text-slate-700"
                       >
                         Password
                       </label>
@@ -417,7 +422,7 @@ export default function SignInPageContent() {
                     <div>
                       <label
                         htmlFor="confirmPassword"
-                        className="block text-sm font-medium text-slate-700 mb-1.5"
+                        className="mb-1.5 block text-sm font-medium text-slate-700"
                       >
                         Confirm password
                       </label>
@@ -440,7 +445,12 @@ export default function SignInPageContent() {
                       </p>
                     )}
 
-                    <Button type="submit" loading={isLoading} fullWidth className="rounded-lg">
+                    <Button
+                      type="submit"
+                      loading={isLoading}
+                      fullWidth
+                      className="rounded-lg"
+                    >
                       {isLoading ? "Creating account…" : "Create account"}
                     </Button>
                   </form>

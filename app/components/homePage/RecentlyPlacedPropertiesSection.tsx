@@ -19,16 +19,16 @@ function RecentlyPlacedPropertiesSection() {
       <div className="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
         <div className="mb-10 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           <div>
-            <h3 className="text-[#222222] font-bold text-2xl md:text-[40px]">
+            <h3 className="text-2xl font-bold text-[#222222] md:text-[40px]">
               Recently placed properties
             </h3>
-            <p className="text-[#717D96] mt-3">
+            <p className="mt-3 text-[#717D96]">
               Fresh properties from owners and agencies.
             </p>
           </div>
           <Link
             href="/listings?sortBy=createdAtDesc"
-            className="text-[#1F5FD6] font-bold hover:underline"
+            className="font-bold text-[#1F5FD6] hover:underline"
           >
             View all properties
           </Link>

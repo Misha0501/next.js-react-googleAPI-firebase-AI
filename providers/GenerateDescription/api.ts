@@ -3,7 +3,7 @@ import { Description } from "./types";
 
 // Create
 export async function generate(
-  props: Description.CreateAPIPayload
+  props: Description.CreateAPIPayload,
 ): Promise<string> {
   return service({
     method: "POST",

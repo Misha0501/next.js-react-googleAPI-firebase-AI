@@ -7,7 +7,7 @@ import {
   ListingType,
   PropertyType,
   UpkeepType,
-  CompanyMembershipRoleType
+  CompanyMembershipRoleType,
 } from "@/types";
 
 export const HEATING_TYPES: HeatingType[] = ["CENTRAL", "BOILER"];

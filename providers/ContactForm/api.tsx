@@ -1,7 +1,9 @@
 import service from "@/services";
 import { ContactFormProvider } from "./types";
 
-export async function create(props: { data: ContactFormProvider.CreateMutationPayload }): Promise<null> {
+export async function create(props: {
+  data: ContactFormProvider.CreateMutationPayload;
+}): Promise<null> {
   return service({
     method: "POST",
     url: `/api/contactForm`,

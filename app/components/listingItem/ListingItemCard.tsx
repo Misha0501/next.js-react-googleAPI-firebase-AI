@@ -3,11 +3,7 @@
 import Image from "next/image";
 import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/solid";
 import { MapPinIcon, PhotoIcon } from "@heroicons/react/24/outline";
-import {
-  forwardRef,
-  type KeyboardEventHandler,
-  type ReactNode,
-} from "react";
+import { forwardRef, type KeyboardEventHandler, type ReactNode } from "react";
 import type { Listing } from "@/types";
 import {
   formatEuroPrice,
@@ -113,7 +109,7 @@ export const ListingItemCard = forwardRef<HTMLDivElement, ListingItemCardProps>(
         tabIndex={0}
         onClick={onClick}
         onKeyDown={onKeyDown}
-        className="group h-fit cursor-pointer animate-listing-card-enter overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition duration-300 hover:-translate-y-0.5 hover:border-[#CFE0FF] hover:shadow-[0_20px_45px_rgba(15,23,42,0.12)] focus:outline-none focus:ring-2 focus:ring-[#1F5FD6]/30 focus:ring-offset-2"
+        className="animate-listing-card-enter group h-fit cursor-pointer overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition duration-300 hover:-translate-y-0.5 hover:border-[#CFE0FF] hover:shadow-[0_20px_45px_rgba(15,23,42,0.12)] focus:outline-none focus:ring-2 focus:ring-[#1F5FD6]/30 focus:ring-offset-2"
       >
         {isLoading ? (
           <div className="h-[242px] w-full animate-pulse bg-slate-200" />
@@ -133,7 +129,7 @@ export const ListingItemCard = forwardRef<HTMLDivElement, ListingItemCardProps>(
               placeholder="blur"
               blurDataURL={LISTING_IMAGE_BLUR_DATA_URL}
             />
-            <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-slate-950/45 to-transparent" />
+            <div className="from-slate-950/45 absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t to-transparent" />
             <div className="absolute left-4 right-4 top-4 z-10 flex items-start justify-between gap-3">
               <div className="flex flex-wrap gap-2">
                 {listingLabel && (
@@ -158,7 +154,7 @@ export const ListingItemCard = forwardRef<HTMLDivElement, ListingItemCardProps>(
             {!hasListingImage && (
               <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-slate-950/5 text-slate-500">
                 <PhotoIcon className="h-9 w-9" />
-                <span className="rounded-md bg-white/85 px-3 py-1 text-sm font-semibold shadow-sm">
+                <span className="bg-white/85 rounded-md px-3 py-1 text-sm font-semibold shadow-sm">
                   No image available
                 </span>
               </div>

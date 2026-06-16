@@ -1,0 +1,9 @@
+.next
+node_modules
+dist
+build
+coverage
+public
+prisma/migrations
+*.min.js
+*.min.css

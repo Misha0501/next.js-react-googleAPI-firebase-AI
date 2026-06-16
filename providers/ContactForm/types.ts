@@ -6,5 +6,5 @@ export namespace ContactFormProvider {
     message: string;
     emailTo?: string;
     subject?: string;
-  }
+  };
 }

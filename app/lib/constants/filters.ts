@@ -4,17 +4,7 @@ export const propertyTypesInitialState = [
 ];
 export const NO_MAX = "No max";
 
-export const areaLivingMinOptions = [
-  0,
-  50,
-  75,
-  100,
-  125,
-  150,
-  175,
-  200,
-  250,
-];
+export const areaLivingMinOptions = [0, 50, 75, 100, 125, 150, 175, 200, 250];
 export const areaLivingMaxOptions = [
   50,
   75,
@@ -24,20 +14,11 @@ export const areaLivingMaxOptions = [
   175,
   200,
   250,
-  NO_MAX
+  NO_MAX,
 ];
 
 export const areaLandMinOptions = [
-  0,
-  100,
-  150,
-  200,
-  250,
-  300,
-  350,
-  400,
-  450,
-  500,
+  0, 100, 150, 200, 250, 300, 350, 400, 450, 500,
 ];
 export const areaLandMaxOptions = [
   100,
@@ -51,22 +32,8 @@ export const areaLandMaxOptions = [
   NO_MAX,
 ];
 
-const propertyMinPriceBuy = [
-  0,
-  50000,
-  75000,
-  100000,
-  125000,
-  150000,
-];
-const propertyMaxPriceBuy = [
-  50000,
-  75000,
-  100000,
-  125000,
-  150000,
-  NO_MAX,
-];
+const propertyMinPriceBuy = [0, 50000, 75000, 100000, 125000, 150000];
+const propertyMaxPriceBuy = [50000, 75000, 100000, 125000, 150000, NO_MAX];
 export const minRoomsOptions = [0, 1, 2, 3, 4, 5];
 export const maxRoomsOptions = [1, 2, 3, 4, 5, NO_MAX];
 export const minBedroomsOptions = [0, 1, 2, 3, 4, 5];
@@ -105,29 +72,17 @@ export const listedSinceOptions = [
 ];
 
 export const sortOption = [
-  "Default",'Accending','Descending','Newest','Oldest']
+  "Default",
+  "Accending",
+  "Descending",
+  "Newest",
+  "Oldest",
+];
 
 export const priceSellMinOptions = [
-  0,
-  50000,
-  75000,
-  100000,
-  125000,
-  175000,
-  200000,
-  250000,
-  300000,
-  350000,
-  400000,
-  450000,
-  500000,
-  600000,
-  700000,
-  800000,
-  900000,
-  1000000,
-  1250000,
-  1500000
+  0, 50000, 75000, 100000, 125000, 175000, 200000, 250000, 300000, 350000,
+  400000, 450000, 500000, 600000, 700000, 800000, 900000, 1000000, 1250000,
+  1500000,
 ];
 
 export const priceSellMaxOptions = [
@@ -150,38 +105,12 @@ export const priceSellMaxOptions = [
   1000000,
   1250000,
   1500000,
-  NO_MAX
+  NO_MAX,
 ];
 
 export const priceRentMinOptions = [
-0,
-100,
-200,
-300,
-400,
-500,
-600,
-700,
-800,
-900,
-1000,
-1250,
-1500,
-1750,
-2000,
-2250,
-2500,
-2750,
-3000,
-3500,
-4000,
-4500,
-5000,
-6000,
-7000,
-8000,
-9000,
-10000
+  0, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1250, 1500, 1750, 2000,
+  2250, 2500, 2750, 3000, 3500, 4000, 4500, 5000, 6000, 7000, 8000, 9000, 10000,
 ];
 
 export const priceRentMaxOptions = [
@@ -212,5 +141,5 @@ export const priceRentMaxOptions = [
   8000,
   9000,
   10000,
-  NO_MAX
+  NO_MAX,
 ];

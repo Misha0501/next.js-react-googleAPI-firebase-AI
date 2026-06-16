@@ -115,7 +115,8 @@ function DescriptionAndImages({
     setShowErrors(true);
   };
 
-  const description = streamingText !== null ? streamingText : (formik.values.description || "");
+  const description =
+    streamingText !== null ? streamingText : formik.values.description || "";
   const stepNumber = "Step 3";
 
   return (
@@ -184,14 +185,18 @@ function DescriptionAndImages({
                 <textarea
                   disabled={isLoading}
                   onChange={(event) => {
-                    formik.setFieldValue("description", event.target.value, true);
+                    formik.setFieldValue(
+                      "description",
+                      event.target.value,
+                      true,
+                    );
                   }}
                   onBlur={formik.handleBlur}
                   value={description}
                   name="description"
                   id="description"
                   placeholder="Describe the layout, condition, natural light, location and anything buyers should know."
-                  className="min-h-[190px] w-full resize-y rounded-xl border border-slate-200 bg-white p-4 text-sm leading-6 text-[#1F2937] outline-none transition placeholder:text-slate-400 focus:border-[#1F5FD6] focus:ring-2 focus:ring-[#1F5FD6]/15 disabled:bg-slate-50"
+                  className="focus:ring-[#1F5FD6]/15 min-h-[190px] w-full resize-y rounded-xl border border-slate-200 bg-white p-4 text-sm leading-6 text-[#1F2937] outline-none transition placeholder:text-slate-400 focus:border-[#1F5FD6] focus:ring-2 disabled:bg-slate-50"
                 />
                 {showError && (
                   <ErrorText>{formik.errors.description as string}</ErrorText>

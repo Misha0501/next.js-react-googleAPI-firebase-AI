@@ -69,7 +69,7 @@ export const ListingDetailImages = ({ images }: Props) => {
           {images[0]?.url && (
             <div
               onClick={() => handleOpenLightBox(0)}
-              className={`group overflow-hidden rounded-xl cursor-pointer ${
+              className={`group cursor-pointer overflow-hidden rounded-xl ${
                 listingImagesAmount > 2 ? "col-span-2" : "col-span-1"
               }`}
             >
@@ -87,7 +87,7 @@ export const ListingDetailImages = ({ images }: Props) => {
           {/* 2-image layout: second image beside main */}
           {listingImagesAmount === 2 && images[1]?.url && (
             <div
-              className="group overflow-hidden rounded-xl cursor-pointer"
+              className="group cursor-pointer overflow-hidden rounded-xl"
               onClick={() => handleOpenLightBox(1)}
             >
               <Image
@@ -105,7 +105,7 @@ export const ListingDetailImages = ({ images }: Props) => {
             <div className="grid h-full min-h-0 grid-rows-2 gap-1.5">
               {images[1]?.url && (
                 <div
-                  className="group min-h-0 overflow-hidden rounded-xl cursor-pointer"
+                  className="group min-h-0 cursor-pointer overflow-hidden rounded-xl"
                   onClick={() => handleOpenLightBox(1)}
                 >
                   <Image
@@ -119,7 +119,7 @@ export const ListingDetailImages = ({ images }: Props) => {
               )}
               {images[2]?.url && (
                 <div
-                  className="group min-h-0 overflow-hidden rounded-xl cursor-pointer"
+                  className="group min-h-0 cursor-pointer overflow-hidden rounded-xl"
                   onClick={() => handleOpenLightBox(2)}
                 >
                   <Image
@@ -151,7 +151,7 @@ export const ListingDetailImages = ({ images }: Props) => {
       <div className="block lg:hidden">
         {images[0]?.url && (
           <div
-            className="h-[56vw] min-h-[220px] max-h-[360px] overflow-hidden rounded-t-2xl border border-b-0 border-slate-200 bg-white cursor-pointer shadow-sm"
+            className="h-[56vw] max-h-[360px] min-h-[220px] cursor-pointer overflow-hidden rounded-t-2xl border border-b-0 border-slate-200 bg-white shadow-sm"
             onClick={() => handleOpenLightBox(0)}
           >
             <Image

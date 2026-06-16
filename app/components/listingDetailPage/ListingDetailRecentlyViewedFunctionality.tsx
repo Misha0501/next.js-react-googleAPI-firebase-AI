@@ -7,7 +7,9 @@ import { useAuthContext } from "@/app/context/AuthContext";
 type Props = {
   listingId: number;
 };
-export const ListingDetailRecentlyViewedFunctionality = ({ listingId }: Props) => {
+export const ListingDetailRecentlyViewedFunctionality = ({
+  listingId,
+}: Props) => {
   const { authToken } = useAuthContext();
 
   const createRecentlyViewedListing = useCreateRecentlyViewedListing({

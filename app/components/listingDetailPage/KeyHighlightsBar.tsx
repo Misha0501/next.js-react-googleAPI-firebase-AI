@@ -16,7 +16,7 @@ const Chip = ({ icon, label }: { icon: React.ReactNode; label: string }) => (
     <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#EAF2FF] text-[#1F5FD6]">
       {icon}
     </span>
-    <span className="text-sm text-[#2D3648] font-medium">{label}</span>
+    <span className="text-sm font-medium text-[#2D3648]">{label}</span>
   </div>
 );
 
@@ -93,7 +93,7 @@ export const KeyHighlightsBar = ({ listing }: Prop) => {
   if (!chips.length) return null;
 
   return (
-    <div className="overflow-x-auto scrollbar-hide">
+    <div className="scrollbar-hide overflow-x-auto">
       <div className="flex min-w-max gap-3 pb-1">
         {chips.map((chip, i) => (
           <Chip key={i} {...chip} />

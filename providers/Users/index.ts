@@ -44,7 +44,11 @@ export function useUserOwnData(
 
 export function useUpdateUser(
   props: ApplicationUserProvider.GetProps,
-): UseMutationResult<ApplicationUser, Error, ApplicationUserProvider.UpdatePropsMutation> {
+): UseMutationResult<
+  ApplicationUser,
+  Error,
+  ApplicationUserProvider.UpdatePropsMutation
+> {
   return useMutation((payload) => api.update({ ...props, data: payload }), {
     mutationKey: `${KEY} | Update`,
     retry: 0,

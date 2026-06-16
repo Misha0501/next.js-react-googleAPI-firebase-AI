@@ -3,11 +3,19 @@ import { CompanyMembershipInvitesProvider } from "./types";
 import type { CompanyMembershipInvite } from "@/types";
 
 type ReadProps = CompanyMembershipInvitesProvider.POSTProps;
-type CreateProps = ReadProps & { data: CompanyMembershipInvitesProvider.CreateMutationPayload };
-type DeclineProps = ReadProps & { data: CompanyMembershipInvitesProvider.DeclineMutationPayload };
-type DeleteProps = ReadProps & { data: CompanyMembershipInvitesProvider.DeleteMutationPayload };
+type CreateProps = ReadProps & {
+  data: CompanyMembershipInvitesProvider.CreateMutationPayload;
+};
+type DeclineProps = ReadProps & {
+  data: CompanyMembershipInvitesProvider.DeclineMutationPayload;
+};
+type DeleteProps = ReadProps & {
+  data: CompanyMembershipInvitesProvider.DeleteMutationPayload;
+};
 
-export async function companyMembershipInvites(props?: ReadProps): Promise<CompanyMembershipInvite[]> {
+export async function companyMembershipInvites(
+  props?: ReadProps,
+): Promise<CompanyMembershipInvite[]> {
   return service({
     method: "GET",
     url: `/api/companyMembershipInvites`,
@@ -15,7 +23,9 @@ export async function companyMembershipInvites(props?: ReadProps): Promise<Compa
   });
 }
 
-export async function create(props: CreateProps): Promise<CompanyMembershipInvite> {
+export async function create(
+  props: CreateProps,
+): Promise<CompanyMembershipInvite> {
   return service({
     method: "POST",
     url: `/api/companyMembershipInvites`,
@@ -24,7 +34,9 @@ export async function create(props: CreateProps): Promise<CompanyMembershipInvit
   });
 }
 
-export async function decline(props: DeclineProps): Promise<CompanyMembershipInvite> {
+export async function decline(
+  props: DeclineProps,
+): Promise<CompanyMembershipInvite> {
   return service({
     method: "POST",
     url: `/api/companyMembershipInvites/decline`,

@@ -16,7 +16,10 @@ const GoogleMap = ({ location, "data-testid": dataTestId }: GoogleMapProps) => {
   useEffect(() => {
     const lat = Number(location.lat);
     const lng = Number(location.lng);
-    const win = window as Window & { google?: typeof google; initGoogleServices?: (...args: unknown[]) => Promise<void> };
+    const win = window as Window & {
+      google?: typeof google;
+      initGoogleServices?: (...args: unknown[]) => Promise<void>;
+    };
 
     const initMap = async () => {
       if (!containerRef.current || !win.google?.maps) return;
@@ -31,8 +34,7 @@ const GoogleMap = ({ location, "data-testid": dataTestId }: GoogleMapProps) => {
 
       // Use AdvancedMarkerElement if available, fall back to Marker
       try {
-        const { AdvancedMarkerElement } =
-          await g.maps.importLibrary("marker");
+        const { AdvancedMarkerElement } = await g.maps.importLibrary("marker");
         new AdvancedMarkerElement({ position: center, map });
       } catch {
         new g.maps.Marker({ position: center, map });

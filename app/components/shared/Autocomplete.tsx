@@ -97,7 +97,9 @@ const AutoComplete = ({
     if (onLocalityChange) onLocalityChange(city);
   };
 
-  const handleSuggestionSelect = async (suggestion: google.maps.places.AutocompleteSuggestion) => {
+  const handleSuggestionSelect = async (
+    suggestion: google.maps.places.AutocompleteSuggestion,
+  ) => {
     if (!suggestion.placePrediction) return;
     const place = suggestion.placePrediction.toPlace();
     await place.fetchFields({
@@ -195,7 +197,7 @@ const AutoComplete = ({
           type="submit"
           className={
             isHero
-              ? "self-stretch flex items-center justify-center rounded-xl bg-[#1F5FD6] px-6 text-base font-bold text-white transition hover:bg-[#184FB5]"
+              ? "flex items-center justify-center self-stretch rounded-xl bg-[#1F5FD6] px-6 text-base font-bold text-white transition hover:bg-[#184FB5]"
               : "h-12 shrink-0 rounded-xl bg-[#1F5FD6] px-5 text-sm font-semibold text-white transition hover:bg-[#184FB5]"
           }
         >
@@ -212,14 +214,14 @@ const AutoComplete = ({
             <button
               key={city}
               type="button"
-              className="w-full text-left px-4 py-2.5 hover:bg-[#EDF0F7] text-[#2D3648] text-sm transition-colors border-b border-gray-100 last:border-0"
+              className="w-full border-b border-gray-100 px-4 py-2.5 text-left text-sm text-[#2D3648] transition-colors last:border-0 hover:bg-[#EDF0F7]"
               onMouseDown={(e) => {
                 e.preventDefault();
                 handlePresetSelect(city);
               }}
             >
               <span className="font-medium">{city}</span>
-              <span className="text-[#717D96] ml-1">Bulgaria</span>
+              <span className="ml-1 text-[#717D96]">Bulgaria</span>
             </button>
           ))}
         </div>
@@ -233,8 +235,8 @@ const AutoComplete = ({
               className="animate-pulse border-b border-gray-100 px-4 py-3 last:border-0"
             >
               <div className="flex items-center gap-2">
-                <div className="h-3.5 bg-gray-200 rounded w-24" />
-                <div className="h-3 bg-gray-100 rounded w-32" />
+                <div className="h-3.5 w-24 rounded bg-gray-200" />
+                <div className="h-3 w-32 rounded bg-gray-100" />
               </div>
             </div>
           ))}
@@ -247,7 +249,7 @@ const AutoComplete = ({
             <button
               key={i}
               type="button"
-              className="w-full text-left px-4 py-3 hover:bg-[#EDF0F7] text-[#2D3648] text-sm transition-colors border-b border-gray-100 last:border-0"
+              className="w-full border-b border-gray-100 px-4 py-3 text-left text-sm text-[#2D3648] transition-colors last:border-0 hover:bg-[#EDF0F7]"
               onMouseDown={(e) => {
                 e.preventDefault();
                 handleSuggestionSelect(suggestion);

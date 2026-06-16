@@ -1,5 +1,4 @@
 export namespace CompanyProvider {
-
   export type CreateMutation = {
     authToken?: string;
     name: string;
@@ -15,7 +14,7 @@ export namespace CompanyProvider {
       latitude: string;
       longitude: string;
     };
-  }
+  };
 
   export type UpdateMutation = {
     authToken?: string;
@@ -32,10 +31,9 @@ export namespace CompanyProvider {
       latitude: string;
       longitude: string;
     };
-  }
+  };
 
   export type ResponseError = {
     message?: string;
-  }
-
+  };
 }

@@ -22,7 +22,13 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
       <input
         ref={ref}
         id={id}
-        className={[BASE, error ? "border-red-400 focus:border-red-400 focus:ring-red-400/15" : "", className]
+        className={[
+          BASE,
+          error
+            ? "focus:ring-red-400/15 border-red-400 focus:border-red-400"
+            : "",
+          className,
+        ]
           .filter(Boolean)
           .join(" ")}
         {...rest}
@@ -55,7 +61,14 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
       <textarea
         ref={ref}
         id={id}
-        className={[BASE, "resize-y", error ? "border-red-400 focus:border-red-400 focus:ring-red-400/15" : "", className]
+        className={[
+          BASE,
+          "resize-y",
+          error
+            ? "focus:ring-red-400/15 border-red-400 focus:border-red-400"
+            : "",
+          className,
+        ]
           .filter(Boolean)
           .join(" ")}
         {...rest}

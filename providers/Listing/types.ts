@@ -46,7 +46,10 @@ export namespace ListingProvider {
 
   export type CreateResponse = {};
 
-  export type CreateMutationPayload = Omit<Partial<Listing>, "areaOutside" | "areaGarage"> & {
+  export type CreateMutationPayload = Omit<
+    Partial<Listing>,
+    "areaOutside" | "areaGarage"
+  > & {
     areaOutside?: string | number;
     areaGarage?: string | number;
     constructedYear?: string;

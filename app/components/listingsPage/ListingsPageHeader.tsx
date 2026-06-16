@@ -13,7 +13,9 @@ export const ListingsPageHeader = ({
 }: Props) => {
   const handleOnSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const input = e.currentTarget.elements.namedItem("locality") as HTMLInputElement | null;
+    const input = e.currentTarget.elements.namedItem(
+      "locality",
+    ) as HTMLInputElement | null;
     const locality = input?.value ?? "";
     if (locality) {
       onLocalityChange(locality);

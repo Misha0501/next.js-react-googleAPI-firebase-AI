@@ -9,7 +9,7 @@ import {
   getCompanyMembershipInvitesByStatus,
   getUserByEmail,
   hasUserSentInvite,
-  isUserAMemberOfAnyCompany
+  isUserAMemberOfAnyCompany,
 } from "@/app/api/companyMembershipInvites/_utils";
 
 /**

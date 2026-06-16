@@ -142,7 +142,9 @@ export const CompanyTab = () => {
           </div>
           <div>
             <h3 className="font-semibold text-[#2D3648]">
-              {formSubmitMethod === "PUT" ? "Company details" : "Create company"}
+              {formSubmitMethod === "PUT"
+                ? "Company details"
+                : "Create company"}
             </h3>
             <p className="mt-1 text-sm leading-6 text-[#717D96]">
               Use this profile for agency-owned listings and company contact
@@ -339,7 +341,7 @@ export const CompanyTab = () => {
             onChange={(e) =>
               formik.setFieldValue("description", e.target.value, true)
             }
-            className="min-h-[150px] w-full resize-y rounded-xl border border-slate-200 bg-white p-3 text-sm text-[#4A5468] outline-0 transition focus:border-[#1F5FD6] focus:ring-2 focus:ring-[#1F5FD6]/15"
+            className="focus:ring-[#1F5FD6]/15 min-h-[150px] w-full resize-y rounded-xl border border-slate-200 bg-white p-3 text-sm text-[#4A5468] outline-0 transition focus:border-[#1F5FD6] focus:ring-2"
           />
           {formik.errors.description && formik.touched.description && (
             <p className="mt-2 text-sm text-rose-600">

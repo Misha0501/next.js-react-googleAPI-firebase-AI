@@ -120,7 +120,7 @@ export const Navigation = () => {
                       key={item.href}
                       href={item.href}
                       className={classNames(
-                        "inline-flex min-h-11 items-center gap-2 rounded-xl px-4 py-2 text-sm font-bold transition",
+                        "min-h-11 inline-flex items-center gap-2 rounded-xl px-4 py-2 text-sm font-bold transition",
                         isActive
                           ? "bg-[#EAF2FF] text-[#1F5FD6]"
                           : "text-[#4A5468] hover:bg-[#F8FAFC] hover:text-[#1F5FD6]",
@@ -137,7 +137,7 @@ export const Navigation = () => {
               <div className="hidden items-center gap-3 lg:flex">
                 <Link
                   href="/placeproperties"
-                  className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-[#1F5FD6] px-4 py-2 text-sm font-bold text-white shadow-sm transition hover:bg-[#184FB5] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1F5FD6]/25 focus-visible:ring-offset-4"
+                  className="min-h-11 inline-flex items-center justify-center gap-2 rounded-xl bg-[#1F5FD6] px-4 py-2 text-sm font-bold text-white shadow-sm transition hover:bg-[#184FB5] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1F5FD6]/25 focus-visible:ring-offset-4"
                 >
                   <BuildingOffice2Icon className="h-4 w-4" />
                   Place property
@@ -147,7 +147,7 @@ export const Navigation = () => {
                   <Link
                     href={authAction.href}
                     className={classNames(
-                      "inline-flex min-h-11 items-center gap-3 rounded-xl border px-3 py-2 text-sm font-bold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1F5FD6]/25 focus-visible:ring-offset-4",
+                      "min-h-11 inline-flex items-center gap-3 rounded-xl border px-3 py-2 text-sm font-bold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1F5FD6]/25 focus-visible:ring-offset-4",
                       isActiveRoute(authAction.href)
                         ? "border-[#CFE0FF] bg-[#F6F9FF] text-[#1F5FD6]"
                         : "border-slate-200 bg-white text-[#334155] hover:border-[#CFE0FF] hover:text-[#1F5FD6]",
@@ -170,7 +170,7 @@ export const Navigation = () => {
               <div className="flex items-center gap-3 lg:hidden">
                 <Link
                   href="/placeproperties"
-                  className="hidden min-h-10 items-center justify-center rounded-xl bg-[#1F5FD6] px-3 py-2 text-xs font-bold text-white shadow-sm transition hover:bg-[#184FB5] sm:inline-flex"
+                  className="min-h-10 hidden items-center justify-center rounded-xl bg-[#1F5FD6] px-3 py-2 text-xs font-bold text-white shadow-sm transition hover:bg-[#184FB5] sm:inline-flex"
                 >
                   Place property
                 </Link>
@@ -199,7 +199,7 @@ export const Navigation = () => {
                       href={item.href}
                       onClick={() => close()}
                       className={classNames(
-                        "flex min-h-12 items-center gap-3 rounded-xl px-4 py-3 text-sm font-bold transition",
+                        "min-h-12 flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-bold transition",
                         isActive
                           ? "bg-[#EAF2FF] text-[#1F5FD6]"
                           : "text-[#334155] hover:bg-[#F8FAFC] hover:text-[#1F5FD6]",
@@ -214,7 +214,7 @@ export const Navigation = () => {
                 <Link
                   href="/placeproperties"
                   onClick={() => close()}
-                  className="mt-2 inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-[#1F5FD6] px-4 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-[#184FB5]"
+                  className="min-h-12 mt-2 inline-flex items-center justify-center gap-2 rounded-xl bg-[#1F5FD6] px-4 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-[#184FB5]"
                 >
                   <BuildingOffice2Icon className="h-5 w-5" />
                   Place property

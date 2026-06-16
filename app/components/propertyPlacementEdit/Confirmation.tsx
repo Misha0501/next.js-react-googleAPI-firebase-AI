@@ -136,11 +136,16 @@ function Confirmation({
       interiorType: (values.interiorType as InteriorType) || undefined,
       upkeepType: (values.upkeepType as UpkeepType) || undefined,
       heatingType: (values.heatingType as HeatingType) || undefined,
-      constructedYear: values.constructedYear !== undefined ? String(values.constructedYear) : undefined,
+      constructedYear:
+        values.constructedYear !== undefined
+          ? String(values.constructedYear)
+          : undefined,
       numberOfFloorsCommon: toNum(values.numberOfFloorsCommon),
       floorNumber: toNum(values.floorNumber),
       buildingType: (values.buildingType as BuildingType) || undefined,
-      characteristics: values.characteristics ? [values.characteristics] : undefined,
+      characteristics: values.characteristics
+        ? [values.characteristics]
+        : undefined,
       description: values.description,
       address: {
         route: values.route,

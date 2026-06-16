@@ -74,7 +74,7 @@ export const ListingAgentContactCard = ({ listing }: Props) => {
                 {listing?.applicationUser?.displayName}
               </p>
               {listing?.company?.name && (
-                <p className="text-sm text-[#717D96] mt-0.5">
+                <p className="mt-0.5 text-sm text-[#717D96]">
                   {listing.company.name}
                 </p>
               )}

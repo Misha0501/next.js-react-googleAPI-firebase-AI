@@ -10,8 +10,7 @@ const VARIANT_CLASSES: Record<Variant, string> = {
     "border border-slate-300 bg-white text-[#334155] hover:border-[#1F5FD6] hover:text-[#1F5FD6] disabled:opacity-50",
   danger:
     "bg-red-600 text-white shadow-sm hover:bg-red-700 disabled:opacity-50",
-  ghost:
-    "text-[#1F5FD6] hover:bg-[#EAF2FF] disabled:opacity-50",
+  ghost: "text-[#1F5FD6] hover:bg-[#EAF2FF] disabled:opacity-50",
 };
 
 const SIZE_CLASSES: Record<Size, string> = {
@@ -57,7 +56,7 @@ export const Button = forwardRef<HTMLButtonElement, Props>(
         {...rest}
       >
         {loading && (
-          <span className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-current/30 border-t-current" />
+          <span className="border-current/30 h-3.5 w-3.5 animate-spin rounded-full border-2 border-t-current" />
         )}
         {children}
       </button>

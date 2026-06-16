@@ -1,6 +1,6 @@
-import {firebaseAdmin} from "@/app/lib/firebase/configAdmin";
-import {cookies, headers} from "next/headers";
-import {ResponseError} from "@/app/lib/classes/ResponseError";
+import { firebaseAdmin } from "@/app/lib/firebase/configAdmin";
+import { cookies, headers } from "next/headers";
+import { ResponseError } from "@/app/lib/classes/ResponseError";
 
 /**
  * Decodes the ID token for a user. The token can be obtained from either the request headers
@@ -20,16 +20,19 @@ import {ResponseError} from "@/app/lib/classes/ResponseError";
  */
 
 export const getDecodedIdToken = async () => {
-    const [headersList, cookieStore] = await Promise.all([headers(), cookies()]);
-    const headerAuthorizationToken = headersList.get('Authorization');
+  const [headersList, cookieStore] = await Promise.all([headers(), cookies()]);
+  const headerAuthorizationToken = headersList.get("Authorization");
 
-    const cookiesAuthorizationToken = cookieStore.get('Authorization')?.value || '';
-    const cookiesAuthToken = cookieStore.get('authToken')?.value || '';
-    const cookieToken = cookiesAuthorizationToken || cookiesAuthToken;
+  const cookiesAuthorizationToken =
+    cookieStore.get("Authorization")?.value || "";
+  const cookiesAuthToken = cookieStore.get("authToken")?.value || "";
+  const cookieToken = cookiesAuthorizationToken || cookiesAuthToken;
 
-    if(!headerAuthorizationToken && !cookieToken) {
-        throw new ResponseError("User is not authenticated.", 401)
-    }
+  if (!headerAuthorizationToken && !cookieToken) {
+    throw new ResponseError("User is not authenticated.", 401);
+  }
 
-    return firebaseAdmin.auth().verifyIdToken(headerAuthorizationToken || cookieToken || '');
-}
+  return firebaseAdmin
+    .auth()
+    .verifyIdToken(headerAuthorizationToken || cookieToken || "");
+};

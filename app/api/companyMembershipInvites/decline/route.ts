@@ -7,7 +7,7 @@ import { handleAPIError } from "@/app/lib/api/handleError";
 import {
   getActiveCompanyMembershipInviteById,
   isUserReceiverOfInvite,
-  userHasMembership
+  userHasMembership,
 } from "@/app/api/companyMembershipInvites/_utils";
 
 /**

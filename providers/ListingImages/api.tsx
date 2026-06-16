@@ -2,7 +2,9 @@ import service from "../../services";
 import { ListingsImagesProvider } from "./types";
 import type { AuthProps } from "@/providers/types";
 
-type DeleteProps = AuthProps & { data: ListingsImagesProvider.DeleteMutationProps };
+type DeleteProps = AuthProps & {
+  data: ListingsImagesProvider.DeleteMutationProps;
+};
 
 export async function deleteItem(props: DeleteProps): Promise<null> {
   return service({

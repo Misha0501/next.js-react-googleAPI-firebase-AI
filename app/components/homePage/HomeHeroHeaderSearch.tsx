@@ -61,7 +61,7 @@ export function HomeHeroHeaderSearch() {
               className={`flex items-center gap-2 rounded-full px-6 py-2.5 text-sm font-bold transition-all duration-200 ${
                 isSelected
                   ? "bg-white text-[#1F5FD6] shadow-md"
-                  : "border border-white/40 bg-white/12 text-white hover:bg-white/20"
+                  : "bg-white/12 border border-white/40 text-white hover:bg-white/20"
               }`}
               onClick={() => setListingTypeSelected(item.value)}
             >
@@ -80,7 +80,7 @@ export function HomeHeroHeaderSearch() {
       </div>
 
       <div className="mt-4 flex flex-wrap items-center justify-center gap-x-2 gap-y-2">
-        <span className="text-xs font-semibold uppercase tracking-widest text-white/45">
+        <span className="text-white/45 text-xs font-semibold uppercase tracking-widest">
           Popular:
         </span>
         {popularSearches.map((item) => (

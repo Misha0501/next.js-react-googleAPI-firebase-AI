@@ -22,10 +22,18 @@ export function useCompanyMemberships(
 
 // Create
 export function useCreateMembership(
-  props: MembershipsProvider.CreateProps
-): UseMutationResult<Membership, any, MembershipsProvider.CreateMutationPayload>{
-  return useMutation<Membership, any, MembershipsProvider.CreateMutationPayload>(
+  props: MembershipsProvider.CreateProps,
+): UseMutationResult<
+  Membership,
+  any,
+  MembershipsProvider.CreateMutationPayload
+> {
+  return useMutation<
+    Membership,
+    any,
+    MembershipsProvider.CreateMutationPayload
+  >(
     (payload) => api.create({ ...props, data: payload }) as Promise<Membership>,
-    { mutationKey: `${KEY} | Create`, retry: 0 }
+    { mutationKey: `${KEY} | Create`, retry: 0 },
   );
 }

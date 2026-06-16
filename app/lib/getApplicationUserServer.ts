@@ -16,7 +16,10 @@ export const getApplicationUserServer = async (
   const decodedToken = await getDecodedIdToken();
 
   if (!decodedToken.email) {
-    throw new ResponseError("Authenticated user does not have an email address.", 400);
+    throw new ResponseError(
+      "Authenticated user does not have an email address.",
+      400,
+    );
   }
 
   let prismaQuery = {

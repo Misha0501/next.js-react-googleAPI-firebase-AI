@@ -110,7 +110,11 @@ export const ProfilePageOwnListings = ({
 
       {totalPages > 1 && (
         <div className="mt-6">
-          <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />
+          <Pagination
+            page={page}
+            totalPages={totalPages}
+            onPageChange={setPage}
+          />
         </div>
       )}
 

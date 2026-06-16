@@ -44,7 +44,8 @@ export async function GET(
       },
     });
 
-    const applicationUserCompanyId = getApplicationUserCompanyId(applicationUser);
+    const applicationUserCompanyId =
+      getApplicationUserCompanyId(applicationUser);
 
     if (applicationUserCompanyId) {
       const company = await prisma.company.findUnique({

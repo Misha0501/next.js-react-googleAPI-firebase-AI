@@ -104,7 +104,7 @@ export const ListingTimeline = ({ listing }: Prop) => {
           </div>
 
           {/* Desktop horizontal timeline */}
-          <div className="hidden overflow-x-auto scrollbar-hide md:block">
+          <div className="scrollbar-hide hidden overflow-x-auto md:block">
             <div className="flex min-w-max items-start pb-2">
               {sortedEvents.map((event, i) => (
                 <div key={i} className="flex items-start">

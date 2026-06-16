@@ -30,7 +30,9 @@ export function usePropertyListing(
 }
 
 //ListingDetailPage
-export function useListingDetailPage(props: ListingProvider.DetailProps): UseQueryResult<Listing, Error> {
+export function useListingDetailPage(
+  props: ListingProvider.DetailProps,
+): UseQueryResult<Listing, Error> {
   return useQuery(
     getKeyFromProps(props, "DETAIL"),
     () => api.listingDetailPage(props),
@@ -43,11 +45,7 @@ export function useListingDetailPage(props: ListingProvider.DetailProps): UseQue
 // Create
 export function useCreateProperty(
   props: ListingProvider.CreateProps,
-): UseMutationResult<
-  Listing,
-  null,
-  ListingProvider.CreateMutationPayload
-> {
+): UseMutationResult<Listing, null, ListingProvider.CreateMutationPayload> {
   return useMutation((payload) => api.create({ ...props, data: payload }), {
     mutationKey: `${KEY} | Create`,
     retry: 0,

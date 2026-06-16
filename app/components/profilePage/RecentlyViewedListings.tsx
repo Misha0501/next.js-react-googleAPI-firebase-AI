@@ -66,8 +66,7 @@ export const RecentlyViewedListings = () => {
                 Recently viewed
               </p>
               <p className="font-semibold text-[#2D3648]">
-                {total}{" "}
-                {total === 1 ? "property" : "properties"}
+                {total} {total === 1 ? "property" : "properties"}
               </p>
             </div>
           </div>
@@ -109,7 +108,11 @@ export const RecentlyViewedListings = () => {
 
       {totalPages > 1 && (
         <div className="mt-6">
-          <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />
+          <Pagination
+            page={page}
+            totalPages={totalPages}
+            onPageChange={setPage}
+          />
         </div>
       )}
     </div>

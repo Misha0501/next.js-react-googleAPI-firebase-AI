@@ -4,7 +4,10 @@ import { getApplicationUserServer } from "@/app/lib/getApplicationUserServer";
 import { prisma } from "@/app/lib/db/client";
 import { savedFiltersSchema } from "@/app/lib/validations/savedFilters";
 import { handleAPIError } from "@/app/lib/api/handleError";
-import { fetchSavedSearches, fetchSavedSearchesCount } from "@/app/api/savedSearches/_utils";
+import {
+  fetchSavedSearches,
+  fetchSavedSearchesCount,
+} from "@/app/api/savedSearches/_utils";
 
 /**
  * GET Route to retrieve saved searches.

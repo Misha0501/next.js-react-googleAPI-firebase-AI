@@ -40,7 +40,7 @@ export const RadioGroupCustom = ({
             aria-checked={isSelected}
             id={id ? `${id}${index}` : undefined}
             onClick={() => handleOnChange(item.value)}
-            className={`flex min-h-11 items-center justify-between gap-3 rounded-xl border px-3 py-2 text-left text-sm font-bold transition ${
+            className={`min-h-11 flex items-center justify-between gap-3 rounded-xl border px-3 py-2 text-left text-sm font-bold transition ${
               isSelected
                 ? "border-[#1F5FD6] bg-[#F6F9FF] text-[#1F5FD6]"
                 : "border-slate-200 bg-white text-[#334155] hover:border-[#CFE0FF] hover:bg-[#F8FAFC] hover:text-[#1F5FD6]"

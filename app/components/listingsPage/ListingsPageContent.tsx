@@ -176,8 +176,16 @@ export const ListingsPageContent = () => {
       <Modal
         show={savedSearchConfirmationModal}
         onClose={() => setSavedSearchConfirmationModal(false)}
-        title={savedSearchError ? "Oops! Something went wrong. Please try again later." : "Your search has been saved! 🎉"}
-        description={savedSearchError ? undefined : "You will be notified via email when new properties match your search criteria."}
+        title={
+          savedSearchError
+            ? "Oops! Something went wrong. Please try again later."
+            : "Your search has been saved! 🎉"
+        }
+        description={
+          savedSearchError
+            ? undefined
+            : "You will be notified via email when new properties match your search criteria."
+        }
         confirmLabel="Got it!"
         onConfirm={() => setSavedSearchConfirmationModal(false)}
       >

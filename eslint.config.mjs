@@ -7,4 +7,8 @@ const __dirname = dirname(__filename);
 
 const compat = new FlatCompat({ baseDirectory: __dirname });
 
-export default [...compat.extends("next/core-web-vitals")];
+export default [
+  ...compat.extends("next/core-web-vitals"),
+  // Must be last: turns off ESLint rules that conflict with Prettier
+  ...compat.extends("prettier"),
+];

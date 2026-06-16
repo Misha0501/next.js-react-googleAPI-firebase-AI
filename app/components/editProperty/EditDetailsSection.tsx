@@ -203,9 +203,7 @@ export const EditDetailsSection = ({ formik, showError }: Props) => {
                 formik={formik}
                 name="floorNumber"
                 label="Property floor"
-                error={
-                  showError ? (formik.errors.floorNumber as string) : ""
-                }
+                error={showError ? (formik.errors.floorNumber as string) : ""}
               />
             </div>
           </SectionRow>
