@@ -13,6 +13,8 @@ import { useDeleteListingImage } from "@/providers/ListingImages";
 import { uniqueID } from "@/app/lib/uniqueID";
 import {
   ArrowUpTrayIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
   PhotoIcon,
   TrashIcon,
 } from "@heroicons/react/24/outline";
@@ -101,6 +103,16 @@ export const PlacingPropertyImagesHandler = ({
       setUploading(false);
       event.target.value = "";
     }
+  };
+
+  const moveImage = (fromIndex: number, toIndex: number) => {
+    if (toIndex < 0 || toIndex >= images.length) return;
+    const next = [...images];
+    const [moved] = next.splice(fromIndex, 1);
+    next.splice(toIndex, 0, moved);
+    const reindexed = next.map((img, i) => ({ ...img, positionInListing: i + 1 }));
+    setImages(reindexed);
+    onChange(reindexed);
   };
 
   const deleteImage = async (listingImage: ListingImage, fileIndex: number) => {
@@ -196,14 +208,34 @@ export const PlacingPropertyImagesHandler = ({
                   </span>
                 )}
               </div>
-              <button
-                type="button"
-                onClick={() => deleteImage(item, index)}
-                className="absolute right-3 top-3 flex h-9 w-9 items-center justify-center rounded-full bg-white/95 text-red-600 shadow-sm transition hover:bg-red-50"
-                aria-label="Delete image"
-              >
-                <TrashIcon className="h-4 w-4" />
-              </button>
+              <div className="absolute right-3 top-3 flex gap-1.5">
+                <button
+                  type="button"
+                  onClick={() => moveImage(index, index - 1)}
+                  disabled={index === 0}
+                  className="flex h-9 w-9 items-center justify-center rounded-full bg-white/95 text-[#4A5468] shadow-sm transition hover:bg-slate-100 disabled:opacity-30"
+                  aria-label="Move left"
+                >
+                  <ChevronLeftIcon className="h-4 w-4" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => moveImage(index, index + 1)}
+                  disabled={index === images.length - 1}
+                  className="flex h-9 w-9 items-center justify-center rounded-full bg-white/95 text-[#4A5468] shadow-sm transition hover:bg-slate-100 disabled:opacity-30"
+                  aria-label="Move right"
+                >
+                  <ChevronRightIcon className="h-4 w-4" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => deleteImage(item, index)}
+                  className="flex h-9 w-9 items-center justify-center rounded-full bg-white/95 text-red-600 shadow-sm transition hover:bg-red-50"
+                  aria-label="Delete image"
+                >
+                  <TrashIcon className="h-4 w-4" />
+                </button>
+              </div>
             </div>
           ))}
         </div>
