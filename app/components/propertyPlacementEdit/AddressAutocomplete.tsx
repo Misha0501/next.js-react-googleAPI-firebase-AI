@@ -22,7 +22,7 @@ export const AddressAutocomplete = ({
   const [suggestions, setSuggestions] = useState<any[]>([]);
   const [showDropdown, setShowDropdown] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
-  const firstUpdate = useRef(true);
+  const justSelected = useRef(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const [googleInstance] = useGooglePlaces();
 
@@ -39,6 +39,11 @@ export const AddressAutocomplete = ({
 
   // Fetch suggestions with debounce
   useEffect(() => {
+    if (justSelected.current) {
+      justSelected.current = false;
+      return;
+    }
+
     if (!googleInstance?.maps?.places?.AutocompleteSuggestion) {
       setSuggestions([]);
       setShowDropdown(false);
@@ -70,7 +75,6 @@ export const AddressAutocomplete = ({
   }, [inputValue, googleInstance]);
 
   const handleSuggestionSelect = async (suggestion: google.maps.places.AutocompleteSuggestion) => {
-    if (firstUpdate.current) firstUpdate.current = false;
     if (!suggestion.placePrediction) return;
 
     const place = suggestion.placePrediction.toPlace();
@@ -96,6 +100,7 @@ export const AddressAutocomplete = ({
       longitude: place.location?.lng()?.toString() ?? "",
     };
 
+    justSelected.current = true;
     setInputValue(suggestion.placePrediction.text.text);
     setSuggestions([]);
     setShowDropdown(false);
