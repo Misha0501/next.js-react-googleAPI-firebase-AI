@@ -1,40 +1,48 @@
-// @ts-nocheck
-import {PrismaClient} from '@prisma/client'
+import { PrismaClient, Prisma } from "@prisma/client";
 
-let prismaClient;
-
-// Using below construction to avoid creating multiple instances of PrismaClient in development mode
-if (process.env.NODE_ENV === "production") {
-    prismaClient = new PrismaClient()
-} else {
-    if (!global.prismaClient) {
-        global.prismaClient = new PrismaClient()
-    }
-    prismaClient = global.prismaClient
+declare global {
+  // eslint-disable-next-line no-var
+  var prismaClient: PrismaClient | undefined;
 }
 
-// Prisma use soft delete for listing table
-prismaClient.$use(async (params: any, next: any) => {
-    // Check incoming query type
-    if (params.model == 'Listing') {
-        if (params.action == 'delete') {
-            // Delete queries
-            // Change action to an update
-            params.action = 'update'
-            params.args['data'] = { deleted: new Date() }
-        }
-        if (params.action == 'deleteMany') {
-            // Delete many queries
-            params.action = 'updateMany'
-            if (params.args.data != undefined) {
-                params.args.data['deleted'] = new Date()
-            } else {
-                params.args['data'] = { deleted: new Date() }
-            }
-        }
-    }
-    return next(params)
-})
+function buildClient(): PrismaClient {
+  const client = new PrismaClient();
 
+  client.$use(
+    async (
+      params: Prisma.MiddlewareParams,
+      next: (params: Prisma.MiddlewareParams) => Promise<unknown>,
+    ) => {
+      if (params.model === "Listing") {
+        if (params.action === "delete") {
+          params.action = "update";
+          (params.args as Record<string, unknown>)["data"] = {
+            deleted: new Date(),
+          };
+        }
+        if (params.action === "deleteMany") {
+          params.action = "updateMany";
+          const args = params.args as Record<string, Record<string, unknown>>;
+          if (args.data !== undefined) {
+            args.data["deleted"] = new Date();
+          } else {
+            args["data"] = { deleted: new Date() };
+          }
+        }
+      }
+      return next(params);
+    },
+  );
 
-export const prisma = prismaClient;
+  return client;
+}
+
+if (process.env.NODE_ENV === "production") {
+  global.prismaClient = buildClient();
+} else {
+  if (!global.prismaClient) {
+    global.prismaClient = buildClient();
+  }
+}
+
+export const prisma = global.prismaClient;
