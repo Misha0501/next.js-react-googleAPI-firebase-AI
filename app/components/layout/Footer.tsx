@@ -120,7 +120,29 @@ const Footer = () => {
         </div>
 
         <div className="mt-12 flex flex-col gap-4 border-t border-slate-700 pt-6 text-sm text-slate-400 md:flex-row md:items-center md:justify-between">
-          <p>© {currentYear} Real Estate Marketplace. All rights reserved.</p>
+          <div className="flex flex-col gap-2 md:flex-row md:items-center md:gap-3">
+            <p>© {currentYear} Real Estate Marketplace. All rights reserved.</p>
+            <p>
+              Built by{" "}
+              <a
+                href="https://mykhailogalenda.com"
+                target="_blank"
+                rel="noreferrer"
+                className="font-semibold text-slate-300 transition-colors hover:text-white"
+              >
+                Mykhailo Galenda
+              </a>{" "}
+              ·{" "}
+              <a
+                href="https://mykhailogalenda.com"
+                target="_blank"
+                rel="noreferrer"
+                className="font-semibold text-slate-300 transition-colors hover:text-white"
+              >
+                mykhailogalenda.com
+              </a>
+            </p>
+          </div>
           <Link
             href="#main-navigation"
             className="inline-flex items-center gap-2 font-semibold text-slate-300 hover:text-white"
