@@ -56,15 +56,17 @@ export function buildGeminiPrompt(data: DescriptionPayload): string {
   if (floor && totalFloors) add("Floor", `${floor} of ${totalFloors}`);
   else if (floor) add("Floor", floor);
 
-  return `Write a short property listing description in English based on the details below. Write it the way a real person would — plain language, no marketing clichés, no excessive adjectives. Just describe what the property is and what makes it practical or interesting.
+  return `Write a property listing description in English based on the details below. Write it the way a real person would — plain language, no marketing clichés, no excessive adjectives. Describe what the property is, what the space feels like to live in, and what makes it practical or interesting for a buyer or renter.
 
 Property details:
 ${lines.join("\n")}
 
 Rules:
-- 100–180 words
+- 200–300 words
 - Use simple, direct sentences. Avoid words like "stunning", "boasting", "nestled", "perfect", "amazing", "featuring", "charming", "ideal"
 - Mention the key facts: size, layout, location, condition, and anything notable
+- Go into detail on the space: how the rooms connect, what the living areas are like, natural light, storage, outdoor space if any
+- If there is a price, briefly mention value relative to what's on offer
 - Skip details that are missing or zero
 - No opening like "Welcome to..." or closing like "Don't miss this opportunity"
 - Output the description text only — no title, no bullet points, no headers`;
