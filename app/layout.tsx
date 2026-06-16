@@ -8,6 +8,7 @@ import { ToastContainer, Bounce } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import MobileFooter from "@/app/components/layout/MobileFooter";
 import Footer from "@/app/components/layout/Footer";
+import { ScrollToTop } from "@/app/components/shared/ScrollToTop";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -32,6 +33,7 @@ export default function RootLayout({
         />
       </head>
       <body className={`${inter.className} min-h-screen flex flex-col`}>
+        <ScrollToTop />
         <Navigation />
         <main className="flex-1 pb-28 lg:pb-0">
           <AuthContextProvider>
