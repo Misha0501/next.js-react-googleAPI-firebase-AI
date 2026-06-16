@@ -15,6 +15,7 @@ import {
   ShieldCheckIcon,
   UserCircleIcon,
 } from "@heroicons/react/24/outline";
+import { Button } from "@/app/components/shared/Button";
 
 const ApplicationUserUpdateSchema = Yup.object().shape({
   displayName: Yup.string()
@@ -208,13 +209,9 @@ export const PersonalDetailsTab = () => {
       )}
 
       <div className="flex justify-end border-t border-slate-100 px-5 py-5 sm:px-6">
-        <button
-          type="submit"
-          disabled={updateUser.isLoading}
-          className="inline-flex items-center justify-center rounded-xl bg-[#1F5FD6] px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-[#184FB5] disabled:opacity-50"
-        >
+        <Button type="submit" loading={updateUser.isLoading}>
           {updateUser.isLoading ? "Saving..." : "Save changes"}
-        </button>
+        </Button>
       </div>
     </form>
   );

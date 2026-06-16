@@ -28,6 +28,7 @@ import {
   UserPlusIcon,
   XCircleIcon,
 } from "@heroicons/react/24/outline";
+import { Button } from "@/app/components/shared/Button";
 
 const InviteSchema = Yup.object().shape({
   applicationUserEmailReceiver: Yup.string()
@@ -306,16 +307,12 @@ export const InvitesTab = () => {
           )}
 
           <div className="flex justify-end border-t border-slate-100 px-5 py-5 sm:px-6">
-            <button
-              type="submit"
-              disabled={createCompanyMembershipInvite.isLoading}
-              className="inline-flex items-center gap-2 rounded-xl bg-[#1F5FD6] px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#184FB5] disabled:opacity-50"
-            >
+            <Button type="submit" loading={createCompanyMembershipInvite.isLoading}>
               <PaperAirplaneIcon className="h-4 w-4" />
               {createCompanyMembershipInvite.isLoading
                 ? "Sending..."
                 : "Send invite"}
-            </button>
+            </Button>
           </div>
         </form>
       )}
@@ -399,16 +396,15 @@ export const InvitesTab = () => {
                                 <XCircleIcon className="h-4 w-4" />
                                 Decline
                               </button>
-                              <button
+                              <Button
                                 type="button"
-                                className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#1F5FD6] px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#184FB5]"
                                 onClick={() =>
                                   acceptInvite(companyMembershipInvite)
                                 }
                               >
                                 <CheckCircleIcon className="h-4 w-4" />
                                 Accept
-                              </button>
+                              </Button>
                             </>
                           )}
                         </div>

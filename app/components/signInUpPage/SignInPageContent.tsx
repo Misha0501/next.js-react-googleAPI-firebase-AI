@@ -18,6 +18,7 @@ import {
   BuildingOffice2Icon,
   ShieldCheckIcon,
 } from "@heroicons/react/24/outline";
+import { Button } from "@/app/components/shared/Button";
 
 type Mode = "signin" | "signup";
 
@@ -344,13 +345,9 @@ export default function SignInPageContent() {
                       </p>
                     )}
 
-                    <button
-                      type="submit"
-                      disabled={isLoading}
-                      className="w-full rounded-lg bg-[#1F5FD6] px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-blue-700 disabled:opacity-50"
-                    >
+                    <Button type="submit" loading={isLoading} fullWidth className="rounded-lg">
                       {isLoading ? "Signing in…" : "Sign in"}
-                    </button>
+                    </Button>
                   </form>
                 ) : (
                   <form
@@ -443,13 +440,9 @@ export default function SignInPageContent() {
                       </p>
                     )}
 
-                    <button
-                      type="submit"
-                      disabled={isLoading}
-                      className="w-full rounded-lg bg-[#1F5FD6] px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-blue-700 disabled:opacity-50"
-                    >
+                    <Button type="submit" loading={isLoading} fullWidth className="rounded-lg">
                       {isLoading ? "Creating account…" : "Create account"}
-                    </button>
+                    </Button>
                   </form>
                 )}
 
