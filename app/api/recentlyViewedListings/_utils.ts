@@ -9,13 +9,8 @@ import { prisma } from "@/app/lib/db/client";
 export const getRecentlyViewedListings = async (
   userId: number,
 ): Promise<any> => {
-  const itemsCount = await prisma.recentlyViewedListing.count({
-    where: {
-      applicationUserId: userId,
-    },
-  });
-
   const items = await prisma.recentlyViewedListing.findMany({
+    distinct: ["listingId"],
     include: {
       listing: {
         include: {
@@ -38,7 +33,7 @@ export const getRecentlyViewedListings = async (
     take: 10,
   });
 
-  return { total: itemsCount, results: items };
+  return { total: items.length, results: items };
 };
 
 /**
