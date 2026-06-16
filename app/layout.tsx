@@ -1,6 +1,6 @@
 import "@/styles/globals.scss";
 import type { Metadata } from "next";
-import { AuthContextProvider } from "./context/AuthContext";
+import { AuthContextProvider } from "@/app/context/AuthContext";
 import { Inter } from "next/font/google";
 import { Navigation } from "@/app/components/layout/Navigation";
 import ReactQueryProvider from "@/app/lib/reactQuery/ReactQueryProvider";
@@ -13,16 +13,15 @@ import { ScrollToTop } from "@/app/components/shared/ScrollToTop";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Real estate marketplace for Bulgarian market",
+  title: {
+    default: "Real estate marketplace for Bulgarian market",
+    template: "%s",
+  },
   description:
-    "Real estate marketplace for Bulgarian market with User Experience first approach",
+    "Find properties for sale and rent across Bulgaria. Apartments, houses, and land in Sofia, Plovdiv, Varna, and beyond.",
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <html className="scroll-smooth" lang="en">
       <head>
@@ -50,4 +49,6 @@ export default function RootLayout({
       </body>
     </html>
   );
-}
+};
+
+export default RootLayout;
