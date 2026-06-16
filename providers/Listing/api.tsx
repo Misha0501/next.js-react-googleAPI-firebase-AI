@@ -1,4 +1,4 @@
-import service from "../../services";
+import service from "@/services";
 import { Listing } from "@/types";
 import { ListingProvider } from "@/providers/Listing/types";
 

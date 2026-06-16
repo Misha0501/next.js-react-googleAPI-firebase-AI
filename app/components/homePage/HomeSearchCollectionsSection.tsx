@@ -66,7 +66,7 @@ const collections = [
   },
 ];
 
-function HomeSearchCollectionsSection() {
+const HomeSearchCollectionsSection = () => {
   return (
     <section className="border-b border-slate-200/80 bg-[#F8FAFC] py-20 lg:py-24">
       <div className="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
@@ -122,6 +122,6 @@ function HomeSearchCollectionsSection() {
       </div>
     </section>
   );
-}
+};
 
 export default HomeSearchCollectionsSection;

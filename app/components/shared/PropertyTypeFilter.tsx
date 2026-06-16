@@ -28,11 +28,11 @@ const labelize = (value: string) =>
     .replaceAll("_", " ")
     .replace(/^\w/, (letter) => letter.toUpperCase());
 
-export function PropertyTypeFilter({
+export const PropertyTypeFilter = ({
   onChange,
   selectedValues = [],
   id,
-}: Props) {
+}: Props) => {
   const handleCheckboxChange = (value: string) => {
     const updatedSelectedValues = selectedValues.includes(value)
       ? selectedValues.filter((item: string) => item !== value)
@@ -74,4 +74,4 @@ export function PropertyTypeFilter({
       })}
     </div>
   );
-}
+};

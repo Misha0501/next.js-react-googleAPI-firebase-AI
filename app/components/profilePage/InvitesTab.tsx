@@ -18,7 +18,7 @@ import { toast } from "react-toastify";
 import { CompanyMembershipInvite } from "@/types";
 import { Modal } from "@/app/components/shared/Modal";
 import { formatDate } from "@/app/lib/formatDate";
-import { COMPANY_MEMBERSHIP_ROLE } from "../../lib/constants";
+import { COMPANY_MEMBERSHIP_ROLE } from "@/app/lib/constants";
 import {
   CheckCircleIcon,
   ClockIcon,

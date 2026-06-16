@@ -54,7 +54,7 @@ const MOBILE_NAV_ITEMS: MobileNavItem[] = [
 const classNames = (...classes: Array<string | false | null | undefined>) =>
   classes.filter(Boolean).join(" ");
 
-function MobileFooter() {
+const MobileFooter = () => {
   const pathname = usePathname() || "/";
 
   const isActiveRoute = (item: MobileNavItem) => {
@@ -122,6 +122,6 @@ function MobileFooter() {
       </div>
     </nav>
   );
-}
+};
 
 export default MobileFooter;

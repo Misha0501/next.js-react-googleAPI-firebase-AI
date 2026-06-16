@@ -1,5 +1,5 @@
 import { useMutation, UseMutationResult } from "react-query";
-import * as api from "./api";
+import * as api from "@/providers/Companies/api";
 import { Company } from "@/types";
 import { CompanyProvider } from "@/providers/Companies/types";
 import type { AuthProps } from "@/providers/types";

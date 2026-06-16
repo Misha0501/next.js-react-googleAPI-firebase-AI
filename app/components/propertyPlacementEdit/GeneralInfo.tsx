@@ -7,10 +7,10 @@ import {
   TagIcon,
 } from "@heroicons/react/24/outline";
 import property1 from "@/public/property1.png";
-import StepsTopInfo from "./StepsTopInfo";
-import { LISTING_TYPES, PROPERTY_TYPES } from "../../lib/constants";
+import StepsTopInfo from "@/app/components/propertyPlacementEdit/StepsTopInfo";
+import { LISTING_TYPES, PROPERTY_TYPES } from "@/app/lib/constants";
 import React, { useState } from "react";
-import PropertyPlacementRadioButtons from "./PropertyPlacementRadioButtons";
+import PropertyPlacementRadioButtons from "@/app/components/propertyPlacementEdit/PropertyPlacementRadioButtons";
 import { AutocompleteAddress } from "@/types";
 import { AddressAutocomplete } from "@/app/components/propertyPlacementEdit/AddressAutocomplete";
 import {
@@ -18,7 +18,7 @@ import {
   getGeneralInfoFields,
   PlacementFormValues,
   validateGeneralInfo,
-} from "./validation";
+} from "@/app/components/propertyPlacementEdit/validation";
 import { FormikProps } from "formik";
 
 interface CreatePropertyComponentPropInterface {

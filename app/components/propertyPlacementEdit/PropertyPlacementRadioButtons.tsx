@@ -13,12 +13,12 @@ type PropertyPlacementRadioButtonsProps = {
   value?: string;
   defaultValue?: string;
 };
-export default function PropertyPlacementRadioButtons({
+const PropertyPlacementRadioButtons = ({
   options,
   onChange,
   id,
   value,
-}: PropertyPlacementRadioButtonsProps) {
+}: PropertyPlacementRadioButtonsProps) => {
   const handleOnChange = (value: string) => {
     if (onChange) {
       onChange(value);
@@ -85,4 +85,6 @@ export default function PropertyPlacementRadioButtons({
       </div>
     </RadioGroup>
   );
-}
+};
+
+export default PropertyPlacementRadioButtons;

@@ -1,13 +1,20 @@
+import type { Metadata } from "next";
 import { ProfilePageMainContent } from "@/app/components/profilePage/ProfilePageMainContent";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { firebaseAdmin } from "@/app/lib/firebase/configAdmin";
 
+export const metadata: Metadata = {
+  title: "My Profile",
+  robots: { index: false },
+};
+
 type Props = {
   params: Promise<{ tab: string }>;
   searchParams: Promise<{ view?: string }>;
 };
-export default async function ProfilePage({ params, searchParams }: Props) {
+
+const ProfilePage = async ({ params, searchParams }: Props) => {
   const { tab } = await params;
   const { view } = await searchParams;
   const userToken = (await cookies()).get("authToken");
@@ -16,13 +23,11 @@ export default async function ProfilePage({ params, searchParams }: Props) {
   await firebaseAdmin
     .auth()
     .verifyIdToken(userToken.value)
-    .catch((error) => {
-      // user is not authenticated
+    .catch(() => {
       redirect("/signin");
     });
-  // the user is authenticated
 
-  return (
-    <ProfilePageMainContent tab={tab} view={view}></ProfilePageMainContent>
-  );
-}
+  return <ProfilePageMainContent tab={tab} view={view} />;
+};
+
+export default ProfilePage;

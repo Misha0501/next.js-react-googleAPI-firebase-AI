@@ -1,5 +1,5 @@
-import service from "../../services";
-import { RecentlyViewedListingsProvider } from "./types";
+import service from "@/services";
+import { RecentlyViewedListingsProvider } from "@/providers/RecentlyViewedListings/types";
 
 type CreateProps = RecentlyViewedListingsProvider.CreateProps & {
   data: RecentlyViewedListingsProvider.CreateMutationPayload;

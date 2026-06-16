@@ -1,4 +1,4 @@
-import StepsTopInfo from "./StepsTopInfo";
+import StepsTopInfo from "@/app/components/propertyPlacementEdit/StepsTopInfo";
 import property1 from "@/public/property1.png";
 import { useState } from "react";
 import {
@@ -13,15 +13,15 @@ import {
   HEATING_TYPES,
   INTERIOR_TYPES,
   UPKEEP_TYPES,
-} from "../../lib/constants";
-import SingleSelectRadioButton from "./SingleSelectRadioButton";
+} from "@/app/lib/constants";
+import SingleSelectRadioButton from "@/app/components/propertyPlacementEdit/SingleSelectRadioButton";
 import { FormikProps } from "formik";
 import {
   applyStepErrors,
   getMoreDetailsFields,
   PlacementFormValues,
   validateMoreDetails,
-} from "./validation";
+} from "@/app/components/propertyPlacementEdit/validation";
 
 interface CreatePropertyComponentPropInterface {
   formik: FormikProps<PlacementFormValues>;

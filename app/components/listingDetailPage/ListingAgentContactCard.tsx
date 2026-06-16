@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { Listing } from "@/types";
 import Link from "next/link";
-import { ListingContactAgentForm } from "./ListingContactAgentForm";
+import { ListingContactAgentForm } from "@/app/components/listingDetailPage/ListingContactAgentForm";
 import { useRouter } from "next/navigation";
 import { useListigDetailContext } from "@/app/context/ListingDetailContext";
 import { formatEuroPrice } from "@/app/lib/formatPrice";

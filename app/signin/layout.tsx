@@ -1,7 +1,4 @@
-export default function SignInLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  return children;
-}
+const SignInLayout = ({ children }: { children: React.ReactNode }) =>
+  children;
+
+export default SignInLayout;

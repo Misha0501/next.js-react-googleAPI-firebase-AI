@@ -4,8 +4,8 @@ import {
   useQuery,
   UseQueryResult,
 } from "react-query";
-import * as api from "./api";
-import { ApplicationUserProvider } from "./types";
+import * as api from "@/providers/Users/api";
+import { ApplicationUserProvider } from "@/providers/Users/types";
 import { ApplicationUser } from "@/types";
 
 const KEY = "Users";

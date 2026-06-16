@@ -1,4 +1,4 @@
-import PropertyPlacementRadioButtons from "./PropertyPlacementRadioButtons";
+import PropertyPlacementRadioButtons from "@/app/components/propertyPlacementEdit/PropertyPlacementRadioButtons";
 import {
   CURRENCIES,
   HEATING_TYPES,
@@ -6,8 +6,8 @@ import {
   LISTING_TYPES,
   PROPERTY_TYPES,
   UPKEEP_TYPES,
-} from "../../lib/constants";
-import SingleSelectRadioButton from "./SingleSelectRadioButton";
+} from "@/app/lib/constants";
+import SingleSelectRadioButton from "@/app/components/propertyPlacementEdit/SingleSelectRadioButton";
 import { PlacingPropertyImagesHandler } from "@/app/components/propertyPlacementEdit/PlacingPropertyImagesHandler";
 import React from "react";
 import { FormikProps } from "formik";
@@ -26,9 +26,9 @@ const numberInputClass =
 const selectClass =
   "h-10 w-full max-w-lg rounded-xl border border-slate-200 bg-white px-3 text-sm text-[#2D3648] outline-none transition focus:border-[#1F5FD6] focus:ring-2 focus:ring-[#1F5FD6]/15";
 
-function EditableConfirmationPage({
+const EditableConfirmationPage = ({
   formik,
-}: CreatePropertyComponentPropInterface) {
+}: CreatePropertyComponentPropInterface) => {
   return (
     <>
       <hr className="my-6 border-slate-200" />
@@ -412,6 +412,6 @@ function EditableConfirmationPage({
       </div>
     </>
   );
-}
+};
 
 export default EditableConfirmationPage;

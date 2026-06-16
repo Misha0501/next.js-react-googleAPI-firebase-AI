@@ -18,8 +18,8 @@ import {
   priceSellMaxOptions,
   priceSellMinOptions,
 } from "@/app/lib/constants/filters";
-import { FromToFilter } from "./FromToFilter";
-import { RadioGroupCustom } from "../shared/RadioGroupCustom";
+import { FromToFilter } from "@/app/components/listingsPage/FromToFilter";
+import { RadioGroupCustom } from "@/app/components/shared/RadioGroupCustom";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { formatEuroPrice } from "@/app/lib/formatPrice";
 import {
@@ -125,7 +125,7 @@ export const getFilterValuesFromSearchParams = (
   };
 };
 
-export function Filters({ listingType, locality }: FiltersProps) {
+export const Filters = ({ listingType, locality }: FiltersProps) => {
   const pathname = usePathname();
   const router = useRouter();
   const urlParams = useSearchParams();
@@ -463,6 +463,6 @@ export function Filters({ listingType, locality }: FiltersProps) {
       </FilterSection>
     </div>
   );
-}
+};
 
 export default Filters;

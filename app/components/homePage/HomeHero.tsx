@@ -3,7 +3,7 @@ import Image from "next/image";
 import { HomeHeroHeaderSearch } from "@/app/components/homePage/HomeHeroHeaderSearch";
 import { CheckBadgeIcon, SparklesIcon } from "@heroicons/react/24/outline";
 
-export default function HomeHero() {
+const HomeHero = () => {
   return (
     <header className="relative overflow-hidden bg-[#0B1220] text-white">
       <div className="absolute inset-0">
@@ -49,4 +49,6 @@ export default function HomeHero() {
       </div>
     </header>
   );
-}
+};
+
+export default HomeHero;

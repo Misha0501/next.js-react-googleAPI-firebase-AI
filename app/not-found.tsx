@@ -1,6 +1,11 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 
-export default function NotFound() {
+export const metadata: Metadata = {
+  title: "Page Not Found",
+};
+
+const NotFound = () => {
   return (
     <div className="container">
       <div className="py-32 text-center">
@@ -24,4 +29,6 @@ export default function NotFound() {
       </div>
     </div>
   );
-}
+};
+
+export default NotFound;

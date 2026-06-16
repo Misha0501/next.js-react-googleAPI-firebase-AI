@@ -13,13 +13,20 @@ import {
 } from "@heroicons/react/24/outline";
 import { FormikProps } from "formik";
 import { Listing } from "@/types";
-import { CURRENCIES, LISTING_TYPES, PROPERTY_TYPES } from "../../lib/constants";
-import PropertyPlacementRadioButtons from "../propertyPlacementEdit/PropertyPlacementRadioButtons";
-import { EditPropertyValues, ErrorMap } from "./types";
-import { ErrorText, SectionRow, inputClass } from "./editFormPrimitives";
-import { EditLocationSection } from "./EditLocationSection";
-import { EditDetailsSection } from "./EditDetailsSection";
-import { EditMediaSection } from "./EditMediaSection";
+import { CURRENCIES, LISTING_TYPES, PROPERTY_TYPES } from "@/app/lib/constants";
+import PropertyPlacementRadioButtons from "@/app/components/propertyPlacementEdit/PropertyPlacementRadioButtons";
+import {
+  EditPropertyValues,
+  ErrorMap,
+} from "@/app/components/editProperty/types";
+import {
+  ErrorText,
+  SectionRow,
+  inputClass,
+} from "@/app/components/editProperty/editFormPrimitives";
+import { EditLocationSection } from "@/app/components/editProperty/EditLocationSection";
+import { EditDetailsSection } from "@/app/components/editProperty/EditDetailsSection";
+import { EditMediaSection } from "@/app/components/editProperty/EditMediaSection";
 
 export type { EditPropertyValues };
 

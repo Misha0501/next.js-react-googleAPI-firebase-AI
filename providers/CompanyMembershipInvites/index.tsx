@@ -4,7 +4,7 @@ import {
   useQuery,
   UseQueryResult,
 } from "react-query";
-import * as api from "./api";
+import * as api from "@/providers/CompanyMembershipInvites/api";
 import { CompanyMembershipInvite } from "@/types";
 import { CompanyMembershipInvitesProvider } from "@/providers/CompanyMembershipInvites/types";
 

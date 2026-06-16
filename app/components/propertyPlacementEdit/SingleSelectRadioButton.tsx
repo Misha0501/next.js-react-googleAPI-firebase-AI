@@ -9,13 +9,13 @@ type PropertyPlacementRadioButtonsProps = {
   value?: string;
   onBlur?: FocusEventHandler;
 };
-export default function SingleSelectRadioButton({
+const SingleSelectRadioButton = ({
   options,
   onChange,
   id,
   value,
   onBlur,
-}: PropertyPlacementRadioButtonsProps) {
+}: PropertyPlacementRadioButtonsProps) => {
   const handleOnChange = (value: string) => {
     if (onChange) {
       onChange(value);
@@ -57,4 +57,6 @@ export default function SingleSelectRadioButton({
       </div>
     </RadioGroup>
   );
-}
+};
+
+export default SingleSelectRadioButton;

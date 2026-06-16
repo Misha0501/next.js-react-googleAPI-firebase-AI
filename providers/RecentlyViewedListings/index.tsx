@@ -4,7 +4,7 @@ import {
   useQuery,
   UseQueryResult,
 } from "react-query";
-import * as api from "./api";
+import * as api from "@/providers/RecentlyViewedListings/api";
 import { RecentlyViewedListing } from "@/types";
 import { RecentlyViewedListingsProvider } from "@/providers/RecentlyViewedListings/types";
 

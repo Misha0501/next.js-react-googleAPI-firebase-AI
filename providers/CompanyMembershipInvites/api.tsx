@@ -1,5 +1,5 @@
-import service from "../../services";
-import { CompanyMembershipInvitesProvider } from "./types";
+import service from "@/services";
+import { CompanyMembershipInvitesProvider } from "@/providers/CompanyMembershipInvites/types";
 import type { CompanyMembershipInvite } from "@/types";
 
 type ReadProps = CompanyMembershipInvitesProvider.POSTProps;

@@ -1,5 +1,5 @@
-import service from "../../services";
-import { ApplicationUserProvider } from "./types";
+import service from "@/services";
+import { ApplicationUserProvider } from "@/providers/Users/types";
 import { ApplicationUser } from "@/types";
 
 type UpdateProps = ApplicationUserProvider.GetProps & {

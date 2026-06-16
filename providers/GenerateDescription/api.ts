@@ -1,5 +1,5 @@
 import service from "@/services";
-import { Description } from "./types";
+import { Description } from "@/providers/GenerateDescription/types";
 
 // Create
 export async function generate(

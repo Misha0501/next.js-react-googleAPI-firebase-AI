@@ -4,7 +4,9 @@ import React from "react";
 import { Formik } from "formik";
 import { useListingDetailPage } from "@/providers/Listing";
 import { useParams } from "next/navigation";
-import EditForm, { EditPropertyValues } from "./EditForm";
+import EditForm, {
+  EditPropertyValues,
+} from "@/app/components/editProperty/EditForm";
 import { ListingImage } from "@/types";
 
 const getYearValue = (value?: string | null) => {
@@ -15,7 +17,7 @@ const getYearValue = (value?: string | null) => {
   return Number.isFinite(year) ? year : undefined;
 };
 
-export default function EditProperty() {
+const EditProperty = () => {
   const params = useParams();
   const listingDetailPage = useListingDetailPage({ id: Number(params?.id) });
   const listing = listingDetailPage.data;
@@ -102,4 +104,6 @@ export default function EditProperty() {
       </div>
     </div>
   );
-}
+};
+
+export default EditProperty;

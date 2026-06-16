@@ -1,5 +1,5 @@
 import { useMutation, UseMutationResult } from "react-query";
-import * as api from "./api";
+import * as api from "@/providers/ContactForm/api";
 import { ContactFormProvider } from "@/providers/ContactForm/types";
 
 // Create

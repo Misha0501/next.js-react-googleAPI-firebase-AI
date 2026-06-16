@@ -2,7 +2,7 @@ import gemini from "@/app/lib/gemini";
 import { getDecodedIdToken } from "@/app/lib/getDecodedIdToken";
 import { checkRateLimit } from "@/app/lib/redis/rateLimit";
 import { handleAPIError } from "@/app/lib/api/handleError";
-import { buildGeminiPrompt } from "./_utils";
+import { buildGeminiPrompt } from "@/app/api/generateDescription/_utils";
 
 export const maxDuration = 60;
 

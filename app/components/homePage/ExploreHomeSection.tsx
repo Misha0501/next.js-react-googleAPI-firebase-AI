@@ -43,7 +43,7 @@ const popularSearches = [
   },
 ];
 
-function ExploreHomeSection() {
+const ExploreHomeSection = () => {
   return (
     <section className="bg-[linear-gradient(180deg,#FFFFFF_0%,#F8FAFC_100%)] py-24 lg:py-32">
       <div className="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
@@ -163,6 +163,6 @@ function ExploreHomeSection() {
       </div>
     </section>
   );
-}
+};
 
 export default ExploreHomeSection;

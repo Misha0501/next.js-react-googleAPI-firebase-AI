@@ -4,10 +4,10 @@ import {
   PhotoIcon,
 } from "@heroicons/react/24/outline";
 import { FormikProps } from "formik";
-import { PlacingPropertyImagesHandler } from "../propertyPlacementEdit/PlacingPropertyImagesHandler";
-import { EditPropertyValues } from "./types";
-import { ErrorText, SectionRow } from "./editFormPrimitives";
-import { AIGenerateBox } from "../propertyPlacementEdit/DescriptionAndImages";
+import { PlacingPropertyImagesHandler } from "@/app/components/propertyPlacementEdit/PlacingPropertyImagesHandler";
+import { EditPropertyValues } from "@/app/components/editProperty/types";
+import { ErrorText, SectionRow } from "@/app/components/editProperty/editFormPrimitives";
+import { AIGenerateBox } from "@/app/components/propertyPlacementEdit/DescriptionAndImages";
 import { useGenerateDescription } from "@/providers/GenerateDescription";
 
 type Props = {

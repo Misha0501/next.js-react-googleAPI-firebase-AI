@@ -7,7 +7,7 @@ type Props = {
   listingItem: Listing | null;
 };
 
-function NextToConfirmationPage({ listingItem }: Props) {
+const NextToConfirmationPage = ({ listingItem }: Props) => {
   const listingHref = listingItem?.id
     ? `/listings/${listingItem.id}`
     : "/profile/myProperties";
@@ -46,6 +46,6 @@ function NextToConfirmationPage({ listingItem }: Props) {
       </div>
     </div>
   );
-}
+};
 
 export default NextToConfirmationPage;

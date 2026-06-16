@@ -1,8 +1,13 @@
+import type { Metadata } from "next";
 import EditProperty from "@/app/components/editProperty";
-import React from "react";
 
-const page = () => {
+export const metadata: Metadata = {
+  title: "Edit Property",
+  robots: { index: false },
+};
+
+const EditPage = () => {
   return <EditProperty />;
 };
 
-export default page;
+export default EditPage;

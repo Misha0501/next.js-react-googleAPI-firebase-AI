@@ -1,5 +1,5 @@
-import service from "../../services";
-import { SavedSearchesProvider } from "./types";
+import service from "@/services";
+import { SavedSearchesProvider } from "@/providers/SavedSearches/types";
 import type { AuthProps } from "@/providers/types";
 
 type CreateProps = AuthProps & {

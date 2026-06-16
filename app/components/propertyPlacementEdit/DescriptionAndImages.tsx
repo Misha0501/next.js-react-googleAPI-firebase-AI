@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import StepsTopInfo from "./StepsTopInfo";
+import StepsTopInfo from "@/app/components/propertyPlacementEdit/StepsTopInfo";
 import property1 from "@/public/property1.png";
 import {
   ArrowLeftIcon,
@@ -16,7 +16,7 @@ import {
   getDescriptionFields,
   PlacementFormValues,
   validateDescriptionAndImages,
-} from "./validation";
+} from "@/app/components/propertyPlacementEdit/validation";
 
 interface CreatePropertyComponentPropInterface {
   formik: FormikProps<PlacementFormValues>;
@@ -55,13 +55,13 @@ const SectionRow = ({ icon, title, description, children }: SectionProps) => (
   </section>
 );
 
-function DescriptionAndImages({
+const DescriptionAndImages = ({
   formik,
   handleBack,
   step,
   handleNext,
   isShow,
-}: CreatePropertyComponentPropInterface) {
+}: CreatePropertyComponentPropInterface) => {
   const [show, setShow] = useState(true);
   const [showError, setShowErrors] = useState(false);
   const [streamingText, setStreamingText] = useState<string | null>(null);
@@ -227,9 +227,9 @@ function DescriptionAndImages({
       )}
     </div>
   );
-}
+};
 
-export function AIGenerateBox({
+export const AIGenerateBox = ({
   isLoading,
   isError,
   onGenerate,
@@ -237,7 +237,7 @@ export function AIGenerateBox({
   isLoading: boolean;
   isError: boolean;
   onGenerate: () => void;
-}) {
+}) => {
   const [elapsed, setElapsed] = useState(0);
 
   useEffect(() => {
@@ -309,6 +309,6 @@ export function AIGenerateBox({
       )}
     </div>
   );
-}
+};
 
 export default DescriptionAndImages;

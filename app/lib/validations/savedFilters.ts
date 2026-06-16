@@ -6,7 +6,7 @@ import {
   LISTING_TYPES,
   PROPERTY_TYPES,
   UPKEEP_TYPES,
-} from "../constants";
+} from "@/app/lib/constants";
 import type {
   CurrencyType,
   HeatingType,

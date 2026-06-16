@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import NextToConfirmationPage from "./NextToConfirmationPage";
+import NextToConfirmationPage from "@/app/components/propertyPlacementEdit/NextToConfirmationPage";
 import { useCreateProperty } from "@/providers/Listing";
 import type { ListingProvider } from "@/providers/Listing/types";
 import { useAuthContext } from "@/app/context/AuthContext";
@@ -22,7 +22,7 @@ import {
   getAllPlacementFields,
   validatePlacementValues,
   applyStepErrors,
-} from "./validation";
+} from "@/app/components/propertyPlacementEdit/validation";
 import type {
   ListingType,
   PropertyType,
@@ -89,11 +89,11 @@ const SummarySection = ({ icon, title, items }: SummarySectionProps) => (
   </section>
 );
 
-function Confirmation({
+const Confirmation = ({
   formik,
   handleBack,
   step,
-}: CreatePropertyComponentPropInterface) {
+}: CreatePropertyComponentPropInterface) => {
   const { authToken } = useAuthContext();
   const createProperty = useCreateProperty({ authToken: authToken });
   const [createError, setCreateError] = useState("");
@@ -387,6 +387,6 @@ function Confirmation({
       </div>
     </div>
   );
-}
+};
 
 export default Confirmation;

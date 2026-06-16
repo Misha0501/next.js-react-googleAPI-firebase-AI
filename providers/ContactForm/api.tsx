@@ -1,5 +1,5 @@
 import service from "@/services";
-import { ContactFormProvider } from "./types";
+import { ContactFormProvider } from "@/providers/ContactForm/types";
 
 export async function create(props: {
   data: ContactFormProvider.CreateMutationPayload;

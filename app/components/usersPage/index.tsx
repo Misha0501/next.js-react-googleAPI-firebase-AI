@@ -1,12 +1,12 @@
 "use client";
 
 import React, { useMemo } from "react";
-import { ListingContactAgentForm } from "../listingDetailPage/ListingContactAgentForm";
-import GoogleMap from "../shared/GoogleMap";
-import { ListingItem } from "../ListingItem";
+import { ListingContactAgentForm } from "@/app/components/listingDetailPage/ListingContactAgentForm";
+import GoogleMap from "@/app/components/shared/GoogleMap";
+import { ListingItem } from "@/app/components/ListingItem";
 import { useUserDetail } from "@/providers/Users";
 import { useParams, useRouter } from "next/navigation";
-import FloatingContactBar from "../listingDetailPage/FloatingContactBar";
+import FloatingContactBar from "@/app/components/listingDetailPage/FloatingContactBar";
 import {
   EnvelopeIcon,
   MapPinIcon,
@@ -20,7 +20,7 @@ import { useAuthContext } from "@/app/context/AuthContext";
 import { useSavedListingIds } from "@/providers/SavedListings";
 import { Listing } from "@/types";
 
-function UserPageMain() {
+const UserPageMain = () => {
   const { authToken } = useAuthContext();
   const params = useParams();
   const id = Number(params?.id);
@@ -256,6 +256,6 @@ function UserPageMain() {
       />
     </div>
   );
-}
+};
 
 export default UserPageMain;

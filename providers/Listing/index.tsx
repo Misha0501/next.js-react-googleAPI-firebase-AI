@@ -5,8 +5,8 @@ import {
   useQueryClient,
   UseQueryResult,
 } from "react-query";
-import * as api from "./api";
-import { ListingProvider } from "./types";
+import * as api from "@/providers/Listing/api";
+import { ListingProvider } from "@/providers/Listing/types";
 import { Listing } from "@/types";
 
 const KEY = "PropertyListing";

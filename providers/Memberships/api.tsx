@@ -1,5 +1,5 @@
-import service from "../../services";
-import { MembershipsProvider } from "./types";
+import service from "@/services";
+import { MembershipsProvider } from "@/providers/Memberships/types";
 import type { AuthProps } from "@/providers/types";
 import type { Membership } from "@/types";
 

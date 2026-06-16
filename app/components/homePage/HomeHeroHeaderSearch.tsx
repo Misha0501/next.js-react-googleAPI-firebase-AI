@@ -10,7 +10,7 @@ import {
 
 type ListingType = "SELL" | "RENT";
 
-export function HomeHeroHeaderSearch() {
+export const HomeHeroHeaderSearch = () => {
   const [listingTypeSelected, setListingTypeSelected] =
     useState<ListingType>("SELL");
   const [selectedLocality, setSelectedLocality] = useState("");
@@ -99,4 +99,4 @@ export function HomeHeroHeaderSearch() {
       </button>
     </form>
   );
-}
+};

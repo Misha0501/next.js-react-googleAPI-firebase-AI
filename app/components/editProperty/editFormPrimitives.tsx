@@ -1,6 +1,6 @@
 import React from "react";
 import { FormikProps } from "formik";
-import { EditPropertyValues } from "./types";
+import { EditPropertyValues } from "@/app/components/editProperty/types";
 
 export const inputClass =
   "h-12 w-full rounded-xl border border-slate-200 bg-white px-4 text-sm font-semibold text-[#1F2937] outline-none transition placeholder:text-slate-400 focus:border-[#1F5FD6] focus:ring-2 focus:ring-[#1F5FD6]/15";

@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { ListingTitleSection } from "@/app/components/listingDetailPage/ListingTitleSection";
 import { ListingDetailSavedButton } from "@/app/components/listingDetailPage/ListingDetailSavedButton";
 import { ListingDetailImages } from "@/app/components/listingDetailPage/ListingDetailImages";
@@ -22,7 +23,7 @@ type Props = {
   params: Promise<{ id: string }>;
 };
 
-const fetchListing = async (listingId: number) => {
+const fetchListing = async (listingId: number): Promise<Listing | null> => {
   const response = await fetch(getFetchUrl(`/api/listings/${listingId}`), {
     cache: "no-store",
   });
@@ -38,7 +39,48 @@ const fetchListing = async (listingId: number) => {
   return response.json();
 };
 
-async function ListingPage({ params }: Props) {
+export const generateMetadata = async ({
+  params,
+}: Props): Promise<Metadata> => {
+  const { id } = await params;
+  const listingId = Number(id);
+
+  if (!Number.isInteger(listingId) || listingId <= 0) {
+    return { title: "Property" };
+  }
+
+  const listing = await fetchListing(listingId).catch(() => null);
+
+  if (!listing) {
+    return { title: "Property not found" };
+  }
+
+  const address = listing.Address?.[0];
+  const city = address?.locality ?? "";
+  const rooms = listing.rooms ? `${listing.rooms}-room ` : "";
+  const type = (listing.propertyType ?? "property").toLowerCase();
+  const cityStr = city ? ` in ${city}` : "";
+  const title = `${rooms}${type}${cityStr}`.replace(/^\w/, (c) =>
+    c.toUpperCase(),
+  );
+  const description =
+    listing.description ??
+    `View this ${type}${cityStr} on Homfli. Check photos, price, and contact the agent.`;
+
+  return {
+    title,
+    description: description.slice(0, 160),
+    openGraph: {
+      title,
+      description: description.slice(0, 160),
+      images: listing.ListingImage?.[0]?.url
+        ? [{ url: listing.ListingImage[0].url }]
+        : [],
+    },
+  };
+};
+
+const ListingPage = async ({ params }: Props) => {
   const { id } = await params;
   const listingId = Number(id);
   let listing: Listing | null = null;
@@ -113,6 +155,6 @@ async function ListingPage({ params }: Props) {
       </div>
     </ListigDetailContextProvider>
   );
-}
+};
 
 export default ListingPage;

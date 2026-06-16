@@ -5,7 +5,7 @@ import { usePropertyListing } from "@/providers/Listing";
 import { useAuthContext } from "@/app/context/AuthContext";
 import { Listing } from "@/types";
 import { NO_MAX } from "@/app/lib/constants/filters";
-import type { FilterValues } from "./Filters";
+import type { FilterValues } from "@/app/components/listingsPage/Filters";
 import { Pagination } from "@/app/components/shared/Pagination";
 import { useSavedListingIds } from "@/providers/SavedListings";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";

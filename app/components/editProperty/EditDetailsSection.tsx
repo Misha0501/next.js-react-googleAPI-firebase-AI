@@ -9,10 +9,10 @@ import {
   HEATING_TYPES,
   INTERIOR_TYPES,
   UPKEEP_TYPES,
-} from "../../lib/constants";
-import SingleSelectRadioButton from "../propertyPlacementEdit/SingleSelectRadioButton";
-import { EditPropertyValues } from "./types";
-import { ErrorText, NumberField, SectionRow } from "./editFormPrimitives";
+} from "@/app/lib/constants";
+import SingleSelectRadioButton from "@/app/components/propertyPlacementEdit/SingleSelectRadioButton";
+import { EditPropertyValues } from "@/app/components/editProperty/types";
+import { ErrorText, NumberField, SectionRow } from "@/app/components/editProperty/editFormPrimitives";
 
 type Props = {
   formik: FormikProps<EditPropertyValues>;

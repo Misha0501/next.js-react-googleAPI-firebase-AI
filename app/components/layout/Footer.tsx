@@ -43,7 +43,7 @@ const FooterLink = ({ href, label }: { href: string; label: string }) => (
   </li>
 );
 
-function Footer() {
+const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   return (
@@ -132,6 +132,6 @@ function Footer() {
       </div>
     </footer>
   );
-}
+};
 
 export default Footer;

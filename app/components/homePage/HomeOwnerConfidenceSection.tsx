@@ -29,7 +29,7 @@ const ownerBenefits = [
   },
 ];
 
-function HomeOwnerConfidenceSection() {
+const HomeOwnerConfidenceSection = () => {
   return (
     <section className="border-b border-slate-200/80 bg-[#F4F7FB] py-20 lg:py-24">
       <div className="mx-auto grid max-w-screen-xl grid-cols-1 gap-10 px-4 sm:px-6 lg:grid-cols-[0.9fr_1.1fr] lg:px-8">
@@ -86,6 +86,6 @@ function HomeOwnerConfidenceSection() {
       </div>
     </section>
   );
-}
+};
 
 export default HomeOwnerConfidenceSection;

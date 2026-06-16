@@ -5,8 +5,8 @@ import { MapPinIcon } from "@heroicons/react/24/outline";
 import { FormikProps } from "formik";
 import { AutocompleteAddress } from "@/types";
 import { AddressAutocomplete } from "@/app/components/propertyPlacementEdit/AddressAutocomplete";
-import { EditPropertyValues } from "./types";
-import { SectionRow, ErrorText } from "./editFormPrimitives";
+import { EditPropertyValues } from "@/app/components/editProperty/types";
+import { SectionRow, ErrorText } from "@/app/components/editProperty/editFormPrimitives";
 
 const disabledInputClass =
   "w-full rounded-xl border border-slate-200 bg-[#F8FAFC] px-4 py-3 text-sm font-semibold text-[#64748B] outline-none";

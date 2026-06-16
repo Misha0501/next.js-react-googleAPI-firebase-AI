@@ -5,7 +5,7 @@ import { ListingItem, ListingItemSkeleton } from "@/app/components/ListingItem";
 import { usePropertyListing } from "@/providers/Listing";
 import { Listing } from "@/types";
 
-function RecentlyPlacedPropertiesSection() {
+const RecentlyPlacedPropertiesSection = () => {
   const { data, isLoading, isError } = usePropertyListing({
     page: 1,
     pageSize: 6,
@@ -56,6 +56,6 @@ function RecentlyPlacedPropertiesSection() {
       </div>
     </section>
   );
-}
+};
 
 export default RecentlyPlacedPropertiesSection;

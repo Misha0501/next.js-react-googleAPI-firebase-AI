@@ -22,7 +22,7 @@ import { Button } from "@/app/components/shared/Button";
 
 type Mode = "signin" | "signup";
 
-function getFirebaseErrorMessage(code: string): string {
+const getFirebaseErrorMessage = (code: string): string => {
   switch (code) {
     case "auth/invalid-credential":
     case "auth/wrong-password":
@@ -49,22 +49,22 @@ function getFirebaseErrorMessage(code: string): string {
     default:
       return "Something went wrong. Please try again.";
   }
-}
+};
 
-async function registerInDatabase(params: {
+const registerInDatabase = async (params: {
   email: string;
   displayName: string;
   providerId: string;
   firebaseUID: string;
-}) {
+}) => {
   await fetch("/api/signup", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(params),
   });
-}
+};
 
-export default function SignInPageContent() {
+const SignInPageContent = () => {
   const updateUser = useUpdateUser({});
   const updateUserRef = useRef(updateUser);
   const { user } = useAuthContext();
@@ -505,4 +505,6 @@ export default function SignInPageContent() {
       </div>
     </section>
   );
-}
+};
+
+export default SignInPageContent;

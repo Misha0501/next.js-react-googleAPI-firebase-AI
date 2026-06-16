@@ -1,4 +1,4 @@
-import service from "../../services";
+import service from "@/services";
 import { SavedListingsProvider } from "@/providers/SavedListings/types";
 import { SavedListing } from "@/types";
 import type { AuthProps } from "@/providers/types";

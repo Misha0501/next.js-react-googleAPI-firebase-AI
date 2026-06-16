@@ -1,9 +1,9 @@
 "use client";
 import React, { useState } from "react";
-import GeneralInfo from "./GeneralInfo";
-import MoreDetails from "./MoreDetails";
-import DescriptionAndImages from "./DescriptionAndImages";
-import Confirmation from "./Confirmation";
+import GeneralInfo from "@/app/components/propertyPlacementEdit/GeneralInfo";
+import MoreDetails from "@/app/components/propertyPlacementEdit/MoreDetails";
+import DescriptionAndImages from "@/app/components/propertyPlacementEdit/DescriptionAndImages";
+import Confirmation from "@/app/components/propertyPlacementEdit/Confirmation";
 import { Formik, FormikProps } from "formik";
 import {
   CheckBadgeIcon,
@@ -11,7 +11,7 @@ import {
   HomeModernIcon,
   PhotoIcon,
 } from "@heroicons/react/24/outline";
-import { PlacementFormValues } from "./validation";
+import { PlacementFormValues } from "@/app/components/propertyPlacementEdit/validation";
 
 const steps = [
   {
@@ -71,7 +71,7 @@ const initialValues: PlacementFormValues = {
   images: [],
 };
 
-export default function MultiForm() {
+const MultiForm = () => {
   const [activeStep, setActiveStep] = useState(0);
   const [showForm1, setShowForm1] = useState(true);
   const [showForm2, setShowForm2] = useState(true);
@@ -243,4 +243,6 @@ export default function MultiForm() {
       </Formik>
     </div>
   );
-}
+};
+
+export default MultiForm;

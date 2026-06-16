@@ -4,7 +4,7 @@ import {
   useQuery,
   UseQueryResult,
 } from "react-query";
-import * as api from "./api";
+import * as api from "@/providers/SavedSearches/api";
 import { SavedSearchesProvider } from "@/providers/SavedSearches/types";
 import { SavedSearch } from "@/types";
 import type { AuthProps } from "@/providers/types";

@@ -1,20 +1,24 @@
-import MultiForm from "../components/propertyPlacementEdit";
+import type { Metadata } from "next";
+import MultiForm from "@/app/components/propertyPlacementEdit";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { firebaseAdmin } from "@/app/lib/firebase/configAdmin";
 
-async function PlacePropertyPage() {
+export const metadata: Metadata = {
+  title: "Place Your Property",
+  robots: { index: false },
+};
+
+const PlacePropertyPage = async () => {
   const userToken = (await cookies()).get("authToken");
   if (!userToken || !userToken.value) redirect("/signin");
 
   await firebaseAdmin
     .auth()
     .verifyIdToken(userToken.value)
-    .catch((error) => {
-      // user is not authenticated
+    .catch(() => {
       redirect("/signin");
     });
-  // the user is authenticated!
 
   return (
     <>
@@ -23,6 +27,6 @@ async function PlacePropertyPage() {
       </section>
     </>
   );
-}
+};
 
 export default PlacePropertyPage;

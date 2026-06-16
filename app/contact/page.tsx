@@ -1,6 +1,13 @@
+import type { Metadata } from "next";
 import { ContactForm } from "@/app/components/shared/ContactForm";
 
-export default function ContactPage() {
+export const metadata: Metadata = {
+  title: "Contact Us",
+  description:
+    "Get in touch with our real estate team. We help buyers, sellers, and renters across Bulgaria.",
+};
+
+const ContactPage = () => {
   return (
     <div>
       {/* Header band */}
@@ -26,4 +33,6 @@ export default function ContactPage() {
       </div>
     </div>
   );
-}
+};
+
+export default ContactPage;

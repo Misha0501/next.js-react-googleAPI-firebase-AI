@@ -1,5 +1,5 @@
-import service from "../../services";
-import { ListingsImagesProvider } from "./types";
+import service from "@/services";
+import { ListingsImagesProvider } from "@/providers/ListingImages/types";
 import type { AuthProps } from "@/providers/types";
 
 type DeleteProps = AuthProps & {

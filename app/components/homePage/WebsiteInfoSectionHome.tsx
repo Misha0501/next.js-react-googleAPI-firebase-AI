@@ -20,7 +20,7 @@ const stats = [
   },
 ];
 
-function HomeWebsiteInfoSection() {
+const HomeWebsiteInfoSection = () => {
   return (
     <section className="border-b border-slate-200/80 bg-white py-14 lg:py-16">
       <div className="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
@@ -41,6 +41,6 @@ function HomeWebsiteInfoSection() {
       </div>
     </section>
   );
-}
+};
 
 export default HomeWebsiteInfoSection;

@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useAuthContext } from "@/app/context/AuthContext";
-import { Description } from "./types";
+import { Description } from "@/providers/GenerateDescription/types";
 
 export function useGenerateDescription() {
   const [isLoading, setIsLoading] = useState(false);
