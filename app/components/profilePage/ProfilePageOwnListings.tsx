@@ -2,13 +2,16 @@
 
 import { Listing } from "@/types";
 import { ListingItem, ListingItemSkeleton } from "@/app/components/ListingItem";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useAuthContext } from "@/app/context/AuthContext";
 import { Modal } from "@/app/components/shared/Modal";
 import { useDeleteListing } from "@/providers/Listing";
+import { Pagination } from "@/app/components/shared/Pagination";
 import { toast } from "react-toastify";
 import Link from "next/link";
 import { HomeModernIcon, PlusIcon } from "@heroicons/react/24/outline";
+
+const PAGE_SIZE = 12;
 
 type Props = {
   initialListings: Listing[];
@@ -21,6 +24,7 @@ export const ProfilePageOwnListings = ({
   const { authToken } = useAuthContext();
 
   const [listings, setListings] = useState(initialListings);
+  const [page, setPage] = useState(1);
   let [deleteConfirmationModalOpen, setDeleteConfirmationModalOpen] =
     useState(false);
   const [listingToDelete, setListingToDelete] = useState<Listing | null>(null);
@@ -28,7 +32,14 @@ export const ProfilePageOwnListings = ({
 
   useEffect(() => {
     setListings(initialListings);
+    setPage(1);
   }, [initialListings]);
+
+  const totalPages = Math.ceil(listings.length / PAGE_SIZE);
+  const pagedListings = useMemo(
+    () => listings.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE),
+    [listings, page],
+  );
 
   function closeModal() {
     setDeleteConfirmationModalOpen(false);
@@ -66,7 +77,7 @@ export const ProfilePageOwnListings = ({
           ? Array.from({ length: 4 }).map((_, i) => (
               <ListingItemSkeleton key={i} />
             ))
-          : listings.map((listing, index) => (
+          : pagedListings.map((listing, index) => (
               <ListingItem
                 key={index}
                 listingItemInitial={listing}
@@ -96,6 +107,12 @@ export const ProfilePageOwnListings = ({
           </div>
         )}
       </div>
+
+      {totalPages > 1 && (
+        <div className="mt-6">
+          <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />
+        </div>
+      )}
 
       <Modal
         show={deleteConfirmationModalOpen}
