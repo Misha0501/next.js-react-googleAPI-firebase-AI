@@ -56,20 +56,16 @@ export function buildGeminiPrompt(data: DescriptionPayload): string {
   if (floor && totalFloors) add("Floor", `${floor} of ${totalFloors}`);
   else if (floor) add("Floor", floor);
 
-  return `You are a professional real estate copywriter for a Bulgarian property platform.
-
-Write a compelling, natural-sounding property listing description in English based on the details below.
+  return `Write a short property listing description in English based on the details below. Write it the way a real person would — plain language, no marketing clichés, no excessive adjectives. Just describe what the property is and what makes it practical or interesting.
 
 Property details:
 ${lines.join("\n")}
 
-Requirements:
-- 180–280 words
-- Warm, professional tone — write as if you are the listing agent
-- Open with the property's strongest feature or location advantage
-- Flow naturally through space, condition, practicalities, and setting
-- End with a subtle invitation to book a viewing
-- Only use the details provided — do not invent anything
-- Omit any detail that is missing or zero
-- Output the description only — no title, no bullet points, no headers`;
+Rules:
+- 100–180 words
+- Use simple, direct sentences. Avoid words like "stunning", "boasting", "nestled", "perfect", "amazing", "featuring", "charming", "ideal"
+- Mention the key facts: size, layout, location, condition, and anything notable
+- Skip details that are missing or zero
+- No opening like "Welcome to..." or closing like "Don't miss this opportunity"
+- Output the description text only — no title, no bullet points, no headers`;
 }
