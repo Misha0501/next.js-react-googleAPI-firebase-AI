@@ -21,6 +21,16 @@ export async function savedListings(
   });
 }
 
+export async function savedListingIds(
+  props?: AuthProps,
+): Promise<{ id: number; listingId: number }[]> {
+  return service<{ id: number; listingId: number }[]>({
+    method: "GET",
+    url: `/api/savedListings/ids`,
+    headers: { Authorization: props?.authToken ?? "" },
+  });
+}
+
 export async function create(props: CreateProps): Promise<SavedListing> {
   return service<SavedListing>({
     method: "POST",

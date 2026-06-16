@@ -4,7 +4,7 @@ import { useAuthContext } from "@/app/context/AuthContext";
 import { Listing } from "@/types";
 import { ListingItem, ListingItemSkeleton } from "@/app/components/ListingItem";
 import { useRecentlyViewedListings } from "@/providers/RecentlyViewedListings";
-import { useSavedListings } from "@/providers/SavedListings";
+import { useSavedListingIds } from "@/providers/SavedListings";
 import { getPopulatedListingsSaved } from "@/app/lib/listing/getPopulatedListingsSaved";
 import { Pagination } from "@/app/components/shared/Pagination";
 import Link from "next/link";
@@ -20,32 +20,25 @@ export const RecentlyViewedListings = () => {
     authToken,
     page,
   });
-  const savedListings = useSavedListings({ authToken });
+  const savedListingIds = useSavedListingIds({ authToken });
 
   const total = recentlyViewedListingsResponse.data?.total ?? 0;
   const totalPages = Math.ceil(total / PAGE_SIZE);
 
   useEffect(() => {
     if (!recentlyViewedListingsResponse.isSuccess) return;
-    const recentlyViewedListingsData =
-      recentlyViewedListingsResponse?.data?.results;
-    const recentlyViewedListings = recentlyViewedListingsData.map(
-      (item) => item.listing,
-    );
-    setPopulatedListings(recentlyViewedListings);
+    const recentlyViewedListings =
+      recentlyViewedListingsResponse.data.results.map((item) => item.listing);
 
-    if (!savedListings.isSuccess) return;
-    const savedListingsData = savedListings?.data?.results;
     const populated = getPopulatedListingsSaved(
       recentlyViewedListings,
-      savedListingsData,
+      savedListingIds.data ?? [],
     );
     setPopulatedListings(populated);
   }, [
     recentlyViewedListingsResponse.data?.results,
     recentlyViewedListingsResponse.isSuccess,
-    savedListings.data?.results,
-    savedListings.isSuccess,
+    savedListingIds.data,
   ]);
 
   return (

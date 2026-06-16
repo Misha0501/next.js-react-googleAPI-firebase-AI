@@ -17,7 +17,7 @@ import {
 } from "@heroicons/react/24/outline";
 import { getPopulatedListingsSaved } from "@/app/lib/listing/getPopulatedListingsSaved";
 import { useAuthContext } from "@/app/context/AuthContext";
-import { useSavedListings } from "@/providers/SavedListings";
+import { useSavedListingIds } from "@/providers/SavedListings";
 import { Listing } from "@/types";
 
 function UserPageMain() {
@@ -27,7 +27,7 @@ function UserPageMain() {
   const userDetail = useUserDetail({ id });
 
   const router = useRouter();
-  const usersSavedListings = useSavedListings({ authToken });
+  const usersSavedListings = useSavedListingIds({ authToken });
 
   const company = useMemo(
     () => userDetail?.data?.Company ?? null,
@@ -54,9 +54,9 @@ function UserPageMain() {
     () =>
       getPopulatedListingsSaved(
         (propertyListing as Listing[] | undefined) ?? [],
-        usersSavedListings?.data?.results ?? [],
+        usersSavedListings?.data ?? [],
       ),
-    [propertyListing, usersSavedListings?.data?.results],
+    [propertyListing, usersSavedListings?.data],
   );
 
   const initials = displayName

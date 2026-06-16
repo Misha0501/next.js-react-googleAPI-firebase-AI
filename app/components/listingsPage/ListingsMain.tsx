@@ -3,11 +3,11 @@ import { useCallback, useMemo } from "react";
 import { ListingItem, ListingItemSkeleton } from "@/app/components/ListingItem";
 import { usePropertyListing } from "@/providers/Listing";
 import { useAuthContext } from "@/app/context/AuthContext";
-import { Listing, SavedListing } from "@/types";
+import { Listing } from "@/types";
 import { NO_MAX } from "@/app/lib/constants/filters";
 import type { FilterValues } from "./Filters";
 import { Pagination } from "@/app/components/shared/Pagination";
-import { useSavedListings } from "@/providers/SavedListings";
+import { useSavedListingIds } from "@/providers/SavedListings";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 type Props = {
@@ -47,8 +47,8 @@ export const ListingsMain = ({
   const page = currentUrlPage;
   const pageSize = LISTINGS_PAGE_SIZE;
   const sortBy = urlSearchParams.get("sortBy") || undefined;
-  const { data: savedListingsData, isLoading: savedListingsIsLoading } =
-    useSavedListings({ authToken });
+  const { data: savedListingIds, isLoading: savedListingsIsLoading } =
+    useSavedListingIds({ authToken });
 
   const {
     data: listingsData,
@@ -112,11 +112,6 @@ export const ListingsMain = ({
     [updatePageUrl],
   );
 
-  const savedListings = useMemo(() => {
-    if (!savedListingsData) return [];
-    return savedListingsData.results;
-  }, [savedListingsData]);
-
   const listings = useMemo(() => {
     if (!listingsData) return [];
     return listingsData.results;
@@ -129,36 +124,16 @@ export const ListingsMain = ({
   const shouldShowListingSkeletons = isLoading && !listings.length;
 
   const populatedListings: Listing[] = useMemo(() => {
-    if (!savedListings?.length) return listings;
     if (!listings?.length) return [];
+    if (!savedListingIds?.length) return listings;
 
-    let savedListingsListingIds: number[] = [];
-
-    // Store all savedListing's listingIds
-    savedListingsListingIds = savedListings.map(
-      (el: SavedListing) => el.listingId,
-    );
-
-    // populate listings with saved listings data
-    const populatedListings = listings.map((listing: Listing) => {
-      const savedListingListingId = savedListingsListingIds.find(
-        (savedListingId) => savedListingId === listing.id,
-      );
-
-      const savedListing = savedListings.find(
-        (savedListing: SavedListing) =>
-          savedListing.listingId === savedListingListingId,
-      );
-
-      if (savedListingListingId && savedListingListingId && savedListing) {
-        listing.savedListingId = savedListing.id;
-      } else {
-        listing.savedListingId = undefined;
-      }
-      return listing;
-    });
+    const savedMap = new Map(savedListingIds.map((s) => [s.listingId, s.id]));
+    const populatedListings = listings.map((listing: Listing) => ({
+      ...listing,
+      savedListingId: savedMap.get(listing.id),
+    }));
     return populatedListings;
-  }, [savedListings, listings]);
+  }, [savedListingIds, listings]);
 
   if (isError) {
     return (

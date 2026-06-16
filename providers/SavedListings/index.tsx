@@ -21,6 +21,15 @@ export function useSavedListings(
   });
 }
 
+export function useSavedListingIds(
+  props: AuthProps,
+): UseQueryResult<{ id: number; listingId: number }[]> {
+  return useQuery(`${KEY} | Ids`, () => api.savedListingIds(props), {
+    enabled: !!props?.authToken,
+    retry: 0,
+  });
+}
+
 export function useCreateSavedListing(
   props: AuthProps,
 ): UseMutationResult<

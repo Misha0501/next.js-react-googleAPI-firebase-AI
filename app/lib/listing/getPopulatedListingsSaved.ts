@@ -1,17 +1,18 @@
-import { Listing, SavedListing } from "@/types";
+import { Listing } from "@/types";
+
+type SavedRef = { id: number; listingId: number };
 
 export const getPopulatedListingsSaved = (
   listings: Listing[],
-  savedListings: SavedListing[],
+  savedRefs: SavedRef[],
 ): Listing[] => {
   if (!listings || !listings.length) return [];
-  if (!savedListings || !savedListings.length) return listings;
+  if (!savedRefs || !savedRefs.length) return listings;
 
-  const savedMap = new Map(savedListings.map((s) => [s.listingId, s]));
+  const savedMap = new Map(savedRefs.map((s) => [s.listingId, s.id]));
 
-  return listings.map((listing) => {
-    const saved = savedMap.get(listing.id);
-    listing.savedListingId = saved?.id ?? undefined;
-    return listing;
-  });
+  return listings.map((listing) => ({
+    ...listing,
+    savedListingId: savedMap.get(listing.id),
+  }));
 };

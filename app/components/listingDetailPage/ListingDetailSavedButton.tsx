@@ -1,13 +1,12 @@
 "use client";
 
-import { SavedListing } from "@/types";
 import { HeartIcon as HeartIconSolid } from "@heroicons/react/24/solid";
 import { HeartIcon } from "@heroicons/react/24/outline";
 import { useMemo, useState } from "react";
 import {
   useCreateSavedListing,
   useDeleteSavedListing,
-  useSavedListings,
+  useSavedListingIds,
 } from "@/providers/SavedListings";
 import { useAuthContext } from "@/app/context/AuthContext";
 import { toast } from "react-toastify";
@@ -25,46 +24,24 @@ export const ListingDetailSavedButton = ({
 }: Prop) => {
   const { authToken } = useAuthContext();
   let [showAuthModal, setShowAuthModal] = useState(false);
-  const savedListings = useSavedListings({ authToken });
+  const savedListingIds = useSavedListingIds({ authToken });
   const createSavedListing = useCreateSavedListing({ authToken });
   const deleteSavedListing = useDeleteSavedListing({ authToken });
 
   const router = useRouter();
 
-  const { isListingSaved, savedListing } = useMemo(() => {
-    if (savedListings?.data?.results) {
-      const savedListing = savedListings.data.results.find(
-        (savedListing: SavedListing) => savedListing.listingId === listingId,
-      );
+  const { isListingSaved, savedId } = useMemo(() => {
+    const match = savedListingIds.data?.find((s) => s.listingId === listingId);
+    return { isListingSaved: !!match, savedId: match?.id };
+  }, [savedListingIds.data, listingId]);
 
-      return {
-        isListingSaved: !!savedListing,
-        savedListing,
-      };
-    }
-
-    return {
-      isListingSaved: false,
-      savedListing: null,
-    };
-  }, [savedListings?.data, listingId]);
-
-  const savedIconIsLoading = useMemo(
-    () =>
-      savedListings.isLoading ||
-      savedListings.isFetching ||
-      createSavedListing.isLoading ||
-      deleteSavedListing.isLoading,
-    [
-      savedListings.isLoading,
-      savedListings.isFetching,
-      createSavedListing.isLoading,
-      deleteSavedListing.isLoading,
-    ],
-  );
+  const savedIconIsLoading =
+    savedListingIds.isLoading ||
+    savedListingIds.isFetching ||
+    createSavedListing.isLoading ||
+    deleteSavedListing.isLoading;
 
   const handleSavedIconClick = async () => {
-    // if user is not logged in show the auth modal
     if (!authToken) {
       setShowAuthModal(true);
       return;
@@ -72,19 +49,16 @@ export const ListingDetailSavedButton = ({
 
     try {
       if (!isListingSaved) {
-        // if listings isn't saved do a post request to save it
-        await createSavedListing.mutateAsync({
-          listingId,
-        });
+        await createSavedListing.mutateAsync({ listingId });
       } else {
-        // if it's saved do a delete request
-        await deleteSavedListing.mutateAsync({ id: savedListing!.id });
+        await deleteSavedListing.mutateAsync({ id: savedId! });
       }
-      await savedListings.refetch();
+      await savedListingIds.refetch();
     } catch (error) {
       toast.error("Oops! Something went wrong. Please try again later.");
     }
   };
+
   return (
     <>
       {showOnDesktop && (

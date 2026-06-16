@@ -38,6 +38,16 @@ export const getSavedListings = async (
   return { page, pageSize, total: savedListingsCount, results: savedListings };
 };
 
+export const getSavedListingIds = async (
+  userId: number,
+): Promise<{ id: number; listingId: number }[]> => {
+  return prisma.savedListing.findMany({
+    where: { applicationUserId: userId },
+    select: { id: true, listingId: true },
+    orderBy: { createdAt: "desc" },
+  });
+};
+
 /**
  * Handles the creation or retrieval of a saved listing record for a user.
  * If the listing was already saved by the user, the existing record is returned.
