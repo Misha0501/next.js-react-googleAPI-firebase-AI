@@ -169,7 +169,7 @@ export const ListingDetailContent = ({ listing }: Prop) => {
               Description
             </h2>
             <p
-              className="mt-4 text-base font-normal leading-7 text-[#4A5468]"
+              className="mt-4 whitespace-pre-line text-base font-normal leading-7 text-[#4A5468]"
               data-testid="description"
             >
               {formattedDescription}
