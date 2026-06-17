@@ -55,7 +55,7 @@
   "devDependencies": {
     "@playwright/test": "^1.61.0",
     "@types/google.maps": "^3.65.1",
-    "checkly": "latest",
+    "checkly": "8.8.0",
     "dotenv-cli": "^11.0.0",
     "eslint-config-prettier": "^10.1.8",
     "prettier": "^3.8.4",
