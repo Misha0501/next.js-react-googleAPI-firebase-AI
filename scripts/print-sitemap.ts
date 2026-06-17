@@ -11,11 +11,13 @@
  * to manually call dotenv.config() here.
  */
 
-import { PrismaClient } from "@prisma/client"
+import { PrismaPg } from "@prisma/adapter-pg";
+import { PrismaClient } from "@/generated/prisma/client";
 import * as fs from "fs"
 import * as path from "path"
 
-const prisma = new PrismaClient()
+const adapter = new PrismaPg(process.env.DATABASE_URL as string);
+const prisma = new PrismaClient({ adapter })
 
 function getSiteUrl(): string {
   const raw =

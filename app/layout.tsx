@@ -14,6 +14,9 @@ import { SilktideConsentManager } from "@/app/components/layout/SilktideConsentM
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL ?? "https://homfli.com",
+  ),
   title: {
     default: "Real estate marketplace for Bulgarian market",
     template: "%s",
@@ -24,7 +27,7 @@ export const metadata: Metadata = {
 
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <html className="scroll-smooth" lang="en">
+    <html className="scroll-smooth" data-scroll-behavior="smooth" lang="en">
       <head>
         <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
         <SilktideConsentManager />
@@ -33,7 +36,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
           content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, user-scalable=no, viewport-fit=cover"
         />
       </head>
-      <body className={`${inter.className} flex min-h-screen flex-col`}>
+      <body suppressHydrationWarning className={`${inter.className} flex min-h-screen flex-col`}>
         <ScrollToTop />
         <Navigation />
         <main className="flex-1 pb-28 lg:pb-0">

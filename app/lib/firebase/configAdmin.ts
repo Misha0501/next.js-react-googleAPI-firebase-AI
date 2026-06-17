@@ -27,7 +27,7 @@ try {
    * not an actual error when we're hot-reloading.
    */
   const err = error as Error;
-  if (!/already exists/u.test(err.message)) {
+  if (!/already exists/.test(err.message)) {
     console.error("Firebase admin initialization error", err.stack);
   }
 }

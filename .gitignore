@@ -209,6 +209,9 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+# prisma generated client (regenerated on build via prisma generate)
+/generated
+
 ### react ###
 .DS_*
 *.log

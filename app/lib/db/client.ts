@@ -1,40 +1,37 @@
-import { PrismaClient, Prisma } from "@prisma/client";
+import { PrismaPg } from "@prisma/adapter-pg";
+import { PrismaClient } from "@/generated/prisma/client";
+
+type ExtendedPrismaClient = ReturnType<typeof buildClient>;
 
 declare global {
   // eslint-disable-next-line no-var
-  var prismaClient: PrismaClient | undefined;
+  var prismaClient: ExtendedPrismaClient | undefined;
 }
 
-function buildClient(): PrismaClient {
-  const client = new PrismaClient();
+function buildClient() {
+  const adapter = new PrismaPg(process.env.DATABASE_URL!);
 
-  client.$use(
-    async (
-      params: Prisma.MiddlewareParams,
-      next: (params: Prisma.MiddlewareParams) => Promise<unknown>,
-    ) => {
-      if (params.model === "Listing") {
-        if (params.action === "delete") {
-          params.action = "update";
-          (params.args as Record<string, unknown>)["data"] = {
-            deleted: new Date(),
-          };
-        }
-        if (params.action === "deleteMany") {
-          params.action = "updateMany";
-          const args = params.args as Record<string, Record<string, unknown>>;
-          if (args.data !== undefined) {
-            args.data["deleted"] = new Date();
-          } else {
-            args["data"] = { deleted: new Date() };
-          }
-        }
-      }
-      return next(params);
+  const base = new PrismaClient({ adapter });
+
+  // Soft-delete: intercept delete/deleteMany on Listing and set deleted timestamp instead.
+  return base.$extends({
+    query: {
+      listing: {
+        async delete({ args }) {
+          return base.listing.update({
+            where: args.where,
+            data: { deleted: new Date() },
+          });
+        },
+        async deleteMany({ args }) {
+          return base.listing.updateMany({
+            where: args.where,
+            data: { deleted: new Date() },
+          });
+        },
+      },
     },
-  );
-
-  return client;
+  });
 }
 
 if (process.env.NODE_ENV === "production") {
@@ -45,4 +42,4 @@ if (process.env.NODE_ENV === "production") {
   }
 }
 
-export const prisma = global.prismaClient;
+export const prisma = global.prismaClient!;

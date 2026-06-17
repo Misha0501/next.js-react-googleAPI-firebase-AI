@@ -107,7 +107,7 @@ async function service<T = unknown>(args: IAPArgs): Promise<T> {
     throw new Error(errorMessage);
   }
 
-  return parseJSON ? await data.json() : data;
+  return (parseJSON ? await data.json() : data) as T;
 }
 
 export default service;

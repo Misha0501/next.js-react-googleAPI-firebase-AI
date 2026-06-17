@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { Prisma } from "@prisma/client";
+import { Prisma } from "@/generated/prisma/client";
 import { ResponseError } from "@/app/lib/classes/ResponseError";
 
 /**

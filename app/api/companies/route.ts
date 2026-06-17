@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { Prisma } from "@prisma/client";
+import { Prisma } from "@/generated/prisma/client";
 import { ResponseError } from "@/app/lib/classes/ResponseError";
 import { getApplicationUserServer } from "@/app/lib/getApplicationUserServer";
 import { prisma } from "@/app/lib/db/client";
