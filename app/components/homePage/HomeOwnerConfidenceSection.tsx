@@ -3,7 +3,7 @@ import {
   CameraIcon,
   ChartBarSquareIcon,
   ClipboardDocumentCheckIcon,
-  ShieldCheckIcon,
+  SparklesIcon,
 } from "@heroicons/react/24/outline";
 
 const ownerBenefits = [
@@ -23,9 +23,9 @@ const ownerBenefits = [
     icon: ChartBarSquareIcon,
   },
   {
-    title: "Support when needed",
-    description: "Agent-backed help is available for important decisions.",
-    icon: ShieldCheckIcon,
+    title: "AI description drafts",
+    description: "Generate a strong first draft from the property details.",
+    icon: SparklesIcon,
   },
 ];
 
@@ -42,8 +42,8 @@ const HomeOwnerConfidenceSection = () => {
           </h2>
           <p className="mt-4 max-w-xl text-[#717D96]">
             A stronger property presentation helps serious buyers and renters
-            understand the home faster, compare it fairly, and take the next
-            step with confidence.
+            understand the home faster. Add the key details, generate an
+            AI-assisted description draft, then refine it before publishing.
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
             <Link
