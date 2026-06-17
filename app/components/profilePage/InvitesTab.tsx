@@ -311,10 +311,10 @@ export const InvitesTab = () => {
           <div className="flex justify-end border-t border-slate-100 px-5 py-5 sm:px-6">
             <Button
               type="submit"
-              loading={createCompanyMembershipInvite.isLoading}
+              loading={createCompanyMembershipInvite.isPending}
             >
               <PaperAirplaneIcon className="h-4 w-4" />
-              {createCompanyMembershipInvite.isLoading
+              {createCompanyMembershipInvite.isPending
                 ? "Sending..."
                 : "Send invite"}
             </Button>

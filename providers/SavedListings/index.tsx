@@ -3,7 +3,7 @@ import {
   UseMutationResult,
   useQuery,
   UseQueryResult,
-} from "react-query";
+} from "@tanstack/react-query";
 import * as api from "@/providers/SavedListings/api";
 import { SavedListingsProvider } from "@/providers/SavedListings/types";
 import { SavedListing } from "@/types";
@@ -15,7 +15,9 @@ export function useSavedListings(
   props: AuthProps & { page?: number },
 ): UseQueryResult<SavedListingsProvider.ReadResponse> {
   const page = props.page ?? 1;
-  return useQuery([`${KEY} | Items`, page], () => api.savedListings(props), {
+  return useQuery({
+    queryKey: [`${KEY} | Items`, page],
+    queryFn: () => api.savedListings(props),
     enabled: !!props?.authToken,
     retry: 0,
   });
@@ -24,7 +26,9 @@ export function useSavedListings(
 export function useSavedListingIds(
   props: AuthProps,
 ): UseQueryResult<{ id: number; listingId: number }[]> {
-  return useQuery(`${KEY} | Ids`, () => api.savedListingIds(props), {
+  return useQuery({
+    queryKey: [`${KEY} | Ids`],
+    queryFn: () => api.savedListingIds(props),
     enabled: !!props?.authToken,
     retry: 0,
   });
@@ -37,8 +41,9 @@ export function useCreateSavedListing(
   Error,
   SavedListingsProvider.CreateMutationPayload
 > {
-  return useMutation((payload) => api.create({ ...props, data: payload }), {
-    mutationKey: `${KEY} | Create`,
+  return useMutation({
+    mutationFn: (payload) => api.create({ ...props, data: payload }),
+    mutationKey: [KEY, "Create"],
     retry: 0,
   });
 }
@@ -46,8 +51,9 @@ export function useCreateSavedListing(
 export function useDeleteSavedListing(
   props: AuthProps,
 ): UseMutationResult<null, Error, SavedListingsProvider.DeleteMutationPayload> {
-  return useMutation((payload) => api.deleteItem({ ...props, data: payload }), {
-    mutationKey: `${KEY} | Delete`,
+  return useMutation({
+    mutationFn: (payload) => api.deleteItem({ ...props, data: payload }),
+    mutationKey: [KEY, "Delete"],
     retry: 0,
   });
 }

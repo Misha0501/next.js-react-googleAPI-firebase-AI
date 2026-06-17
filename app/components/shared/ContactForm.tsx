@@ -251,11 +251,11 @@ export const ContactForm = ({
 
       <Button
         type="submit"
-        loading={sendEmail.isLoading}
-        disabled={!formik.isValid || !formik.dirty || sendEmail.isLoading}
+        loading={sendEmail.isPending}
+        disabled={!formik.isValid || !formik.dirty || sendEmail.isPending}
         fullWidth
       >
-        {sendEmail.isLoading ? "Sending..." : submitLabel}
+        {sendEmail.isPending ? "Sending..." : submitLabel}
       </Button>
     </form>
   );

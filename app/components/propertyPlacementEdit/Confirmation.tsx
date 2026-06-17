@@ -363,7 +363,7 @@ const Confirmation = ({
             <button
               type="button"
               onClick={handleBack}
-              disabled={createProperty.isLoading}
+              disabled={createProperty.isPending}
               className="inline-flex min-h-[50px] w-full items-center justify-center gap-2 rounded-xl border border-slate-300 bg-white px-6 py-3 text-sm font-bold text-[#334155] transition hover:border-[#1F5FD6] hover:text-[#1F5FD6] disabled:opacity-50 sm:w-auto"
             >
               <ArrowLeftIcon className="h-4 w-4" />
@@ -372,11 +372,11 @@ const Confirmation = ({
           )}
           <button
             type="button"
-            disabled={createProperty.isLoading}
+            disabled={createProperty.isPending}
             onClick={confirmBtnHandler}
             className="inline-flex min-h-[50px] w-full items-center justify-center rounded-xl bg-[#1F5FD6] px-6 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-[#184FB5] disabled:opacity-50 sm:w-auto"
           >
-            {createProperty.isLoading ? "Publishing..." : "Publish property"}
+            {createProperty.isPending ? "Publishing..." : "Publish property"}
           </button>
         </div>
         {createError && (

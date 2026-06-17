@@ -128,7 +128,7 @@ export const CompanyTab = () => {
     });
   }, [companyMemberships.data, companyMemberships.isSuccess]);
 
-  const isSubmitting = createCompany.isLoading || updateCompany.isLoading;
+  const isSubmitting = createCompany.isPending || updateCompany.isPending;
 
   return (
     <form

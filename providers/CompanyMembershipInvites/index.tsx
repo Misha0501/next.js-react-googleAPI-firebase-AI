@@ -3,7 +3,7 @@ import {
   UseMutationResult,
   useQuery,
   UseQueryResult,
-} from "react-query";
+} from "@tanstack/react-query";
 import * as api from "@/providers/CompanyMembershipInvites/api";
 import { CompanyMembershipInvite } from "@/types";
 import { CompanyMembershipInvitesProvider } from "@/providers/CompanyMembershipInvites/types";
@@ -13,7 +13,9 @@ const KEY = "CompanyMembershipInvites";
 export function useCompanyMembershipInvites(
   props: CompanyMembershipInvitesProvider.POSTProps,
 ): UseQueryResult<CompanyMembershipInvite[], any> {
-  return useQuery(`${KEY} | Items`, () => api.companyMembershipInvites(props), {
+  return useQuery({
+    queryKey: [`${KEY} | Items`],
+    queryFn: () => api.companyMembershipInvites(props),
     enabled: !!props?.authToken,
     retry: 0,
   });
@@ -31,14 +33,12 @@ export function useCreateCompanyMembershipInvites(
     CompanyMembershipInvite,
     any,
     CompanyMembershipInvitesProvider.CreateMutationPayload
-  >(
-    (payload) =>
-      api.create({
-        ...props,
-        data: payload,
-      }) as Promise<CompanyMembershipInvite>,
-    { mutationKey: `${KEY} | Create`, retry: 0 },
-  );
+  >({
+    mutationFn: (payload) =>
+      api.create({ ...props, data: payload }) as Promise<CompanyMembershipInvite>,
+    mutationKey: [KEY, "Create"],
+    retry: 0,
+  });
 }
 
 // Decline
@@ -53,14 +53,12 @@ export function useDeclineCompanyMembershipInvite(
     CompanyMembershipInvite,
     any,
     CompanyMembershipInvitesProvider.DeclineMutationPayload
-  >(
-    (payload) =>
-      api.decline({
-        ...props,
-        data: payload,
-      }) as Promise<CompanyMembershipInvite>,
-    { mutationKey: `${KEY} | Decline`, retry: 0 },
-  );
+  >({
+    mutationFn: (payload) =>
+      api.decline({ ...props, data: payload }) as Promise<CompanyMembershipInvite>,
+    mutationKey: [KEY, "Decline"],
+    retry: 0,
+  });
 }
 
 // Delete
@@ -75,8 +73,10 @@ export function useDeleteCompanyMembershipInvite(
     null,
     any,
     CompanyMembershipInvitesProvider.DeleteMutationPayload
-  >((payload) => api.deleteItem({ ...props, data: payload }) as Promise<null>, {
-    mutationKey: `${KEY} | Delete`,
+  >({
+    mutationFn: (payload) =>
+      api.deleteItem({ ...props, data: payload }) as Promise<null>,
+    mutationKey: [KEY, "Delete"],
     retry: 0,
   });
 }

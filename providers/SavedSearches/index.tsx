@@ -3,7 +3,7 @@ import {
   UseMutationResult,
   useQuery,
   UseQueryResult,
-} from "react-query";
+} from "@tanstack/react-query";
 import * as api from "@/providers/SavedSearches/api";
 import { SavedSearchesProvider } from "@/providers/SavedSearches/types";
 import { SavedSearch } from "@/types";
@@ -15,7 +15,9 @@ export function useSavedSearches(
   props: AuthProps & { page?: number },
 ): UseQueryResult<SavedSearchesProvider.ReadResponse> {
   const page = props.page ?? 1;
-  return useQuery([`${KEY} | Items`, page], () => api.savedSearches(props), {
+  return useQuery({
+    queryKey: [`${KEY} | Items`, page],
+    queryFn: () => api.savedSearches(props),
     enabled: !!props?.authToken,
     retry: 0,
   });
@@ -32,18 +34,21 @@ export function useCreateSavedSearches(
     SavedSearch,
     Error,
     SavedSearchesProvider.CreateMutationPayload
-  >(
-    (payload) =>
+  >({
+    mutationFn: (payload) =>
       api.create({ ...props, data: payload }) as Promise<SavedSearch>,
-    { mutationKey: `${KEY} | Create`, retry: 0 },
-  );
+    mutationKey: [KEY, "Create"],
+    retry: 0,
+  });
 }
 
 export function useDeleteSavedSearch(
   props: AuthProps,
 ): UseMutationResult<null, Error, SavedSearchesProvider.DeleteMutationPayload> {
-  return useMutation<null, Error, SavedSearchesProvider.DeleteMutationPayload>(
-    (payload) => api.deleteItem({ ...props, data: payload }) as Promise<null>,
-    { mutationKey: `${KEY} | Delete`, retry: 0 },
-  );
+  return useMutation<null, Error, SavedSearchesProvider.DeleteMutationPayload>({
+    mutationFn: (payload) =>
+      api.deleteItem({ ...props, data: payload }) as Promise<null>,
+    mutationKey: [KEY, "Delete"],
+    retry: 0,
+  });
 }

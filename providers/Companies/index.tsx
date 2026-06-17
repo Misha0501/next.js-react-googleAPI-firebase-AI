@@ -1,4 +1,4 @@
-import { useMutation, UseMutationResult } from "react-query";
+import { useMutation, UseMutationResult } from "@tanstack/react-query";
 import * as api from "@/providers/Companies/api";
 import { Company } from "@/types";
 import { CompanyProvider } from "@/providers/Companies/types";
@@ -18,8 +18,10 @@ export function useCreateCompany(
     Company,
     CompanyProvider.ResponseError,
     CompanyProvider.CreateMutation
-  >((payload) => api.create({ ...props, data: payload }) as Promise<Company>, {
-    mutationKey: `${KEY} | Create`,
+  >({
+    mutationFn: (payload) =>
+      api.create({ ...props, data: payload }) as Promise<Company>,
+    mutationKey: [KEY, "Create"],
     retry: 0,
   });
 }
@@ -36,8 +38,10 @@ export function useUpdateCompany(
     Company,
     CompanyProvider.ResponseError,
     CompanyProvider.UpdateMutation
-  >((payload) => api.update({ ...props, data: payload }) as Promise<Company>, {
-    mutationKey: `${KEY} | Update`,
+  >({
+    mutationFn: (payload) =>
+      api.update({ ...props, data: payload }) as Promise<Company>,
+    mutationKey: [KEY, "Update"],
     retry: 0,
   });
 }

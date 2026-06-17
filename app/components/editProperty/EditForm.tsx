@@ -408,9 +408,9 @@ const EditForm = ({ formik, addressId, id, loading }: EditFormProps) => {
           <button
             type="submit"
             className="inline-flex min-h-[50px] w-full items-center justify-center rounded-xl bg-[#1F5FD6] px-6 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-[#184FB5] disabled:opacity-50 sm:w-auto"
-            disabled={updateProperty.isLoading}
+            disabled={updateProperty.isPending}
           >
-            {updateProperty.isLoading ? "Saving..." : "Save changes"}
+            {updateProperty.isPending ? "Saving..." : "Save changes"}
           </button>
         </div>
       </div>

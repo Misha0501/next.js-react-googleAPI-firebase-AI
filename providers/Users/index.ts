@@ -3,7 +3,7 @@ import {
   UseMutationResult,
   useQuery,
   UseQueryResult,
-} from "react-query";
+} from "@tanstack/react-query";
 import * as api from "@/providers/Users/api";
 import { ApplicationUserProvider } from "@/providers/Users/types";
 import { ApplicationUser } from "@/types";
@@ -20,26 +20,22 @@ export function getKeyFromProps(
 export function useUserDetail(
   props: ApplicationUserProvider.GetProps,
 ): UseQueryResult<ApplicationUserProvider.DetailResponse> {
-  return useQuery(
-    getKeyFromProps(props, "DETAIL"),
-    () => api.userDetail(props),
-    {
-      retry: 0,
-    },
-  );
+  return useQuery({
+    queryKey: getKeyFromProps(props, "DETAIL"),
+    queryFn: () => api.userDetail(props),
+    retry: 0,
+  });
 }
 
 export function useUserOwnData(
   props: ApplicationUserProvider.GetProps,
 ): UseQueryResult<ApplicationUserProvider.DetailResponse> {
-  return useQuery(
-    getKeyFromProps(props, "OWN DATA"),
-    () => api.userOwnData(props),
-    {
-      enabled: Boolean(props?.authToken),
-      retry: 0,
-    },
-  );
+  return useQuery({
+    queryKey: getKeyFromProps(props, "OWN DATA"),
+    queryFn: () => api.userOwnData(props),
+    enabled: Boolean(props?.authToken),
+    retry: 0,
+  });
 }
 
 export function useUpdateUser(
@@ -49,8 +45,9 @@ export function useUpdateUser(
   Error,
   ApplicationUserProvider.UpdatePropsMutation
 > {
-  return useMutation((payload) => api.update({ ...props, data: payload }), {
-    mutationKey: `${KEY} | Update`,
+  return useMutation({
+    mutationFn: (payload) => api.update({ ...props, data: payload }),
+    mutationKey: [KEY, "Update"],
     retry: 0,
   });
 }

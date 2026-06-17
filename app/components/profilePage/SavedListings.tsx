@@ -76,7 +76,7 @@ export const SavedListings = () => {
                 <ListingItem
                   listingItemInitial={item.listing}
                   key={index}
-                  onStateChanged={refetch}
+                  onStateChanged={() => void refetch()}
                 />
               ))}
         </div>

@@ -3,26 +3,23 @@ import {
   UseMutationResult,
   useQuery,
   UseQueryResult,
-} from "react-query";
+} from "@tanstack/react-query";
 import * as api from "@/providers/RecentlyViewedListings/api";
 import { RecentlyViewedListing } from "@/types";
 import { RecentlyViewedListingsProvider } from "@/providers/RecentlyViewedListings/types";
 
 const KEY = "RecentlyViewedListing";
 
-// RecentlyViewed Listings
 export function useRecentlyViewedListings(
   props: RecentlyViewedListingsProvider.GetProps,
 ): UseQueryResult<RecentlyViewedListingsProvider.GetResponse> {
   const page = props.page ?? 1;
-  return useQuery(
-    [`${KEY} | Listings`, page],
-    () => api.recentlyViewedListings(props),
-    {
-      enabled: !!props?.authToken,
-      retry: 0,
-    },
-  );
+  return useQuery({
+    queryKey: [`${KEY} | Listings`, page],
+    queryFn: () => api.recentlyViewedListings(props),
+    enabled: !!props?.authToken,
+    retry: 0,
+  });
 }
 
 // Create
@@ -37,9 +34,10 @@ export function useCreateRecentlyViewedListing(
     RecentlyViewedListing,
     any,
     RecentlyViewedListingsProvider.CreateMutationPayload
-  >(
-    (payload) =>
+  >({
+    mutationFn: (payload) =>
       api.create({ ...props, data: payload }) as Promise<RecentlyViewedListing>,
-    { mutationKey: `${KEY} | Create`, retry: 0 },
-  );
+    mutationKey: [KEY, "Create"],
+    retry: 0,
+  });
 }

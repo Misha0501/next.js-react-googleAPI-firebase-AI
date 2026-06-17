@@ -33,8 +33,8 @@ export const ListingItemSaveButton = ({
   const deleteSavedListing = useDeleteSavedListing({ authToken });
   const isSaving =
     isLoadingSavedListings ||
-    createSavedListing.isLoading ||
-    deleteSavedListing.isLoading;
+    createSavedListing.isPending ||
+    deleteSavedListing.isPending;
 
   const handleSavedIconClick = async () => {
     if (!authToken) {

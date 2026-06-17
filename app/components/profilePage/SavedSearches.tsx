@@ -155,7 +155,7 @@ export const SavedSearches = () => {
 
   return (
     <div className="w-full">
-      {(deleteSavedSearch.isLoading || isLoading) && (
+      {(deleteSavedSearch.isPending || isLoading) && (
         <div className="rounded-2xl border border-slate-200 bg-white px-5 py-4 shadow-sm">
           <div className="h-6 w-6 animate-spin rounded-full border-2 border-slate-200 border-t-[#1F5FD6]" />
         </div>

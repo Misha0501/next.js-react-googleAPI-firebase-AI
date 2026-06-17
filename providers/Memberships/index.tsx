@@ -3,18 +3,19 @@ import {
   UseMutationResult,
   useQuery,
   UseQueryResult,
-} from "react-query";
+} from "@tanstack/react-query";
 import * as api from "@/providers/Memberships/api";
 import { Membership } from "@/types";
 import { MembershipsProvider } from "@/providers/Memberships/types";
 
 const KEY = "companyMemberships";
 
-// RecentlyViewed Listings
 export function useCompanyMemberships(
   props: MembershipsProvider.CreateProps,
-): UseQueryResult<Membership> {
-  return useQuery(`${KEY} | Items`, () => api.companyMemberships(props), {
+): UseQueryResult<Membership[]> {
+  return useQuery({
+    queryKey: [`${KEY} | Items`],
+    queryFn: () => api.companyMemberships(props),
     enabled: !!props?.authToken,
     retry: 0,
   });
@@ -32,8 +33,10 @@ export function useCreateMembership(
     Membership,
     any,
     MembershipsProvider.CreateMutationPayload
-  >(
-    (payload) => api.create({ ...props, data: payload }) as Promise<Membership>,
-    { mutationKey: `${KEY} | Create`, retry: 0 },
-  );
+  >({
+    mutationFn: (payload) =>
+      api.create({ ...props, data: payload }) as Promise<Membership>,
+    mutationKey: [KEY, "Create"],
+    retry: 0,
+  });
 }

@@ -38,8 +38,8 @@ export const ListingDetailSavedButton = ({
   const savedIconIsLoading =
     savedListingIds.isLoading ||
     savedListingIds.isFetching ||
-    createSavedListing.isLoading ||
-    deleteSavedListing.isLoading;
+    createSavedListing.isPending ||
+    deleteSavedListing.isPending;
 
   const handleSavedIconClick = async () => {
     if (!authToken) {

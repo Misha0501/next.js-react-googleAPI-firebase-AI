@@ -136,9 +136,9 @@ export const ListingsPageContent = () => {
           type="button"
           className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-[#2D3648] shadow-sm hover:bg-slate-50 disabled:opacity-50"
           onClick={handleSaveSearch}
-          disabled={createSavedSearches.isLoading}
+          disabled={createSavedSearches.isPending}
         >
-          {createSavedSearches.isLoading ? "Saving..." : "Save search"}
+          {createSavedSearches.isPending ? "Saving..." : "Save search"}
         </button>
       </div>
       <section className="mx-auto w-full max-w-screen-xl px-4 pb-20 pt-6 text-black sm:px-6 lg:px-8">
