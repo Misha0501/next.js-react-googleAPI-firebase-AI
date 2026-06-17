@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import logo from "@/public/homfli-logo.svg";
 import { ArrowUpRightIcon } from "@heroicons/react/24/outline";
+import { CookiePreferencesButton } from "@/app/components/layout/CookiePreferencesButton";
 
 const exploreLinks = [
   { label: "Buy property", href: "/listings?listingType=SELL" },
@@ -80,7 +81,19 @@ const Footer = () => {
 
           <FooterColumn title="Explore" links={exploreLinks} />
           <FooterColumn title="Company" links={companyLinks} />
-          <FooterColumn title="Legal" links={legalLinks} />
+          <div>
+            <h3 className="mb-4 text-xs font-black uppercase tracking-[0.18em] text-slate-400">
+              Legal
+            </h3>
+            <ul className="space-y-3">
+              {legalLinks.map((link) => (
+                <FooterLink key={link.href} {...link} />
+              ))}
+              <li>
+                <CookiePreferencesButton />
+              </li>
+            </ul>
+          </div>
         </div>
 
         <div className="mt-12 flex flex-col gap-4 border-t border-slate-700 pt-6 text-xs text-slate-400 md:flex-row md:items-center md:justify-between">

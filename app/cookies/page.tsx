@@ -270,7 +270,7 @@ const CookiesPage = () => {
                   </li>
                 </ul>
                 <p className="mt-2">
-                  Cookiebot may also set necessary cookies to store your cookie
+                  Silktide may also set necessary cookies to store your cookie
                   consent preferences.
                 </p>
               </div>
@@ -289,7 +289,7 @@ const CookiesPage = () => {
                 </p>
                 <p className="mt-2">
                   If preference cookies are added later, they will be listed in
-                  the Cookiebot declaration.
+                  the Silktide preferences panel.
                 </p>
               </div>
 
@@ -310,7 +310,8 @@ const CookiesPage = () => {
                   If analytics tools are added later, such as Google Analytics,
                   Plausible, PostHog, or similar services, they will be used
                   only in accordance with applicable law and consent
-                  requirements, and will be listed in the Cookiebot declaration.
+                  requirements, and will be listed in the Silktide preferences
+                  panel.
                 </p>
               </div>
 
@@ -330,90 +331,47 @@ const CookiesPage = () => {
                 <p className="mt-2">
                   If marketing cookies are added later, they will require
                   consent where required by law and will be listed in the
-                  Cookiebot declaration.
+                  Silktide preferences panel.
                 </p>
               </div>
             </div>
           ),
         },
         {
-          id: "cookiebot",
-          title: "5. Cookiebot consent management",
+          id: "silktide",
+          title: "5. Silktide consent management",
           body: (
             <div className="space-y-3">
               <p>
-                Homfli uses, or plans to use, Cookiebot as its cookie consent
-                management tool.
+                Homfli uses Silktide as its cookie consent management tool.
               </p>
               <p>
-                Cookiebot may display a cookie banner when you visit Homfli.
-                Through the banner, you may be able to accept, reject, or
-                customise non-essential cookies.
+                Silktide displays a cookie banner when you visit Homfli.
+                Through the banner, you may accept, reject, or customise
+                non-essential cookies.
               </p>
               <p>
-                Cookiebot may also generate a live cookie declaration that lists
-                cookies detected on the website, grouped by category.
+                You can reopen your preferences at any time by clicking
+                &ldquo;Cookie Preferences&rdquo; in the site footer.
               </p>
             </div>
           ),
         },
         {
-          id: "cookie-declaration",
-          title: "6. Cookie declaration",
+          id: "cookie-preferences-panel",
+          title: "6. Cookie preferences panel",
           body: (
-            <div className="space-y-6">
-              <div className="space-y-3">
-                <p>
-                  The following section is reserved for the Cookiebot Cookie
-                  Declaration. When Cookiebot is configured, add the
-                  declaration script to this page.
-                </p>
-                <div className="rounded-xl border border-slate-200 bg-[#F8FAFC] p-4">
-                  <p className="mb-2 text-xs font-bold uppercase tracking-wide text-[#64748B]">
-                    Cookie declaration placeholder — add to this page
-                  </p>
-                  <pre className="overflow-x-auto text-xs text-[#334155]">
-                    {`<!-- Cookiebot Cookie Declaration placeholder -->
-<!-- Replace YOUR_COOKIEBOT_DOMAIN_GROUP_ID with the actual Cookiebot Domain Group ID -->
-
-<script
-  id="CookieDeclaration"
-  src="https://consent.cookiebot.com/YOUR_COOKIEBOT_DOMAIN_GROUP_ID/cd.js"
-  type="text/javascript"
-  async>
-</script>`}
-                  </pre>
-                </div>
-                <p className="text-[#64748B]">
-                  [Cookiebot declaration will appear here once the script is
-                  added.]
-                </p>
-              </div>
-
-              <div className="space-y-3">
-                <p>
-                  The Cookiebot consent banner script should be placed in the
-                  site layout or{" "}
-                  <code className="rounded bg-slate-100 px-1 py-0.5 font-mono text-xs">
-                    &lt;head&gt;
-                  </code>
-                  , not on this page:
-                </p>
-                <div className="rounded-xl border border-slate-200 bg-[#F8FAFC] p-4">
-                  <p className="mb-2 text-xs font-bold uppercase tracking-wide text-[#64748B]">
-                    Banner script placeholder — add to site layout/head
-                  </p>
-                  <pre className="overflow-x-auto text-xs text-[#334155]">
-                    {`<script
-  id="Cookiebot"
-  src="https://consent.cookiebot.com/uc.js"
-  data-cbid="YOUR_COOKIEBOT_DOMAIN_GROUP_ID"
-  data-blockingmode="auto"
-  type="text/javascript">
-</script>`}
-                  </pre>
-                </div>
-              </div>
+            <div className="space-y-3">
+              <p>
+                The Silktide preferences panel shows the cookie categories used
+                on homfli.com and lets you manage your choices.
+              </p>
+              <p>
+                At the current stage, Homfli only uses essential cookies, so
+                the panel shows a single required category. If additional cookie
+                categories are added in the future, they will appear here and
+                require your consent where required by law.
+              </p>
             </div>
           ),
         },
@@ -423,8 +381,8 @@ const CookiesPage = () => {
           body: (
             <div className="space-y-3">
               <p>
-                You can manage your cookie preferences through the Cookiebot
-                banner or cookie settings panel, where available.
+                You can manage your cookie preferences at any time by clicking
+                &ldquo;Cookie Preferences&rdquo; in the footer of any page.
               </p>
               <p>You may be able to:</p>
               <ul className="list-disc space-y-1 pl-5">
@@ -433,20 +391,6 @@ const CookiesPage = () => {
                 <li>Customise cookie categories</li>
                 <li>Change or withdraw your consent later</li>
               </ul>
-              <p>
-                If a cookie settings button or link is available on the
-                website, you can use it to reopen your cookie preferences.
-              </p>
-              <div className="rounded-xl border border-slate-200 bg-[#F8FAFC] p-4">
-                <p className="mb-2 text-xs font-bold uppercase tracking-wide text-[#64748B]">
-                  Developer placeholder — reopen preferences button
-                </p>
-                <pre className="overflow-x-auto text-xs text-[#334155]">
-                  {`<button type="button" onclick="Cookiebot.renew()">
-  Change cookie preferences
-</button>`}
-                </pre>
-              </div>
             </div>
           ),
         },
@@ -494,7 +438,7 @@ const CookiesPage = () => {
                 <li>Redis</li>
                 <li>PostgreSQL database hosting providers</li>
                 <li>OpenAI, if AI description functionality is enabled</li>
-                <li>Cookiebot</li>
+                <li>Silktide</li>
               </ul>
               <p>
                 At the current stage, Homfli does not intentionally use
@@ -503,8 +447,7 @@ const CookiesPage = () => {
               </p>
               <p>
                 If third-party services set cookies or similar technologies,
-                these should appear in the Cookiebot declaration once the
-                website has been scanned by Cookiebot.
+                these will be listed in the Silktide preferences panel.
               </p>
             </div>
           ),
@@ -527,8 +470,8 @@ const CookiesPage = () => {
               </p>
               <p>
                 Depending on the technical implementation, Google services may
-                set cookies or use similar technologies. If detected by
-                Cookiebot, these will be listed in the cookie declaration.
+                set cookies or use similar technologies. If detected, these
+                will be listed in the Silktide preferences panel.
               </p>
             </div>
           ),
@@ -564,8 +507,8 @@ const CookiesPage = () => {
             <div className="space-y-3">
               <p>
                 We may update this Cookie Policy from time to time, especially
-                as Homfli develops, new features are added, Cookiebot is
-                configured, or third-party services change.
+                as Homfli develops, new features are added, the consent
+                configuration changes, or third-party services change.
               </p>
               <p>
                 The updated version will be posted on this page with a new
