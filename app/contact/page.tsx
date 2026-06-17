@@ -1,37 +1,65 @@
 import type { Metadata } from "next";
 import { ContactForm } from "@/app/components/shared/ContactForm";
+import { getSiteUrl } from "@/app/lib/sitemap/getSiteUrl";
+
+const title = "Contact — Homfli";
+const description = "Get in touch with the Homfli team.";
 
 export const metadata: Metadata = {
-  title: "Contact Us",
-  description:
-    "Get in touch with our real estate team. We help buyers, sellers, and renters across Bulgaria.",
+  title,
+  description,
+  robots: { index: true, follow: true },
+  alternates: {
+    canonical: `${getSiteUrl()}/contact`,
+  },
 };
 
 const ContactPage = () => {
   return (
-    <div>
-      {/* Header band */}
-      <div className="bg-[#EDF0F7] py-16 text-center md:py-24">
-        <div className="container">
-          <p className="mb-4 text-xs font-medium uppercase tracking-[0.2em] text-[#717D96]">
-            Real Estate &middot; Bulgaria
+    <main className="bg-[#F8FAFC]">
+      <section className="border-b border-slate-200 bg-white">
+        <div className="mx-auto max-w-[720px] px-4 py-14 text-center sm:px-6 lg:py-16">
+          <p className="mb-3 text-sm font-bold uppercase tracking-wide text-[#1F5FD6]">
+            Contact
           </p>
-          <h1 className="mb-5 font-semibold text-[#2D3648]">Get in touch</h1>
-          <p className="mx-auto max-w-md text-lg leading-relaxed text-[#717D96]">
-            Have a question or a proposition? We&rsquo;d love to hear from you.
+          <h1 className="text-4xl font-black tracking-tight text-[#1F2937] sm:text-5xl">
+            Contact
+          </h1>
+          <p className="mx-auto mt-5 max-w-xl text-base leading-7 text-[#475569]">
+            Have a question about Homfli, a property, or the platform itself?
+            Reach out using the form below or email us directly.
           </p>
         </div>
-      </div>
+      </section>
 
-      {/* Form section */}
-      <div className="py-16 md:py-24">
-        <div className="container">
-          <div className="mx-auto max-w-lg rounded-2xl border border-gray-100 bg-white px-8 py-10 shadow-sm md:px-12 md:py-12">
-            <ContactForm />
+      <section className="px-4 py-12 sm:px-6 lg:py-16">
+        <div className="mx-auto max-w-[560px] rounded-2xl border border-slate-200 bg-white px-6 py-8 shadow-sm sm:px-8">
+          <ContactForm
+            emailTo="contact@homfli.com"
+            showSubject
+            showPhone={false}
+            requireMessageMinLength
+            successMode="inline"
+            submitLabel="Send message"
+          />
+
+          <div className="mt-8 border-t border-slate-200 pt-6 text-sm leading-6 text-[#64748B]">
+            <p>
+              Or email us directly:{" "}
+              <a
+                href="mailto:contact@homfli.com"
+                className="font-bold text-[#1F5FD6]"
+              >
+                contact@homfli.com
+              </a>
+            </p>
+            <p className="mt-2">
+              We typically respond within 2-3 business days.
+            </p>
           </div>
         </div>
-      </div>
-    </div>
+      </section>
+    </main>
   );
 };
 

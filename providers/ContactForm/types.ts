@@ -3,6 +3,7 @@ export namespace ContactFormProvider {
     name: string;
     phoneNumber: string;
     email: string;
+    companyWebsite?: string;
     message: string;
     emailTo?: string;
     subject?: string;

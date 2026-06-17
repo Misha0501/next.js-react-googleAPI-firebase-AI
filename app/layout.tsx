@@ -9,6 +9,7 @@ import "react-toastify/dist/ReactToastify.css";
 import MobileFooter from "@/app/components/layout/MobileFooter";
 import Footer from "@/app/components/layout/Footer";
 import { ScrollToTop } from "@/app/components/shared/ScrollToTop";
+import Script from "next/script";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -26,6 +27,13 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
     <html className="scroll-smooth" lang="en">
       <head>
         <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
+        <Script
+          id="Cookiebot"
+          src="https://consent.cookiebot.com/uc.js"
+          data-cbid="ad9c4ada-3d8c-4e8d-86f2-6ba46daa97c8"
+          data-blockingmode="auto"
+          strategy="beforeInteractive"
+        />
         <meta
           name="viewport"
           content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, user-scalable=no, viewport-fit=cover"
