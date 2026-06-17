@@ -4,7 +4,7 @@ import { getDecodedIdToken } from "@/app/lib/getDecodedIdToken";
 import { prisma } from "@/app/lib/db/client";
 import { ApplicationUser } from "@/types";
 import { userPUTSchema } from "@/app/lib/validations/user";
-import { firebaseAdmin } from "@/app/lib/firebase/configAdmin";
+import { firebaseAdminAuth } from "@/app/lib/firebase/configAdmin";
 import {
   findApplicationUserByEmail,
   handleUserAPIUpdateError,
@@ -43,7 +43,7 @@ export async function PUT(req: Request) {
     const parsedValues = userPUTSchema.parse(await req.json());
     const { displayName, phoneNumber, newPassword } = parsedValues;
 
-    await firebaseAdmin.auth().updateUser(applicationUser.firebaseUID, {
+    await firebaseAdminAuth.updateUser(applicationUser.firebaseUID, {
       displayName,
       phoneNumber,
       ...(newPassword && { password: newPassword }),

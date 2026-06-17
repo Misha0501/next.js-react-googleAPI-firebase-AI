@@ -1,4 +1,4 @@
-import { firebaseAdmin } from "@/app/lib/firebase/configAdmin";
+import { firebaseAdminAuth } from "@/app/lib/firebase/configAdmin";
 import { cookies, headers } from "next/headers";
 import { ResponseError } from "@/app/lib/classes/ResponseError";
 
@@ -32,7 +32,7 @@ export const getDecodedIdToken = async () => {
     throw new ResponseError("User is not authenticated.", 401);
   }
 
-  return firebaseAdmin
-    .auth()
-    .verifyIdToken(headerAuthorizationToken || cookieToken || "");
+  return firebaseAdminAuth.verifyIdToken(
+    headerAuthorizationToken || cookieToken || "",
+  );
 };

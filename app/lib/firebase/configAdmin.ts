@@ -1,4 +1,11 @@
-import admin from "firebase-admin";
+import {
+  cert,
+  getApp,
+  getApps,
+  initializeApp,
+  type ServiceAccount,
+} from "firebase-admin/app";
+import { getAuth } from "firebase-admin/auth";
 
 const firebaseAdminCredentials = {
   type: process.env.FIREBASE_ADMIN_TYPE,
@@ -15,21 +22,12 @@ const firebaseAdminCredentials = {
   universe_domain: process.env.FIREBASE_ADMIN_UNIVERSE_DOMAIN,
 };
 
-try {
-  admin.initializeApp({
-    credential: admin.credential.cert(
-      firebaseAdminCredentials as admin.ServiceAccount,
-    ),
-  });
-} catch (error) {
-  /*
-   * We skip the "already exists" message which is
-   * not an actual error when we're hot-reloading.
-   */
-  const err = error as Error;
-  if (!/already exists/.test(err.message)) {
-    console.error("Firebase admin initialization error", err.stack);
-  }
-}
+// getApps()/getApp() avoids "already exists" errors when hot-reloading.
+const firebaseAdminApp =
+  getApps().length === 0
+    ? initializeApp({
+        credential: cert(firebaseAdminCredentials as ServiceAccount),
+      })
+    : getApp();
 
-export const firebaseAdmin = admin;
+export const firebaseAdminAuth = getAuth(firebaseAdminApp);
