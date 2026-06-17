@@ -8,7 +8,7 @@ import { NO_MAX } from "@/app/lib/constants/filters";
 import type { FilterValues } from "@/app/components/listingsPage/Filters";
 import { Pagination } from "@/app/components/shared/Pagination";
 import { useSavedListingIds } from "@/providers/SavedListings";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 
 type Props = {
   searchParams: FilterValues;
@@ -37,7 +37,6 @@ export const ListingsMain = ({
 }: Props) => {
   const { authToken } = useAuthContext();
   const pathname = usePathname();
-  const router = useRouter();
   const urlSearchParams = useSearchParams();
   const urlQueryString = urlSearchParams.toString();
   const currentUrlPage = useMemo(
@@ -100,9 +99,13 @@ export const ListingsMain = ({
       }
 
       const queryString = params.toString();
-      router.push(queryString ? `${pathname}?${queryString}` : pathname);
+      window.history.pushState(
+        null,
+        "",
+        queryString ? `${pathname}?${queryString}` : pathname,
+      );
     },
-    [pathname, router, urlQueryString],
+    [pathname, urlQueryString],
   );
 
   const handlePageChange = useCallback(

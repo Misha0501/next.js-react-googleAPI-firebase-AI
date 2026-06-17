@@ -53,7 +53,9 @@ export const ListingsPageContent = () => {
     }
     params.delete("page");
     const nextQueryString = params.toString();
-    router.replace(
+    window.history.replaceState(
+      null,
+      "",
       nextQueryString ? `/listings?${nextQueryString}` : "/listings",
     );
   };

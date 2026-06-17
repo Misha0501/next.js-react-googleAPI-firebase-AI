@@ -20,7 +20,7 @@ import {
 } from "@/app/lib/constants/filters";
 import { FromToFilter } from "@/app/components/listingsPage/FromToFilter";
 import { RadioGroupCustom } from "@/app/components/shared/RadioGroupCustom";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { formatEuroPrice } from "@/app/lib/formatPrice";
 import {
   BanknotesIcon,
@@ -127,7 +127,6 @@ export const getFilterValuesFromSearchParams = (
 
 export const Filters = ({ listingType, locality }: FiltersProps) => {
   const pathname = usePathname();
-  const router = useRouter();
   const urlParams = useSearchParams();
   const urlQueryString = urlParams.toString();
   const filterValues = useMemo(
@@ -214,15 +213,19 @@ export const Filters = ({ listingType, locality }: FiltersProps) => {
     const qp = new URLSearchParams();
     if (locality) qp.set("locality", locality);
     if (listingType) qp.set("listingType", listingType);
-    router.replace(`${pathname}?${qp.toString()}`);
-  }, [locality, listingType, pathname, router]);
+    window.history.replaceState(null, "", `${pathname}?${qp.toString()}`);
+  }, [locality, listingType, pathname]);
 
   const applyFilters = useCallback(
     (newValues: typeof filterValues) => {
       const queryString = buildUrl(newValues);
-      router.replace(queryString ? `${pathname}?${queryString}` : pathname);
+      window.history.replaceState(
+        null,
+        "",
+        queryString ? `${pathname}?${queryString}` : pathname,
+      );
     },
-    [buildUrl, pathname, router],
+    [buildUrl, pathname],
   );
 
   const handlePropertyTypeChange = useCallback(

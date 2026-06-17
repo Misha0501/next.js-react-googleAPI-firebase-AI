@@ -1,6 +1,6 @@
 import { ListingType } from "@/types";
 import Filters from "@/app/components/listingsPage/Filters";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import {
   AdjustmentsHorizontalIcon,
   BuildingOffice2Icon,
@@ -19,7 +19,6 @@ export const ListingsPageFilters = ({
   showFiltersMobile,
 }: Props) => {
   const params = useSearchParams();
-  const router = useRouter();
 
   const handleTabChange = (newType: "SELL" | "RENT") => {
     if (newType === listingType) return;
@@ -28,7 +27,7 @@ export const ListingsPageFilters = ({
     const currentLocality = locality || params.get("locality");
     if (currentLocality) qp.set("locality", currentLocality);
     qp.set("listingType", newType);
-    router.replace(`/listings?${qp.toString()}`);
+    window.history.replaceState(null, "", `/listings?${qp.toString()}`);
   };
 
   const tabs = [
