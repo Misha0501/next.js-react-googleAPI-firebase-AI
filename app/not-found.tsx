@@ -1,34 +1,27 @@
-import type { Metadata } from "next";
-import Link from "next/link";
+import type { Metadata } from "next"
+import { MagnifyingGlassIcon } from "@heroicons/react/24/outline"
+import { ErrorPageShell } from "@/app/components/shared/ErrorPageShell"
 
 export const metadata: Metadata = {
   title: "Page Not Found",
-};
+}
 
-const NotFound = () => {
+export default function NotFound() {
   return (
-    <div className="container">
-      <div className="py-32 text-center">
-        <h2 className="mb-8 text-2xl">
-          Oops we could not find the page you are looking for...
-        </h2>
-        <div className="flex flex-col items-center gap-4">
-          <Link
-            href="/"
-            className="inline-flex items-center justify-center rounded-xl bg-[#1F5FD6] px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#184FB5]"
-          >
-            Go to home page
-          </Link>
-          <Link
-            href="/listings"
-            className="inline-flex items-center justify-center rounded-xl bg-[#1F5FD6] px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#184FB5]"
-          >
-            View all properties
-          </Link>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-export default NotFound;
+    <ErrorPageShell
+      code="Error 404"
+      icon={<MagnifyingGlassIcon className="h-10 w-10 text-[#1F5FD6]" />}
+      title="Page not found"
+      description="The page you're looking for doesn't exist or may have been moved. Let's get you back on track."
+      actions={[
+        { type: "link", href: "/", label: "Go to home page", variant: "primary" },
+        {
+          type: "link",
+          href: "/listings",
+          label: "Browse all properties",
+          variant: "ghost",
+        },
+      ]}
+    />
+  )
+}

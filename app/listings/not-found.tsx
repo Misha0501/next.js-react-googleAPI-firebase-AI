@@ -1,21 +1,22 @@
-import Link from "next/link";
+import { HomeModernIcon } from "@heroicons/react/24/outline"
+import { ErrorPageShell } from "@/app/components/shared/ErrorPageShell"
 
-const NotFound = () => {
+export default function ListingNotFound() {
   return (
-    <div className="container">
-      <div className="py-32 text-center">
-        <h2 className="mb-8 text-2xl">
-          Oops we could not find the property you are looking for...
-        </h2>
-        <Link
-          href="/listings"
-          className="inline-flex items-center justify-center rounded-xl bg-[#1F5FD6] px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#184FB5]"
-        >
-          View all properties
-        </Link>
-      </div>
-    </div>
-  );
-};
-
-export default NotFound;
+    <ErrorPageShell
+      code="Error 404"
+      icon={<HomeModernIcon className="h-10 w-10 text-[#1F5FD6]" />}
+      title="Property not found"
+      description="This property listing doesn't exist, may have been removed, or is no longer active."
+      actions={[
+        {
+          type: "link",
+          href: "/listings",
+          label: "Browse all properties",
+          variant: "primary",
+        },
+        { type: "link", href: "/", label: "Go to home page", variant: "ghost" },
+      ]}
+    />
+  )
+}
