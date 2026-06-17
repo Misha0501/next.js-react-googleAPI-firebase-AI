@@ -7,7 +7,7 @@ import { ApplicationUser } from "@/types";
  * @returns {number|null} - The company ID or null if not available.
  */
 export const getApplicationUserCompanyId = (
-  applicationUser: ApplicationUser,
+  applicationUser: ApplicationUser | null,
 ) => {
   if (!applicationUser) return null;
 

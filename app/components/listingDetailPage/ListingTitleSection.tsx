@@ -28,12 +28,14 @@ export const ListingTitleSection = ({ listing }: Prop) => {
   if (!listing) return null;
 
   const address = listing.Address?.[0];
-  const propertyType =
-    propertyTypeLabels[listing.propertyType] ??
-    capitalize(listing.propertyType);
-  const listingType =
-    listingTypeLabels[listing.listingType] ??
-    `For ${capitalize(listing.listingType)}`;
+  const propertyType = listing.propertyType
+    ? (propertyTypeLabels[listing.propertyType] ??
+      capitalize(listing.propertyType))
+    : "";
+  const listingType = listing.listingType
+    ? (listingTypeLabels[listing.listingType] ??
+      `For ${capitalize(listing.listingType)}`)
+    : "";
 
   const parts = [
     propertyType,

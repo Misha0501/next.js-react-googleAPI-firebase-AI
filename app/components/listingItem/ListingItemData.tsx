@@ -13,7 +13,14 @@ import {
   WrenchScrewdriverIcon,
 } from "@heroicons/react/24/outline";
 import type { ReactNode } from "react";
-import type { Listing } from "@/types";
+import type {
+  HeatingType,
+  InteriorType,
+  Listing,
+  ListingType,
+  PropertyType,
+  UpkeepType,
+} from "@/types";
 import { roundNumberTwoDecimal } from "@/app/lib/roundNumberTwoDecimal";
 
 export type ListingFeature = {
@@ -29,7 +36,7 @@ export const LISTING_IMAGE_BLUR_DATA_URL =
 export const MAX_VISIBLE_FEATURES = 6;
 
 export const PROPERTY_TYPE_FEATURES: Record<
-  Listing["propertyType"],
+  PropertyType,
   { label: string; icon: ReactNode }
 > = {
   APARTMENT: {
@@ -50,24 +57,24 @@ export const PROPERTY_TYPE_FEATURES: Record<
   },
 };
 
-const INTERIOR_TYPE_LABELS: Record<Listing["interiorType"], string> = {
+const INTERIOR_TYPE_LABELS: Record<InteriorType, string> = {
   FURNISHED: "Furnished",
   UNFURNISHED: "Unfurnished",
 };
 
-const HEATING_TYPE_LABELS: Record<Listing["heatingType"], string> = {
+const HEATING_TYPE_LABELS: Record<HeatingType, string> = {
   BOILER: "Boiler heating",
   CENTRAL: "Central heating",
 };
 
-const UPKEEP_TYPE_LABELS: Record<Listing["upkeepType"], string> = {
+const UPKEEP_TYPE_LABELS: Record<UpkeepType, string> = {
   EXCELLENT: "Excellent upkeep",
   FAIR: "Fair upkeep",
   GOOD: "Good upkeep",
   POOR: "Needs upkeep",
 };
 
-export const LISTING_TYPE_LABELS: Record<Listing["listingType"], string> = {
+export const LISTING_TYPE_LABELS: Record<ListingType, string> = {
   RENT: "For rent",
   SELL: "For sale",
 };

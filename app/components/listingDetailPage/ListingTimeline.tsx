@@ -9,7 +9,7 @@ import {
 type Prop = { listing: Listing };
 
 type TimelineEvent = {
-  date: string;
+  date: Date | string;
   label: string;
   sublabel?: string;
   type: "listed" | "price" | "expiry";
@@ -33,15 +33,17 @@ const dot: Record<
   },
 };
 
-const fmt = (d: string) =>
+const fmt = (d: Date | string) =>
   new Date(d).toLocaleDateString("en-GB", {
     day: "numeric",
     month: "short",
     year: "numeric",
   });
 
-const byCreatedAt = (a: { createdAt: string }, b: { createdAt: string }) =>
-  new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+const byCreatedAt = (
+  a: { createdAt: Date | string },
+  b: { createdAt: Date | string },
+) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
 
 export const ListingTimeline = ({ listing }: Prop) => {
   if (!listing?.createdAt) return null;

@@ -1,6 +1,6 @@
 import { prisma } from "@/app/lib/db/client";
 import { ResponseError } from "@/app/lib/classes/ResponseError";
-import { ApplicationUser, ListingImage } from "@/types";
+import { ApplicationUser, Listing, ListingImage } from "@/types";
 import { getApplicationUserCompanyId } from "@/app/lib/listing/getApplicationUserCompanyId";
 import { userAllowedManipulateListing } from "@/app/lib/listing/userAllowedManipulateListing";
 
@@ -56,7 +56,7 @@ export const ensureListingAndUserPermissions = async (
     !userAllowedManipulateListing(
       applicationUser.id,
       applicationUserCompanyId,
-      listing,
+      listing as unknown as Listing,
     )
   ) {
     throw new ResponseError("You aren't allowed to changed this property", 401);

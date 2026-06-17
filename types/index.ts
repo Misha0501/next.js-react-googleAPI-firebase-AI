@@ -26,61 +26,61 @@ export type FirebaseAPISignInAuthResponse = {
 export type ListingImage = {
   id?: number;
   listingId?: number;
-  positionInListing?: number;
+  positionInListing?: number | null;
   url: string;
-  imagePath?: string;
-  createdAt?: string;
-  updatedAt?: string;
+  imagePath?: string | null;
+  createdAt?: Date | string;
+  updatedAt?: Date | string;
 };
 
 export type Listing = {
   active: boolean;
-  activeUntil: string;
+  activeUntil: Date | string;
   applicationUserId: number;
-  applicationUser: ApplicationUser;
-  areaGarage: number;
-  areaGarden: number;
-  balcony: boolean;
-  areaLand: number;
-  areaLiving: number;
-  areaOutside: number;
-  areaTotal: number;
-  bathrooms: number;
-  bedrooms: number;
-  companyId: number;
-  company: Company;
-  constructedYear: string;
-  createdAt: string;
-  deleted: boolean;
-  description: string;
-  floorNumber: number;
-  heatingType: HeatingType;
-  houseNumber: string;
+  applicationUser?: ApplicationUser;
+  areaGarage?: number | null;
+  areaGarden?: number | null;
+  balcony?: boolean;
+  areaLand?: number | null;
+  areaLiving?: number | null;
+  areaOutside?: number | null;
+  areaTotal?: number | null;
+  bathrooms?: number | null;
+  bedrooms?: number | null;
+  companyId?: number | null;
+  company?: Company | null;
+  constructedYear?: string | null;
+  createdAt: Date | string;
+  deleted: Date | null;
+  description?: string | null;
+  floorNumber?: number | null;
+  heatingType?: HeatingType | null;
+  houseNumber?: string | null;
   averagePriceInNeighborhood?: number;
   ListingPrice: ListingPrice[];
   id: number;
-  interiorType: InteriorType;
-  latitude: string;
-  listingType: ListingType;
-  localityId: number;
+  interiorType?: InteriorType | null;
+  latitude?: string | null;
+  listingType?: ListingType | null;
+  localityId?: number;
   Address: Address[];
   ListingImage: ListingImage[];
-  propertyType: PropertyType;
-  longitude: string;
-  numberOfFloorsCommon: number;
-  numberOfFloorsProperty: number;
-  parking: number;
-  postalCode: string;
-  propertyTypeId: number;
-  rooms: number;
-  streetName: string;
-  updatedAt: string;
-  upkeepType: UpkeepType;
-  volume: number;
+  propertyType?: PropertyType | null;
+  longitude?: string | null;
+  numberOfFloorsCommon?: number | null;
+  numberOfFloorsProperty?: number | null;
+  parking?: number | null;
+  postalCode?: string | null;
+  propertyTypeId?: number;
+  rooms?: number | null;
+  streetName?: string | null;
+  updatedAt: Date | string;
+  upkeepType?: UpkeepType | null;
+  volume?: number | null;
   savedListingId?: number;
   price: number;
   buildingType?: BuildingType;
-  currency?: CurrencyType;
+  currency?: CurrencyType | null;
 };
 
 export type ListingPrice = {
@@ -89,35 +89,35 @@ export type ListingPrice = {
   listing?: Listing;
   price: number;
   currency: CurrencyType;
-  createdAt: string;
-  updatedAt: string;
+  createdAt: Date | string;
+  updatedAt: Date | string;
 };
 
 export type Address = {
-  createdAt: string;
+  createdAt: Date | string;
   id: number;
-  route: string;
+  route: string | null;
   latitude: string;
-  locality: string;
+  locality: string | null;
   longitude: string;
-  neighborhood: string;
-  postalCode: string;
+  neighborhood: string | null;
+  postalCode: string | null;
   showExactLocation: boolean;
-  administrativeAreaLevelOne: string;
-  streetNumber: string;
-  streetName: string;
-  updatedAt: string;
+  administrativeAreaLevelOne: string | null;
+  streetNumber: string | null;
+  streetName?: string | null;
+  updatedAt: Date | string;
   listingId: number;
   companyId: number | null;
 };
 
 export type SavedListing = {
   applicationUserId: number;
-  createdAt: string;
+  createdAt: Date | string;
   id: number;
   listing: Listing;
   listingId: number;
-  updatedAt: string;
+  updatedAt: Date | string;
 };
 
 export type SavedSearch = {
@@ -149,23 +149,23 @@ export type SavedSearch = {
   applicationUserId?: number;
   applicationUser?: ApplicationUser;
   locality?: string | null;
-  createdAt?: string;
-  updatedAt?: string;
+  createdAt?: Date | string;
+  updatedAt?: Date | string;
 };
 
 export type ApplicationUser = {
-  Listing: Listing[];
-  SavedListing: SavedListing[];
-  Membership: Membership[];
-  SavedSearch: SavedSearch[];
-  createdAt: string;
+  Listing?: Listing[];
+  SavedListing?: SavedListing[];
+  Membership?: Membership[];
+  SavedSearch?: SavedSearch[];
+  createdAt: Date | string;
   displayName: string;
   email: string;
-  phoneNumber: string;
+  phoneNumber?: string | null;
   firebaseUID: string;
   id: number;
   providerId: string;
-  updatedAt: string;
+  updatedAt: Date | string;
 };
 
 export type MatchedListingsAndSearches = {
@@ -194,39 +194,39 @@ export type RecentlyViewedListing = {
 export type Company = {
   id: number;
   name: string;
-  phoneNumber: string;
-  description: string;
-  createdAt: string;
-  updatedAt: string;
-  email: string;
+  phoneNumber: string | null;
+  description: string | null;
+  createdAt: Date | string;
+  updatedAt: Date | string;
+  email: string | null;
   Address?: Address[];
   memberships?: Membership[];
   Listing?: Listing[];
 };
 
 export type Membership = {
-  company: Company;
+  company?: Company;
   applicationUserId: number;
   applicationUser?: ApplicationUser;
   applicationUserRole: string;
   companyId: number;
-  createdAt: string;
+  createdAt: Date | string;
   id: number;
   isActive: boolean;
-  updatedAt: string;
+  updatedAt: Date | string;
 };
 
 export type CompanyMembershipInvite = {
-  accepted: boolean;
+  accepted: Date | null;
   applicationUserEmailReceiver: string;
   applicationUserIdSender: number;
-  applicationUserReceiver: ApplicationUser;
-  applicationUserSender: ApplicationUser;
-  applicationUserRole: CompanyMembershipRoleType;
-  company: Company;
+  applicationUserReceiver?: ApplicationUser;
+  applicationUserSender?: ApplicationUser;
+  applicationUserRole: string;
+  company?: Company;
   companyId: number;
-  createdAt: string;
-  declined: string;
-  expiresAt: string;
+  createdAt: Date | string;
+  declined: Date | null;
+  expiresAt: Date | null;
   id: number;
 };

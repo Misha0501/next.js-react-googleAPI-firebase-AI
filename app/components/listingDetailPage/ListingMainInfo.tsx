@@ -37,7 +37,7 @@ export const ListingMainInfo = ({ listing }: Prop) => {
     },
     {
       title: "Offered since",
-      value: formatToDayAndMonthWithName(listing?.createdAt ?? ""),
+      value: formatToDayAndMonthWithName(String(listing?.createdAt ?? "")),
       icon: <CalendarDaysIcon className="h-5 w-5 shrink-0" />,
     },
   ];

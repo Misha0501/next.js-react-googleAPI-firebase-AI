@@ -16,7 +16,7 @@ import {
   handlePriceUpdate,
   validateListingExistence,
 } from "@/app/api/listings/_utils";
-import { ApplicationUser } from "@/types";
+import { ApplicationUser, Listing } from "@/types";
 import { handleAPIError } from "@/app/lib/api/handleError";
 
 const DEFAULT_LISTINGS_PAGE_SIZE = 16;
@@ -87,7 +87,14 @@ export async function POST(req: Request) {
       await getApplicationUserServer(true);
 
     const parsedValues = listingSchema.parse(await req.json());
-    const { address, currency, price, images, ...restData } = parsedValues;
+    const {
+      address,
+      currency,
+      price,
+      images,
+      listingDescriptionKeyPoints,
+      ...restData
+    } = parsedValues;
 
     // Get user's company id
     let companyId = getApplicationUserCompanyId(applicationUser);
@@ -97,25 +104,33 @@ export async function POST(req: Request) {
     activeUntil.setDate(activeUntil.getDate() + 30);
 
     const listing = await prisma.listing.create({
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       data: {
         applicationUserId: applicationUser.id,
         companyId,
         ...restData,
         price,
-        currency,
+        currency: currency ?? undefined,
         active: true,
         activeUntil: activeUntil,
         Address: {
           create: [{ ...address }],
         },
-        ListingPrice: {
-          create: [{ currency, price }],
-        },
+        ...(currency
+          ? { ListingPrice: { create: [{ currency, price }] } }
+          : {}),
+        ...(listingDescriptionKeyPoints != null
+          ? {
+              listingDescriptionKeyPoints: {
+                create: listingDescriptionKeyPoints,
+              },
+            }
+          : {}),
         ListingImage: {
           // @ts-ignore
           create: [...images],
         },
-      },
+      } as any,
       include: {
         ListingImage: true,
         Address: true,
@@ -148,7 +163,7 @@ export async function PUT(req: Request) {
 
     const listing = await validateListingExistence(id);
 
-    ensureUserHasListingAccess(applicationUser, listing);
+    ensureUserHasListingAccess(applicationUser, listing as unknown as Listing);
 
     if (images)
       await handleImagesUpdate(
@@ -160,17 +175,28 @@ export async function PUT(req: Request) {
       id,
       address as Parameters<typeof handleAddressUpdate>[1],
     );
-    await handlePriceUpdate(id, price, currency);
+    await handlePriceUpdate(id, price, currency ?? undefined);
 
+    const { listingDescriptionKeyPoints, ...restDataWithoutKeyPoints } =
+      restData;
     const updatedListing = await prisma.listing.update({
       where: {
         id,
       },
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       data: {
-        price,
-        currency,
-        ...restData,
-      },
+        price: price ?? undefined,
+        currency: currency ?? undefined,
+        ...restDataWithoutKeyPoints,
+        ...(listingDescriptionKeyPoints != null
+          ? {
+              listingDescriptionKeyPoints: {
+                deleteMany: {},
+                createMany: { data: listingDescriptionKeyPoints },
+              },
+            }
+          : {}),
+      } as any,
       include: {
         ListingImage: true,
         Address: true,

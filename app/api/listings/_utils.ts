@@ -13,7 +13,13 @@ import {
 import { prisma } from "@/app/lib/db/client";
 import { getApplicationUserCompanyId } from "@/app/lib/listing/getApplicationUserCompanyId";
 import { userAllowedManipulateListing } from "@/app/lib/listing/userAllowedManipulateListing";
-import { ApplicationUser, Listing, ListingImage, Address } from "@/types";
+import {
+  ApplicationUser,
+  CurrencyType,
+  Listing,
+  ListingImage,
+  Address,
+} from "@/types";
 import { ResponseError } from "@/app/lib/classes/ResponseError";
 
 /**
@@ -202,14 +208,14 @@ export const buildPrismaQueryConditions = (params: ListingSearchParams) => {
 export const buildPrismaOrderBy = (sortBy?: string) => {
   switch (sortBy) {
     case "createdAtAsc":
-      return { createdAt: "asc" };
+      return { createdAt: "asc" as const };
     case "priceDesc":
-      return { price: "desc" };
+      return { price: "desc" as const };
     case "priceAsc":
-      return { price: "asc" };
+      return { price: "asc" as const };
     case "createdAtDesc":
     default:
-      return { createdAt: "desc" };
+      return { createdAt: "desc" as const };
   }
 };
 
@@ -225,8 +231,9 @@ export const handleImagesUpdate = async (
 ) => {
   for (const image of images) {
     if (!image.id) {
+      if (!image.url) continue;
       await prisma.listingImage.create({
-        data: { ...image, listingId: id },
+        data: { ...image, listingId: id, url: image.url },
       });
     } else {
       await prisma.listingImage.update({
@@ -265,7 +272,7 @@ export const handleAddressUpdate = async (
 export const handlePriceUpdate = async (
   id: number,
   price: number | undefined,
-  currency: string | undefined,
+  currency: CurrencyType | undefined,
 ) => {
   if (price && currency) {
     const listingPrice = await prisma.listingPrice.findMany({

@@ -3,6 +3,7 @@ import { prisma } from "@/app/lib/db/client";
 import { getApplicationUserCompanyId } from "@/app/lib/listing/getApplicationUserCompanyId";
 import { handleAPIError } from "@/app/lib/api/handleError";
 import { validateParamId } from "@/app/lib/api/validateParamId";
+import type { ApplicationUser } from "@/types";
 
 const listingInclude = {
   ListingImage: true,
@@ -44,8 +45,9 @@ export async function GET(
       },
     });
 
-    const applicationUserCompanyId =
-      getApplicationUserCompanyId(applicationUser);
+    const applicationUserCompanyId = getApplicationUserCompanyId(
+      applicationUser as ApplicationUser | null,
+    );
 
     if (applicationUserCompanyId) {
       const company = await prisma.company.findUnique({

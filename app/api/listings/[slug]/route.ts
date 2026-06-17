@@ -2,7 +2,7 @@ import { ResponseError } from "@/app/lib/classes/ResponseError";
 import { NextResponse } from "next/server";
 import { prisma } from "@/app/lib/db/client";
 import { getApplicationUserServer } from "@/app/lib/getApplicationUserServer";
-import { ApplicationUser } from "@/types";
+import { ApplicationUser, Listing } from "@/types";
 import { getAveragePriceInNeighborhood } from "@/app/lib/listing/getAveragePriceInNeighborhood";
 import {
   deleteListingAndAssociatedEntities,
@@ -47,11 +47,11 @@ export async function GET(
     if (!listing)
       throw new ResponseError("Property with provided id wasn't found.", 404);
 
-    // Get average price in the neighborhood of the listing
-    listing.averagePriceInNeighborhood =
-      await getAveragePriceInNeighborhood(listing);
+    const averagePriceInNeighborhood = await getAveragePriceInNeighborhood(
+      listing as Listing,
+    );
 
-    return NextResponse.json(listing);
+    return NextResponse.json({ ...listing, averagePriceInNeighborhood });
   } catch (error) {
     return handleAPIError(error);
   }
@@ -76,7 +76,7 @@ export async function DELETE(
 
     const listing = await validateListingExistence(id);
 
-    ensureUserHasListingAccess(applicationUser, listing);
+    ensureUserHasListingAccess(applicationUser, listing as unknown as Listing);
 
     await deleteListingAndAssociatedEntities(id);
 

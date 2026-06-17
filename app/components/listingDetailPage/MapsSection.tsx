@@ -29,7 +29,7 @@ export const MapsSection = ({ address }: Prop) => {
           location={{
             lat: parseFloat(address?.latitude),
             lng: parseFloat(address?.longitude),
-            address: address?.locality,
+            address: address?.locality ?? "",
           }}
         />
       </div>

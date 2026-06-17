@@ -35,7 +35,7 @@ const humanize = (value?: string | null) => {
     .join(" ");
 };
 
-const formatDate = (date?: string | null) => {
+const formatDate = (date?: Date | string | null) => {
   if (!date) return "-";
 
   const parsedDate = new Date(date);

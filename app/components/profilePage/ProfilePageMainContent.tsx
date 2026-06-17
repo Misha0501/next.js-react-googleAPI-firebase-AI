@@ -125,7 +125,7 @@ export const ProfilePageMainContent = ({ tab, view }: Props) => {
 
   const company = useMemo(() => {
     if (applicationUser?.Membership && applicationUser?.Membership.length) {
-      return applicationUser?.Membership[0].company;
+      return applicationUser?.Membership[0].company ?? null;
     }
     return null;
   }, [applicationUser]);

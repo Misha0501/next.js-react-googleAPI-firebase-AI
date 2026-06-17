@@ -61,7 +61,7 @@ const getInviteStatus = (invite: CompanyMembershipInvite) => {
     };
   }
 
-  if (new Date(invite.expiresAt) < new Date()) {
+  if (!invite.expiresAt || new Date(invite.expiresAt) < new Date()) {
     return {
       label: "Expired",
       className: "bg-slate-100 text-slate-600 border-slate-200",
