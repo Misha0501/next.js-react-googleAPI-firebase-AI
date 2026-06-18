@@ -1,6 +1,19 @@
 @import "tailwindcss";
 
 @theme {
+  /*
+   * Tailwind v4 expresses breakpoints as rem-based theme variables, which
+   * resolve against the real root font-size (14px here, see globals.scss)
+   * instead of a fixed pixel value the way v3's `screens` config did. Pin
+   * them back to plain px so max-w-screen-*, container, and responsive
+   * variants keep matching their original viewport breakpoints.
+   */
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-2xl: 1536px;
+
   --font-sans:
     "Inter var", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
     "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif,

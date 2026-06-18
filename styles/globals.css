@@ -1,0 +1,62 @@
+:root {
+  font-size: 14px;
+}
+
+/*
+ * Tailwind v4 wraps its utility classes in `@layer utilities`, and unlayered
+ * CSS always wins over layered CSS regardless of selector specificity. These
+ * element-selector resets used to lose to Tailwind utility classes (like
+ * w-full, h-full, text-*) on specificity alone; without `@layer base` here
+ * they'd now always win instead, silently breaking any component that relies
+ * on a utility class to override them (next/image sizing, heading sizes).
+ */
+@layer base {
+  img {
+    width: auto;
+    max-width: 100%;
+  }
+
+  button {
+    font-size: 1rem;
+
+    span {
+      font-size: 1rem;
+    }
+  }
+}
+
+/* Google Places Autocomplete styles */
+.pac-container {
+  border-radius: 8px;
+}
+.pac-item {
+  padding: 8px 12px;
+}
+
+.pac-container:after {
+  /* Disclaimer: not needed to show 'powered by Google' if also a Google Map is shown */
+  background-image: none !important;
+  height: 0px;
+}
+
+@keyframes listing-card-enter {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-listing-card-enter {
+  animation: listing-card-enter 450ms ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-listing-card-enter {
+    animation: none;
+  }
+}

@@ -1,5 +1,5 @@
 import "@/styles/tailwind.css";
-import "@/styles/globals.scss";
+import "@/styles/globals.css";
 import type { Metadata } from "next";
 import { AuthContextProvider } from "@/app/context/AuthContext";
 import { Inter } from "next/font/google";

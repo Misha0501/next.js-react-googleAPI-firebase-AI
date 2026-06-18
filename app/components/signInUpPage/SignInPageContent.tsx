@@ -194,7 +194,7 @@ const SignInPageContent = () => {
 
   return (
     <section className="signin-page bg-[#f6f8fb]">
-      <div className="container flex min-h-[calc(100vh-98px)] items-center py-12 lg:py-16">
+      <div className="mx-auto flex min-h-[calc(100vh-98px)] w-full max-w-screen-xl items-center px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
         <div className="grid w-full overflow-hidden rounded-lg border border-slate-200 bg-white shadow-[0_24px_80px_rgba(15,23,42,0.12)] lg:grid-cols-[1.05fr_0.95fr]">
           {/* Left panel */}
           <div className="relative hidden min-h-[660px] overflow-hidden lg:block">
