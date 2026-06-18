@@ -109,6 +109,29 @@ npm run dev
 
 Open http://localhost:3000 with your browser to see the result.
 
+## Dependency Security Audits
+
+Run security audits with npm:
+
+```bash
+npm audit
+npm audit --audit-level=high
+```
+
+The project uses npm `overrides` in `package.json` to pin patched versions of vulnerable transitive dependencies. These are packages pulled in by direct dependencies such as Next.js, Firebase Admin, Prisma, or Formik, even though this project does not import them directly.
+
+Do not blindly run `npm audit fix --force`. It can apply breaking major-version changes or downgrade-style fixes. Prefer dependency-specific cleanup: inspect the vulnerable package path with `npm why <package>`, update the owning dependency when a safe version exists, or keep a targeted `overrides` entry when the upstream package has not released a clean dependency tree yet.
+
+When updating dependencies later, check whether overrides are still needed:
+
+```bash
+npm audit
+npm why jws lodash-es postcss @hono/node-server
+npm ls jws lodash-es postcss @hono/node-server
+```
+
+If `npm audit` is clean without a specific override and the package tree no longer resolves to the vulnerable version, remove that override and run `npm install` to refresh `package-lock.json`.
+
 ### Contact
 
 For any questions or feedback, feel free to reach me out at:
