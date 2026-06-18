@@ -98,13 +98,10 @@ async function service<T = unknown>(args: IAPArgs): Promise<T> {
   const data = await fetch(fetchUrl, props);
 
   if (!data.ok) {
-    if (data.status === 422) {
-      const json = await data.json();
-      console.error(json);
-      throw new Error("Something went wrong please try again later");
-    }
     const errorMessage = await data.text();
-    throw new Error(errorMessage);
+    throw new Error(
+      errorMessage || "Something went wrong please try again later",
+    );
   }
 
   return (parseJSON ? await data.json() : data) as T;

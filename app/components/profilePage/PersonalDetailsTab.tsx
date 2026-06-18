@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useMemo } from "react";
 import { useAuthContext } from "@/app/context/AuthContext";
 import * as Yup from "yup";
 import { useFormik } from "formik";
@@ -22,9 +22,7 @@ const ApplicationUserUpdateSchema = Yup.object().shape({
     .min(2, "Name is too short")
     .max(50, "Name is too long")
     .required("Required"),
-  phoneNumber: Yup.string()
-    .min(8, "Phone number is too short")
-    .max(50, "Phone number is too long"),
+  phoneNumber: Yup.string(),
   newPassword: Yup.string()
     .min(6, "The password must be a string with at least 6 characters.")
     .max(50, "The password must be a string of up to 50 characters."),
@@ -45,20 +43,22 @@ const inputClass = (hasError: boolean) =>
 
 export const PersonalDetailsTab = () => {
   const { authToken } = useAuthContext();
-  const [personalDetails, setPersonalDetails] = useState<FormValues>({
-    displayName: "",
-    phoneNumber: "",
-    newPassword: "",
-  });
-
   const router = useRouter();
 
   const userData = useUserOwnData({ authToken });
   const updateUser = useUpdateUser({ authToken });
+  const initialValues = useMemo<FormValues>(
+    () => ({
+      displayName: userData.data?.displayName || "",
+      phoneNumber: userData.data?.phoneNumber || "",
+      newPassword: "",
+    }),
+    [userData.data?.displayName, userData.data?.phoneNumber],
+  );
 
   const formik = useFormik({
     enableReinitialize: true,
-    initialValues: personalDetails,
+    initialValues,
     validationSchema: ApplicationUserUpdateSchema,
     onSubmit: (values) => handleFormSubmit(values),
   });
@@ -80,16 +80,6 @@ export const PersonalDetailsTab = () => {
       );
     }
   };
-
-  useEffect(() => {
-    if (userData.isSuccess && userData.data) {
-      setPersonalDetails({
-        displayName: userData.data?.displayName || "",
-        phoneNumber: userData.data?.phoneNumber || "",
-        newPassword: "",
-      });
-    }
-  }, [userData.data, userData.isSuccess]);
 
   const displayNameError = Boolean(
     formik.errors.displayName && formik.touched.displayName,
@@ -147,18 +137,24 @@ export const PersonalDetailsTab = () => {
         <label className="block">
           <span className="mb-2 flex items-center gap-2 text-sm font-semibold text-[#2D3648]">
             <PhoneIcon className="h-4 w-4 text-[#1F5FD6]" />
-            Phone number
+            Mobile phone
           </span>
           <input
-            type="text"
+            type="tel"
             value={formik.values.phoneNumber}
             onChange={(e) =>
               formik.setFieldValue("phoneNumber", e.target.value, true)
             }
             onBlur={formik.handleBlur}
             name="phoneNumber"
+            placeholder="Any phone number format"
             className={inputClass(phoneError)}
           />
+          {!phoneError && (
+            <p className="mt-1 text-xs leading-5 text-[#717D96]">
+              Use the format customers should see on your listings and profile.
+            </p>
+          )}
           {phoneError && (
             <p className="mt-1 text-sm text-red-600">
               {formik.errors.phoneNumber}

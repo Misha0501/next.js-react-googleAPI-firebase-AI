@@ -72,10 +72,9 @@ export const handleUserAPIUpdateError = (error: unknown): Response => {
   if (firebaseError?.code) {
     console.error(error);
     if (firebaseError.code === "auth/invalid-phone-number") {
-      return new Response(
-        "Invalid phone number. Example of valid phone number: +35923443234",
-        { status: 400 },
-      );
+      return new Response("The authentication phone number is invalid.", {
+        status: 400,
+      });
     }
 
     if (firebaseError.code === "auth/invalid-password") {

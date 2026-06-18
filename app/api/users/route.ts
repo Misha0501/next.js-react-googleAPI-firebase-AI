@@ -10,6 +10,7 @@ import {
   handleUserAPIUpdateError,
 } from "@/app/api/users/_utils";
 import { handleAPIError } from "@/app/lib/api/handleError";
+import { normalizeContactPhoneNumber } from "@/app/lib/phoneNumber";
 
 /**
  * GET Route to retrieve users data
@@ -42,10 +43,10 @@ export async function PUT(req: Request) {
 
     const parsedValues = userPUTSchema.parse(await req.json());
     const { displayName, phoneNumber, newPassword } = parsedValues;
+    const normalizedPhoneNumber = normalizeContactPhoneNumber(phoneNumber);
 
     await firebaseAdminAuth.updateUser(applicationUser.firebaseUID, {
       displayName,
-      phoneNumber,
       ...(newPassword && { password: newPassword }),
     });
 
@@ -53,7 +54,7 @@ export async function PUT(req: Request) {
       where: { id: applicationUser.id },
       data: {
         displayName,
-        phoneNumber,
+        phoneNumber: normalizedPhoneNumber,
       },
     });
 
