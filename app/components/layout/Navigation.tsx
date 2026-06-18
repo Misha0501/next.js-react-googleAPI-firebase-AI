@@ -17,6 +17,7 @@ import {
   UserCircleIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
+import { Skeleton } from "@/app/components/shared/Skeleton";
 
 const navigationItems = [
   {
@@ -163,7 +164,7 @@ export const Navigation = () => {
                     <span>{authAction.label}</span>
                   </Link>
                 ) : (
-                  <div className="h-11 w-28 animate-pulse rounded-xl bg-slate-100" />
+                  <Skeleton className="h-11 w-28 rounded-xl bg-slate-100" />
                 )}
               </div>
 
