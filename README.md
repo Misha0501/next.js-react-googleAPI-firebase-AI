@@ -81,7 +81,7 @@ To ensure authentication works correctly, ensure the Firebase Auth Emulator is r
 
 ## Environment Setup
 
-Before running the project, ensure you have set up your environment variables. Copy the contents of the `.env.example` file to the corresponding `.env` files. Adjust the variables if necessary to fit your local or production environment.
+Before running the project, copy `.env.example` to `.env` and fill in local development values. Use `.env.production.local` only for local commands that intentionally target production resources, such as the `*:prod` sitemap and remote database scripts.
 
 ## Running the Application
 

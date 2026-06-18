@@ -121,15 +121,15 @@ Tailwind's entry point is `styles/tailwind.css` (`@import "tailwindcss"` + an `@
 
 ### Key environment variables
 
-| Variable                                | Purpose                                                         |
-| ---------------------------------------- | --------------------------------------------------------------- |
-| `DATABASE_URL`                          | Postgres connection string, passed to the `@prisma/adapter-pg` driver adapter |
-| `REDIS_URL`                              | Redis (optional; rate limiting degrades gracefully without it) |
-| `NEXT_PUBLIC_FIREBASE_*`                 | Firebase client config                                          |
-| `FIREBASE_ADMIN_*`                       | Firebase Admin SDK credentials                                  |
-| `GEMINI_AI_API_KEY`                      | Gemini API key for `generateDescription`                        |
-| `IDENTITYTOOLKIT_GOOGLE_API_BASE_URL`    | Firebase Identity Toolkit endpoint for login                    |
-| `API_URL` / `VERCEL_URL`                 | Base URL used by `getFetchUrl` on the server                    |
+| Variable                              | Purpose                                                                                   |
+| ------------------------------------- | ----------------------------------------------------------------------------------------- |
+| `DATABASE_URL`                        | Postgres connection string, passed to the `@prisma/adapter-pg` driver adapter             |
+| `REDIS_URL`                           | Redis (optional; rate limiting degrades gracefully without it)                            |
+| `NEXT_PUBLIC_FIREBASE_*`              | Firebase client config                                                                    |
+| `FIREBASE_ADMIN_*`                    | Firebase Admin SDK credentials                                                            |
+| `GEMINI_AI_API_KEY`                   | Gemini API key for `generateDescription`                                                  |
+| `IDENTITYTOOLKIT_GOOGLE_API_BASE_URL` | Firebase Identity Toolkit endpoint for login                                              |
+| `SITE_URL`                            | Canonical public origin for metadata and sitemaps; fallback for server-side absolute URLs |
 
 ### Disabled features
 

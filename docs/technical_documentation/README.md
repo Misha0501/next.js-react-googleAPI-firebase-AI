@@ -178,8 +178,7 @@ Actual pages are represented by the folders with a page.tsx file in the app dire
 
 ## Multiple environments
 
-Application supports multiple environments. In order to implement it, the app has separate environment files with variables for each environment. These variables are later used in the application. For the ease of onboarding and setting up a project, an example env file is present for each environment.
-Environment files:
+Application supports multiple environments through Next.js environment loading and explicit `dotenv-cli` usage in npm scripts. Local development uses `.env`; production deployment variables live in Vercel; `.env.production.local` is only for local scripts that intentionally target production resources.
 
 Good to know:
 Environment variables are looked up in the below-specified order, stopping once the variable is found.
