@@ -2,6 +2,9 @@ import { FormikProps } from "formik";
 import { ListingImage } from "@/types";
 
 export type PlacementFormValues = {
+  // undefined: default to the creator's current company membership (server
+  // decides). null: list as the individual. number: list under that company.
+  companyId?: number | null;
   listingType: string;
   propertyType: string;
   address: string;

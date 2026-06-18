@@ -2,6 +2,7 @@
 
 import {
   BanknotesIcon,
+  BuildingOffice2Icon,
   HomeModernIcon,
   MapPinIcon,
   TagIcon,
@@ -9,9 +10,10 @@ import {
 import property1 from "@/public/property1.png";
 import StepsTopInfo from "@/app/components/propertyPlacementEdit/StepsTopInfo";
 import { LISTING_TYPES, PROPERTY_TYPES } from "@/app/lib/constants";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PropertyPlacementRadioButtons from "@/app/components/propertyPlacementEdit/PropertyPlacementRadioButtons";
-import { AutocompleteAddress } from "@/types";
+import SingleSelectRadioButton from "@/app/components/propertyPlacementEdit/SingleSelectRadioButton";
+import { AutocompleteAddress, Company } from "@/types";
 import { AddressAutocomplete } from "@/app/components/propertyPlacementEdit/AddressAutocomplete";
 import {
   applyStepErrors,
@@ -26,7 +28,10 @@ interface CreatePropertyComponentPropInterface {
   handleNext: () => void;
   step: number;
   isShow: boolean;
+  company?: Pick<Company, "id" | "name"> | null;
 }
+
+const LIST_AS_MYSELF = "Myself";
 
 type SectionProps = {
   icon: React.ReactNode;
@@ -66,6 +71,7 @@ const GeneralInfo = ({
   handleNext,
   step,
   isShow,
+  company,
 }: CreatePropertyComponentPropInterface) => {
   const [show, setShow] = useState(true);
   const [showError, setShowErrors] = useState(false);
@@ -74,6 +80,28 @@ const GeneralInfo = ({
       ? new Intl.NumberFormat("bg-BG").format(Number(formik.values.price))
       : "",
   );
+
+  // Default to "list as the company" the first time company data loads, to
+  // preserve the prior auto-assign behavior for anyone who doesn't change it.
+  useEffect(() => {
+    if (company && formik.values.companyId === undefined) {
+      formik.setFieldValue("companyId", company.id, false);
+    }
+  }, [company, formik]);
+
+  const listAsValue =
+    company && formik.values.companyId === company.id
+      ? company.name
+      : LIST_AS_MYSELF;
+
+  const handleListAsChange = (value: string) => {
+    if (!company) return;
+    formik.setFieldValue(
+      "companyId",
+      value === company.name ? company.id : null,
+      false,
+    );
+  };
 
   const [showAddress, setShowAddress] = useState(
     Boolean(
@@ -148,7 +176,7 @@ const GeneralInfo = ({
         />
       ) : (
         <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8 lg:p-10">
-          <div className="mb-3 text-sm font-bold uppercase tracking-wide text-[#1F5FD6]">
+          <div className="mb-3 text-sm font-bold tracking-wide text-[#1F5FD6] uppercase">
             {stepNumber}
           </div>
           <div className="max-w-3xl">
@@ -162,6 +190,21 @@ const GeneralInfo = ({
           </div>
 
           <div className="mt-4">
+            {company && (
+              <SectionRow
+                icon={<BuildingOffice2Icon className="h-5 w-5" />}
+                title="List as"
+                description="Post this property as yourself or under your company's name."
+              >
+                <SingleSelectRadioButton
+                  id="companyId"
+                  value={listAsValue}
+                  options={[LIST_AS_MYSELF, company.name]}
+                  onChange={handleListAsChange}
+                />
+              </SectionRow>
+            )}
+
             <SectionRow
               icon={<HomeModernIcon className="h-5 w-5" />}
               title="Offer type"
@@ -231,7 +274,7 @@ const GeneralInfo = ({
                 {showAddress && (
                   <div className="grid gap-4 rounded-2xl border border-slate-200 bg-[#F8FAFC] p-4 sm:grid-cols-2">
                     <div>
-                      <p className="mb-1 text-xs font-bold uppercase text-[#64748B]">
+                      <p className="mb-1 text-xs font-bold text-[#64748B] uppercase">
                         House number
                       </p>
                       <input
@@ -242,7 +285,7 @@ const GeneralInfo = ({
                       />
                     </div>
                     <div>
-                      <p className="mb-1 text-xs font-bold uppercase text-[#64748B]">
+                      <p className="mb-1 text-xs font-bold text-[#64748B] uppercase">
                         Street
                       </p>
                       <input
@@ -253,7 +296,7 @@ const GeneralInfo = ({
                       />
                     </div>
                     <div>
-                      <p className="mb-1 text-xs font-bold uppercase text-[#64748B]">
+                      <p className="mb-1 text-xs font-bold text-[#64748B] uppercase">
                         Neighborhood
                       </p>
                       <input
@@ -264,7 +307,7 @@ const GeneralInfo = ({
                       />
                     </div>
                     <div>
-                      <p className="mb-1 text-xs font-bold uppercase text-[#64748B]">
+                      <p className="mb-1 text-xs font-bold text-[#64748B] uppercase">
                         City
                       </p>
                       <input
@@ -275,7 +318,7 @@ const GeneralInfo = ({
                       />
                     </div>
                     <div>
-                      <p className="mb-1 text-xs font-bold uppercase text-[#64748B]">
+                      <p className="mb-1 text-xs font-bold text-[#64748B] uppercase">
                         Administrative area
                       </p>
                       <input
@@ -286,7 +329,7 @@ const GeneralInfo = ({
                       />
                     </div>
                     <div>
-                      <p className="mb-1 text-xs font-bold uppercase text-[#64748B]">
+                      <p className="mb-1 text-xs font-bold text-[#64748B] uppercase">
                         Postal code
                       </p>
                       <input
@@ -313,7 +356,7 @@ const GeneralInfo = ({
                 Price
               </label>
               <div className="relative">
-                <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-sm font-bold text-[#64748B]">
+                <span className="pointer-events-none absolute top-1/2 left-4 -translate-y-1/2 text-sm font-bold text-[#64748B]">
                   €
                 </span>
                 <input

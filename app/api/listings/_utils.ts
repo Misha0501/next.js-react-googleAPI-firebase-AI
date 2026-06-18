@@ -331,6 +331,29 @@ export const ensureUserHasListingAccess = (
 };
 
 /**
+ * Ensures a user may assign a listing to the given company - either `null`
+ * (list as the individual) or their own current membership's company.
+ * Membership is exclusive (one company per user), so that's the only valid
+ * non-null target.
+ *
+ * @param {ApplicationUser} applicationUser - The application user object.
+ * @param {number | null} companyId - The requested company assignment.
+ */
+export const ensureUserCanAssignListingToCompany = (
+  applicationUser: ApplicationUser,
+  companyId: number | null,
+) => {
+  const applicationUserCompanyId = getApplicationUserCompanyId(applicationUser);
+
+  if (companyId !== null && companyId !== applicationUserCompanyId) {
+    throw new ResponseError(
+      "You aren't allowed to assign this property to that company",
+      401,
+    );
+  }
+};
+
+/**
  * Deletes a listing and its associated entities (images, address, prices).
  *
  * @param {number} id - The ID of the listing to be deleted.

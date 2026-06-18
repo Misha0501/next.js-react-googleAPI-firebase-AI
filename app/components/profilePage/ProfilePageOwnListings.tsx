@@ -1,44 +1,63 @@
 "use client";
 
-import { Listing } from "@/types";
+import { Company, Listing } from "@/types";
 import { ListingItem, ListingItemSkeleton } from "@/app/components/ListingItem";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { useAuthContext } from "@/app/context/AuthContext";
 import { Modal } from "@/app/components/shared/Modal";
-import { useDeleteListing } from "@/providers/Listing";
+import { useDeleteListing, useUpdateProperty } from "@/providers/Listing";
 import { Pagination } from "@/app/components/shared/Pagination";
 import { toast } from "react-toastify";
 import Link from "next/link";
-import { HomeModernIcon, PlusIcon } from "@heroicons/react/24/outline";
+import {
+  BuildingOffice2Icon,
+  HomeModernIcon,
+  PlusIcon,
+  UserCircleIcon,
+} from "@heroicons/react/24/outline";
 
 const PAGE_SIZE = 12;
 
 type Props = {
   initialListings: Listing[];
   isLoading?: boolean;
+  company?: Pick<Company, "id" | "name"> | null;
+  canMoveOwnership?: boolean;
 };
 export const ProfilePageOwnListings = ({
   initialListings,
   isLoading,
+  company,
+  canMoveOwnership = false,
 }: Props) => {
   const { authToken } = useAuthContext();
 
-  const [listings, setListings] = useState(initialListings);
+  const [deletedListingIds, setDeletedListingIds] = useState<number[]>([]);
+  const [updatedListings, setUpdatedListings] = useState<
+    Record<number, Listing>
+  >({});
   const [page, setPage] = useState(1);
-  let [deleteConfirmationModalOpen, setDeleteConfirmationModalOpen] =
+  const [deleteConfirmationModalOpen, setDeleteConfirmationModalOpen] =
     useState(false);
   const [listingToDelete, setListingToDelete] = useState<Listing | null>(null);
+  const [movingListingId, setMovingListingId] = useState<number | null>(null);
   const deleteListingQuery = useDeleteListing({ authToken });
+  const updateProperty = useUpdateProperty({ authToken });
 
-  useEffect(() => {
-    setListings(initialListings);
-    setPage(1);
-  }, [initialListings]);
+  const listings = useMemo(
+    () =>
+      initialListings
+        .filter((listing) => !deletedListingIds.includes(listing.id))
+        .map((listing) => updatedListings[listing.id] ?? listing),
+    [deletedListingIds, initialListings, updatedListings],
+  );
 
   const totalPages = Math.ceil(listings.length / PAGE_SIZE);
+  const currentPage = Math.min(page, Math.max(totalPages, 1));
   const pagedListings = useMemo(
-    () => listings.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE),
-    [listings, page],
+    () =>
+      listings.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE),
+    [currentPage, listings],
   );
 
   function closeModal() {
@@ -62,12 +81,40 @@ export const ProfilePageOwnListings = ({
       });
 
     // optimistic update
-    const filteredListings = listings.filter(
-      (listing) => listing.id !== listingToDelete.id,
-    );
-    setListings(filteredListings);
+    setDeletedListingIds((currentIds) => [...currentIds, listingToDelete.id]);
     setListingToDelete(null);
     closeModal();
+  };
+  const moveListingOwnership = async (listing: Listing) => {
+    if (!company) return;
+
+    const moveToCompany = !listing.companyId;
+    const nextCompanyId = moveToCompany ? company.id : null;
+
+    setMovingListingId(listing.id);
+
+    try {
+      const updatedListing = await updateProperty.mutateAsync({
+        id: listing.id,
+        companyId: nextCompanyId,
+      });
+
+      setUpdatedListings((currentListings) => ({
+        ...currentListings,
+        [listing.id]: updatedListing,
+      }));
+      toast.success(
+        moveToCompany
+          ? `Property moved to ${company.name}`
+          : "Property moved to personal listings",
+      );
+    } catch (error) {
+      toast.error(
+        error instanceof Error ? error.message : "Error updating property",
+      );
+    } finally {
+      setMovingListingId(null);
+    }
   };
 
   return (
@@ -77,11 +124,27 @@ export const ProfilePageOwnListings = ({
           ? Array.from({ length: 4 }).map((_, i) => (
               <ListingItemSkeleton key={i} />
             ))
-          : pagedListings.map((listing, index) => (
+          : pagedListings.map((listing) => (
               <ListingItem
-                key={index}
+                key={listing.id}
                 listingItemInitial={listing}
                 onDeleteIconClick={onDeletedIconClick}
+                ownerAction={
+                  canMoveOwnership && company
+                    ? {
+                        label: listing.companyId
+                          ? "Move to personal"
+                          : "Move to company",
+                        icon: listing.companyId ? (
+                          <UserCircleIcon className="h-5 w-5 text-[#1F5FD6]" />
+                        ) : (
+                          <BuildingOffice2Icon className="h-5 w-5 text-[#1F5FD6]" />
+                        ),
+                        disabled: movingListingId === listing.id,
+                        onClick: moveListingOwnership,
+                      }
+                    : undefined
+                }
                 ownerView={true}
               />
             ))}
@@ -111,7 +174,7 @@ export const ProfilePageOwnListings = ({
       {totalPages > 1 && (
         <div className="mt-6">
           <Pagination
-            page={page}
+            page={currentPage}
             totalPages={totalPages}
             onPageChange={setPage}
           />

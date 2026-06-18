@@ -1,7 +1,13 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState, type KeyboardEvent } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+  type KeyboardEvent,
+  type ReactNode,
+} from "react";
 import type { Listing } from "@/types";
 import {
   ListingItemCard,
@@ -17,6 +23,12 @@ type ListingItemProps = {
   ownerView?: boolean;
   onEditIconClick?: (listingItem: Listing) => void;
   onDeleteIconClick?: (listingItem: Listing) => void;
+  ownerAction?: {
+    label: string;
+    icon: ReactNode;
+    disabled?: boolean;
+    onClick: (listingItem: Listing) => void;
+  };
   onStateChanged?: (listingItem: Listing) => void;
   isLoading?: boolean;
   lazy?: boolean;
@@ -28,14 +40,31 @@ export const ListingItem = ({
   ownerView = false,
   onEditIconClick,
   onDeleteIconClick,
+  ownerAction,
   onStateChanged,
   isLoading,
   lazy = false,
 }: ListingItemProps) => {
   const cardRef = useRef<HTMLDivElement | null>(null);
-  const [listingItem, setListingItem] = useState(listingItemInitial);
+  const listingItemVersion = `${listingItemInitial.id}:${listingItemInitial.updatedAt}:${listingItemInitial.savedListingId ?? ""}`;
+  const [listingItemState, setListingItemState] = useState(() => ({
+    version: listingItemVersion,
+    value: listingItemInitial,
+  }));
   const [shouldRender, setShouldRender] = useState(!lazy);
   const router = useRouter();
+  const listingItem =
+    listingItemState.version === listingItemVersion
+      ? listingItemState.value
+      : listingItemInitial;
+  const shouldRenderCard = shouldRender || !lazy;
+
+  const handleListingChange = (nextListingItem: Listing) => {
+    setListingItemState({
+      version: listingItemVersion,
+      value: nextListingItem,
+    });
+  };
 
   const goToListingPage = () => {
     if (isLoading) return;
@@ -67,22 +96,18 @@ export const ListingItem = ({
     onDeleteIconClick?.(listingItem);
   };
 
-  useEffect(() => {
-    setListingItem(listingItemInitial);
-  }, [listingItemInitial]);
+  const handleOwnerActionClick = () => {
+    ownerAction?.onClick(listingItem);
+  };
 
   useEffect(() => {
-    if (!lazy) {
-      setShouldRender(true);
-      return;
-    }
-    if (shouldRender) return;
+    if (shouldRenderCard) return;
 
     const cardElement = cardRef.current;
     if (!cardElement) return;
     if (!("IntersectionObserver" in window)) {
-      setShouldRender(true);
-      return;
+      const timeoutId = setTimeout(() => setShouldRender(true), 0);
+      return () => clearTimeout(timeoutId);
     }
 
     const observer = new IntersectionObserver(
@@ -98,9 +123,9 @@ export const ListingItem = ({
     observer.observe(cardElement);
 
     return () => observer.disconnect();
-  }, [lazy, shouldRender]);
+  }, [shouldRenderCard]);
 
-  if (!shouldRender) {
+  if (!shouldRenderCard) {
     return (
       <div ref={cardRef}>
         <ListingItemSkeleton />
@@ -118,12 +143,22 @@ export const ListingItem = ({
       onKeyDown={handleCardKeyDown}
       onEditClick={handleEditIconClick}
       onDeleteClick={handleDeletedIconClick}
+      ownerAction={
+        ownerAction
+          ? {
+              label: ownerAction.label,
+              icon: ownerAction.icon,
+              disabled: ownerAction.disabled,
+              onClick: handleOwnerActionClick,
+            }
+          : undefined
+      }
       saveControl={
         !ownerView ? (
           <ListingItemSaveButton
             listing={listingItem}
             isLoadingSavedListings={isLoadingSavedListings}
-            onListingChange={setListingItem}
+            onListingChange={handleListingChange}
             onStateChanged={onStateChanged}
           />
         ) : null

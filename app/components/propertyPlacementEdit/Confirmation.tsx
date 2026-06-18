@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import NextToConfirmationPage from "@/app/components/propertyPlacementEdit/NextToConfirmationPage";
 import { useCreateProperty } from "@/providers/Listing";
@@ -77,7 +77,7 @@ const SummarySection = ({ icon, title, items }: SummarySectionProps) => (
     <dl className="grid gap-4 sm:grid-cols-2">
       {items.map((item) => (
         <div key={item.label} className="rounded-xl bg-[#F8FAFC] p-4">
-          <dt className="text-xs font-bold uppercase text-[#64748B]">
+          <dt className="text-xs font-bold text-[#64748B] uppercase">
             {item.label}
           </dt>
           <dd className="mt-1 text-sm font-bold text-[#1F2937]">
@@ -107,7 +107,7 @@ const Confirmation = ({
     .filter(Boolean)
     .join(" ");
 
-  const confirmBtnHandler = () => {
+  const confirmBtnHandler = async () => {
     const errors = validatePlacementValues(values);
 
     if (Object.keys(errors).length > 0) {
@@ -120,6 +120,7 @@ const Confirmation = ({
       v !== undefined && v !== "" ? Number(v) : undefined;
 
     const payload: ListingProvider.CreateMutationPayload = {
+      companyId: values.companyId,
       listingType: (values.listingType as ListingType) || undefined,
       propertyType: (values.propertyType as PropertyType) || undefined,
       currency: values.currency as CurrencyType,
@@ -161,23 +162,17 @@ const Confirmation = ({
     };
 
     setCreateError("");
-    createProperty.mutate(payload);
-  };
 
-  useEffect(() => {
-    if (createProperty.isSuccess) {
-      setCreatedProperty(createProperty.data);
+    try {
+      const listing = await createProperty.mutateAsync(payload);
+      setCreatedProperty(listing);
       setOpenAdvertisementSection(true);
       toast.success("Property created successfully");
-    }
-  }, [createProperty?.isSuccess, createProperty.data]);
-
-  useEffect(() => {
-    if (createProperty.isError) {
+    } catch {
       setCreateError("Oops, something went wrong. Please try again later.");
       toast.error("Oops, something went wrong. Please try again later.");
     }
-  }, [createProperty?.isError]);
+  };
 
   const overviewItems: SummaryItem[] = [
     { label: "Offer type", value: labelize(values.listingType) },
@@ -245,7 +240,7 @@ const Confirmation = ({
   return (
     <div className="mx-auto max-w-screen-xl">
       <div className="mb-8 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8 lg:p-10">
-        <div className="mb-3 text-sm font-bold uppercase tracking-wide text-[#1F5FD6]">
+        <div className="mb-3 text-sm font-bold tracking-wide text-[#1F5FD6] uppercase">
           Step 4
         </div>
         <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
@@ -314,7 +309,7 @@ const Confirmation = ({
                     sizes="(min-width: 1024px) 38vw, 100vw"
                     className="object-cover"
                   />
-                  <span className="absolute left-3 top-3 rounded-full bg-white/95 px-3 py-1 text-xs font-bold text-[#1F2937] shadow-sm">
+                  <span className="absolute top-3 left-3 rounded-full bg-white/95 px-3 py-1 text-xs font-bold text-[#1F2937] shadow-sm">
                     Main image
                   </span>
                 </div>
@@ -350,7 +345,7 @@ const Confirmation = ({
             <h3 className="mb-3 text-base font-bold text-[#1F2937]">
               Description
             </h3>
-            <p className="whitespace-pre-line text-sm leading-6 text-[#4A5468]">
+            <p className="text-sm leading-6 whitespace-pre-line text-[#4A5468]">
               {values.description || "-"}
             </p>
           </section>

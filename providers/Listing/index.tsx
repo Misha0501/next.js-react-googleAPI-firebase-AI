@@ -56,7 +56,7 @@ export function useCreateProperty(
 // Update
 export function useUpdateProperty(
   props: ListingProvider.UpdatePropertyProp,
-): UseMutationResult<Listing, Error, Listing> {
+): UseMutationResult<Listing, Error, ListingProvider.UpdateMutationPayload> {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (payload) => api.updateProperty({ ...props, data: payload }),

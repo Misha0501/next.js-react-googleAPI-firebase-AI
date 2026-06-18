@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import GeneralInfo from "@/app/components/propertyPlacementEdit/GeneralInfo";
 import MoreDetails from "@/app/components/propertyPlacementEdit/MoreDetails";
 import DescriptionAndImages from "@/app/components/propertyPlacementEdit/DescriptionAndImages";
@@ -12,6 +12,8 @@ import {
   PhotoIcon,
 } from "@heroicons/react/24/outline";
 import { PlacementFormValues } from "@/app/components/propertyPlacementEdit/validation";
+import { useAuthContext } from "@/app/context/AuthContext";
+import { useUserOwnData } from "@/providers/Users";
 
 const steps = [
   {
@@ -77,6 +79,13 @@ const MultiForm = () => {
   const [showForm2, setShowForm2] = useState(true);
   const [showForm3, setShowForm3] = useState(true);
 
+  const { authToken } = useAuthContext();
+  const userOwnData = useUserOwnData({ authToken });
+  const company = useMemo(
+    () => userOwnData?.data?.Membership?.[0]?.company ?? null,
+    [userOwnData?.data],
+  );
+
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
@@ -106,6 +115,7 @@ const MultiForm = () => {
             formik={formik}
             handleNext={handleNext}
             step={step}
+            company={company}
           />
         );
       case 1:
@@ -151,7 +161,7 @@ const MultiForm = () => {
           <form onSubmit={(event) => event.preventDefault()}>
             <div className="border-b border-slate-200 bg-white">
               <div className="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 lg:px-8">
-                <p className="mb-3 text-sm font-bold uppercase tracking-wide text-[#1F5FD6]">
+                <p className="mb-3 text-sm font-bold tracking-wide text-[#1F5FD6] uppercase">
                   Property placement
                 </p>
                 <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">

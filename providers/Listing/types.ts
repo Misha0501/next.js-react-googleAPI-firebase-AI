@@ -62,10 +62,12 @@ export namespace ListingProvider {
   }
 
   //UPDATE Property
+  export type UpdateMutationPayload = Partial<Listing> & Pick<Listing, "id">;
+
   export type UpdatePropertyProp = {
     authToken?: string | null;
   };
   export interface PutAPIPayload extends UpdatePropertyProp {
-    data: Listing;
+    data: UpdateMutationPayload;
   }
 }

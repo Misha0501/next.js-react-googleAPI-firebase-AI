@@ -21,6 +21,10 @@ const tenYearsFromNow = new Date();
 tenYearsFromNow.setFullYear(tenYearsFromNow.getFullYear() + 10);
 
 export const listingSchema = z.object({
+  // Omitted: auto-assign from the creator's current company membership (default
+  // behavior). Explicit null: list as the individual even if they have a company.
+  // Explicit number: must match the creator's own company - enforced server-side.
+  companyId: z.number().optional().nullable(),
   listingType: z.enum(LISTING_TYPES as [ListingType, ...ListingType[]]),
   interiorType: z
     .enum(INTERIOR_TYPES as [InteriorType, ...InteriorType[]])

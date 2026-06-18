@@ -9,6 +9,7 @@ import { getApplicationUserCompanyId } from "@/app/lib/listing/getApplicationUse
 import {
   buildPrismaQueryConditions,
   buildPrismaOrderBy,
+  ensureUserCanAssignListingToCompany,
   ensureUserHasListingAccess,
   extractParametersGET,
   handleAddressUpdate,
@@ -93,18 +94,26 @@ export async function POST(req: Request) {
       price,
       images,
       listingDescriptionKeyPoints,
+      companyId: requestedCompanyId,
       ...restData
     } = parsedValues;
 
-    // Get user's company id
-    let companyId = getApplicationUserCompanyId(applicationUser);
+    // Default (field omitted): auto-assign from the user's current company
+    // membership, same as before. Explicit value: respect the user's choice,
+    // validated against their own membership.
+    let companyId: number | null;
+    if (requestedCompanyId === undefined) {
+      companyId = getApplicationUserCompanyId(applicationUser);
+    } else {
+      ensureUserCanAssignListingToCompany(applicationUser, requestedCompanyId);
+      companyId = requestedCompanyId;
+    }
 
     // active until 30 days from now
     const activeUntil = new Date();
     activeUntil.setDate(activeUntil.getDate() + 30);
 
     const listing = await prisma.listing.create({
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       data: {
         applicationUserId: applicationUser.id,
         companyId,
@@ -159,11 +168,23 @@ export async function PUT(req: Request) {
       await getApplicationUserServer(true);
     const parsedValues = listingSchemaPutRequest.parse(await req.json());
 
-    const { id, images, address, price, currency, ...restData } = parsedValues;
+    const {
+      id,
+      images,
+      address,
+      price,
+      currency,
+      companyId: requestedCompanyId,
+      ...restData
+    } = parsedValues;
 
     const listing = await validateListingExistence(id);
 
     ensureUserHasListingAccess(applicationUser, listing as unknown as Listing);
+
+    if (requestedCompanyId !== undefined) {
+      ensureUserCanAssignListingToCompany(applicationUser, requestedCompanyId);
+    }
 
     if (images)
       await handleImagesUpdate(
@@ -183,10 +204,12 @@ export async function PUT(req: Request) {
       where: {
         id,
       },
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       data: {
         price: price ?? undefined,
         currency: currency ?? undefined,
+        ...(requestedCompanyId !== undefined
+          ? { companyId: requestedCompanyId }
+          : {}),
         ...restDataWithoutKeyPoints,
         ...(listingDescriptionKeyPoints != null
           ? {
