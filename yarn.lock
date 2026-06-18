@@ -1570,12 +1570,12 @@
     pg-protocol "*"
     pg-types "^2.2.0"
 
-"@types/react-dom@*", "@types/react-dom@19.2.3":
+"@types/react-dom@*", "@types/react-dom@^16 || ^17 || ^18 || ^19", "@types/react-dom@19.2.3":
   version "19.2.3"
   resolved "https://registry.npmjs.org/@types/react-dom/-/react-dom-19.2.3.tgz"
   integrity sha512-jp2L/eY6fn+KgVVQAOqYItbF0VY/YApe5Mz2F0aykSO8gx31bYCZyvSeYxCHKvzHG5eZjc+zyaS5BrBWya2+kQ==
 
-"@types/react@*", "@types/react@^18.0.0 || ^19.0.0", "@types/react@^18.2.25 || ^19", "@types/react@^19.2.0", "@types/react@19.2.17":
+"@types/react@*", "@types/react@^16 || ^17 || ^18 || ^19", "@types/react@^18.0.0 || ^19.0.0", "@types/react@^18.2.25 || ^19", "@types/react@^19.2.0", "@types/react@19.2.17":
   version "19.2.17"
   resolved "https://registry.npmjs.org/@types/react/-/react-19.2.17.tgz"
   integrity sha512-MXfmqaVPEVgkBT/aY0aGCkRWWtByiYQXo3xdQ8r5RzuFrPiRn8Gar2tQdXSUQ2GKV3bkXckek89V8wQBY2Q/Aw==
@@ -5688,7 +5688,7 @@ react-aria@^3.48.0:
     react-stately "3.47.0"
     use-sync-external-store "^1.6.0"
 
-"react-dom@^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0", "react-dom@^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc", "react-dom@^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0", "react-dom@^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1", "react-dom@^18 || ^19", "react-dom@^18 || ^19 || ^19.0.0-rc", "react-dom@^18.0.0 || ^19.0.0", "react-dom@^18.2.0 || 19.0.0-rc-de68d2f4-20241204 || ^19.0.0", react-dom@>=16.8.0, react-dom@19.2.7:
+"react-dom@^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0", "react-dom@^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc", "react-dom@^16.8.0 || ^17 || ^18 || ^19", "react-dom@^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0", "react-dom@^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1", "react-dom@^18 || ^19", "react-dom@^18 || ^19 || ^19.0.0-rc", "react-dom@^18.0.0 || ^19.0.0", "react-dom@^18.2.0 || 19.0.0-rc-de68d2f4-20241204 || ^19.0.0", react-dom@>=16.8.0, react-dom@19.2.7:
   version "19.2.7"
   resolved "https://registry.npmjs.org/react-dom/-/react-dom-19.2.7.tgz"
   integrity sha512-t0BRVXvbiE/o20Hfw669rLbMCDWtYZLvmJigy2f0MxsXF+71pxhR3xOkspmsO8h3ZlNzyibAmtCa3l4lYKk6gQ==
@@ -5742,7 +5742,7 @@ react-toastify@^11.1.0:
   dependencies:
     clsx "^2.1.1"
 
-"react@^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc", "react@^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0", "react@^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1", "react@^16.9.0 || ^17.0.0 || ^18 || ^19", "react@^18 || ^19", "react@^18 || ^19 || ^19.0.0-rc", "react@^18.0 || ^19", "react@^18.0.0 || ^19.0.0", "react@^18.2.0 || 19.0.0-rc-de68d2f4-20241204 || ^19.0.0", react@^19.2.7, "react@>= 16 || ^19.0.0-rc", "react@>= 16.8.0", "react@>= 16.8.0 || 17.x.x || ^18.0.0-0 || ^19.0.0-0", react@>=16.8.0, react@19.2.7:
+"react@^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc", "react@^16.8.0 || ^17 || ^18 || ^19", "react@^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0", "react@^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1", "react@^16.9.0 || ^17.0.0 || ^18 || ^19", "react@^18 || ^19", "react@^18 || ^19 || ^19.0.0-rc", "react@^18.0 || ^19", "react@^18.0.0 || ^19.0.0", "react@^18.2.0 || 19.0.0-rc-de68d2f4-20241204 || ^19.0.0", react@^19.2.7, "react@>= 16 || ^19.0.0-rc", "react@>= 16.8.0", "react@>= 16.8.0 || 17.x.x || ^18.0.0-0 || ^19.0.0-0", react@>=16.8.0, react@19.2.7:
   version "19.2.7"
   resolved "https://registry.npmjs.org/react/-/react-19.2.7.tgz"
   integrity sha512-HNe9WslTbXmFK8o8cmwgAeJFSBvt1bPdHCVKtaaV+WlAN36mpT4hcRpwbf3fY56ar2oIXzsBpOAiIRHAdY0OlQ==
@@ -7061,10 +7061,10 @@ yargs@^17.7.2:
     y18n "^5.0.5"
     yargs-parser "^21.1.1"
 
-yet-another-react-lightbox@^3.12.2:
-  version "3.12.2"
-  resolved "https://registry.npmjs.org/yet-another-react-lightbox/-/yet-another-react-lightbox-3.12.2.tgz"
-  integrity sha512-sFypE74Rjjl7WbzKSrGeZ7lbcgduOam/BKj8kqzx/ciC4dJyYdE1SG0dur9oDq/gZiY3VGJh+PYGbq6ZwmPFmA==
+yet-another-react-lightbox@^3.32.0:
+  version "3.32.0"
+  resolved "https://registry.npmjs.org/yet-another-react-lightbox/-/yet-another-react-lightbox-3.32.0.tgz"
+  integrity sha512-FWODOMrE07i3O5MeWRcYlcnAUk518zkUYKAe307pVW5pkey3hKMcAIWn8yMIURzGvbd3m9eghWO9CocEZmQPIg==
 
 yocto-queue@^0.1.0:
   version "0.1.0"
