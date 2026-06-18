@@ -1,5 +1,20 @@
 import { PrismaPg } from "@prisma/adapter-pg";
-import { PrismaClient } from "../generated/prisma/client.js";
+import {
+  Currency,
+  HeatingType,
+  InteriorType,
+  ListingType,
+  PrismaClient,
+  PropertyType,
+  UpkeepType,
+  type ApplicationUser,
+  type Currency as CurrencyValue,
+  type HeatingType as HeatingTypeValue,
+  type InteriorType as InteriorTypeValue,
+  type ListingType as ListingTypeValue,
+  type PropertyType as PropertyTypeValue,
+  type UpkeepType as UpkeepTypeValue,
+} from "../generated/prisma/client.js";
 
 const adapter = new PrismaPg(process.env.DATABASE_URL as string);
 const prisma = new PrismaClient({ adapter });
@@ -19,6 +34,95 @@ const REMOTE_IMAGE_BASE_URL = (
   process.env.SEED_REMOTE_IMAGE_BASE_URL || DEFAULT_REMOTE_IMAGE_BASE_URL
 ).replace(/\/$/, "");
 
+type SeedImage = {
+  url: string;
+  imagePath: string;
+};
+
+type SeedListingImage = SeedImage & {
+  positionInListing: number;
+};
+
+type PriceHistoryEntry = {
+  currency: CurrencyValue;
+  price: number;
+  tax: number | null;
+  createdAt: Date;
+};
+
+type KeyPoint = [title: string, description: string];
+
+type SeedUser = {
+  displayName: string;
+  email: string;
+  phone: string;
+  addr: string;
+};
+
+type ResidentialSubtype = "apartment" | "house" | "villa";
+type LandParkingSubtype = "land" | "parking";
+type SeedSubtype = ResidentialSubtype | LandParkingSubtype;
+
+type BaseSeedProperty = {
+  lt: ListingTypeValue;
+  city: string;
+  nbhd: string;
+  street: string;
+  hn: string;
+  pc: string;
+  lat: number;
+  lng: number;
+  area: number;
+  price: number;
+};
+
+type ResidentialSeedProperty = BaseSeedProperty & {
+  sub: ResidentialSubtype;
+  aLiv: number;
+  aOut: number | null;
+  aLand: number | null;
+  aGar: number | null;
+  rooms: number;
+  bed: number;
+  bath: number;
+  fl: number | null;
+  tfl: number;
+  built: number;
+  int: InteriorTypeValue;
+  upk: UpkeepTypeValue;
+  heat: HeatingTypeValue;
+  park: number;
+};
+
+type LandParkingSeedProperty = BaseSeedProperty & {
+  sub: LandParkingSubtype;
+  aLiv: null;
+  aOut: null;
+  aLand: null;
+  aGar: null;
+  rooms: null;
+  bed: null;
+  bath: null;
+  fl: null;
+  tfl: null;
+  built: null;
+  int: null;
+  upk: null;
+  heat: null;
+  park: null;
+  zone?: string | null;
+  covered?: boolean;
+  indoor?: boolean;
+};
+
+type SeedProperty = ResidentialSeedProperty | LandParkingSeedProperty;
+
+function isResidentialProperty(
+  property: SeedProperty,
+): property is ResidentialSeedProperty {
+  return property.sub !== "land" && property.sub !== "parking";
+}
+
 if (![LOCAL_IMAGE_SOURCE, REMOTE_IMAGE_SOURCE].includes(SEED_IMAGE_SOURCE)) {
   throw new Error(
     `Unsupported SEED_IMAGE_SOURCE "${SEED_IMAGE_SOURCE}". Use "local" or "remote".`,
@@ -33,7 +137,7 @@ if (SEED_IMAGE_SOURCE === REMOTE_IMAGE_SOURCE && !REMOTE_IMAGE_BASE_URL) {
 
 // ── Image pools ───────────────────────────────────────────────────────────────
 
-function pool(dir, prefix, count) {
+function pool(dir: string, prefix: string, count: number): SeedImage[] {
   return Array.from({ length: count }, (_, i) => {
     const fileName = `${prefix}-${String(i + 1).padStart(2, "0")}.webp`;
     const localPath = `${LOCAL_IMAGES_BASE_PATH}/${dir}/${fileName}`;
@@ -69,7 +173,7 @@ let aptExtIdx = 0,
   landIdx = 0,
   parkingIdx = 0;
 
-function exterior(sub) {
+function exterior(sub: ResidentialSubtype): SeedImage {
   // villas use house-exteriors (villa-exteriors pool not used in seed)
   if (sub === "house" || sub === "villa")
     return IMG.hseExt[hseExtIdx++ % IMG.hseExt.length];
@@ -77,14 +181,18 @@ function exterior(sub) {
 }
 
 // Image count: 10%→1, 15%→2, 25%→3, 50%→4  (based on listingIdx 0-149)
-function imageCount(idx) {
+function imageCount(idx: number): number {
   if (idx < 15) return 1;
   if (idx < 38) return 2;
   if (idx < 75) return 3;
   return 4;
 }
 
-function buildImages(sub, idx, hasBalcony) {
+function buildImages(
+  sub: SeedSubtype,
+  idx: number,
+  hasBalcony: boolean,
+): SeedListingImage[] {
   // Land and parking: always exactly 1 unique image from dedicated pools
   if (sub === "land") {
     const img = IMG.land[landIdx++ % IMG.land.length];
@@ -112,7 +220,7 @@ function buildImages(sub, idx, hasBalcony) {
   if (count === 3) return imgs;
 
   // Slot 3: balcony if the property has one, otherwise vary by type
-  let slot3;
+  let slot3: SeedImage;
   if (hasBalcony) {
     slot3 = IMG.balcony[idx % IMG.balcony.length];
   } else {
@@ -127,7 +235,7 @@ function buildImages(sub, idx, hasBalcony) {
 
 // ── Price history ─────────────────────────────────────────────────────────────
 
-function euros(v) {
+function euros(v: number): number {
   // Rounding unit scales with price so small prices still get a visible change
   const unit =
     v >= 100000
@@ -142,13 +250,17 @@ function euros(v) {
   return Math.round(v / unit) * unit;
 }
 
-function chronological(history) {
+function chronological(history: PriceHistoryEntry[]): PriceHistoryEntry[] {
   return [...history].sort(
     (a, b) => a.createdAt.getTime() - b.createdAt.getTime(),
   );
 }
 
-function buildPriceHistory(price, idx, listedAt) {
+function buildPriceHistory(
+  price: number,
+  idx: number,
+  listedAt: Date,
+): PriceHistoryEntry[] {
   // listedAt is the listing's createdAt — the first entry must use this date so the
   // app labels it "Listed". Every listing gets at least 2 entries.
   // Anchor days are computed proportionally so dates are always strictly increasing
@@ -157,10 +269,10 @@ function buildPriceHistory(price, idx, listedAt) {
   const msListed = now - listedAt.getTime();
   const daysListed = Math.floor(msListed / MS_PER_DAY);
 
-  function after(d) {
+  function after(d: number): Date {
     return new Date(listedAt.getTime() + d * MS_PER_DAY);
   }
-  function afterMs(ms) {
+  function afterMs(ms: number): Date {
     return new Date(listedAt.getTime() + ms);
   }
 
@@ -168,9 +280,9 @@ function buildPriceHistory(price, idx, listedAt) {
   if (daysListed < 5) {
     const p0 = euros(price * (1.03 + (idx % 5) * 0.01));
     return chronological([
-      { currency: "EUR", price: p0, tax: null, createdAt: listedAt },
+      { currency: Currency.EUR, price: p0, tax: null, createdAt: listedAt },
       {
-        currency: "EUR",
+        currency: Currency.EUR,
         price: price,
         tax: null,
         createdAt: afterMs(Math.floor(msListed * 0.5)),
@@ -188,8 +300,8 @@ function buildPriceHistory(price, idx, listedAt) {
   if (daysListed < 20) {
     const p0 = euros(price * (1.05 + (idx % 8) * 0.01));
     return chronological([
-      { currency: "EUR", price: p0, tax: null, createdAt: listedAt },
-      { currency: "EUR", price: price, tax: null, createdAt: after(d1) },
+      { currency: Currency.EUR, price: p0, tax: null, createdAt: listedAt },
+      { currency: Currency.EUR, price: price, tax: null, createdAt: after(d1) },
     ]);
   }
 
@@ -200,9 +312,9 @@ function buildPriceHistory(price, idx, listedAt) {
     const p0 = euros(price * (1.08 + (idx % 10) * 0.01));
     const p1 = euros(price * (1.03 + (idx % 5) * 0.01));
     return chronological([
-      { currency: "EUR", price: p0, tax: null, createdAt: listedAt },
-      { currency: "EUR", price: p1, tax: null, createdAt: after(d1) },
-      { currency: "EUR", price: price, tax: null, createdAt: after(d2) },
+      { currency: Currency.EUR, price: p0, tax: null, createdAt: listedAt },
+      { currency: Currency.EUR, price: p1, tax: null, createdAt: after(d1) },
+      { currency: Currency.EUR, price: price, tax: null, createdAt: after(d2) },
     ]);
   }
 
@@ -213,19 +325,19 @@ function buildPriceHistory(price, idx, listedAt) {
       const p1 = euros(price * (1.08 + (idx % 6) * 0.01));
       const p2 = euros(price * (1.03 + (idx % 4) * 0.01));
       return chronological([
-        { currency: "EUR", price: p0, tax: null, createdAt: listedAt },
-        { currency: "EUR", price: p1, tax: null, createdAt: after(d1) },
-        { currency: "EUR", price: p2, tax: null, createdAt: after(d2) },
-        { currency: "EUR", price: price, tax: null, createdAt: after(d3) },
+        { currency: Currency.EUR, price: p0, tax: null, createdAt: listedAt },
+        { currency: Currency.EUR, price: p1, tax: null, createdAt: after(d1) },
+        { currency: Currency.EUR, price: p2, tax: null, createdAt: after(d2) },
+        { currency: Currency.EUR, price: price, tax: null, createdAt: after(d3) },
       ]);
     }
     // Fall back to 3 entries for younger listings
     const p0 = euros(price * (1.08 + (idx % 10) * 0.01));
     const p1 = euros(price * (1.03 + (idx % 5) * 0.01));
     return chronological([
-      { currency: "EUR", price: p0, tax: null, createdAt: listedAt },
-      { currency: "EUR", price: p1, tax: null, createdAt: after(d1) },
-      { currency: "EUR", price: price, tax: null, createdAt: after(d2) },
+      { currency: Currency.EUR, price: p0, tax: null, createdAt: listedAt },
+      { currency: Currency.EUR, price: p1, tax: null, createdAt: after(d1) },
+      { currency: Currency.EUR, price: price, tax: null, createdAt: after(d2) },
     ]);
   }
 
@@ -233,15 +345,15 @@ function buildPriceHistory(price, idx, listedAt) {
   const p0 = euros(price * (0.94 + (idx % 5) * 0.01));
   const p1 = euros(price * (0.97 + (idx % 4) * 0.01));
   return chronological([
-    { currency: "EUR", price: p0, tax: null, createdAt: listedAt },
-    { currency: "EUR", price: p1, tax: null, createdAt: after(d1) },
-    { currency: "EUR", price: price, tax: null, createdAt: after(d2) },
+    { currency: Currency.EUR, price: p0, tax: null, createdAt: listedAt },
+    { currency: Currency.EUR, price: p1, tax: null, createdAt: after(d1) },
+    { currency: Currency.EUR, price: price, tax: null, createdAt: after(d2) },
   ]);
 }
 
 // ── Description & key points ──────────────────────────────────────────────────
 
-function buildDescription(p) {
+function buildDescription(p: SeedProperty): string {
   if (p.sub === "land") {
     const use = p.zone ? p.zone : "residential or investment";
     return (
@@ -259,22 +371,27 @@ function buildDescription(p) {
       `Ideal for residents and investors in ${p.nbhd}.`
     );
   }
+  if (!isResidentialProperty(p)) {
+    throw new Error(`Unsupported property subtype: ${p.sub}`);
+  }
   const type =
     p.sub === "villa" ? "villa" : p.sub === "house" ? "house" : "apartment";
-  const action = p.lt === "RENT" ? "rent" : "sale";
+  const action = p.lt === ListingType.RENT ? "rent" : "sale";
   const balcony = p.aOut ? ` with a ${p.aOut} sqm balcony` : "";
   const garden = p.aLand ? ` set on a ${p.aLand} sqm private plot` : "";
   const bedLabel = p.bed === 0 ? "Studio" : `${p.bed}-bedroom`;
   const floorLine = p.fl ? `, floor ${p.fl} of ${p.tfl}` : "";
   const furnished =
-    p.int === "FURNISHED"
+    p.int === InteriorType.FURNISHED
       ? "fully furnished and move-in ready"
       : "unfurnished — ideal for buyers who prefer their own interior";
-  const condition = {
-    EXCELLENT: "in excellent condition with modern finishes",
-    GOOD: "in good overall condition",
-    FAIR: "in fair condition with some cosmetic updates needed",
-  }[p.upk];
+  const conditions: Record<UpkeepTypeValue, string> = {
+    [UpkeepType.EXCELLENT]: "in excellent condition with modern finishes",
+    [UpkeepType.GOOD]: "in good overall condition",
+    [UpkeepType.FAIR]: "in fair condition with some cosmetic updates needed",
+    [UpkeepType.POOR]: "in poor condition and ready for a full renovation",
+  };
+  const condition = conditions[p.upk];
   return (
     `${bedLabel} ${type} for ${action} in ${p.nbhd}, ${p.city}${balcony}${garden}. ` +
     `The property spans ${p.area} sqm${p.aLiv ? ` (${p.aLiv} sqm living area)` : ""}${floorLine}, ` +
@@ -283,7 +400,7 @@ function buildDescription(p) {
   );
 }
 
-function buildKeyPoints(p) {
+function buildKeyPoints(p: SeedProperty): KeyPoint[] {
   if (p.sub === "land") {
     return [
       ["Land area", `${p.area} sqm of regulated land ready for development.`],
@@ -313,7 +430,10 @@ function buildKeyPoints(p) {
       ],
     ];
   }
-  const kp = [];
+  if (!isResidentialProperty(p)) {
+    throw new Error(`Unsupported property subtype: ${p.sub}`);
+  }
+  const kp: KeyPoint[] = [];
   if (p.aOut)
     kp.push([
       "Outdoor space",
@@ -328,7 +448,7 @@ function buildKeyPoints(p) {
     "Prime location",
     `Located in ${p.nbhd}, ${p.city} — close to transport, shops and everyday services.`,
   ]);
-  if (p.heat === "CENTRAL")
+  if (p.heat === HeatingType.CENTRAL)
     kp.push([
       "Central heating",
       "Building-wide central heating with individual metering.",
@@ -353,7 +473,7 @@ function buildKeyPoints(p) {
 
 // ── Users ─────────────────────────────────────────────────────────────────────
 
-const USERS = [
+const USERS: SeedUser[] = [
   {
     displayName: "Maria Ivanova",
     email: "maria@homfli.com",
@@ -423,7 +543,7 @@ const USERS = [
 // aOut: balcony/terrace sqm | aLand: plot sqm | aLiv: living area sqm | aGar: garage sqm
 // int: FURNISHED | UNFURNISHED  |  upk: EXCELLENT | GOOD | FAIR  |  heat: CENTRAL | BOILER
 
-const PROPS = [
+const PROPS: ResidentialSeedProperty[] = [
   // ── Sofia · Lozenets ────────────────────────────────────────────────────────
   {
     sub: "apartment",
@@ -4572,7 +4692,7 @@ const PROPS = [
 
 // ── Land plots & parking spaces ───────────────────────────────────────────────
 
-const LAND_PARKING = [
+const LAND_PARKING: LandParkingSeedProperty[] = [
   // 5 land plots — price = area × EUR/sqm; each gets 1 unique image from land pool
   {
     sub: "land",
@@ -4891,7 +5011,7 @@ async function main() {
   await deleteAllData();
 
   // Create users
-  const users = [];
+  const users: ApplicationUser[] = [];
   for (const u of USERS) {
     const slug = u.email.split("@")[0];
     const user = await prisma.applicationUser.create({
@@ -4920,14 +5040,8 @@ async function main() {
     const activeUntil = new Date(createdAt.getTime() + 8 * 30 * MS_PER_DAY);
     const latStr = (p.lat + (idx % 9) * 0.0004).toFixed(6);
     const lngStr = (p.lng + (idx % 9) * 0.0004).toFixed(6);
-    const propType =
-      p.sub === "land"
-        ? "LAND"
-        : p.sub === "parking"
-          ? "PARKING"
-          : p.sub === "apartment"
-            ? "APARTMENT"
-            : "HOUSE";
+    const propType: PropertyTypeValue =
+      p.sub === "apartment" ? PropertyType.APARTMENT : PropertyType.HOUSE;
 
     await prisma.listing.create({
       data: {
@@ -4939,7 +5053,7 @@ async function main() {
         heatingType: p.heat ?? null,
         description: buildDescription(p),
         price: p.price,
-        currency: "EUR",
+        currency: Currency.EUR,
         locality: p.city,
         areaTotal: p.area ?? null,
         areaLiving: p.aLiv ?? null,
@@ -5005,7 +5119,8 @@ async function main() {
     const activeUntil = new Date(createdAt.getTime() + 8 * 30 * MS_PER_DAY);
     const latStr = (p.lat + (idx % 9) * 0.0004).toFixed(6);
     const lngStr = (p.lng + (idx % 9) * 0.0004).toFixed(6);
-    const propType = p.sub === "land" ? "LAND" : "PARKING";
+    const propType: PropertyTypeValue =
+      p.sub === "land" ? PropertyType.LAND : PropertyType.PARKING;
 
     await prisma.listing.create({
       data: {
@@ -5017,7 +5132,7 @@ async function main() {
         heatingType: null,
         description: buildDescription(p),
         price: p.price,
-        currency: "EUR",
+        currency: Currency.EUR,
         locality: p.city,
         areaTotal: p.area ?? null,
         areaLiving: null,

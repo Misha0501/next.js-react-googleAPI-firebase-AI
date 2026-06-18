@@ -1,8 +1,8 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "module": "CommonJS",
-    "moduleResolution": "Node",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "noEmit": false,
     "outDir": "./dist/scripts"
   },
@@ -10,5 +10,6 @@
     "transpileOnly": true,
     "esm": false
   },
-  "include": ["scripts/**/*.ts"]
+  "include": ["scripts/**/*.ts", "prisma/seed.ts"],
+  "exclude": ["node_modules", "generated"]
 }
