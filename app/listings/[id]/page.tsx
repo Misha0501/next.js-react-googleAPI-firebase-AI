@@ -13,8 +13,9 @@ import { PriceChangeGraphSection } from "@/app/components/listingDetailPage/Pric
 import { ListingDetailRecentlyViewedFunctionality } from "@/app/components/listingDetailPage/ListingDetailRecentlyViewedFunctionality";
 import { ListigDetailContextProvider } from "@/app/context/ListingDetailContext";
 import { notFound } from "next/navigation";
-import { getFetchUrl } from "@/app/lib/getFetchUrl";
 import type { Listing } from "@/types";
+import { getListingDetailById } from "@/app/lib/listing/getListingDetailById";
+import { cache } from "react";
 
 export const dynamic = "force-dynamic";
 
@@ -22,21 +23,11 @@ type Props = {
   params: Promise<{ id: string }>;
 };
 
-const fetchListing = async (listingId: number): Promise<Listing | null> => {
-  const response = await fetch(getFetchUrl(`/api/listings/${listingId}`), {
-    cache: "no-store",
-  });
-
-  if (response.status === 404) {
-    return null;
-  }
-
-  if (!response.ok) {
-    throw new Error(`Listing fetch failed with status ${response.status}`);
-  }
-
-  return response.json();
-};
+const fetchListing = cache(
+  async (listingId: number): Promise<Listing | null> => {
+    return getListingDetailById(listingId);
+  },
+);
 
 export const generateMetadata = async ({
   params,
@@ -107,7 +98,7 @@ const ListingPage = async ({ params }: Props) => {
     <ListigDetailContextProvider>
       <div className="bg-[#F8FAFC] pb-32 lg:pb-16">
         <div className="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
-          <div className="space-y-6 pb-8 pt-6 lg:space-y-8 lg:pb-10 lg:pt-10">
+          <div className="space-y-6 pt-6 pb-8 lg:space-y-8 lg:pt-10 lg:pb-10">
             <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
               <ListingTitleSection listing={listing} />
 
