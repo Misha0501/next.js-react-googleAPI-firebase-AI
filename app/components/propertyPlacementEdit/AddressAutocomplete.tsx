@@ -18,7 +18,7 @@ export const AddressAutocomplete = ({
   initialValue,
 }: AutocompleteProps) => {
   const [inputValue, setInputValue] = useState(initialValue || "");
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   const [suggestions, setSuggestions] = useState<any[]>([]);
   const [showDropdown, setShowDropdown] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
@@ -47,14 +47,22 @@ export const AddressAutocomplete = ({
       return;
     }
 
-    if (!googleInstance?.maps?.places?.AutocompleteSuggestion) {
-      setSuggestions([]);
-      setShowDropdown(false);
-      return;
+    if (
+      !inputValue.trim() ||
+      !googleInstance?.maps?.places?.AutocompleteSuggestion
+    ) {
+      const timer = window.setTimeout(() => {
+        setSuggestions([]);
+        setShowDropdown(false);
+        setIsFetching(false);
+      }, 0);
+
+      return () => window.clearTimeout(timer);
     }
 
-    setIsFetching(true);
     const timer = setTimeout(async () => {
+      setIsFetching(true);
+
       try {
         const { suggestions: results } =
           await googleInstance.maps.places.AutocompleteSuggestion.fetchAutocompleteSuggestions(
@@ -75,7 +83,6 @@ export const AddressAutocomplete = ({
 
     return () => {
       clearTimeout(timer);
-      setIsFetching(false);
     };
   }, [inputValue, googleInstance]);
 

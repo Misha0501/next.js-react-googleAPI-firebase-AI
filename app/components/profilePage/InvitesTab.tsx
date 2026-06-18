@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { useAuthContext } from "@/app/context/AuthContext";
 import {
   useCompanyMemberships,
@@ -89,7 +89,6 @@ export const InvitesTab = () => {
   const [showModal, setShowModal] = useState(false);
   const [inviteToDecline, setInviteToDecline] =
     useState<CompanyMembershipInvite | null>(null);
-  const [isPartOfCompany, setIsPartOfCompany] = useState(false);
   const [inviteToDelete, setInviteToDelete] =
     useState<CompanyMembershipInvite | null>(null);
 
@@ -116,6 +115,9 @@ export const InvitesTab = () => {
   const invites = useMemo(
     () => companyMembershipInvites.data ?? [],
     [companyMembershipInvites.data],
+  );
+  const isPartOfCompany = Boolean(
+    companyMemberships.isSuccess && companyMemberships.data,
   );
 
   const handleDeclineInvite = async () => {
@@ -156,12 +158,6 @@ export const InvitesTab = () => {
     setInviteToDelete(null);
     setShowModal(false);
   };
-
-  useEffect(() => {
-    setIsPartOfCompany(
-      Boolean(companyMemberships.isSuccess && companyMemberships.data),
-    );
-  }, [companyMemberships.data, companyMemberships.isSuccess]);
 
   const onDeclineClick = (companyMembershipInvite: CompanyMembershipInvite) => {
     setInviteToDelete(null);

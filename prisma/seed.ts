@@ -1,7 +1,6 @@
 import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "../generated/prisma/client.js";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const adapter = new PrismaPg(process.env.DATABASE_URL as string);
 const prisma = new PrismaClient({ adapter });
 const MS_PER_DAY = 24 * 60 * 60 * 1000;

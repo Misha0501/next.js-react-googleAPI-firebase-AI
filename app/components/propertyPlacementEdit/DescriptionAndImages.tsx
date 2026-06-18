@@ -242,8 +242,8 @@ export const AIGenerateBox = ({
 
   useEffect(() => {
     if (!isLoading) {
-      setElapsed(0);
-      return;
+      const id = window.setTimeout(() => setElapsed(0), 0);
+      return () => window.clearTimeout(id);
     }
     const id = setInterval(() => setElapsed((s) => s + 1), 1000);
     return () => clearInterval(id);

@@ -4,7 +4,6 @@ import { PrismaClient } from "@/generated/prisma/client";
 type ExtendedPrismaClient = ReturnType<typeof buildClient>;
 
 declare global {
-  // eslint-disable-next-line no-var
   var prismaClient: ExtendedPrismaClient | undefined;
 }
 

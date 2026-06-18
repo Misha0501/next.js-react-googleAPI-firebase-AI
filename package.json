@@ -34,8 +34,6 @@
     "@types/react": "19.2.17",
     "@types/react-dom": "19.2.3",
     "cookies-next": "^6.1.1",
-    "eslint": "^9.39.4",
-    "eslint-config-next": "16.2.9",
     "firebase": "^12.15.0",
     "firebase-admin": "^14.0.0",
     "formik": "^2.4.9",
@@ -53,16 +51,21 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
+    "@eslint/compat": "^2.1.0",
     "@playwright/test": "^1.61.0",
     "@types/google.maps": "^3.65.1",
     "checkly": "8.8.0",
     "dotenv-cli": "^11.0.0",
+    "eslint": "^10.5.0",
+    "eslint-config-next": "^16.2.9",
     "eslint-config-prettier": "^10.1.8",
+    "espree": "^11.2.0",
     "prettier": "^3.8.4",
     "prettier-plugin-tailwindcss": "^0.8.0",
     "prisma": "^7.8.0",
     "tsx": "^4.22.4",
-    "typescript": "6.0.3"
+    "typescript": "6.0.3",
+    "typescript-eslint": "^8.61.1"
   },
   "overrides": {
     "jose": "5.10.0"

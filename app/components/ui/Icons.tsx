@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 export const Icons = ({ props = {} }) => (
   <svg
     width={24}
@@ -14,7 +16,9 @@ export const Icons = ({ props = {} }) => (
   </svg>
 );
 
-export const property1 = () => <img src="./property1.png" alt="" />;
+export const property1 = () => (
+  <Image src="/property1.png" alt="" width={529} height={371} />
+);
 
 export const PhotosIcon = ({ className }: { className?: string }) => (
   <svg

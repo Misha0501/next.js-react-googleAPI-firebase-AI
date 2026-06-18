@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect } from "react"
+import Link from "next/link"
 
 type Props = {
   error: Error & { digest?: string }
@@ -67,9 +68,9 @@ export default function GlobalError({ error, unstable_retry }: Props) {
             <button className="btn-primary" onClick={unstable_retry}>
               Refresh page
             </button>
-            <a className="btn-ghost" href="/">
+            <Link className="btn-ghost" href="/">
               Go to home page
-            </a>
+            </Link>
           </div>
 
           {error.digest && (

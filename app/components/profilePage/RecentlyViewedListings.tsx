@@ -1,7 +1,6 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useMemo, useState } from "react";
 import { useAuthContext } from "@/app/context/AuthContext";
-import { Listing } from "@/types";
 import { ListingItem, ListingItemSkeleton } from "@/app/components/ListingItem";
 import { useRecentlyViewedListings } from "@/providers/RecentlyViewedListings";
 import { useSavedListingIds } from "@/providers/SavedListings";
@@ -15,7 +14,6 @@ const PAGE_SIZE = 8;
 export const RecentlyViewedListings = () => {
   const { authToken } = useAuthContext();
   const [page, setPage] = useState(1);
-  const [populatedListings, setPopulatedListings] = useState<Listing[]>([]);
   const recentlyViewedListingsResponse = useRecentlyViewedListings({
     authToken,
     page,
@@ -25,16 +23,17 @@ export const RecentlyViewedListings = () => {
   const total = recentlyViewedListingsResponse.data?.total ?? 0;
   const totalPages = Math.ceil(total / PAGE_SIZE);
 
-  useEffect(() => {
-    if (!recentlyViewedListingsResponse.isSuccess) return;
+  const populatedListings = useMemo(() => {
+    if (!recentlyViewedListingsResponse.isSuccess) return [];
     const recentlyViewedListings =
-      recentlyViewedListingsResponse.data.results.map((item) => item.listing);
+      recentlyViewedListingsResponse.data?.results.map(
+        (item) => item.listing,
+      ) ?? [];
 
-    const populated = getPopulatedListingsSaved(
+    return getPopulatedListingsSaved(
       recentlyViewedListings,
       savedListingIds.data ?? [],
     );
-    setPopulatedListings(populated);
   }, [
     recentlyViewedListingsResponse.data?.results,
     recentlyViewedListingsResponse.isSuccess,

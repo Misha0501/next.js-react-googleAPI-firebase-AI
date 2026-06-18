@@ -52,7 +52,6 @@ export async function POST(req: Request) {
 
     const parsedValues = savedFiltersSchema.parse(await req.json());
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const savedSearch = await prisma.savedSearch.create({
       data: { applicationUserId: applicationUser.id, ...parsedValues } as any,
     });

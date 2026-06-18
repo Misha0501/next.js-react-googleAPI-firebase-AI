@@ -12,7 +12,6 @@ import { PlacingPropertyImagesHandler } from "@/app/components/propertyPlacement
 import React from "react";
 import { FormikProps } from "formik";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 interface CreatePropertyComponentPropInterface {
   formik: FormikProps<any>;
 }

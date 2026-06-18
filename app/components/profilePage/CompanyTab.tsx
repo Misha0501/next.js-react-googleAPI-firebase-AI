@@ -1,7 +1,7 @@
 // @ts-nocheck
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { useAuthContext } from "@/app/context/AuthContext";
 import { useCompanyMemberships } from "@/providers/Memberships";
 import * as Yup from "yup";
@@ -77,11 +77,23 @@ const inputClass = (hasError?: boolean) =>
 export const CompanyTab = () => {
   const { authToken } = useAuthContext();
   const companyMemberships = useCompanyMemberships({ authToken });
-  const [company, setCompany] = useState<FormValues>(initialCompanyState);
-  const [formSubmitMethod, setFormSubmitMethod] = useState("POST");
   const createCompany = useCreateCompany({ authToken });
   const updateCompany = useUpdateCompany({ authToken });
-  const [showAddress, setShowAddress] = useState(false);
+  const [showAddressManually, setShowAddressManually] = useState(false);
+  const membershipCompany = companyMemberships.isSuccess
+    ? companyMemberships.data?.company
+    : undefined;
+  const company = useMemo<FormValues>(() => {
+    if (!membershipCompany) return initialCompanyState;
+    const companyAddress = membershipCompany.Address?.[0];
+
+    return {
+      ...membershipCompany,
+      description: membershipCompany.description || "",
+      address: { ...initialCompanyState.address, ...companyAddress },
+    };
+  }, [membershipCompany]);
+  const formSubmitMethod = membershipCompany ? "PUT" : "POST";
 
   const formik = useFormik({
     enableReinitialize: true,
@@ -94,7 +106,7 @@ export const CompanyTab = () => {
     if (!address) return;
     const addressId = formik.values.address.id;
     formik.setFieldValue("address", { id: addressId, ...address });
-    setShowAddress(true);
+    setShowAddressManually(true);
   };
 
   const handleFormSubmit = async (values: FormValues) => {
@@ -114,21 +126,9 @@ export const CompanyTab = () => {
     }
   };
 
-  useEffect(() => {
-    if (!companyMemberships.isSuccess || !companyMemberships?.data) return;
-    const membershipCompany = companyMemberships.data?.company;
-    if (!membershipCompany) return;
-    const companyAddress = membershipCompany.Address?.[0];
-    if (companyAddress?.locality) setShowAddress(true);
-    setFormSubmitMethod("PUT");
-    setCompany({
-      ...membershipCompany,
-      description: membershipCompany.description || "",
-      address: { ...initialCompanyState.address, ...companyAddress },
-    });
-  }, [companyMemberships.data, companyMemberships.isSuccess]);
-
   const isSubmitting = createCompany.isPending || updateCompany.isPending;
+  const showAddress =
+    showAddressManually || Boolean(formik.values.address.locality);
 
   return (
     <form

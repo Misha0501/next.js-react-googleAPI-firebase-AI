@@ -5,7 +5,7 @@ import {
   ref,
   uploadBytes,
 } from "firebase/storage";
-import { ChangeEvent, MouseEvent, useEffect, useRef, useState } from "react";
+import { ChangeEvent, MouseEvent, useMemo, useRef, useState } from "react";
 import { useAuthContext } from "@/app/context/AuthContext";
 import Image from "next/image";
 import { ListingImage } from "@/types";
@@ -24,20 +24,43 @@ type PlacingPropertyImagesHandlerProps = {
   initialImages?: ListingImage[];
 };
 
+const getImagesSignature = (images?: ListingImage[]) =>
+  (images ?? [])
+    .map(
+      (image) =>
+        `${image.id ?? ""}:${image.imagePath ?? ""}:${image.url}:${image.positionInListing ?? ""}`,
+    )
+    .join("|");
+
 export const PlacingPropertyImagesHandler = ({
   onChange,
   initialImages,
 }: PlacingPropertyImagesHandlerProps) => {
   const { user, authToken } = useAuthContext();
-  const [images, setImages] = useState<ListingImage[]>(initialImages || []);
+  const initialImagesSignature = useMemo(
+    () => getImagesSignature(initialImages),
+    [initialImages],
+  );
+  const [imagesState, setImagesState] = useState(() => ({
+    initialImagesSignature,
+    images: initialImages || [],
+  }));
   const [error, setError] = useState("");
   const [uploading, setUploading] = useState(false);
   const hiddenFileInput = useRef<HTMLInputElement>(null);
   const deleteListingImage = useDeleteListingImage({ authToken });
+  const images =
+    imagesState.initialImagesSignature === initialImagesSignature
+      ? imagesState.images
+      : initialImages || [];
 
-  useEffect(() => {
-    setImages(initialImages || []);
-  }, [initialImages]);
+  const updateImages = (nextImages: ListingImage[]) => {
+    setImagesState({
+      initialImagesSignature,
+      images: nextImages,
+    });
+    onChange(nextImages);
+  };
 
   const handleFileInputClick = (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
@@ -84,18 +107,15 @@ export const PlacingPropertyImagesHandler = ({
         });
       }
 
-      setImages((prevState) => {
-        const nextImages = [
-          ...prevState,
-          ...uploadedImages.map((image, index) => ({
-            ...image,
-            positionInListing: prevState.length + index + 1,
-          })),
-        ];
+      const nextImages = [
+        ...images,
+        ...uploadedImages.map((image, index) => ({
+          ...image,
+          positionInListing: images.length + index + 1,
+        })),
+      ];
 
-        onChange(nextImages);
-        return nextImages;
-      });
+      updateImages(nextImages);
     } catch (uploadError) {
       console.error(uploadError);
       setError("Something went wrong. Please try again.");
@@ -114,8 +134,7 @@ export const PlacingPropertyImagesHandler = ({
       ...img,
       positionInListing: i + 1,
     }));
-    setImages(reindexed);
-    onChange(reindexed);
+    updateImages(reindexed);
   };
 
   const deleteImage = async (listingImage: ListingImage, fileIndex: number) => {
@@ -138,8 +157,7 @@ export const PlacingPropertyImagesHandler = ({
           positionInListing: index + 1,
         }));
 
-      onChange(sortedImages);
-      setImages(sortedImages);
+      updateImages(sortedImages);
     } catch (deleteError) {
       setError("Something went wrong. Please try again.");
       console.error(deleteError);

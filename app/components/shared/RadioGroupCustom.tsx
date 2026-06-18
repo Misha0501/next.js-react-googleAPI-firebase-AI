@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { CheckCircleIcon } from "@heroicons/react/24/outline";
 
 type Props = {
@@ -14,16 +14,17 @@ export const RadioGroupCustom = ({
   id,
   initialValue = null,
 }: Props) => {
-  const [selectedValue, setSelectedValue] = useState<string | number | null>(
-    initialValue,
-  );
-
-  useEffect(() => {
-    setSelectedValue(initialValue);
-  }, [initialValue]);
+  const [selectedValueState, setSelectedValueState] = useState<{
+    initialValue: string | number | null;
+    value: string | number | null;
+  }>(() => ({ initialValue, value: initialValue }));
+  const selectedValue =
+    selectedValueState.initialValue === initialValue
+      ? selectedValueState.value
+      : initialValue;
 
   const handleOnChange = (value: string | number) => {
-    setSelectedValue(value);
+    setSelectedValueState({ initialValue, value });
     onChange?.(value);
   };
 
