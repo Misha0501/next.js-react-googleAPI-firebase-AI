@@ -11,13 +11,12 @@ import MobileFooter from "@/app/components/layout/MobileFooter";
 import Footer from "@/app/components/layout/Footer";
 import { ScrollToTop } from "@/app/components/shared/ScrollToTop";
 import { SilktideConsentManager } from "@/app/components/layout/SilktideConsentManager";
+import { getSiteOrigin } from "@/app/lib/siteOrigin";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(
-    process.env.NEXT_PUBLIC_SITE_URL ?? "https://homfli.com",
-  ),
+  metadataBase: new URL(getSiteOrigin()),
   title: {
     default: "Real estate marketplace for Bulgarian market",
     template: "%s",
@@ -37,7 +36,10 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
           content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, user-scalable=no, viewport-fit=cover"
         />
       </head>
-      <body suppressHydrationWarning className={`${inter.className} flex min-h-screen flex-col`}>
+      <body
+        suppressHydrationWarning
+        className={`${inter.className} flex min-h-screen flex-col`}
+      >
         <ScrollToTop />
         <Navigation />
         <main className="flex-1 pb-28 lg:pb-0">
