@@ -12,8 +12,8 @@ import { toast } from "react-toastify";
 import { Modal } from "@/app/components/shared/Modal";
 import { ListingType } from "@/types";
 import {
-  getFilterValuesFromSearchParams,
   type FilterValues,
+  getFilterValuesFromSearchParams,
 } from "@/app/components/listingsPage/Filters";
 
 const getListingTypeFromSearchParams = (
@@ -141,13 +141,13 @@ export const ListingsPageContent = () => {
           {createSavedSearches.isPending ? "Saving..." : "Save search"}
         </button>
       </div>
-      <section className="mx-auto w-full max-w-screen-xl px-4 pb-20 pt-6 text-black sm:px-6 lg:px-8">
+      <section className="mx-auto w-full max-w-screen-xl px-4 pt-6 pb-20 text-black sm:px-6 lg:px-8">
         <div className="flex items-start justify-between gap-6 lg:gap-8 xl:gap-10">
           <div
             className={`${
               !showFiltersMobile
                 ? "hidden lg:block lg:w-[320px] lg:shrink-0 xl:w-[340px]"
-                : "fixed inset-0 z-[70] overflow-y-auto bg-[#F8FAFC] px-4 pb-24 pt-4 lg:static lg:block lg:w-[320px] lg:shrink-0 lg:overflow-visible lg:bg-transparent lg:p-0 xl:w-[340px]"
+                : "fixed inset-0 z-[70] overflow-y-auto bg-[#F8FAFC] px-4 pt-4 pb-24 lg:static lg:block lg:w-[320px] lg:shrink-0 lg:overflow-visible lg:bg-transparent lg:p-0 xl:w-[340px]"
             }`}
           >
             <div className="lg:sticky lg:top-28">
@@ -194,7 +194,10 @@ export const ListingsPageContent = () => {
         {!savedSearchError && (
           <p className="text-sm text-[#717D96]">
             You can manage your saved searches in your{" "}
-            <Link href="/profile" className="text-[#1F5FD6] underline">
+            <Link
+              href="/profile/saved?view=searches"
+              className="text-[#1F5FD6] underline"
+            >
               profile
             </Link>
             .
