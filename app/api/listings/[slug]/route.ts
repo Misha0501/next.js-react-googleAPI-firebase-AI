@@ -1,9 +1,8 @@
 import { ResponseError } from "@/app/lib/classes/ResponseError";
 import { NextResponse } from "next/server";
-import { prisma } from "@/app/lib/db/client";
 import { getApplicationUserServer } from "@/app/lib/getApplicationUserServer";
 import { ApplicationUser, Listing } from "@/types";
-import { getAveragePriceInNeighborhood } from "@/app/lib/listing/getAveragePriceInNeighborhood";
+import { getListingDetailById } from "@/app/lib/listing/getListingDetailById";
 import {
   deleteListingAndAssociatedEntities,
   ensureUserHasListingAccess,
@@ -26,32 +25,12 @@ export async function GET(
     const { slug } = await params;
     const id = validateParamId(slug);
 
-    const listing = await prisma.listing.findUnique({
-      where: {
-        id,
-        deleted: null,
-      },
-      include: {
-        applicationUser: true,
-        company: true,
-        ListingImage: true,
-        Address: true,
-        ListingPrice: {
-          orderBy: {
-            createdAt: "asc",
-          },
-        },
-      },
-    });
+    const listing = await getListingDetailById(id);
 
     if (!listing)
       throw new ResponseError("Property with provided id wasn't found.", 404);
 
-    const averagePriceInNeighborhood = await getAveragePriceInNeighborhood(
-      listing as Listing,
-    );
-
-    return NextResponse.json({ ...listing, averagePriceInNeighborhood });
+    return NextResponse.json(listing);
   } catch (error) {
     return handleAPIError(error);
   }
