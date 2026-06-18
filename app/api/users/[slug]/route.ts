@@ -70,7 +70,6 @@ export async function GET(
       return NextResponse.json({
         ...applicationUser,
         Membership: undefined,
-        Listing: undefined,
         Company: company,
       });
     }

@@ -21,6 +21,6 @@ export namespace ApplicationUserProvider {
     Membership: Membership[];
     createdAt: string;
     Company?: Company;
-    Listing?: Listing[];
+    Listing: Listing[];
   }
 }

@@ -19,6 +19,11 @@ type Prop = {
 };
 
 export const ListingMainInfo = ({ listing }: Prop) => {
+  const isCompanyListing = Boolean(listing?.companyId && listing?.company);
+  const profileHref = `/users/${listing?.applicationUser?.id}?profile=${
+    isCompanyListing ? "company" : "personal"
+  }`;
+
   const stats = [
     {
       title: "Rooms",
@@ -59,7 +64,7 @@ export const ListingMainInfo = ({ listing }: Prop) => {
               {el.icon}
             </div>
             <div className="min-w-0">
-              <p className="text-xs font-medium uppercase text-[#717D96]">
+              <p className="text-xs font-medium text-[#717D96] uppercase">
                 {el.title}
               </p>
               <p className="mt-0.5 truncate font-semibold text-[#2D3648]">
@@ -74,7 +79,7 @@ export const ListingMainInfo = ({ listing }: Prop) => {
       <div className="block rounded-2xl border border-slate-200 bg-white px-4 py-5 shadow-sm lg:hidden">
         <div className="price_details flex justify-between gap-4">
           <div className="min-w-0 flex-1">
-            <p className="text-xs font-semibold uppercase text-[#717D96]">
+            <p className="text-xs font-semibold text-[#717D96] uppercase">
               Asking price
             </p>
             <h2
@@ -103,14 +108,14 @@ export const ListingMainInfo = ({ listing }: Prop) => {
                     <p className="text-xs leading-tight text-[#848484]">
                       {el.title}
                     </p>
-                    <p className="truncate text-sm font-semibold leading-tight text-[#2D3648]">
+                    <p className="truncate text-sm leading-tight font-semibold text-[#2D3648]">
                       {el.value || "-"}
                     </p>
                   </div>
                 </div>
               ))}
             </div>
-            <Link href={`/users/${listing?.applicationUser?.id}`}>
+            <Link href={profileHref}>
               <p className="text-sm font-medium text-[#717D96]">
                 {listing?.company?.name
                   ? listing?.company?.name
