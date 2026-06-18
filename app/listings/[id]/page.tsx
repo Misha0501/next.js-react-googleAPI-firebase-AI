@@ -10,7 +10,6 @@ import { ListingAgentContactCard } from "@/app/components/listingDetailPage/List
 import { NeighbourhoodPriceCallout } from "@/app/components/listingDetailPage/NeighbourhoodPriceCallout";
 import { ListingTimeline } from "@/app/components/listingDetailPage/ListingTimeline";
 import { PriceChangeGraphSection } from "@/app/components/listingDetailPage/PriceChangeGraphSection";
-import FloatingContactBar from "@/app/components/listingDetailPage/FloatingContactBar";
 import { ListingDetailRecentlyViewedFunctionality } from "@/app/components/listingDetailPage/ListingDetailRecentlyViewedFunctionality";
 import { ListigDetailContextProvider } from "@/app/context/ListingDetailContext";
 import { notFound } from "next/navigation";
@@ -83,12 +82,12 @@ export const generateMetadata = async ({
 const ListingPage = async ({ params }: Props) => {
   const { id } = await params;
   const listingId = Number(id);
-  let listing: Listing | null = null;
 
   if (!Number.isInteger(listingId) || listingId <= 0) {
     return notFound();
   }
 
+  let listing;
   try {
     listing = await fetchListing(listingId);
   } catch (error) {
@@ -148,8 +147,6 @@ const ListingPage = async ({ params }: Props) => {
             listingPriceArray={listing?.ListingPrice ?? []}
           />
         </div>
-
-        <FloatingContactBar listing={listing} />
 
         <ListingDetailRecentlyViewedFunctionality listingId={listingId} />
       </div>

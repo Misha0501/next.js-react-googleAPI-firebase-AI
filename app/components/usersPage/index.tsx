@@ -6,7 +6,6 @@ import GoogleMap from "@/app/components/shared/GoogleMap";
 import { ListingItem } from "@/app/components/ListingItem";
 import { useUserDetail } from "@/providers/Users";
 import { useParams, useRouter } from "next/navigation";
-import FloatingContactBar from "@/app/components/listingDetailPage/FloatingContactBar";
 import {
   EnvelopeIcon,
   MapPinIcon,
@@ -249,11 +248,6 @@ const UserPageMain = () => {
           </div>
         </>
       )}
-
-      <FloatingContactBar
-        initialPhoneNumber={contactNumber}
-        contactLabel={isCompany ? "Contact agent" : "Contact owner"}
-      />
     </div>
   );
 };
