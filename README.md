@@ -85,19 +85,19 @@ Before running the project, copy `.env.example` to `.env` and fill in local deve
 
 ## Running the Application
 
-### With Docker
+### Database With Docker
 
-You can run the project with Docker Compose. However, it's recommended to run only the `db`, `pgadmin`, and `redis` containers using Docker. The application itself should be run via the standard development command to leverage hot-reloading and other features.
+Docker Compose is only used for local database services. The application itself should be run with npm so local development keeps hot reloading and the normal Next.js tooling.
 
-To run the recommended containers via Docker Compose:
+To start PostgreSQL and pgAdmin:
 
 ```bash
-docker-compose up db pgadmin redis
+docker compose up db pgadmin
 ```
 
-### Without Docker
+### Application
 
-With the database, pgAdmin, and Redis running through Docker, you can now start the application:
+With the database services running, start the application:
 
 ```bash
 # Install dependencies

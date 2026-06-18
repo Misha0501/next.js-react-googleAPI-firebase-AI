@@ -9,7 +9,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ```bash
 # Development
 npm run dev                           # Start Next.js dev server on localhost:3000
-docker-compose up db pgadmin redis    # Start required backing services
+docker compose up db pgadmin          # Start local database services
 
 # Build & lint
 npm run build                         # prisma generate + next build
@@ -23,13 +23,7 @@ npm run prisma-db-setup-dev           # push + seed in one step
 
 # Database (production)
 npm run prisma-db-push-remote         # Push schema changes to production DB
-
-# E2E tests
-npx playwright test                   # Run all Playwright tests in __checks__/
-npx playwright test __checks__/home-page.spec.ts  # Run a single test file
 ```
-
-The same spec files in `__checks__/*.spec.ts` double as Checkly browser checks (see `checkly.config.ts`, `browserChecks.testMatch`) for production monitoring — they aren't exclusively a local Playwright suite.
 
 ## Architecture
 

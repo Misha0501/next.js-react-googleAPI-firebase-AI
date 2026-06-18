@@ -1,15 +1,4 @@
 services:
-  web:
-    build:
-      context: ./
-      target: runner
-    volumes:
-      - .:/app
-    command: npm run dev
-    ports:
-      - "3000:3000"
-    environment:
-      NODE_ENV: development
   db:
     image: postgres:18
     container_name: real-estate-db-container
@@ -22,10 +11,6 @@ services:
       - "5555:5432"
     volumes:
       - real-estate-db:/var/lib/postgresql
-  redis:
-    image: redis:alpine
-    ports:
-      - "6379:6379"
 
   pgadmin:
     container_name: real-estate-pgadmin4_container
@@ -36,6 +21,8 @@ services:
       PGADMIN_DEFAULT_PASSWORD: root
     ports:
       - "5051:80"
+    depends_on:
+      - db
 
 volumes:
   real-estate-db:
