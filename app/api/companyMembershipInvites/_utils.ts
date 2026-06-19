@@ -1,5 +1,6 @@
 import { prisma } from "@/app/lib/db/client";
 import { ApplicationUser, CompanyMembershipInvite, Membership } from "@/types";
+import { ResponseError } from "@/app/lib/classes/ResponseError";
 
 /**
  * Gets the active membership of a user.
@@ -9,13 +10,39 @@ import { ApplicationUser, CompanyMembershipInvite, Membership } from "@/types";
 export const getActiveMembership = async (
   userId: number,
 ): Promise<Membership | null> => {
-  return await prisma.membership.findUnique({
+  return await prisma.membership.findFirst({
     where: {
       applicationUserId: userId,
       isActive: true,
     },
   });
 };
+
+export const isAdminMembership = (
+  membership: Pick<Membership, "applicationUserRole" | "isActive"> | null,
+): boolean => {
+  return (
+    Boolean(membership?.isActive) &&
+    membership?.applicationUserRole.toUpperCase() === "ADMIN"
+  );
+};
+
+export function ensureActiveCompanyAdmin(
+  membership: Membership | null,
+  companyId?: number,
+): asserts membership is Membership {
+  if (!membership) {
+    throw new ResponseError("You are not a member of a company", 400);
+  }
+
+  if (companyId !== undefined && membership.companyId !== companyId) {
+    throw new ResponseError("You are not a member of this company", 401);
+  }
+
+  if (!isAdminMembership(membership)) {
+    throw new ResponseError("Only company admins can perform this action", 403);
+  }
+}
 
 /**
  * Gets the invites based on membership status.
@@ -81,7 +108,7 @@ export const getUserByEmail = async (
 export const isUserAMemberOfAnyCompany = async (
   userId: number,
 ): Promise<boolean> => {
-  const membership = await prisma.membership.findUnique({
+  const membership = await prisma.membership.findFirst({
     where: {
       applicationUserId: userId,
       isActive: true,
@@ -107,6 +134,11 @@ export const hasUserSentInvite = async (
       applicationUserIdSender: senderId,
       applicationUserEmailReceiver: receiverEmail,
       companyId: companyId,
+      accepted: null,
+      declined: null,
+      expiresAt: {
+        gt: new Date(),
+      },
     },
   });
   return !!invite;
@@ -130,9 +162,11 @@ export const userHasMembership = async (userId: number): Promise<boolean> => {
 export const getActiveCompanyMembershipInviteById = async (
   inviteId: number,
 ): Promise<CompanyMembershipInvite | null> => {
-  return await prisma.companyMembershipInvite.findUnique({
+  return await prisma.companyMembershipInvite.findFirst({
     where: {
       id: inviteId,
+      accepted: null,
+      declined: null,
       expiresAt: {
         gt: new Date(),
       },

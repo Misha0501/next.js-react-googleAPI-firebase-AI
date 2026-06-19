@@ -5,6 +5,7 @@ import { prisma } from "@/app/lib/db/client";
 import { companyMembershipInviteSchema } from "@/app/lib/validations/companyMembershipInvite";
 import { handleAPIError } from "@/app/lib/api/handleError";
 import {
+  ensureActiveCompanyAdmin,
   getActiveMembership,
   getCompanyMembershipInvitesByStatus,
   getUserByEmail,
@@ -49,10 +50,7 @@ export async function POST(req: Request) {
     const { applicationUserRole, applicationUserEmailReceiver } = parsedValues;
 
     const membership = await getActiveMembership(applicationUser.id);
-
-    if (!membership) {
-      return new Response("You are not a member of a company", { status: 400 });
-    }
+    ensureActiveCompanyAdmin(membership);
 
     const applicationUserReceiver = await getUserByEmail(
       applicationUserEmailReceiver,

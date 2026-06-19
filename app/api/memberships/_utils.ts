@@ -28,12 +28,22 @@ export const validateMembershipInvite = async (
   inviteId: number,
   email: string,
 ): Promise<any> => {
-  const invite = await prisma.companyMembershipInvite.findUnique({
-    where: { id: inviteId },
+  const invite = await prisma.companyMembershipInvite.findFirst({
+    where: {
+      id: inviteId,
+      accepted: null,
+      declined: null,
+      expiresAt: {
+        gt: new Date(),
+      },
+    },
   });
 
   if (!invite) {
-    throw new ResponseError("The invite does not exist", 400);
+    throw new ResponseError(
+      "The invite does not exist, has expired, or was already used",
+      400,
+    );
   }
   if (invite.applicationUserEmailReceiver !== email) {
     throw new ResponseError("You are not the receiver of the invite", 400);

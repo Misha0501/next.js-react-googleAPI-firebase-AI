@@ -4,10 +4,13 @@ import { ResponseError } from "@/app/lib/classes/ResponseError";
 import { getApplicationUserServer } from "@/app/lib/getApplicationUserServer";
 import { prisma } from "@/app/lib/db/client";
 import { companyPUTSchema, companySchema } from "@/app/lib/validations/company";
-import { getApplicationUserCompanyId } from "@/app/lib/listing/getApplicationUserCompanyId";
 import { handleAPIError } from "@/app/lib/api/handleError";
 import { userHasMembership } from "@/app/api/companies/_utils";
 import { ApplicationUser } from "@/types";
+import {
+  ensureActiveCompanyAdmin,
+  getActiveMembership,
+} from "@/app/api/companyMembershipInvites/_utils";
 
 /**
  * POST Route to create a new company.
@@ -42,7 +45,7 @@ export async function POST(req: Request) {
         memberships: {
           create: {
             applicationUserId: applicationUser.id,
-            applicationUserRole: "admin",
+            applicationUserRole: "ADMIN",
           },
         },
       },
@@ -81,15 +84,8 @@ export async function PUT(req: Request) {
     if (!company)
       throw new ResponseError("Company with provided id wasn't found.", 404);
 
-    // Get user's company id
-    let applicationUserCompanyId = getApplicationUserCompanyId(applicationUser);
-
-    // Check if the user can edit the listing
-    if (company.id !== applicationUserCompanyId)
-      throw new ResponseError(
-        "You aren't allowed to changed this property",
-        401,
-      );
+    const activeMembership = await getActiveMembership(applicationUser.id);
+    ensureActiveCompanyAdmin(activeMembership, company.id);
 
     let transactions: Prisma.PrismaPromise<unknown>[] = [];
 
