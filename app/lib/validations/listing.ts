@@ -201,7 +201,7 @@ export const listingsSearchParamSchema = z.object({
   sortBy: stringParam().superRefine((value, ctx) => {
     if (value !== undefined && !LISTING_SORT_OPTIONS.includes(value)) {
       ctx.addIssue({
-        code: z.ZodIssueCode.custom,
+        code: "custom",
         message: `Invalid sort input: ${value}. Allowed values: ${LISTING_SORT_OPTIONS}`,
       });
     }
