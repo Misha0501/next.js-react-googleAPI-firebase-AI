@@ -2,9 +2,11 @@ import { contactFormSchema } from "@/app/lib/validations/contactForm";
 import { NextResponse } from "next/server";
 import { sendEmail } from "@/app/lib/email";
 import { handleAPIError } from "@/app/lib/api/handleError";
+import { checkRateLimit } from "@/app/lib/redis/rateLimit";
 import {
   createEmailHTMLContent,
-  getDefaultEmailTo,
+  getClientIp,
+  getContactEmailTo,
   getDefaultSubject,
 } from "@/app/api/contactForm/_utils";
 
@@ -12,14 +14,27 @@ export const dynamic = "force-dynamic"; // Force dynamic (server) route instead 
 
 export async function POST(req: Request) {
   try {
+    const ip = getClientIp(req);
+    if (!(await checkRateLimit(`rate:contact:${ip}`, 5, 60))) {
+      return new Response("Too many requests", { status: 429 });
+    }
+
     const parsedValues = contactFormSchema.parse(await req.json());
-    const { name, phoneNumber, email, message, companyWebsite } = parsedValues;
+    const {
+      name,
+      phoneNumber,
+      email,
+      message,
+      companyWebsite,
+      targetType,
+      targetId,
+    } = parsedValues;
 
     if (companyWebsite) {
       return NextResponse.json({ ok: true });
     }
 
-    const emailTo = getDefaultEmailTo(parsedValues.emailTo);
+    const emailTo = await getContactEmailTo(targetType, targetId);
     const subject = getDefaultSubject(parsedValues.subject);
 
     const emailContent = createEmailHTMLContent(

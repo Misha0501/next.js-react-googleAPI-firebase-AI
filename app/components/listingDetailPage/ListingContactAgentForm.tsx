@@ -1,13 +1,16 @@
 import { ContactForm } from "@/app/components/shared/ContactForm";
+import { ContactFormProvider } from "@/providers/ContactForm/types";
 
 interface PropInterface {
   name: string;
-  emailTo: string;
+  targetType: ContactFormProvider.ContactTargetType;
+  targetId: number;
   subject?: string;
 }
 export const ListingContactAgentForm = ({
   name,
-  emailTo,
+  targetType,
+  targetId,
   subject,
 }: PropInterface) => {
   return (
@@ -17,7 +20,8 @@ export const ListingContactAgentForm = ({
           Contact {name || "Seller"}
         </p>
         <ContactForm
-          emailTo={emailTo}
+          targetType={targetType}
+          targetId={targetId}
           subject={subject ?? "Someone is interested in your property!"}
         />
         <p className="mt-6 text-xs leading-5 text-[#717D96]">

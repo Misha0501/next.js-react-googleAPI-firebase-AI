@@ -46,6 +46,8 @@ const UserPageMain = ({ profileMode }: UserPageMainProps) => {
   const displayName =
     activeCompany?.name ?? userDetail?.data?.displayName ?? "";
   const email = activeCompany?.email ?? userDetail?.data?.email ?? "";
+  const contactTargetType = isCompany ? "COMPANY" : "USER";
+  const contactTargetId = isCompany ? activeCompany?.id : id;
   const address = activeCompany?.Address?.[0];
   const hasMap = !!address?.latitude && !!address?.longitude;
 
@@ -255,17 +257,20 @@ const UserPageMain = ({ profileMode }: UserPageMainProps) => {
               : renderListingGroup("Properties", personalListings)}
 
             {/* ── Contact form ─────────────────────────────────────────── */}
-            <div id="contactAgentForm" className="mx-auto max-w-2xl">
-              <ListingContactAgentForm
-                name={displayName}
-                emailTo={email}
-                subject={
-                  isCompany
-                    ? "Someone is interested in your company!"
-                    : "Someone is interested in your property!"
-                }
-              />
-            </div>
+            {contactTargetId && (
+              <div id="contactAgentForm" className="mx-auto max-w-2xl">
+                <ListingContactAgentForm
+                  name={displayName}
+                  targetType={contactTargetType}
+                  targetId={contactTargetId}
+                  subject={
+                    isCompany
+                      ? "Someone is interested in your company!"
+                      : "Someone is interested in your property!"
+                  }
+                />
+              </div>
+            )}
           </div>
         </>
       )}

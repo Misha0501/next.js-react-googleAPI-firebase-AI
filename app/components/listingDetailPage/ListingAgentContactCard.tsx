@@ -126,7 +126,7 @@ export const ListingAgentContactCard = ({ listing }: Props) => {
         </div>
       </div>
 
-      {contactSellerFormVisible && (
+      {contactSellerFormVisible && listing?.id && (
         <div id="contactAgentForm" data-testid="contactAgentForm">
           <ListingContactAgentForm
             name={
@@ -134,9 +134,8 @@ export const ListingAgentContactCard = ({ listing }: Props) => {
               listing?.applicationUser?.displayName ||
               ""
             }
-            emailTo={
-              listing?.company?.email || listing?.applicationUser?.email || ""
-            }
+            targetType="LISTING"
+            targetId={listing.id}
           />
         </div>
       )}

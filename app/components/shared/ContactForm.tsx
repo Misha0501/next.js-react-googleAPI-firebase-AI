@@ -7,6 +7,7 @@ import { useSendEmail } from "@/providers/ContactForm";
 import { Input, Textarea } from "@/app/components/shared/Input";
 import { Button } from "@/app/components/shared/Button";
 import { useMemo, useState } from "react";
+import { ContactFormProvider } from "@/providers/ContactForm/types";
 
 interface FormValues {
   name: string;
@@ -14,13 +15,15 @@ interface FormValues {
   email: string;
   companyWebsite: string;
   message: string;
-  emailTo?: string;
   subject?: string;
+  targetType?: ContactFormProvider.ContactTargetType;
+  targetId?: number;
 }
 
 type Props = {
-  emailTo?: string;
   subject?: string;
+  targetType?: ContactFormProvider.ContactTargetType;
+  targetId?: number;
   showSubject?: boolean;
   showPhone?: boolean;
   requireMessageMinLength?: boolean;
@@ -40,8 +43,9 @@ const inputClass =
   "w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-[#1F2937] outline-none transition placeholder:text-slate-400 focus:border-[#1F5FD6] focus:ring-2 focus:ring-[#1F5FD6]/15 disabled:bg-slate-50 disabled:text-slate-400";
 
 export const ContactForm = ({
-  emailTo,
   subject,
+  targetType,
+  targetId,
   showSubject = false,
   showPhone = true,
   requireMessageMinLength = false,
@@ -83,8 +87,9 @@ export const ContactForm = ({
     email: "",
     companyWebsite: "",
     message: "",
-    emailTo: emailTo ?? "",
     subject: subject ?? "",
+    targetType,
+    targetId,
   };
 
   const formik = useFormik({

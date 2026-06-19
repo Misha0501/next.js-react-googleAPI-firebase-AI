@@ -35,7 +35,6 @@ const ContactPage = () => {
       <section className="px-4 py-12 sm:px-6 lg:py-16">
         <div className="mx-auto max-w-[560px] rounded-2xl border border-slate-200 bg-white px-6 py-8 shadow-sm sm:px-8">
           <ContactForm
-            emailTo="contact@homfli.com"
             showSubject
             showPhone={false}
             requireMessageMinLength
