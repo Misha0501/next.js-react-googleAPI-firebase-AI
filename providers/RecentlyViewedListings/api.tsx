@@ -1,7 +1,7 @@
 import service from "@/services";
 import { RecentlyViewedListingsProvider } from "@/providers/RecentlyViewedListings/types";
 
-type CreateProps = RecentlyViewedListingsProvider.CreateProps & {
+type CreateProps = {
   data: RecentlyViewedListingsProvider.CreateMutationPayload;
 };
 
@@ -12,7 +12,6 @@ export async function recentlyViewedListings(
   return service<RecentlyViewedListingsProvider.GetResponse>({
     method: "GET",
     url: `/api/recentlyViewedListings?page=${page}&pageSize=8`,
-    headers: { Authorization: props?.authToken ?? "" },
   });
 }
 
@@ -21,6 +20,5 @@ export async function create(props: CreateProps) {
     method: "POST",
     url: `/api/recentlyViewedListings`,
     body: props.data as Record<string, unknown>,
-    headers: { Authorization: props.authToken ?? "" },
   });
 }

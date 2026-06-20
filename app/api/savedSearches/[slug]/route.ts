@@ -1,5 +1,5 @@
 import { ResponseError } from "@/app/lib/classes/ResponseError";
-import { getApplicationUserServer } from "@/app/lib/getApplicationUserServer";
+import { requireUser } from "@/app/lib/auth/requireUser";
 import { handleAPIError } from "@/app/lib/api/handleError";
 import {
   authorizeUser,
@@ -21,7 +21,7 @@ export async function DELETE(
   try {
     const { slug } = await params;
     const id = validateParamId(slug);
-    const applicationUser = await getApplicationUserServer();
+    const { user: applicationUser } = await requireUser();
     const savedSearch = await fetchSavedSearch(id);
 
     if (!savedSearch) {

@@ -5,7 +5,7 @@ import { getSiteUrl } from "@/app/lib/sitemap/getSiteUrl";
 
 const title = "Cookie Policy — Homfli";
 const description = "How Homfli uses cookies and similar technologies.";
-const lastUpdated = "17 June 2026";
+const lastUpdated = "20 June 2026";
 
 export const metadata: Metadata = {
   title,
@@ -109,49 +109,38 @@ const CookiesPage = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    <tr className="border-b border-slate-100">
+                    <tr>
                       <td className="px-4 py-3 font-mono text-xs">
-                        authToken
+                        __session
                       </td>
                       <td className="px-4 py-3">
                         Used to authenticate logged-in users with a Firebase
-                        JWT ID token
+                        session credential
                       </td>
                       <td className="px-4 py-3 whitespace-nowrap">
                         Necessary
                       </td>
-                      <td className="px-4 py-3 whitespace-nowrap">1 day</td>
-                    </tr>
-                    <tr>
-                      <td className="px-4 py-3 font-mono text-xs">
-                        refreshToken
-                      </td>
-                      <td className="px-4 py-3">
-                        Used to renew the user session through Firebase
-                      </td>
-                      <td className="px-4 py-3 whitespace-nowrap">
-                        Necessary
-                      </td>
-                      <td className="px-4 py-3 whitespace-nowrap">1 day</td>
+                      <td className="px-4 py-3 whitespace-nowrap">7 days</td>
                     </tr>
                   </tbody>
                 </table>
               </div>
 
               <div>
-                <h3 className="font-bold text-[#1F2937]">3.1 authToken</h3>
+                <h3 className="font-bold text-[#1F2937]">3.1 __session</h3>
                 <p className="mt-2">
                   The{" "}
                   <code className="rounded bg-slate-100 px-1 py-0.5 font-mono text-xs">
-                    authToken
+                    __session
                   </code>{" "}
                   cookie is used to keep logged-in users authenticated.
                 </p>
                 <p className="mt-2">
-                  It contains a Firebase JWT ID token and is required for
-                  secure access to authenticated features such as saved
-                  listings, saved searches, recently viewed listings, and
-                  company listing management.
+                  It contains a Firebase session credential, verified by our
+                  servers on each request, and is required for secure access
+                  to authenticated features such as saved listings, saved
+                  searches, recently viewed listings, and company listing
+                  management.
                 </p>
                 <p className="mt-2">
                   In production, this cookie is configured as:
@@ -164,7 +153,7 @@ const CookiesPage = () => {
                   </li>
                   <li>
                     <code className="rounded bg-slate-100 px-1 py-0.5 font-mono text-xs">
-                      sameSite: strict
+                      sameSite: lax
                     </code>
                   </li>
                   <li>
@@ -174,53 +163,10 @@ const CookiesPage = () => {
                   </li>
                 </ul>
                 <p className="mt-2">
-                  Because this cookie is necessary for authentication, it
+                  This cookie cannot be read by JavaScript running in the
+                  browser. Because it is necessary for authentication, it
                   cannot be disabled through the cookie consent banner without
                   affecting login functionality.
-                </p>
-              </div>
-
-              <div>
-                <h3 className="font-bold text-[#1F2937]">3.2 refreshToken</h3>
-                <p className="mt-2">
-                  The{" "}
-                  <code className="rounded bg-slate-100 px-1 py-0.5 font-mono text-xs">
-                    refreshToken
-                  </code>{" "}
-                  cookie is used to renew the user session automatically.
-                </p>
-                <p className="mt-2">
-                  It allows Homfli to refresh the Firebase authentication
-                  session periodically, so users do not need to log in
-                  repeatedly during normal use.
-                </p>
-                <p className="mt-2">
-                  In production, this cookie is configured as:
-                </p>
-                <ul className="mt-2 list-disc space-y-1 pl-5">
-                  <li>
-                    <code className="rounded bg-slate-100 px-1 py-0.5 font-mono text-xs">
-                      sameSite: strict
-                    </code>
-                  </li>
-                  <li>
-                    <code className="rounded bg-slate-100 px-1 py-0.5 font-mono text-xs">
-                      secure
-                    </code>
-                  </li>
-                </ul>
-                <p className="mt-2">
-                  This cookie is currently not{" "}
-                  <code className="rounded bg-slate-100 px-1 py-0.5 font-mono text-xs">
-                    httpOnly
-                  </code>
-                  , because client-side JavaScript reads it to renew the
-                  session.
-                </p>
-                <p className="mt-2">
-                  Because this cookie is necessary for authentication and
-                  session renewal, it cannot be disabled through the cookie
-                  consent banner without affecting login functionality.
                 </p>
               </div>
             </div>
@@ -260,12 +206,7 @@ const CookiesPage = () => {
                 <ul className="mt-2 list-disc space-y-1 pl-5">
                   <li>
                     <code className="rounded bg-slate-100 px-1 py-0.5 font-mono text-xs">
-                      authToken
-                    </code>
-                  </li>
-                  <li>
-                    <code className="rounded bg-slate-100 px-1 py-0.5 font-mono text-xs">
-                      refreshToken
+                      __session
                     </code>
                   </li>
                 </ul>

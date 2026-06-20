@@ -1,6 +1,5 @@
 export namespace CompanyProvider {
   export type CreateMutation = {
-    authToken?: string;
     name: string;
     email: string;
     phoneNumber: string;
@@ -17,7 +16,6 @@ export namespace CompanyProvider {
   };
 
   export type UpdateMutation = {
-    authToken?: string;
     name: string;
     email: string;
     phoneNumber: string;

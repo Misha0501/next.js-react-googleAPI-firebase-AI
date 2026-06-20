@@ -2,7 +2,6 @@
 
 import React, { useMemo, useState } from "react";
 import { useUpdateProperty } from "@/providers/Listing";
-import { useAuthContext } from "@/app/context/AuthContext";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import {
@@ -153,8 +152,7 @@ const errorFields = (
 
 const EditForm = ({ formik, addressId, id, loading }: EditFormProps) => {
   const [showError, setShowErrors] = useState(false);
-  const { authToken } = useAuthContext();
-  const updateProperty = useUpdateProperty({ authToken });
+  const updateProperty = useUpdateProperty();
   const router = useRouter();
 
   const priceDisplay = useMemo(() => {

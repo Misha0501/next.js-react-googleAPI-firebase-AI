@@ -3,7 +3,7 @@ import {
   listingSchema,
   listingSchemaPutRequest,
 } from "@/app/lib/validations/listing";
-import { getApplicationUserServer } from "@/app/lib/getApplicationUserServer";
+import { requireUser } from "@/app/lib/auth/requireUser";
 import { prisma } from "@/app/lib/db/client";
 import { getApplicationUserCompanyId } from "@/app/lib/listing/getApplicationUserCompanyId";
 import {
@@ -17,7 +17,7 @@ import {
   handlePriceUpdate,
   validateListingExistence,
 } from "@/app/api/listings/_utils";
-import { ApplicationUser, Listing } from "@/types";
+import { Listing } from "@/types";
 import { handleAPIError } from "@/app/lib/api/handleError";
 
 const DEFAULT_LISTINGS_PAGE_SIZE = 16;
@@ -84,8 +84,7 @@ export async function GET(req: NextRequest) {
  */
 export async function POST(req: Request) {
   try {
-    const applicationUser: ApplicationUser =
-      await getApplicationUserServer(true);
+    const { user: applicationUser } = await requireUser();
 
     const parsedValues = listingSchema.parse(await req.json());
     const {
@@ -164,8 +163,7 @@ export async function POST(req: Request) {
  */
 export async function PUT(req: Request) {
   try {
-    const applicationUser: ApplicationUser =
-      await getApplicationUserServer(true);
+    const { user: applicationUser } = await requireUser();
     const parsedValues = listingSchemaPutRequest.parse(await req.json());
 
     const {

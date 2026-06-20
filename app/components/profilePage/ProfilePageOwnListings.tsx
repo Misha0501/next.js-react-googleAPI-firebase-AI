@@ -3,7 +3,6 @@
 import { Company, Listing } from "@/types";
 import { ListingItem, ListingItemSkeleton } from "@/app/components/ListingItem";
 import { useMemo, useState } from "react";
-import { useAuthContext } from "@/app/context/AuthContext";
 import { Modal } from "@/app/components/shared/Modal";
 import { useDeleteListing, useUpdateProperty } from "@/providers/Listing";
 import { Pagination } from "@/app/components/shared/Pagination";
@@ -30,8 +29,6 @@ export const ProfilePageOwnListings = ({
   company,
   canMoveOwnership = false,
 }: Props) => {
-  const { authToken } = useAuthContext();
-
   const [deletedListingIds, setDeletedListingIds] = useState<number[]>([]);
   const [updatedListings, setUpdatedListings] = useState<
     Record<number, Listing>
@@ -41,8 +38,8 @@ export const ProfilePageOwnListings = ({
     useState(false);
   const [listingToDelete, setListingToDelete] = useState<Listing | null>(null);
   const [movingListingId, setMovingListingId] = useState<number | null>(null);
-  const deleteListingQuery = useDeleteListing({ authToken });
-  const updateProperty = useUpdateProperty({ authToken });
+  const deleteListingQuery = useDeleteListing();
+  const updateProperty = useUpdateProperty();
 
   const listings = useMemo(
     () =>

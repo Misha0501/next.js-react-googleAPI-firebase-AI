@@ -12,17 +12,6 @@ export type Characteristics =
   | "Lying / sitting bath"
   | "Swimming pool";
 
-export type FirebaseAPISignInAuthResponse = {
-  kind: string;
-  localId: string;
-  email: string;
-  idToken: string;
-  displayName: string;
-  registered: boolean;
-  refreshToken: string;
-  expiresIn: string;
-};
-
 export type ListingImage = {
   id?: number;
   listingId?: number;

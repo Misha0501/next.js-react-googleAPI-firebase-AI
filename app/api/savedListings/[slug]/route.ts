@@ -1,6 +1,5 @@
 import { ResponseError } from "@/app/lib/classes/ResponseError";
-import { getApplicationUserServer } from "@/app/lib/getApplicationUserServer";
-import { ApplicationUser } from "@/types";
+import { requireUser } from "@/app/lib/auth/requireUser";
 import {
   deleteSavedListing,
   fetchSavedListing,
@@ -24,7 +23,7 @@ export async function DELETE(
 
     if (isNaN(id)) throw new ResponseError("ID must be a valid number", 422);
 
-    const applicationUser: ApplicationUser = await getApplicationUserServer();
+    const { user: applicationUser } = await requireUser();
 
     const savedListing = await fetchSavedListing(id);
 

@@ -3,11 +3,10 @@ import { Company, Listing, Membership } from "@/types";
 export namespace ApplicationUserProvider {
   export type GetProps = {
     id?: number;
-    authToken?: string | null;
+    enabled?: boolean;
   };
 
   export type UpdatePropsMutation = {
-    authToken?: string;
     displayName?: string;
     phoneNumber?: string;
     newPassword?: string;

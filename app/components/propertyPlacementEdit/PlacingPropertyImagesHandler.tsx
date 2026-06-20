@@ -1,16 +1,11 @@
-import {
-  deleteObject,
-  getDownloadURL,
-  getStorage,
-  ref,
-  uploadBytes,
-} from "firebase/storage";
 import { ChangeEvent, MouseEvent, useMemo, useRef, useState } from "react";
-import { useAuthContext } from "@/app/context/AuthContext";
 import Image from "next/image";
 import { ListingImage } from "@/types";
-import { useDeleteListingImage } from "@/providers/ListingImages";
-import { uniqueID } from "@/app/lib/uniqueID";
+import {
+  useDeleteListingImage,
+  useDeleteListingImageByPath,
+  useUploadListingImage,
+} from "@/providers/ListingImages";
 import {
   ArrowUpTrayIcon,
   ChevronLeftIcon,
@@ -36,7 +31,6 @@ export const PlacingPropertyImagesHandler = ({
   onChange,
   initialImages,
 }: PlacingPropertyImagesHandlerProps) => {
-  const { user, authToken } = useAuthContext();
   const initialImagesSignature = useMemo(
     () => getImagesSignature(initialImages),
     [initialImages],
@@ -48,7 +42,9 @@ export const PlacingPropertyImagesHandler = ({
   const [error, setError] = useState("");
   const [uploading, setUploading] = useState(false);
   const hiddenFileInput = useRef<HTMLInputElement>(null);
-  const deleteListingImage = useDeleteListingImage({ authToken });
+  const deleteListingImage = useDeleteListingImage();
+  const uploadListingImage = useUploadListingImage();
+  const deleteListingImageByPath = useDeleteListingImageByPath();
   const images =
     imagesState.initialImagesSignature === initialImagesSignature
       ? imagesState.images
@@ -69,15 +65,9 @@ export const PlacingPropertyImagesHandler = ({
 
   const handleFileChange = async (event: ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(event.target.files || []);
-    const uid = user?.uid;
 
     if (!files.length) {
       setError("Please select at least one image");
-      return;
-    }
-
-    if (!uid) {
-      setError("Please sign in again before uploading images");
       return;
     }
 
@@ -85,27 +75,10 @@ export const PlacingPropertyImagesHandler = ({
     setError("");
 
     try {
-      const storage = getStorage();
-      const uploadedImages: Omit<ListingImage, "positionInListing">[] = [];
-
-      for (const file of files) {
-        const fileName = file.name.replace(/\.[^/.]+$/, ".jpg");
-        const imagePath = `publicImages/${uniqueID()}-${fileName}`;
-        const imageRef = ref(storage, imagePath);
-
-        await uploadBytes(imageRef, file, {
-          customMetadata: {
-            firebaseUID: uid,
-            activity: "Property placement",
-          },
-        });
-
-        const downloadURL = await getDownloadURL(imageRef);
-        uploadedImages.push({
-          url: downloadURL,
-          imagePath,
-        });
-      }
+      const uploadedImages: Omit<ListingImage, "positionInListing">[] =
+        await Promise.all(
+          files.map((file) => uploadListingImage.mutateAsync(file)),
+        );
 
       const nextImages = [
         ...images,
@@ -142,12 +115,13 @@ export const PlacingPropertyImagesHandler = ({
       setError("");
 
       if (listingImage.id) {
+        // Deleting the DB row also deletes the underlying Storage object.
         await deleteListingImage.mutateAsync({ id: listingImage.id });
-      }
-
-      if (listingImage.imagePath) {
-        const storage = getStorage();
-        await deleteObject(ref(storage, listingImage.imagePath));
+      } else if (listingImage.imagePath) {
+        // Not yet attached to a listing — only the Storage object exists.
+        await deleteListingImageByPath.mutateAsync({
+          imagePath: listingImage.imagePath,
+        });
       }
 
       const sortedImages = images

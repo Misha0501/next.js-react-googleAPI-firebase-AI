@@ -10,21 +10,19 @@ type Props = {
 export const ListingDetailRecentlyViewedFunctionality = ({
   listingId,
 }: Props) => {
-  const { authToken } = useAuthContext();
+  const { isAuthenticated } = useAuthContext();
 
   const { mutate: createRecentlyViewedListing } =
-    useCreateRecentlyViewedListing({
-    authToken,
-  });
+    useCreateRecentlyViewedListing();
 
   useEffect(() => {
     // Create recently viewed listing if user is logged in
-    if (listingId && authToken) {
+    if (listingId && isAuthenticated) {
       createRecentlyViewedListing({
         listingId,
       });
     }
-  }, [authToken, createRecentlyViewedListing, listingId]);
+  }, [isAuthenticated, createRecentlyViewedListing, listingId]);
 
   return null;
 };

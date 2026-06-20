@@ -1,54 +1,89 @@
 "use client";
 import {
   createContext,
+  useCallback,
   useContext,
   useEffect,
   useState,
   type ReactNode,
 } from "react";
-import { setCookie } from "cookies-next";
-import { onIdTokenChanged, type User } from "firebase/auth";
-import { firebaseClientAuth } from "@/app/lib/firebase/configClient";
+import type { CurrentUserDto } from "@/app/lib/auth/session";
+import { SESSION_EXPIRED_EVENT } from "@/app/lib/auth/notifySessionExpired";
 
 interface ContextProps {
-  authToken: string | null;
-  user: User | null;
+  user: CurrentUserDto | null;
+  isLoading: boolean;
+  isAuthenticated: boolean;
+  refreshUser: () => Promise<void>;
+  logout: () => Promise<void>;
 }
 
 export const AuthContext = createContext<ContextProps>({
-  authToken: null,
   user: null,
+  isLoading: true,
+  isAuthenticated: false,
+  refreshUser: async () => {},
+  logout: async () => {},
 });
 
 export const useAuthContext = () => useContext(AuthContext);
 
 export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<User | null>(null);
-  const [authToken, setAuthToken] = useState<string | null>(null);
+  const [user, setUser] = useState<CurrentUserDto | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const refreshUser = useCallback(async () => {
+    try {
+      const response = await fetch("/api/auth/me", { credentials: "include" });
+      const data = await response.json();
+      setUser(data.user ?? null);
+    } catch {
+      setUser(null);
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  const logout = useCallback(async () => {
+    try {
+      await fetch("/api/auth/logout", { method: "POST", credentials: "include" });
+    } finally {
+      setUser(null);
+    }
+  }, []);
 
   useEffect(() => {
-    const unsubscribe = onIdTokenChanged(firebaseClientAuth, async (user) => {
-      if (user) {
-        setUser(user);
-        const token = await user.getIdToken();
-        setAuthToken(token);
-        setCookie("authToken", token, {
-          maxAge: 60 * 60, // 1 hour — matches Firebase token expiry
-          sameSite: "strict",
-          secure: process.env.NODE_ENV === "production",
-        });
-      } else {
-        setUser(null);
-        setAuthToken(null);
-        setCookie("authToken", "", { maxAge: 0 });
-      }
-    });
+    let isMounted = true;
 
-    return () => unsubscribe();
+    fetch("/api/auth/me", { credentials: "include" })
+      .then((response) => response.json())
+      .then((data) => {
+        if (isMounted) setUser(data.user ?? null);
+      })
+      .catch(() => {
+        if (isMounted) setUser(null);
+      })
+      .finally(() => {
+        if (isMounted) setIsLoading(false);
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    const handleSessionExpired = () => setUser(null);
+
+    window.addEventListener(SESSION_EXPIRED_EVENT, handleSessionExpired);
+    return () =>
+      window.removeEventListener(SESSION_EXPIRED_EVENT, handleSessionExpired);
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, authToken }}>
+    <AuthContext.Provider
+      value={{ user, isLoading, isAuthenticated: !!user, refreshUser, logout }}
+    >
       {children}
     </AuthContext.Provider>
   );

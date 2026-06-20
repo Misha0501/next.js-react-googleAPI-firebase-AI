@@ -64,20 +64,20 @@ export const findApplicationUserByEmail = async (
  * @returns {Response} - The constructed response object based on the error.
  */
 export const handleUserAPIUpdateError = (error: unknown): Response => {
-  const firebaseError =
-    typeof error === "object" && error !== null && "errorInfo" in error
-      ? (error as { errorInfo?: { code?: string } }).errorInfo
+  const firebaseErrorCode =
+    typeof error === "object" && error !== null && "code" in error
+      ? (error as { code?: string }).code
       : undefined;
 
-  if (firebaseError?.code) {
+  if (firebaseErrorCode?.startsWith("auth/")) {
     console.error(error);
-    if (firebaseError.code === "auth/invalid-phone-number") {
+    if (firebaseErrorCode === "auth/invalid-phone-number") {
       return new Response("The authentication phone number is invalid.", {
         status: 400,
       });
     }
 
-    if (firebaseError.code === "auth/invalid-password") {
+    if (firebaseErrorCode === "auth/invalid-password") {
       return new Response(
         "The password must be a string with at least 6 characters.",
         { status: 400 },

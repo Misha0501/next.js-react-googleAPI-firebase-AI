@@ -87,13 +87,21 @@ Before running the project, copy `.env.example` to `.env` and fill in local deve
 
 ### Database With Docker
 
-Docker Compose is only used for local database services. The application itself should be run with npm so local development keeps hot reloading and the normal Next.js tooling.
+Docker Compose is only used for local database/cache services. The application itself should be run with npm so local development keeps hot reloading and the normal Next.js tooling.
 
 To start PostgreSQL and pgAdmin:
 
 ```bash
 docker compose up db pgadmin
 ```
+
+To also rate-limit locally against a real Redis instead of the in-memory fallback, start a local Upstash-compatible Redis (a plain `redis` container plus a small REST proxy in front of it, so the app's `@upstash/redis` client works the same way it does in production):
+
+```bash
+docker compose up redis serverless-redis-http
+```
+
+This is optional — the app works fine without it, falling back to a process-local rate limiter (see `UPSTASH_REDIS_REST_URL`/`UPSTASH_REDIS_REST_TOKEN` in `.env.example`).
 
 ### Application
 

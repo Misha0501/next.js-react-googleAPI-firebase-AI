@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import MultiForm from "@/app/components/propertyPlacementEdit";
-import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { firebaseAdminAuth } from "@/app/lib/firebase/configAdmin";
+import { getSessionUser } from "@/app/lib/auth/session";
 
 export const metadata: Metadata = {
   title: "Place Your Property",
@@ -10,12 +9,8 @@ export const metadata: Metadata = {
 };
 
 const PlacePropertyPage = async () => {
-  const userToken = (await cookies()).get("authToken");
-  if (!userToken || !userToken.value) redirect("/signin");
-
-  await firebaseAdminAuth.verifyIdToken(userToken.value).catch(() => {
-    redirect("/signin");
-  });
+  const session = await getSessionUser();
+  if (!session) redirect("/signin");
 
   return (
     <>

@@ -7,8 +7,6 @@ import { useFormik } from "formik";
 import { toast } from "react-toastify";
 import { useUpdateUser, useUserOwnData } from "@/providers/Users";
 import { useRouter } from "next/navigation";
-import { signOut } from "firebase/auth";
-import { firebaseClientAuth } from "@/app/lib/firebase/configClient";
 import {
   KeyIcon,
   PhoneIcon,
@@ -42,11 +40,11 @@ const inputClass = (hasError: boolean) =>
   }`;
 
 export const PersonalDetailsTab = () => {
-  const { authToken } = useAuthContext();
+  const { isAuthenticated, logout } = useAuthContext();
   const router = useRouter();
 
-  const userData = useUserOwnData({ authToken });
-  const updateUser = useUpdateUser({ authToken });
+  const userData = useUserOwnData({ enabled: isAuthenticated });
+  const updateUser = useUpdateUser();
   const initialValues = useMemo<FormValues>(
     () => ({
       displayName: userData.data?.displayName || "",
@@ -69,7 +67,7 @@ export const PersonalDetailsTab = () => {
       toast.success("Updated successfully");
 
       if (values.newPassword) {
-        await signOut(firebaseClientAuth);
+        await logout();
         router.push("/signin");
       }
     } catch (error: unknown) {

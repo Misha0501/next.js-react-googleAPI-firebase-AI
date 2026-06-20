@@ -28,25 +28,23 @@ export function useUserDetail(
 }
 
 export function useUserOwnData(
-  props: ApplicationUserProvider.GetProps,
+  props?: ApplicationUserProvider.GetProps,
 ): UseQueryResult<ApplicationUserProvider.DetailResponse> {
   return useQuery({
-    queryKey: getKeyFromProps(props, "OWN DATA"),
-    queryFn: () => api.userOwnData(props),
-    enabled: Boolean(props?.authToken),
+    queryKey: getKeyFromProps(props ?? {}, "OWN DATA"),
+    queryFn: () => api.userOwnData(),
+    enabled: props?.enabled ?? false,
     retry: 0,
   });
 }
 
-export function useUpdateUser(
-  props: ApplicationUserProvider.GetProps,
-): UseMutationResult<
+export function useUpdateUser(): UseMutationResult<
   ApplicationUser,
   Error,
   ApplicationUserProvider.UpdatePropsMutation
 > {
   return useMutation({
-    mutationFn: (payload) => api.update({ ...props, data: payload }),
+    mutationFn: (payload) => api.update({ data: payload }),
     mutationKey: [KEY, "Update"],
     retry: 0,
   });

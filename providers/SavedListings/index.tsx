@@ -18,41 +18,41 @@ export function useSavedListings(
   return useQuery({
     queryKey: [`${KEY} | Items`, page],
     queryFn: () => api.savedListings(props),
-    enabled: !!props?.authToken,
+    enabled: props?.enabled ?? false,
     retry: 0,
   });
 }
 
 export function useSavedListingIds(
-  props: AuthProps,
+  props?: AuthProps,
 ): UseQueryResult<{ id: number; listingId: number }[]> {
   return useQuery({
     queryKey: [`${KEY} | Ids`],
-    queryFn: () => api.savedListingIds(props),
-    enabled: !!props?.authToken,
+    queryFn: () => api.savedListingIds(),
+    enabled: props?.enabled ?? false,
     retry: 0,
   });
 }
 
-export function useCreateSavedListing(
-  props: AuthProps,
-): UseMutationResult<
+export function useCreateSavedListing(): UseMutationResult<
   SavedListing,
   Error,
   SavedListingsProvider.CreateMutationPayload
 > {
   return useMutation({
-    mutationFn: (payload) => api.create({ ...props, data: payload }),
+    mutationFn: (payload) => api.create({ data: payload }),
     mutationKey: [KEY, "Create"],
     retry: 0,
   });
 }
 
-export function useDeleteSavedListing(
-  props: AuthProps,
-): UseMutationResult<null, Error, SavedListingsProvider.DeleteMutationPayload> {
+export function useDeleteSavedListing(): UseMutationResult<
+  null,
+  Error,
+  SavedListingsProvider.DeleteMutationPayload
+> {
   return useMutation({
-    mutationFn: (payload) => api.deleteItem({ ...props, data: payload }),
+    mutationFn: (payload) => api.deleteItem({ data: payload }),
     mutationKey: [KEY, "Delete"],
     retry: 0,
   });

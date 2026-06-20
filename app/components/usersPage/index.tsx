@@ -26,13 +26,13 @@ type UserPageMainProps = {
 };
 
 const UserPageMain = ({ profileMode }: UserPageMainProps) => {
-  const { authToken } = useAuthContext();
+  const { isAuthenticated } = useAuthContext();
   const params = useParams();
   const id = Number(params?.id);
   const userDetail = useUserDetail({ id });
 
   const router = useRouter();
-  const usersSavedListings = useSavedListingIds({ authToken });
+  const usersSavedListings = useSavedListingIds({ enabled: isAuthenticated });
 
   const company = useMemo(
     () => userDetail?.data?.Company ?? null,

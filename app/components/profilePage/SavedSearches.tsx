@@ -102,7 +102,7 @@ const getSearchDetails = (item: SavedSearch): SearchDetail[] => {
 };
 
 export const SavedSearches = () => {
-  const { authToken } = useAuthContext();
+  const { isAuthenticated } = useAuthContext();
   const [page, setPage] = useState(1);
   const [deleteConfirmationModalOpen, setDeleteConfirmationModalOpen] =
     useState(false);
@@ -115,8 +115,8 @@ export const SavedSearches = () => {
     isLoading,
     refetch,
     error,
-  } = useSavedSearches({ authToken, page });
-  const deleteSavedSearch = useDeleteSavedSearch({ authToken });
+  } = useSavedSearches({ enabled: isAuthenticated, page });
+  const deleteSavedSearch = useDeleteSavedSearch();
 
   const savedSearches = useMemo(() => {
     if (!savedSearchesData) return [];

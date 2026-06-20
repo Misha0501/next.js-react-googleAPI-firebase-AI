@@ -1,3 +1,3 @@
 export type AuthProps = {
-  authToken?: string | null;
+  enabled?: boolean;
 };

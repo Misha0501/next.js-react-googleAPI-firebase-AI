@@ -2,7 +2,7 @@ import { RecentlyViewedListing } from "@/types";
 
 export namespace RecentlyViewedListingsProvider {
   export type GetProps = {
-    authToken?: string | null;
+    enabled?: boolean;
     page?: number;
   };
 
@@ -14,7 +14,6 @@ export namespace RecentlyViewedListingsProvider {
   };
 
   export type CreateProps = {
-    authToken?: string | null;
     listingId?: number;
   };
 

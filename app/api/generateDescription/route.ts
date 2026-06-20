@@ -1,5 +1,5 @@
 import gemini from "@/app/lib/gemini";
-import { getDecodedIdToken } from "@/app/lib/getDecodedIdToken";
+import { requireUser } from "@/app/lib/auth/requireUser";
 import { checkRateLimit } from "@/app/lib/redis/rateLimit";
 import { handleAPIError } from "@/app/lib/api/handleError";
 import { buildGeminiPrompt } from "@/app/api/generateDescription/_utils";
@@ -8,9 +8,9 @@ export const maxDuration = 60;
 
 export async function POST(request: Request) {
   try {
-    const decodedToken = await getDecodedIdToken();
+    const { firebase } = await requireUser();
 
-    if (!(await checkRateLimit(`rate:desc:${decodedToken.uid}`, 5, 60))) {
+    if (!(await checkRateLimit(`rate:desc:${firebase.uid}`, 5, 60))) {
       return new Response("Too many requests", { status: 429 });
     }
 

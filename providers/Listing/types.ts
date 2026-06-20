@@ -36,13 +36,10 @@ export namespace ListingProvider {
   };
 
   export type DeleteProps = {
-    authToken?: string | null;
     data: { id: number };
   };
 
-  export type CreateProps = {
-    authToken?: string | null;
-  };
+  export type CreateProps = {};
 
   export type CreateResponse = {};
 
@@ -64,9 +61,7 @@ export namespace ListingProvider {
   //UPDATE Property
   export type UpdateMutationPayload = Partial<Listing> & Pick<Listing, "id">;
 
-  export type UpdatePropertyProp = {
-    authToken?: string | null;
-  };
+  export type UpdatePropertyProp = {};
   export interface PutAPIPayload extends UpdatePropertyProp {
     data: UpdateMutationPayload;
   }

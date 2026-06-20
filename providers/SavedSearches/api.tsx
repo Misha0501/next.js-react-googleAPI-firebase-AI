@@ -1,22 +1,20 @@
 import service from "@/services";
 import { SavedSearchesProvider } from "@/providers/SavedSearches/types";
-import type { AuthProps } from "@/providers/types";
 
-type CreateProps = AuthProps & {
+type CreateProps = {
   data: SavedSearchesProvider.CreateMutationPayload;
 };
-type DeleteProps = AuthProps & {
+type DeleteProps = {
   data: SavedSearchesProvider.DeleteMutationPayload;
 };
 
 export async function savedSearches(
-  props?: AuthProps & { page?: number },
+  props?: { page?: number },
 ): Promise<SavedSearchesProvider.ReadResponse> {
   const page = props?.page ?? 1;
   return service<SavedSearchesProvider.ReadResponse>({
     method: "GET",
     url: `/api/savedSearches?page=${page}&pageSize=8`,
-    headers: { Authorization: props?.authToken ?? "" },
   });
 }
 
@@ -25,7 +23,6 @@ export async function create(props: CreateProps) {
     method: "POST",
     url: `/api/savedSearches`,
     body: props.data as Record<string, unknown>,
-    headers: { Authorization: props.authToken ?? "" },
   });
 }
 
@@ -34,6 +31,5 @@ export async function deleteItem(props: DeleteProps) {
     method: "DELETE",
     parseJSON: false,
     url: `/api/savedSearches/${props.data.id}`,
-    headers: { Authorization: props.authToken ?? "" },
   });
 }

@@ -2,24 +2,22 @@ import service from "@/services";
 import { CompanyMembershipInvitesProvider } from "@/providers/CompanyMembershipInvites/types";
 import type { CompanyMembershipInvite } from "@/types";
 
-type ReadProps = CompanyMembershipInvitesProvider.POSTProps;
-type CreateProps = ReadProps & {
+type CreateProps = {
   data: CompanyMembershipInvitesProvider.CreateMutationPayload;
 };
-type DeclineProps = ReadProps & {
+type DeclineProps = {
   data: CompanyMembershipInvitesProvider.DeclineMutationPayload;
 };
-type DeleteProps = ReadProps & {
+type DeleteProps = {
   data: CompanyMembershipInvitesProvider.DeleteMutationPayload;
 };
 
-export async function companyMembershipInvites(
-  props?: ReadProps,
-): Promise<CompanyMembershipInvite[]> {
+export async function companyMembershipInvites(): Promise<
+  CompanyMembershipInvite[]
+> {
   return service({
     method: "GET",
     url: `/api/companyMembershipInvites`,
-    headers: { Authorization: props?.authToken ?? "" },
   });
 }
 
@@ -30,7 +28,6 @@ export async function create(
     method: "POST",
     url: `/api/companyMembershipInvites`,
     body: props.data as Record<string, unknown>,
-    headers: { Authorization: props.authToken ?? "" },
   });
 }
 
@@ -41,7 +38,6 @@ export async function decline(
     method: "POST",
     url: `/api/companyMembershipInvites/decline`,
     body: props.data as Record<string, unknown>,
-    headers: { Authorization: props.authToken ?? "" },
   });
 }
 
@@ -50,6 +46,5 @@ export async function deleteItem(props: DeleteProps): Promise<null> {
     method: "DELETE",
     parseJSON: false,
     url: `/api/companyMembershipInvites/${props.data.id}`,
-    headers: { Authorization: props.authToken ?? "" },
   });
 }

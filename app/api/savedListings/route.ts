@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { ApplicationUser } from "@/types";
-import { getApplicationUserServer } from "@/app/lib/getApplicationUserServer";
+import { requireUser } from "@/app/lib/auth/requireUser";
 import { savedListingsSchema } from "@/app/lib/validations/savedListings";
 import {
   getSavedListings,
@@ -15,8 +14,7 @@ import { handleAPIError } from "@/app/lib/api/handleError";
  */
 export async function GET(req: NextRequest) {
   try {
-    const applicationUser: ApplicationUser =
-      await getApplicationUserServer(true);
+    const { user: applicationUser } = await requireUser();
 
     const { searchParams } = new URL(req.url);
     const page = Number(searchParams.get("page") ?? 1);
@@ -41,8 +39,7 @@ export async function GET(req: NextRequest) {
  */
 export async function POST(req: Request) {
   try {
-    const applicationUser: ApplicationUser =
-      await getApplicationUserServer(true);
+    const { user: applicationUser } = await requireUser();
 
     const parsedValues = savedListingsSchema.parse(await req.json());
 

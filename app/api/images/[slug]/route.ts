@@ -1,5 +1,4 @@
-import { getApplicationUserServer } from "@/app/lib/getApplicationUserServer";
-import { ApplicationUser } from "@/types";
+import { requireUser } from "@/app/lib/auth/requireUser";
 import {
   deleteImageFromDB,
   ensureListingAndUserPermissions,
@@ -7,6 +6,7 @@ import {
 } from "@/app/api/images/[slug]/_utils";
 import { handleAPIError } from "@/app/lib/api/handleError";
 import { validateParamId } from "@/app/lib/api/validateParamId";
+import { firebaseAdminBucket } from "@/app/lib/firebase/configAdminStorage";
 
 /**
  * DELETE Route to delete a listing.
@@ -22,13 +22,19 @@ export async function DELETE(
     const { slug } = await params;
     const id = validateParamId(slug);
 
-    const applicationUser: ApplicationUser = await getApplicationUserServer();
+    const { user: applicationUser } = await requireUser();
 
-    const { listingId } = await fetchImageById(id);
+    const { image, listingId } = await fetchImageById(id);
 
     await ensureListingAndUserPermissions(applicationUser, listingId!);
 
     await deleteImageFromDB(id);
+
+    if (image?.imagePath) {
+      await firebaseAdminBucket
+        .file(image.imagePath)
+        .delete({ ignoreNotFound: true });
+    }
 
     return new Response(null, { status: 204 });
   } catch (error) {

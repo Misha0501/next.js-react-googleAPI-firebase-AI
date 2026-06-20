@@ -1,4 +1,5 @@
 import { getFetchUrl } from "@/app/lib/getFetchUrl";
+import { notifySessionExpired } from "@/app/lib/auth/notifySessionExpired";
 
 interface IDefaultHeadersProps {
   medium: string;
@@ -16,7 +17,6 @@ interface IAPArgs {
   body?: Record<string, unknown> | FormData | null;
   headers?: Record<string, string>;
   queryParams?: Record<string, QueryParamValue> | null;
-  noAuth?: boolean;
   formData?: boolean;
   baseDomain?: string;
   parseJSON?: boolean;
@@ -48,17 +48,12 @@ async function service<T = unknown>(args: IAPArgs): Promise<T> {
     formData = false,
     baseDomain,
     parseJSON = true,
-    noAuth = false,
   } = args;
 
   const requestHeaders: Record<string, string> = {
     ...defaultHeaders,
     ...headers,
   };
-
-  if (noAuth) {
-    delete requestHeaders.Authorization;
-  }
 
   if (formData) {
     delete requestHeaders["Content-Type"];
@@ -67,6 +62,7 @@ async function service<T = unknown>(args: IAPArgs): Promise<T> {
   const props: RequestInit = {
     method,
     headers: requestHeaders,
+    credentials: "include",
   };
 
   if (method !== "GET") {
@@ -98,6 +94,7 @@ async function service<T = unknown>(args: IAPArgs): Promise<T> {
   const data = await fetch(fetchUrl, props);
 
   if (!data.ok) {
+    if (data.status === 401) notifySessionExpired();
     const errorMessage = await data.text();
     throw new Error(
       errorMessage || "Something went wrong please try again later",

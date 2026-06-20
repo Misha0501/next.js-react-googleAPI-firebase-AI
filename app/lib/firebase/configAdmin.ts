@@ -23,7 +23,7 @@ const firebaseAdminCredentials = {
 };
 
 // getApps()/getApp() avoids "already exists" errors when hot-reloading.
-const firebaseAdminApp =
+export const firebaseAdminApp =
   getApps().length === 0
     ? initializeApp({
         credential: cert(firebaseAdminCredentials as ServiceAccount),

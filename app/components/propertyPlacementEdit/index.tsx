@@ -79,8 +79,8 @@ const MultiForm = () => {
   const [showForm2, setShowForm2] = useState(true);
   const [showForm3, setShowForm3] = useState(true);
 
-  const { authToken } = useAuthContext();
-  const userOwnData = useUserOwnData({ authToken });
+  const { isAuthenticated } = useAuthContext();
+  const userOwnData = useUserOwnData({ enabled: isAuthenticated });
   const company = useMemo(
     () => userOwnData?.data?.Membership?.[0]?.company ?? null,
     [userOwnData?.data],

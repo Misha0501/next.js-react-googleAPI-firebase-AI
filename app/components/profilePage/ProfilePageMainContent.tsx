@@ -1,7 +1,5 @@
 "use client";
 
-import { signOut } from "firebase/auth";
-import { firebaseClientAuth } from "@/app/lib/firebase/configClient";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { SavedItemsPageTabs } from "@/app/components/profilePage/SavedItemsPageTabs";
@@ -113,7 +111,7 @@ const getInitials = (value?: string | null) => {
 
 export const ProfilePageMainContent = ({ tab, view }: Props) => {
   const router = useRouter();
-  const { authToken } = useAuthContext();
+  const { isAuthenticated, logout } = useAuthContext();
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const activeTab = PROFILE_TAB_BY_ID[tab] ?? PROFILE_TAB_BY_ID.myProperties;
 
@@ -121,7 +119,7 @@ export const ProfilePageMainContent = ({ tab, view }: Props) => {
     data: applicationUser,
     isLoading,
     error,
-  } = useUserOwnData({ authToken });
+  } = useUserOwnData({ enabled: isAuthenticated });
 
   const company = useMemo(() => {
     if (applicationUser?.Membership && applicationUser?.Membership.length) {
@@ -130,7 +128,7 @@ export const ProfilePageMainContent = ({ tab, view }: Props) => {
     return null;
   }, [applicationUser]);
 
-  const showSkeleton = !authToken || isLoading;
+  const showSkeleton = !isAuthenticated || isLoading;
   const ownListings = (applicationUser?.Listing as Listing[] | undefined) || [];
   const companyListings = (company?.Listing as Listing[] | undefined) || [];
   const displayName = applicationUser?.displayName || "Your account";
@@ -145,7 +143,7 @@ export const ProfilePageMainContent = ({ tab, view }: Props) => {
   const handleLogOut = async () => {
     setIsLoggingOut(true);
     try {
-      await signOut(firebaseClientAuth);
+      await logout();
       router.replace("/");
     } catch (error) {
       console.error(error);

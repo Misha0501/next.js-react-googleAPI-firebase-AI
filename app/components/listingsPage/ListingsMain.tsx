@@ -35,7 +35,7 @@ export const ListingsMain = ({
   listingType,
   locality,
 }: Props) => {
-  const { authToken } = useAuthContext();
+  const { isAuthenticated } = useAuthContext();
   const pathname = usePathname();
   const urlSearchParams = useSearchParams();
   const urlQueryString = urlSearchParams.toString();
@@ -47,7 +47,7 @@ export const ListingsMain = ({
   const pageSize = LISTINGS_PAGE_SIZE;
   const sortBy = urlSearchParams.get("sortBy") || undefined;
   const { data: savedListingIds, isLoading: savedListingsIsLoading } =
-    useSavedListingIds({ authToken });
+    useSavedListingIds({ enabled: isAuthenticated });
 
   const {
     data: listingsData,

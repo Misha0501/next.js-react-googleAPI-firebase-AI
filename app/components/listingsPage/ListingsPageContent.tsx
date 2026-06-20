@@ -23,7 +23,7 @@ const getListingTypeFromSearchParams = (
 };
 
 export const ListingsPageContent = () => {
-  const { authToken } = useAuthContext();
+  const { isAuthenticated } = useAuthContext();
   const param = useSearchParams();
   const queryString = param.toString();
   const listingType = getListingTypeFromSearchParams(param);
@@ -36,7 +36,7 @@ export const ListingsPageContent = () => {
       ),
     [listingType, queryString],
   );
-  const createSavedSearches = useCreateSavedSearches({ authToken });
+  const createSavedSearches = useCreateSavedSearches();
   let [showAuthModal, setShowAuthModal] = useState(false);
 
   let [savedSearchConfirmationModal, setSavedSearchConfirmationModal] =
@@ -101,7 +101,7 @@ export const ListingsPageContent = () => {
 
   const handleSaveSearch = async () => {
     // If the user is not logged in, show the login modal
-    if (!authToken) {
+    if (!isAuthenticated) {
       setShowAuthModal(true);
       return;
     }

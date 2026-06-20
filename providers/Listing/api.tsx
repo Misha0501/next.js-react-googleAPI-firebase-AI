@@ -28,9 +28,6 @@ export async function create(
     method: "POST",
     url: `/api/listings`,
     body: props.data,
-    headers: {
-      Authorization: props.authToken ?? "",
-    },
   });
 }
 
@@ -41,9 +38,6 @@ export async function updateProperty(
     method: "PUT",
     url: `/api/listings`,
     body: props.data,
-    headers: {
-      Authorization: props.authToken ?? "",
-    },
   });
 }
 
@@ -55,8 +49,5 @@ export async function deleteItem(
     parseJSON: false,
     url: `/api/listings/${props.data.id}`,
     body: props.data,
-    headers: {
-      Authorization: props.authToken ?? "",
-    },
   });
 }

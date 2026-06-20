@@ -24,5 +24,28 @@ services:
     depends_on:
       - db
 
+  redis:
+    container_name: real-estate-redis-container
+    image: redis:7-alpine
+    restart: always
+    ports:
+      - "6399:6379"
+
+  # Emulates Upstash's REST API in front of the plain redis container above,
+  # so local dev can use the same @upstash/redis REST client as production.
+  # See: https://github.com/hiett/serverless-redis-http
+  serverless-redis-http:
+    container_name: real-estate-redis-http-container
+    image: hiett/serverless-redis-http:latest
+    restart: always
+    ports:
+      - "8079:80"
+    environment:
+      SRH_MODE: env
+      SRH_TOKEN: local_dev_token
+      SRH_CONNECTION_STRING: "redis://redis:6379"
+    depends_on:
+      - redis
+
 volumes:
   real-estate-db:

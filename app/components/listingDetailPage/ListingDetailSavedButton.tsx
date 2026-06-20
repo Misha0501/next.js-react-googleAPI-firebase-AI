@@ -22,11 +22,11 @@ export const ListingDetailSavedButton = ({
   listingId,
   showOnDesktop = false,
 }: Prop) => {
-  const { authToken } = useAuthContext();
+  const { isAuthenticated } = useAuthContext();
   let [showAuthModal, setShowAuthModal] = useState(false);
-  const savedListingIds = useSavedListingIds({ authToken });
-  const createSavedListing = useCreateSavedListing({ authToken });
-  const deleteSavedListing = useDeleteSavedListing({ authToken });
+  const savedListingIds = useSavedListingIds({ enabled: isAuthenticated });
+  const createSavedListing = useCreateSavedListing();
+  const deleteSavedListing = useDeleteSavedListing();
 
   const router = useRouter();
 
@@ -42,7 +42,7 @@ export const ListingDetailSavedButton = ({
     deleteSavedListing.isPending;
 
   const handleSavedIconClick = async () => {
-    if (!authToken) {
+    if (!isAuthenticated) {
       setShowAuthModal(true);
       return;
     }

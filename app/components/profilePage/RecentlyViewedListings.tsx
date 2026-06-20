@@ -12,13 +12,13 @@ import { ClockIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 const PAGE_SIZE = 8;
 
 export const RecentlyViewedListings = () => {
-  const { authToken } = useAuthContext();
+  const { isAuthenticated } = useAuthContext();
   const [page, setPage] = useState(1);
   const recentlyViewedListingsResponse = useRecentlyViewedListings({
-    authToken,
+    enabled: isAuthenticated,
     page,
   });
-  const savedListingIds = useSavedListingIds({ authToken });
+  const savedListingIds = useSavedListingIds({ enabled: isAuthenticated });
 
   const total = recentlyViewedListingsResponse.data?.total ?? 0;
   const totalPages = Math.ceil(total / PAGE_SIZE);

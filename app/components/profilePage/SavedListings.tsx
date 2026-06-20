@@ -12,7 +12,7 @@ import { HeartIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 const PAGE_SIZE = 8;
 
 export const SavedListings = () => {
-  const { authToken } = useAuthContext();
+  const { isAuthenticated } = useAuthContext();
   const [page, setPage] = useState(1);
 
   const {
@@ -20,7 +20,7 @@ export const SavedListings = () => {
     isLoading,
     error,
     refetch,
-  } = useSavedListings({ authToken, page });
+  } = useSavedListings({ enabled: isAuthenticated, page });
 
   const savedListings = useMemo(() => {
     if (savedListingsData && savedListingsData.results) {

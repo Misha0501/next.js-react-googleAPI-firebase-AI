@@ -1,8 +1,7 @@
 import { NextResponse } from "next/server";
-import { getApplicationUserServer } from "@/app/lib/getApplicationUserServer";
-import { getDecodedIdToken } from "@/app/lib/getDecodedIdToken";
+import { requireUser } from "@/app/lib/auth/requireUser";
+import { isRecentlyAuthenticated } from "@/app/lib/auth/session";
 import { prisma } from "@/app/lib/db/client";
-import { ApplicationUser } from "@/types";
 import { userPUTSchema } from "@/app/lib/validations/user";
 import { firebaseAdminAuth } from "@/app/lib/firebase/configAdmin";
 import {
@@ -10,6 +9,7 @@ import {
   handleUserAPIUpdateError,
 } from "@/app/api/users/_utils";
 import { handleAPIError } from "@/app/lib/api/handleError";
+import { ResponseError } from "@/app/lib/classes/ResponseError";
 import { normalizeContactPhoneNumber } from "@/app/lib/phoneNumber";
 
 /**
@@ -19,11 +19,9 @@ import { normalizeContactPhoneNumber } from "@/app/lib/phoneNumber";
  */
 export async function GET(req: Request) {
   try {
-    const decodedToken = await getDecodedIdToken();
+    const { user } = await requireUser();
 
-    const applicationUser = await findApplicationUserByEmail(
-      decodedToken.email || "",
-    );
+    const applicationUser = await findApplicationUserByEmail(user.email);
 
     return NextResponse.json(applicationUser);
   } catch (error) {
@@ -38,17 +36,28 @@ export async function GET(req: Request) {
  */
 export async function PUT(req: Request) {
   try {
-    const applicationUser: ApplicationUser =
-      await getApplicationUserServer(true);
+    const { user: applicationUser, firebase } = await requireUser();
 
     const parsedValues = userPUTSchema.parse(await req.json());
     const { displayName, phoneNumber, newPassword } = parsedValues;
     const normalizedPhoneNumber = normalizeContactPhoneNumber(phoneNumber);
 
+    if (newPassword && !isRecentlyAuthenticated(firebase)) {
+      throw new ResponseError(
+        "Please sign in again to change your password.",
+        401,
+      );
+    }
+
     await firebaseAdminAuth.updateUser(applicationUser.firebaseUID, {
       displayName,
       ...(newPassword && { password: newPassword }),
     });
+
+    if (newPassword) {
+      // Changing the password is a security event: sign out every other session.
+      await firebaseAdminAuth.revokeRefreshTokens(applicationUser.firebaseUID);
+    }
 
     const updatedApplicationUser = await prisma.applicationUser.update({
       where: { id: applicationUser.id },

@@ -1,18 +1,20 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import {
   createUserWithEmailAndPassword,
-  getAdditionalUserInfo,
   GoogleAuthProvider,
+  inMemoryPersistence,
+  setPersistence,
   signInWithEmailAndPassword,
   signInWithPopup,
+  signOut,
+  updateProfile,
 } from "firebase/auth";
 import { firebaseClientAuth } from "@/app/lib/firebase/configClient";
 import { getFirebaseErrorMessage } from "@/app/lib/firebase/getFirebaseErrorMessage";
-import { useUpdateUser } from "@/providers/Users";
 import { useAuthContext } from "@/app/context/AuthContext";
 import logo from "@/public/homfli-logo.svg";
 import homeImage from "@/public/header-hero.jpg";
@@ -24,23 +26,26 @@ import { Button } from "@/app/components/shared/Button";
 
 type Mode = "signin" | "signup";
 
-const registerInDatabase = async (params: {
-  email: string;
-  displayName: string;
-  providerId: string;
-  firebaseUID: string;
-}) => {
-  await fetch("/api/signup", {
+/**
+ * Exchanges a freshly-issued Firebase ID token for an httpOnly session cookie,
+ * then immediately signs the client SDK out — the session cookie is the only
+ * thing that should outlive this call.
+ */
+const createServerSession = async (idToken: string) => {
+  const response = await fetch("/api/auth/session", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(params),
+    body: JSON.stringify({ idToken }),
+    credentials: "include",
   });
+
+  if (!response.ok) {
+    throw new Error("Could not create a session. Please try again.");
+  }
 };
 
 const SignInPageContent = () => {
-  const updateUser = useUpdateUser({});
-  const updateUserRef = useRef(updateUser);
-  const { user } = useAuthContext();
+  const { user, refreshUser } = useAuthContext();
   const router = useRouter();
 
   const [mode, setMode] = useState<Mode>("signin");
@@ -50,10 +55,6 @@ const SignInPageContent = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-
-  useEffect(() => {
-    updateUserRef.current = updateUser;
-  }, [updateUser]);
 
   useEffect(() => {
     if (user) router.replace("/profile/myAccount");
@@ -70,26 +71,16 @@ const SignInPageContent = () => {
     setError(null);
     setIsLoading(true);
     try {
+      await setPersistence(firebaseClientAuth, inMemoryPersistence);
       const result = await signInWithPopup(
         firebaseClientAuth,
         new GoogleAuthProvider(),
       );
-      const fbUser = result.user;
-      const token = await fbUser.getIdToken();
-      const additionalUserInfo = getAdditionalUserInfo(result);
+      const idToken = await result.user.getIdToken();
 
-      if (additionalUserInfo?.isNewUser) {
-        await registerInDatabase({
-          email: fbUser.email ?? "",
-          displayName: fbUser.displayName ?? "",
-          providerId: fbUser.providerData[0]?.providerId ?? "google.com",
-          firebaseUID: fbUser.uid,
-        });
-      } else if (fbUser.displayName) {
-        await updateUserRef.current
-          .mutateAsync({ displayName: fbUser.displayName, authToken: token })
-          .catch(console.error);
-      }
+      await createServerSession(idToken);
+      await signOut(firebaseClientAuth);
+      await refreshUser();
 
       router.replace("/profile/myAccount");
     } catch (err: any) {
@@ -109,20 +100,18 @@ const SignInPageContent = () => {
     setError(null);
     setIsLoading(true);
     try {
+      await setPersistence(firebaseClientAuth, inMemoryPersistence);
       const result = await signInWithEmailAndPassword(
         firebaseClientAuth,
         email,
         password,
       );
-      const token = await result.user.getIdToken();
-      if (result.user.displayName) {
-        await updateUserRef.current
-          .mutateAsync({
-            displayName: result.user.displayName,
-            authToken: token,
-          })
-          .catch(console.error);
-      }
+      const idToken = await result.user.getIdToken();
+
+      await createServerSession(idToken);
+      await signOut(firebaseClientAuth);
+      await refreshUser();
+
       router.replace("/profile/myAccount");
     } catch (err: any) {
       setError(getFirebaseErrorMessage(err.code));
@@ -140,6 +129,7 @@ const SignInPageContent = () => {
     setError(null);
     setIsLoading(true);
     try {
+      await setPersistence(firebaseClientAuth, inMemoryPersistence);
       const result = await createUserWithEmailAndPassword(
         firebaseClientAuth,
         email,
@@ -147,12 +137,17 @@ const SignInPageContent = () => {
       );
       const fbUser = result.user;
 
-      await registerInDatabase({
-        email: fbUser.email ?? "",
-        displayName: displayName.trim() || (fbUser.email ?? "").split("@")[0],
-        providerId: "password",
-        firebaseUID: fbUser.uid,
+      // updateProfile + a forced token refresh so the verified ID token's
+      // `name` claim carries the chosen display name to the server.
+      await updateProfile(fbUser, {
+        displayName:
+          displayName.trim() || (fbUser.email ?? "").split("@")[0],
       });
+      const idToken = await fbUser.getIdToken(true);
+
+      await createServerSession(idToken);
+      await signOut(firebaseClientAuth);
+      await refreshUser();
 
       router.replace("/profile/myAccount");
     } catch (err: any) {

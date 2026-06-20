@@ -1,17 +1,17 @@
-import Redis from "ioredis";
+import { Redis } from "@upstash/redis";
 
-let redisClient: Redis | null = null;
+const url = process.env.UPSTASH_REDIS_REST_URL;
+const token = process.env.UPSTASH_REDIS_REST_TOKEN;
 
-const url = process.env.REDIS_URL;
-if (url) {
-  try {
-    redisClient = new Redis(url);
-    redisClient.on("error", () => {
-      // Suppress connection errors — rate limiting degrades gracefully without Redis
-    });
-  } catch {
-    redisClient = null;
-  }
-}
-
-export const redis = redisClient;
+export const redis =
+  url && token
+    ? new Redis({
+        url,
+        token,
+        // Fail fast instead of the SDK's default 5 retries with exponential
+        // backoff (~4.3s before giving up) — checkRateLimit's fallback only
+        // helps if the call it's wrapping actually rejects quickly.
+        retry: { retries: 0 },
+        signal: () => AbortSignal.timeout(1000),
+      })
+    : null;

@@ -27,17 +27,17 @@ export const ListingItemSaveButton = ({
   onStateChanged,
 }: ListingItemSaveButtonProps) => {
   const router = useRouter();
-  const { authToken } = useAuthContext();
+  const { isAuthenticated } = useAuthContext();
   const [showAuthModal, setShowAuthModal] = useState(false);
-  const createSavedListing = useCreateSavedListing({ authToken });
-  const deleteSavedListing = useDeleteSavedListing({ authToken });
+  const createSavedListing = useCreateSavedListing();
+  const deleteSavedListing = useDeleteSavedListing();
   const isSaving =
     isLoadingSavedListings ||
     createSavedListing.isPending ||
     deleteSavedListing.isPending;
 
   const handleSavedIconClick = async () => {
-    if (!authToken) {
+    if (!isAuthenticated) {
       setShowAuthModal(true);
       return;
     }

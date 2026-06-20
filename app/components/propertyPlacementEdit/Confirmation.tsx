@@ -3,7 +3,6 @@ import Image from "next/image";
 import NextToConfirmationPage from "@/app/components/propertyPlacementEdit/NextToConfirmationPage";
 import { useCreateProperty } from "@/providers/Listing";
 import type { ListingProvider } from "@/providers/Listing/types";
-import { useAuthContext } from "@/app/context/AuthContext";
 import { Listing, ListingImage } from "@/types";
 import { toast } from "react-toastify";
 import { FormikProps } from "formik";
@@ -94,8 +93,7 @@ const Confirmation = ({
   handleBack,
   step,
 }: CreatePropertyComponentPropInterface) => {
-  const { authToken } = useAuthContext();
-  const createProperty = useCreateProperty({ authToken: authToken });
+  const createProperty = useCreateProperty();
   const [createError, setCreateError] = useState("");
   const [createdProperty, setCreatedProperty] = useState<Listing | null>(null);
   const [openAdvertisementSection, setOpenAdvertisementSection] =

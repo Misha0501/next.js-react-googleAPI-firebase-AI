@@ -40,9 +40,9 @@ export const handleAPIError = (error: unknown): Response => {
   if (
     typeof error === "object" &&
     error !== null &&
-    "errorInfo" in error &&
-    typeof (error as { errorInfo?: unknown }).errorInfo === "object" &&
-    (error as { errorInfo: { code?: unknown } }).errorInfo?.code
+    "code" in error &&
+    typeof (error as { code?: unknown }).code === "string" &&
+    (error as { code: string }).code.startsWith("auth/")
   ) {
     return new Response(
       "Your auth token is invalid or it has expired. Get a new auth token and try again.",

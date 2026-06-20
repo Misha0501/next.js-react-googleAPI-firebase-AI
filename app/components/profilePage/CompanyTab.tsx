@@ -75,10 +75,10 @@ const inputClass = (hasError?: boolean) =>
   }`;
 
 export const CompanyTab = () => {
-  const { authToken } = useAuthContext();
-  const companyMemberships = useCompanyMemberships({ authToken });
-  const createCompany = useCreateCompany({ authToken });
-  const updateCompany = useUpdateCompany({ authToken });
+  const { isAuthenticated } = useAuthContext();
+  const companyMemberships = useCompanyMemberships({ enabled: isAuthenticated });
+  const createCompany = useCreateCompany();
+  const updateCompany = useUpdateCompany();
   const [showAddressManually, setShowAddressManually] = useState(false);
   const membershipCompany = companyMemberships.isSuccess
     ? companyMemberships.data?.company

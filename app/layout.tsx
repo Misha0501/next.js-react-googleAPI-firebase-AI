@@ -40,20 +40,20 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
         suppressHydrationWarning
         className={`${inter.className} flex min-h-screen flex-col`}
       >
-        <ScrollToTop />
-        <Navigation />
-        <main className="flex-1 pb-28 lg:pb-0">
-          <AuthContextProvider>
+        <AuthContextProvider>
+          <ScrollToTop />
+          <Navigation />
+          <main className="flex-1 pb-28 lg:pb-0">
             <ToastContainer
               position="top-right"
               autoClose={8000}
               transition={Bounce}
             />
             <ReactQueryProvider>{children}</ReactQueryProvider>
-          </AuthContextProvider>
-        </main>
-        <Footer />
-        <MobileFooter />
+          </main>
+          <Footer />
+          <MobileFooter />
+        </AuthContextProvider>
       </body>
     </html>
   );

@@ -1,10 +1,9 @@
 import { ResponseError } from "@/app/lib/classes/ResponseError";
 import { prisma } from "@/app/lib/db/client";
-import { getApplicationUserServer } from "@/app/lib/getApplicationUserServer";
+import { requireUser } from "@/app/lib/auth/requireUser";
 import { handleAPIError } from "@/app/lib/api/handleError";
 import { getActiveCompanyMembershipInviteById } from "@/app/api/companyMembershipInvites/_utils";
 import { validateParamId } from "@/app/lib/api/validateParamId";
-import { ApplicationUser } from "@/types";
 
 /**
  * DELETE Route to delete a membership invite.
@@ -20,7 +19,7 @@ export async function DELETE(
     const { slug } = await params;
     const id = validateParamId(slug);
 
-    const applicationUser: ApplicationUser = await getApplicationUserServer();
+    const { user: applicationUser } = await requireUser();
 
     const invite = await getActiveCompanyMembershipInviteById(id);
 

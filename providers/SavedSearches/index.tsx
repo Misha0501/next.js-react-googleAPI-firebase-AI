@@ -18,14 +18,12 @@ export function useSavedSearches(
   return useQuery({
     queryKey: [`${KEY} | Items`, page],
     queryFn: () => api.savedSearches(props),
-    enabled: !!props?.authToken,
+    enabled: props?.enabled ?? false,
     retry: 0,
   });
 }
 
-export function useCreateSavedSearches(
-  props: AuthProps,
-): UseMutationResult<
+export function useCreateSavedSearches(): UseMutationResult<
   SavedSearch,
   Error,
   SavedSearchesProvider.CreateMutationPayload
@@ -35,19 +33,19 @@ export function useCreateSavedSearches(
     Error,
     SavedSearchesProvider.CreateMutationPayload
   >({
-    mutationFn: (payload) =>
-      api.create({ ...props, data: payload }) as Promise<SavedSearch>,
+    mutationFn: (payload) => api.create({ data: payload }) as Promise<SavedSearch>,
     mutationKey: [KEY, "Create"],
     retry: 0,
   });
 }
 
-export function useDeleteSavedSearch(
-  props: AuthProps,
-): UseMutationResult<null, Error, SavedSearchesProvider.DeleteMutationPayload> {
+export function useDeleteSavedSearch(): UseMutationResult<
+  null,
+  Error,
+  SavedSearchesProvider.DeleteMutationPayload
+> {
   return useMutation<null, Error, SavedSearchesProvider.DeleteMutationPayload>({
-    mutationFn: (payload) =>
-      api.deleteItem({ ...props, data: payload }) as Promise<null>,
+    mutationFn: (payload) => api.deleteItem({ data: payload }) as Promise<null>,
     mutationKey: [KEY, "Delete"],
     retry: 0,
   });

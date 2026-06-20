@@ -3,9 +3,9 @@
 import logo from "@/public/homfli-logo.svg";
 import Link from "next/link";
 import Image from "next/image";
-import { firebaseClientAuth } from "@/app/lib/firebase/configClient";
-import { useEffect, useMemo, useState } from "react";
-import { onAuthStateChanged, User } from "firebase/auth";
+import { useAuthContext } from "@/app/context/AuthContext";
+import type { CurrentUserDto } from "@/app/lib/auth/session";
+import { useMemo } from "react";
 import { Disclosure } from "@headlessui/react";
 import { usePathname } from "next/navigation";
 import {
@@ -40,7 +40,7 @@ const navigationItems = [
 const classNames = (...classes: Array<string | false | null | undefined>) =>
   classes.filter(Boolean).join(" ");
 
-const getUserInitials = (user?: User | null) => {
+const getUserInitials = (user?: CurrentUserDto | null) => {
   const source = user?.displayName || user?.email || "";
   const parts = source.split(/[.\s@_-]+/).filter(Boolean);
 
@@ -54,17 +54,8 @@ const getUserInitials = (user?: User | null) => {
 
 export const Navigation = () => {
   const pathname = usePathname();
-  const [user, setUser] = useState<User | null>(null);
-  const [isAuthReady, setIsAuthReady] = useState(false);
-
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(firebaseClientAuth, async (user) => {
-      setUser(user || null);
-      setIsAuthReady(true);
-    });
-
-    return () => unsubscribe();
-  }, []);
+  const { user, isLoading } = useAuthContext();
+  const isAuthReady = !isLoading;
 
   const userInitials = useMemo(() => getUserInitials(user), [user]);
 

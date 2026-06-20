@@ -11,20 +11,18 @@ import { CompanyMembershipInvitesProvider } from "@/providers/CompanyMembershipI
 const KEY = "CompanyMembershipInvites";
 
 export function useCompanyMembershipInvites(
-  props: CompanyMembershipInvitesProvider.POSTProps,
+  props?: CompanyMembershipInvitesProvider.POSTProps,
 ): UseQueryResult<CompanyMembershipInvite[], any> {
   return useQuery({
     queryKey: [`${KEY} | Items`],
-    queryFn: () => api.companyMembershipInvites(props),
-    enabled: !!props?.authToken,
+    queryFn: () => api.companyMembershipInvites(),
+    enabled: props?.enabled ?? false,
     retry: 0,
   });
 }
 
 // Create
-export function useCreateCompanyMembershipInvites(
-  props: CompanyMembershipInvitesProvider.POSTProps,
-): UseMutationResult<
+export function useCreateCompanyMembershipInvites(): UseMutationResult<
   CompanyMembershipInvite,
   any,
   CompanyMembershipInvitesProvider.CreateMutationPayload
@@ -35,16 +33,14 @@ export function useCreateCompanyMembershipInvites(
     CompanyMembershipInvitesProvider.CreateMutationPayload
   >({
     mutationFn: (payload) =>
-      api.create({ ...props, data: payload }) as Promise<CompanyMembershipInvite>,
+      api.create({ data: payload }) as Promise<CompanyMembershipInvite>,
     mutationKey: [KEY, "Create"],
     retry: 0,
   });
 }
 
 // Decline
-export function useDeclineCompanyMembershipInvite(
-  props: CompanyMembershipInvitesProvider.POSTProps,
-): UseMutationResult<
+export function useDeclineCompanyMembershipInvite(): UseMutationResult<
   CompanyMembershipInvite,
   any,
   CompanyMembershipInvitesProvider.DeclineMutationPayload
@@ -55,16 +51,14 @@ export function useDeclineCompanyMembershipInvite(
     CompanyMembershipInvitesProvider.DeclineMutationPayload
   >({
     mutationFn: (payload) =>
-      api.decline({ ...props, data: payload }) as Promise<CompanyMembershipInvite>,
+      api.decline({ data: payload }) as Promise<CompanyMembershipInvite>,
     mutationKey: [KEY, "Decline"],
     retry: 0,
   });
 }
 
 // Delete
-export function useDeleteCompanyMembershipInvite(
-  props: CompanyMembershipInvitesProvider.POSTProps,
-): UseMutationResult<
+export function useDeleteCompanyMembershipInvite(): UseMutationResult<
   null,
   any,
   CompanyMembershipInvitesProvider.DeleteMutationPayload
@@ -75,7 +69,7 @@ export function useDeleteCompanyMembershipInvite(
     CompanyMembershipInvitesProvider.DeleteMutationPayload
   >({
     mutationFn: (payload) =>
-      api.deleteItem({ ...props, data: payload }) as Promise<null>,
+      api.deleteItem({ data: payload }) as Promise<null>,
     mutationKey: [KEY, "Delete"],
     retry: 0,
   });

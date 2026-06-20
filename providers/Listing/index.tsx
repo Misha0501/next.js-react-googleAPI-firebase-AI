@@ -43,40 +43,43 @@ export function useListingDetailPage(
 }
 
 // Create
-export function useCreateProperty(
-  props: ListingProvider.CreateProps,
-): UseMutationResult<Listing, null, ListingProvider.CreateMutationPayload> {
+export function useCreateProperty(): UseMutationResult<
+  Listing,
+  null,
+  ListingProvider.CreateMutationPayload
+> {
   return useMutation({
-    mutationFn: (payload) => api.create({ ...props, data: payload }),
+    mutationFn: (payload) => api.create({ data: payload }),
     mutationKey: [KEY, "Create"],
     retry: 0,
   });
 }
 
 // Update
-export function useUpdateProperty(
-  props: ListingProvider.UpdatePropertyProp,
-): UseMutationResult<Listing, Error, ListingProvider.UpdateMutationPayload> {
+export function useUpdateProperty(): UseMutationResult<
+  Listing,
+  Error,
+  ListingProvider.UpdateMutationPayload
+> {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (payload) => api.updateProperty({ ...props, data: payload }),
+    mutationFn: (payload) => api.updateProperty({ data: payload }),
     mutationKey: [KEY, "Update"],
     retry: 0,
     onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: getKeyFromProps(props, "DETAIL"),
-      });
       queryClient.invalidateQueries({ queryKey: [KEY] });
     },
   });
 }
 
 // Delete
-export function useDeleteListing(
-  props: ListingProvider.UpdatePropertyProp,
-): UseMutationResult<null, Error, ListingProvider.DeleteProps["data"]> {
+export function useDeleteListing(): UseMutationResult<
+  null,
+  Error,
+  ListingProvider.DeleteProps["data"]
+> {
   return useMutation({
-    mutationFn: (payload) => api.deleteItem({ ...props, data: payload }),
+    mutationFn: (payload) => api.deleteItem({ data: payload }),
     mutationKey: [KEY, "Delete"],
     retry: 0,
   });

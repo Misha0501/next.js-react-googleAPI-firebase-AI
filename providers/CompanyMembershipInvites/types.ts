@@ -1,6 +1,6 @@
 export namespace CompanyMembershipInvitesProvider {
   export type POSTProps = {
-    authToken?: string | null;
+    enabled?: boolean;
   };
 
   export type CreateMutationPayload = {

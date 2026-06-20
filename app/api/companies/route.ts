@@ -1,12 +1,11 @@
 import { NextResponse } from "next/server";
 import { Prisma } from "@/generated/prisma/client";
 import { ResponseError } from "@/app/lib/classes/ResponseError";
-import { getApplicationUserServer } from "@/app/lib/getApplicationUserServer";
+import { requireUser } from "@/app/lib/auth/requireUser";
 import { prisma } from "@/app/lib/db/client";
 import { companyPUTSchema, companySchema } from "@/app/lib/validations/company";
 import { handleAPIError } from "@/app/lib/api/handleError";
 import { userHasMembership } from "@/app/api/companies/_utils";
-import { ApplicationUser } from "@/types";
 import {
   ensureActiveCompanyAdmin,
   getActiveMembership,
@@ -19,8 +18,7 @@ import {
  */
 export async function POST(req: Request) {
   try {
-    const applicationUser: ApplicationUser =
-      await getApplicationUserServer(true);
+    const { user: applicationUser } = await requireUser();
 
     const parsedValues = companySchema.parse(await req.json());
     let { name, description, phoneNumber, address, email } = parsedValues;
@@ -74,8 +72,7 @@ export async function POST(req: Request) {
  */
 export async function PUT(req: Request) {
   try {
-    const applicationUser: ApplicationUser =
-      await getApplicationUserServer(true);
+    const { user: applicationUser } = await requireUser();
     const parsedValues = companyPUTSchema.parse(await req.json());
     const { id, description, address, phoneNumber, email, name } = parsedValues;
 

@@ -79,12 +79,12 @@ const getInviteStatus = (invite: CompanyMembershipInvite) => {
 };
 
 export const InvitesTab = () => {
-  const { authToken } = useAuthContext();
+  const { isAuthenticated } = useAuthContext();
   const companyMemberships = useCompanyMemberships({
-    authToken: authToken ?? undefined,
+    enabled: isAuthenticated,
   });
   const companyMembershipInvites = useCompanyMembershipInvites({
-    authToken: authToken ?? undefined,
+    enabled: isAuthenticated,
   });
   const [showModal, setShowModal] = useState(false);
   const [inviteToDecline, setInviteToDecline] =
@@ -92,16 +92,10 @@ export const InvitesTab = () => {
   const [inviteToDelete, setInviteToDelete] =
     useState<CompanyMembershipInvite | null>(null);
 
-  const createCompanyMembershipInvite = useCreateCompanyMembershipInvites({
-    authToken,
-  });
-  const declineCompanyMembershipInvite = useDeclineCompanyMembershipInvite({
-    authToken,
-  });
-  const deleteCompanyMembershipInvite = useDeleteCompanyMembershipInvite({
-    authToken,
-  });
-  const createMembership = useCreateMembership({ authToken: authToken ?? "" });
+  const createCompanyMembershipInvite = useCreateCompanyMembershipInvites();
+  const declineCompanyMembershipInvite = useDeclineCompanyMembershipInvite();
+  const deleteCompanyMembershipInvite = useDeleteCompanyMembershipInvite();
+  const createMembership = useCreateMembership();
 
   const formik = useFormik({
     initialValues: {

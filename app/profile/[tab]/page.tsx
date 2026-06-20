@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import { ProfilePageMainContent } from "@/app/components/profilePage/ProfilePageMainContent";
-import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { firebaseAdminAuth } from "@/app/lib/firebase/configAdmin";
+import { getSessionUser } from "@/app/lib/auth/session";
 
 export const metadata: Metadata = {
   title: "My Profile",
@@ -17,12 +16,8 @@ type Props = {
 const ProfilePage = async ({ params, searchParams }: Props) => {
   const { tab } = await params;
   const { view } = await searchParams;
-  const userToken = (await cookies()).get("authToken");
-  if (!userToken || !userToken.value) redirect("/signin");
-
-  await firebaseAdminAuth.verifyIdToken(userToken.value).catch(() => {
-    redirect("/signin");
-  });
+  const session = await getSessionUser();
+  if (!session) redirect("/signin");
 
   return <ProfilePageMainContent tab={tab} view={view} />;
 };

@@ -1,12 +1,11 @@
 "use client";
 import { useState } from "react";
-import { useAuthContext } from "@/app/context/AuthContext";
 import { Description } from "@/providers/GenerateDescription/types";
+import { notifySessionExpired } from "@/app/lib/auth/notifySessionExpired";
 
 export function useGenerateDescription() {
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
-  const { authToken } = useAuthContext();
 
   const generate = async (
     payload: Description.CreateMutationPayload,
@@ -20,12 +19,15 @@ export function useGenerateDescription() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: authToken ?? "",
         },
+        credentials: "include",
         body: JSON.stringify(payload),
       });
 
-      if (!res.ok) throw new Error(await res.text());
+      if (!res.ok) {
+        if (res.status === 401) notifySessionExpired();
+        throw new Error(await res.text());
+      }
       if (!res.body) throw new Error("No response body");
 
       const reader = res.body.getReader();

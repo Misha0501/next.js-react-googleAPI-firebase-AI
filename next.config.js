@@ -9,6 +9,22 @@ module.exports = {
       },
     ];
   },
+  async headers() {
+    return [
+      {
+        // Google sign-in opens a popup via the Firebase SDK; without this,
+        // some browsers default to a COOP policy that blocks the opener
+        // from reading popup.closed / calling popup.close().
+        source: "/(.*)",
+        headers: [
+          {
+            key: "Cross-Origin-Opener-Policy",
+            value: "same-origin-allow-popups",
+          },
+        ],
+      },
+    ];
+  },
   typescript: {
     ignoreBuildErrors: false,
   },

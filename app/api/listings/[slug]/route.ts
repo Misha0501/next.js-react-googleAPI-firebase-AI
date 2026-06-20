@@ -1,7 +1,7 @@
 import { ResponseError } from "@/app/lib/classes/ResponseError";
 import { NextResponse } from "next/server";
-import { getApplicationUserServer } from "@/app/lib/getApplicationUserServer";
-import { ApplicationUser, Listing } from "@/types";
+import { requireUser } from "@/app/lib/auth/requireUser";
+import { Listing } from "@/types";
 import { getListingDetailById } from "@/app/lib/listing/getListingDetailById";
 import {
   deleteListingAndAssociatedEntities,
@@ -50,8 +50,7 @@ export async function DELETE(
     const { slug } = await params;
     const id = validateParamId(slug);
 
-    const applicationUser: ApplicationUser =
-      await getApplicationUserServer(true);
+    const { user: applicationUser } = await requireUser();
 
     const listing = await validateListingExistence(id);
 

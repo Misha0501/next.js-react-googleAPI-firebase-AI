@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { ApplicationUser } from "@/types";
-import { getApplicationUserServer } from "@/app/lib/getApplicationUserServer";
+import { requireUser } from "@/app/lib/auth/requireUser";
 import { prisma } from "@/app/lib/db/client";
 import { membershipSchema } from "@/app/lib/validations/membership";
 import { handleAPIError } from "@/app/lib/api/handleError";
@@ -17,8 +16,7 @@ import {
  */
 export async function POST(req: NextRequest) {
   try {
-    const applicationUser: ApplicationUser =
-      await getApplicationUserServer(true);
+    const { user: applicationUser } = await requireUser();
 
     const parsedValues = membershipSchema.parse(await req.json());
     const { companyMembershipInviteId } = parsedValues;

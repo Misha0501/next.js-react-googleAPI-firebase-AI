@@ -17,15 +17,13 @@ export function useRecentlyViewedListings(
   return useQuery({
     queryKey: [`${KEY} | Listings`, page],
     queryFn: () => api.recentlyViewedListings(props),
-    enabled: !!props?.authToken,
+    enabled: props?.enabled ?? false,
     retry: 0,
   });
 }
 
 // Create
-export function useCreateRecentlyViewedListing(
-  props: RecentlyViewedListingsProvider.CreateProps,
-): UseMutationResult<
+export function useCreateRecentlyViewedListing(): UseMutationResult<
   RecentlyViewedListing,
   any,
   RecentlyViewedListingsProvider.CreateMutationPayload
@@ -36,7 +34,7 @@ export function useCreateRecentlyViewedListing(
     RecentlyViewedListingsProvider.CreateMutationPayload
   >({
     mutationFn: (payload) =>
-      api.create({ ...props, data: payload }) as Promise<RecentlyViewedListing>,
+      api.create({ data: payload }) as Promise<RecentlyViewedListing>,
     mutationKey: [KEY, "Create"],
     retry: 0,
   });

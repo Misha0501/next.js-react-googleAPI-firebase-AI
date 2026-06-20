@@ -1,6 +1,6 @@
 export namespace MembershipsProvider {
   export type CreateProps = {
-    authToken?: string;
+    enabled?: boolean;
   };
 
   export type CreateMutationPayload = {

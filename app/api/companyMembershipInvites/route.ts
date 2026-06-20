@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { ApplicationUser } from "@/types";
-import { getApplicationUserServer } from "@/app/lib/getApplicationUserServer";
+import { requireUser } from "@/app/lib/auth/requireUser";
 import { prisma } from "@/app/lib/db/client";
 import { companyMembershipInviteSchema } from "@/app/lib/validations/companyMembershipInvite";
 import { handleAPIError } from "@/app/lib/api/handleError";
@@ -20,8 +19,7 @@ import {
  */
 export async function GET(req: NextRequest) {
   try {
-    const applicationUser: ApplicationUser =
-      await getApplicationUserServer(true);
+    const { user: applicationUser } = await requireUser();
 
     const membership = await getActiveMembership(applicationUser.id);
 
@@ -43,8 +41,7 @@ export async function GET(req: NextRequest) {
  */
 export async function POST(req: Request) {
   try {
-    const applicationUser: ApplicationUser =
-      await getApplicationUserServer(true);
+    const { user: applicationUser } = await requireUser();
 
     const parsedValues = companyMembershipInviteSchema.parse(await req.json());
     const { applicationUserRole, applicationUserEmailReceiver } = parsedValues;

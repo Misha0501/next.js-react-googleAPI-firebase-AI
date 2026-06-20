@@ -5,7 +5,7 @@ import { getSiteUrl } from "@/app/lib/sitemap/getSiteUrl";
 const title = "Privacy Policy — Homfli";
 const description =
   "Privacy policy for Homfli — how we collect, use, and protect your data.";
-const lastUpdated = "17 June 2026";
+const lastUpdated = "20 June 2026";
 
 export const metadata: Metadata = {
   title,
@@ -430,21 +430,15 @@ const PrivacyPage = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    <tr className="border-b border-slate-100">
-                      <td className="px-4 py-3 font-mono text-xs">authToken</td>
-                      <td className="px-4 py-3">
-                        Session authentication with a Firebase JWT ID token
-                      </td>
-                      <td className="whitespace-nowrap px-4 py-3">1 day</td>
-                    </tr>
                     <tr>
                       <td className="px-4 py-3 font-mono text-xs">
-                        refreshToken
+                        __session
                       </td>
                       <td className="px-4 py-3">
-                        Hourly session renewal with Firebase
+                        Session authentication with a Firebase session
+                        credential
                       </td>
-                      <td className="whitespace-nowrap px-4 py-3">1 day</td>
+                      <td className="whitespace-nowrap px-4 py-3">7 days</td>
                     </tr>
                   </tbody>
                 </table>
@@ -452,7 +446,7 @@ const PrivacyPage = () => {
               <p>
                 The{" "}
                 <code className="rounded bg-slate-100 px-1 py-0.5 font-mono text-xs">
-                  authToken
+                  __session
                 </code>{" "}
                 cookie is set as{" "}
                 <code className="rounded bg-slate-100 px-1 py-0.5 font-mono text-xs">
@@ -460,37 +454,17 @@ const PrivacyPage = () => {
                 </code>
                 ,{" "}
                 <code className="rounded bg-slate-100 px-1 py-0.5 font-mono text-xs">
-                  sameSite: strict
+                  sameSite: lax
                 </code>
                 , and{" "}
                 <code className="rounded bg-slate-100 px-1 py-0.5 font-mono text-xs">
                   secure
                 </code>{" "}
-                in production.
+                in production. It cannot be read by client-side JavaScript.
               </p>
               <p>
-                The{" "}
-                <code className="rounded bg-slate-100 px-1 py-0.5 font-mono text-xs">
-                  refreshToken
-                </code>{" "}
-                cookie is not{" "}
-                <code className="rounded bg-slate-100 px-1 py-0.5 font-mono text-xs">
-                  httpOnly
-                </code>{" "}
-                because client-side JavaScript currently reads it to renew the
-                session. It is set as{" "}
-                <code className="rounded bg-slate-100 px-1 py-0.5 font-mono text-xs">
-                  sameSite: strict
-                </code>{" "}
-                and{" "}
-                <code className="rounded bg-slate-100 px-1 py-0.5 font-mono text-xs">
-                  secure
-                </code>{" "}
-                in production.
-              </p>
-              <p>
-                These cookies are necessary for login and session functionality.
-                Without them, authenticated parts of Homfli may not work
+                This cookie is necessary for login and session functionality.
+                Without it, authenticated parts of Homfli may not work
                 properly.
               </p>
             </div>
