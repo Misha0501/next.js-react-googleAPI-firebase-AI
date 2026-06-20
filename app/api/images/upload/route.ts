@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { requireUser } from "@/app/lib/auth/requireUser";
 import { handleAPIError } from "@/app/lib/api/handleError";
 import { ResponseError } from "@/app/lib/classes/ResponseError";
-import { firebaseAdminBucket } from "@/app/lib/firebase/configAdminStorage";
+import { getFirebaseAdminBucket } from "@/app/lib/firebase/configAdminStorage";
 import { uniqueID } from "@/app/lib/uniqueID";
 
 const ALLOWED_CONTENT_TYPES: Record<string, string> = {
@@ -40,7 +40,8 @@ export async function POST(req: Request) {
     const imagePath = `publicImages/${uniqueID()}${extension}`;
     const buffer = Buffer.from(await file.arrayBuffer());
 
-    const bucketFile = firebaseAdminBucket.file(imagePath);
+    const bucket = getFirebaseAdminBucket();
+    const bucketFile = bucket.file(imagePath);
     await bucketFile.save(buffer, {
       contentType: file.type,
       // Resumable uploads are unnecessary (and fail to resolve an upload
@@ -55,7 +56,7 @@ export async function POST(req: Request) {
     });
     await bucketFile.makePublic();
 
-    const url = `https://storage.googleapis.com/${firebaseAdminBucket.name}/${imagePath}`;
+    const url = `https://storage.googleapis.com/${bucket.name}/${imagePath}`;
 
     return NextResponse.json({ url, imagePath });
   } catch (error) {
@@ -77,7 +78,9 @@ export async function DELETE(req: Request) {
       throw new ResponseError("A valid imagePath is required.", 400);
     }
 
-    await firebaseAdminBucket.file(imagePath).delete({ ignoreNotFound: true });
+    await getFirebaseAdminBucket()
+      .file(imagePath)
+      .delete({ ignoreNotFound: true });
 
     return new Response(null, { status: 204 });
   } catch (error) {

@@ -3,9 +3,10 @@ import {
   getApp,
   getApps,
   initializeApp,
+  type App,
   type ServiceAccount,
 } from "firebase-admin/app";
-import { getAuth } from "firebase-admin/auth";
+import { getAuth, type Auth } from "firebase-admin/auth";
 
 const firebaseAdminCredentials = {
   type: process.env.FIREBASE_ADMIN_TYPE,
@@ -22,12 +23,30 @@ const firebaseAdminCredentials = {
   universe_domain: process.env.FIREBASE_ADMIN_UNIVERSE_DOMAIN,
 };
 
-// getApps()/getApp() avoids "already exists" errors when hot-reloading.
-export const firebaseAdminApp =
-  getApps().length === 0
-    ? initializeApp({
-        credential: cert(firebaseAdminCredentials as ServiceAccount),
-      })
-    : getApp();
+let app: App | undefined;
 
-export const firebaseAdminAuth = getAuth(firebaseAdminApp);
+// Lazy on purpose: Next.js imports every route module at build time to
+// collect page data. A route that merely imports this file — even one that
+// never calls Firebase Admin, like /api/auth/logout — would otherwise force
+// initializeApp() to run during the build and fail the entire build if the
+// service account env vars aren't present for that build's environment.
+export const getFirebaseAdminApp = (): App => {
+  if (!app) {
+    app =
+      getApps().length === 0
+        ? initializeApp({
+            credential: cert(firebaseAdminCredentials as ServiceAccount),
+          })
+        : getApp();
+  }
+
+  return app;
+};
+
+let auth: Auth | undefined;
+
+export const getFirebaseAdminAuth = (): Auth => {
+  if (!auth) auth = getAuth(getFirebaseAdminApp());
+
+  return auth;
+};

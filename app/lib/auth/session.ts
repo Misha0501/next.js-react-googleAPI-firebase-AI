@@ -1,6 +1,6 @@
 import { cookies } from "next/headers";
 import type { DecodedIdToken } from "firebase-admin/auth";
-import { firebaseAdminAuth } from "@/app/lib/firebase/configAdmin";
+import { getFirebaseAdminAuth } from "@/app/lib/firebase/configAdmin";
 import { prisma } from "@/app/lib/db/client";
 import { ApplicationUser } from "@/types";
 
@@ -50,7 +50,7 @@ export const getSessionUser = async (): Promise<AuthenticatedUser | null> => {
 
   let decoded: DecodedIdToken;
   try {
-    decoded = await firebaseAdminAuth.verifySessionCookie(
+    decoded = await getFirebaseAdminAuth().verifySessionCookie(
       sessionCookie,
       true,
     );

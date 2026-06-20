@@ -3,7 +3,7 @@ import { requireUser } from "@/app/lib/auth/requireUser";
 import { isRecentlyAuthenticated } from "@/app/lib/auth/session";
 import { prisma } from "@/app/lib/db/client";
 import { userPUTSchema } from "@/app/lib/validations/user";
-import { firebaseAdminAuth } from "@/app/lib/firebase/configAdmin";
+import { getFirebaseAdminAuth } from "@/app/lib/firebase/configAdmin";
 import {
   findApplicationUserByEmail,
   handleUserAPIUpdateError,
@@ -49,14 +49,16 @@ export async function PUT(req: Request) {
       );
     }
 
-    await firebaseAdminAuth.updateUser(applicationUser.firebaseUID, {
+    await getFirebaseAdminAuth().updateUser(applicationUser.firebaseUID, {
       displayName,
       ...(newPassword && { password: newPassword }),
     });
 
     if (newPassword) {
       // Changing the password is a security event: sign out every other session.
-      await firebaseAdminAuth.revokeRefreshTokens(applicationUser.firebaseUID);
+      await getFirebaseAdminAuth().revokeRefreshTokens(
+        applicationUser.firebaseUID,
+      );
     }
 
     const updatedApplicationUser = await prisma.applicationUser.update({

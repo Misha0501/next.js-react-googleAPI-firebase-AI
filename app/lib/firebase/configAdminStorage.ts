@@ -1,6 +1,16 @@
 import { getStorage } from "firebase-admin/storage";
-import { firebaseAdminApp } from "@/app/lib/firebase/configAdmin";
+import { getFirebaseAdminApp } from "@/app/lib/firebase/configAdmin";
 
-export const firebaseAdminBucket = getStorage(firebaseAdminApp).bucket(
-  process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
-);
+let bucket: ReturnType<ReturnType<typeof getStorage>["bucket"]> | undefined;
+
+// Lazy for the same reason as getFirebaseAdminApp/getFirebaseAdminAuth — see
+// app/lib/firebase/configAdmin.ts.
+export const getFirebaseAdminBucket = () => {
+  if (!bucket) {
+    bucket = getStorage(getFirebaseAdminApp()).bucket(
+      process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+    );
+  }
+
+  return bucket;
+};

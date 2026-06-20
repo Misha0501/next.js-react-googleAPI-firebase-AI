@@ -6,7 +6,7 @@ import {
 } from "@/app/api/images/[slug]/_utils";
 import { handleAPIError } from "@/app/lib/api/handleError";
 import { validateParamId } from "@/app/lib/api/validateParamId";
-import { firebaseAdminBucket } from "@/app/lib/firebase/configAdminStorage";
+import { getFirebaseAdminBucket } from "@/app/lib/firebase/configAdminStorage";
 
 /**
  * DELETE Route to delete a listing.
@@ -31,7 +31,7 @@ export async function DELETE(
     await deleteImageFromDB(id);
 
     if (image?.imagePath) {
-      await firebaseAdminBucket
+      await getFirebaseAdminBucket()
         .file(image.imagePath)
         .delete({ ignoreNotFound: true });
     }

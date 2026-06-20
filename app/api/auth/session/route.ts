@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { firebaseAdminAuth } from "@/app/lib/firebase/configAdmin";
+import { getFirebaseAdminAuth } from "@/app/lib/firebase/configAdmin";
 import { prisma } from "@/app/lib/db/client";
 import { handleAPIError } from "@/app/lib/api/handleError";
 import { ResponseError } from "@/app/lib/classes/ResponseError";
@@ -31,7 +31,7 @@ export async function POST(req: Request) {
       throw new ResponseError("idToken is required.", 400);
     }
 
-    const decoded = await firebaseAdminAuth.verifyIdToken(idToken, true);
+    const decoded = await getFirebaseAdminAuth().verifyIdToken(idToken, true);
 
     if (!decoded.email) {
       throw new ResponseError(
@@ -69,7 +69,7 @@ export async function POST(req: Request) {
       });
     }
 
-    const sessionCookie = await firebaseAdminAuth.createSessionCookie(
+    const sessionCookie = await getFirebaseAdminAuth().createSessionCookie(
       idToken,
       { expiresIn: SESSION_DURATION_MS },
     );
