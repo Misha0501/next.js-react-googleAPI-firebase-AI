@@ -21,7 +21,7 @@ export async function DELETE(
   try {
     const { slug } = await params;
     const id = validateParamId(slug);
-    const { user: applicationUser } = await requireUser();
+    const { user: applicationUser } = await requireUser(request);
     const savedSearch = await fetchSavedSearch(id);
 
     if (!savedSearch) {

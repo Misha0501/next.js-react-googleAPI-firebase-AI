@@ -42,9 +42,8 @@ const CookiesPage = () => {
                 <li>Showing advertising</li>
               </ul>
               <p>
-                Some cookies are necessary for a website to work. Others
-                require your consent, depending on their purpose and applicable
-                law.
+                Some cookies are necessary for a website to work. Others require
+                your consent, depending on their purpose and applicable law.
               </p>
             </div>
           ),
@@ -67,8 +66,8 @@ const CookiesPage = () => {
                 <li>Retargeting pixels</li>
                 <li>Browser fingerprinting scripts</li>
                 <li>
-                  Persistent device identifiers beyond authentication/session
-                  tokens
+                  Persistent device identifiers beyond the necessary
+                  authentication session cookie
                 </li>
               </ul>
               <p>
@@ -110,16 +109,12 @@ const CookiesPage = () => {
                   </thead>
                   <tbody>
                     <tr>
-                      <td className="px-4 py-3 font-mono text-xs">
-                        __session
-                      </td>
+                      <td className="px-4 py-3 font-mono text-xs">__session</td>
                       <td className="px-4 py-3">
                         Used to authenticate logged-in users with a Firebase
                         session credential
                       </td>
-                      <td className="px-4 py-3 whitespace-nowrap">
-                        Necessary
-                      </td>
+                      <td className="px-4 py-3 whitespace-nowrap">Necessary</td>
                       <td className="px-4 py-3 whitespace-nowrap">7 days</td>
                     </tr>
                   </tbody>
@@ -137,10 +132,9 @@ const CookiesPage = () => {
                 </p>
                 <p className="mt-2">
                   It contains a Firebase session credential, verified by our
-                  servers on each request, and is required for secure access
-                  to authenticated features such as saved listings, saved
-                  searches, recently viewed listings, and company listing
-                  management.
+                  servers on each request, and is required for secure access to
+                  authenticated features such as saved listings, saved searches,
+                  recently viewed listings, and company listing management.
                 </p>
                 <p className="mt-2">
                   In production, this cookie is configured as:
@@ -164,8 +158,8 @@ const CookiesPage = () => {
                 </ul>
                 <p className="mt-2">
                   This cookie cannot be read by JavaScript running in the
-                  browser. Because it is necessary for authentication, it
-                  cannot be disabled through the cookie consent banner without
+                  browser. Because it is necessary for authentication, it cannot
+                  be disabled through the cookie consent banner without
                   affecting login functionality.
                 </p>
               </div>
@@ -177,9 +171,7 @@ const CookiesPage = () => {
           title: "4. Cookie categories",
           body: (
             <div className="space-y-6">
-              <p>
-                Homfli may classify cookies into the following categories.
-              </p>
+              <p>Homfli may classify cookies into the following categories.</p>
 
               <div>
                 <h3 className="font-bold text-[#1F2937]">
@@ -283,13 +275,11 @@ const CookiesPage = () => {
           title: "5. Silktide consent management",
           body: (
             <div className="space-y-3">
+              <p>Homfli uses Silktide as its cookie consent management tool.</p>
               <p>
-                Homfli uses Silktide as its cookie consent management tool.
-              </p>
-              <p>
-                Silktide displays a cookie banner when you visit Homfli.
-                Through the banner, you may accept, reject, or customise
-                non-essential cookies.
+                Silktide displays a cookie banner when you visit Homfli. Through
+                the banner, you may accept, reject, or customise non-essential
+                cookies.
               </p>
               <p>
                 You can reopen your preferences at any time by clicking
@@ -308,8 +298,8 @@ const CookiesPage = () => {
                 on homfli.com and lets you manage your choices.
               </p>
               <p>
-                At the current stage, Homfli only uses essential cookies, so
-                the panel shows a single required category. If additional cookie
+                At the current stage, Homfli only uses essential cookies, so the
+                panel shows a single required category. If additional cookie
                 categories are added in the future, they will appear here and
                 require your consent where required by law.
               </p>
@@ -366,8 +356,8 @@ const CookiesPage = () => {
           body: (
             <div className="space-y-3">
               <p>
-                Homfli uses third-party services that may process technical
-                data or set cookies depending on how they are integrated.
+                Homfli uses third-party services that may process technical data
+                or set cookies depending on how they are integrated.
               </p>
               <p>These services may include:</p>
               <ul className="list-disc space-y-1 pl-5">
@@ -411,8 +401,8 @@ const CookiesPage = () => {
               </p>
               <p>
                 Depending on the technical implementation, Google services may
-                set cookies or use similar technologies. If detected, these
-                will be listed in the Silktide preferences panel.
+                set cookies or use similar technologies. If detected, these will
+                be listed in the Silktide preferences panel.
               </p>
             </div>
           ),
@@ -423,12 +413,15 @@ const CookiesPage = () => {
           body: (
             <div className="space-y-3">
               <p>
-                If you log in to Homfli, authentication cookies are needed to
-                keep your session active.
+                If you log in to Homfli, the httpOnly{" "}
+                <code className="rounded bg-slate-100 px-1 py-0.5 font-mono text-xs">
+                  __session
+                </code>{" "}
+                cookie is needed to keep your session active for up to 7 days.
               </p>
               <p>
-                If you delete or block authentication cookies, you may be
-                logged out or unable to use account features such as:
+                If you delete or block authentication cookies, you may be logged
+                out or unable to use account features such as:
               </p>
               <ul className="list-disc space-y-1 pl-5">
                 <li>Saving listings</li>
@@ -467,9 +460,7 @@ const CookiesPage = () => {
           title: "13. Contact",
           body: (
             <div className="space-y-3">
-              <p>
-                For questions about this Cookie Policy, contact us at:
-              </p>
+              <p>For questions about this Cookie Policy, contact us at:</p>
               <p>
                 Homfli
                 <br />

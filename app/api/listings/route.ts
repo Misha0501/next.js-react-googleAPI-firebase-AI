@@ -84,7 +84,7 @@ export async function GET(req: NextRequest) {
  */
 export async function POST(req: Request) {
   try {
-    const { user: applicationUser } = await requireUser();
+    const { user: applicationUser } = await requireUser(req);
 
     const parsedValues = listingSchema.parse(await req.json());
     const {
@@ -163,7 +163,7 @@ export async function POST(req: Request) {
  */
 export async function PUT(req: Request) {
   try {
-    const { user: applicationUser } = await requireUser();
+    const { user: applicationUser } = await requireUser(req);
     const parsedValues = listingSchemaPutRequest.parse(await req.json());
 
     const {

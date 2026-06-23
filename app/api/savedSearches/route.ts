@@ -45,7 +45,7 @@ export async function GET(req: NextRequest) {
  */
 export async function POST(req: Request) {
   try {
-    const { user: applicationUser } = await requireUser();
+    const { user: applicationUser } = await requireUser(req);
 
     const parsedValues = savedFiltersSchema.parse(await req.json());
 

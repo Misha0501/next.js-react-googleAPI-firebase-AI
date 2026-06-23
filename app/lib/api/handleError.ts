@@ -45,7 +45,7 @@ export const handleAPIError = (error: unknown): Response => {
     (error as { code: string }).code.startsWith("auth/")
   ) {
     return new Response(
-      "Your auth token is invalid or it has expired. Get a new auth token and try again.",
+      "Your session is invalid or has expired. Please sign in again.",
       { status: 400 },
     );
   }

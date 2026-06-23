@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { sendEmail } from "@/app/lib/email";
 import { handleAPIError } from "@/app/lib/api/handleError";
 import { checkRateLimit } from "@/app/lib/redis/rateLimit";
+import { assertSameOrigin } from "@/app/lib/auth/origin";
 import {
   createEmailHTMLContent,
   getClientIp,
@@ -14,6 +15,8 @@ export const dynamic = "force-dynamic"; // Force dynamic (server) route instead 
 
 export async function POST(req: Request) {
   try {
+    await assertSameOrigin(req);
+
     const ip = getClientIp(req);
     if (!(await checkRateLimit(`rate:contact:${ip}`, 5, 60))) {
       return new Response("Too many requests", { status: 429 });

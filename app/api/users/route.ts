@@ -36,7 +36,7 @@ export async function GET(req: Request) {
  */
 export async function PUT(req: Request) {
   try {
-    const { user: applicationUser, firebase } = await requireUser();
+    const { user: applicationUser, firebase } = await requireUser(req);
 
     const parsedValues = userPUTSchema.parse(await req.json());
     const { displayName, phoneNumber, newPassword } = parsedValues;

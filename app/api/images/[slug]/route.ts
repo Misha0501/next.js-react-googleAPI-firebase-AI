@@ -22,7 +22,7 @@ export async function DELETE(
     const { slug } = await params;
     const id = validateParamId(slug);
 
-    const { user: applicationUser } = await requireUser();
+    const { user: applicationUser } = await requireUser(request);
 
     const { image, listingId } = await fetchImageById(id);
 

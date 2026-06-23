@@ -5,8 +5,10 @@ import { AuthenticatedUser, getSessionUser } from "@/app/lib/auth/session";
 /**
  * Authenticates the current request from the httpOnly `__session` cookie.
  */
-export const requireUser = async (): Promise<AuthenticatedUser> => {
-  await assertSameOrigin();
+export const requireUser = async (
+  req?: Request,
+): Promise<AuthenticatedUser> => {
+  await assertSameOrigin(req);
 
   const session = await getSessionUser();
 

@@ -44,6 +44,27 @@ const createServerSession = async (idToken: string) => {
   }
 };
 
+const clearTemporaryFirebaseAuth = async () => {
+  try {
+    await signOut(firebaseClientAuth);
+  } catch (error) {
+    console.error(
+      "Failed to clear temporary Firebase client auth state",
+      error,
+    );
+  }
+};
+
+const withTemporaryFirebaseAuth = async <T,>(
+  callback: () => Promise<T>,
+): Promise<T> => {
+  try {
+    return await callback();
+  } finally {
+    await clearTemporaryFirebaseAuth();
+  }
+};
+
 const SignInPageContent = () => {
   const { user, refreshUser } = useAuthContext();
   const router = useRouter();
@@ -76,10 +97,10 @@ const SignInPageContent = () => {
         firebaseClientAuth,
         new GoogleAuthProvider(),
       );
-      const idToken = await result.user.getIdToken();
-
-      await createServerSession(idToken);
-      await signOut(firebaseClientAuth);
+      await withTemporaryFirebaseAuth(async () => {
+        const idToken = await result.user.getIdToken();
+        await createServerSession(idToken);
+      });
       await refreshUser();
 
       router.replace("/profile/myAccount");
@@ -106,10 +127,10 @@ const SignInPageContent = () => {
         email,
         password,
       );
-      const idToken = await result.user.getIdToken();
-
-      await createServerSession(idToken);
-      await signOut(firebaseClientAuth);
+      await withTemporaryFirebaseAuth(async () => {
+        const idToken = await result.user.getIdToken();
+        await createServerSession(idToken);
+      });
       await refreshUser();
 
       router.replace("/profile/myAccount");
@@ -137,16 +158,15 @@ const SignInPageContent = () => {
       );
       const fbUser = result.user;
 
-      // updateProfile + a forced token refresh so the verified ID token's
-      // `name` claim carries the chosen display name to the server.
-      await updateProfile(fbUser, {
-        displayName:
-          displayName.trim() || (fbUser.email ?? "").split("@")[0],
+      await withTemporaryFirebaseAuth(async () => {
+        // updateProfile + a forced token refresh so the verified ID token's
+        // `name` claim carries the chosen display name to the server.
+        await updateProfile(fbUser, {
+          displayName: displayName.trim() || (fbUser.email ?? "").split("@")[0],
+        });
+        const idToken = await fbUser.getIdToken(true);
+        await createServerSession(idToken);
       });
-      const idToken = await fbUser.getIdToken(true);
-
-      await createServerSession(idToken);
-      await signOut(firebaseClientAuth);
       await refreshUser();
 
       router.replace("/profile/myAccount");
@@ -174,13 +194,13 @@ const SignInPageContent = () => {
               className="object-cover"
               sizes="(min-width: 1024px) 50vw, 100vw"
             />
-            <div className="via-slate-950/55 absolute inset-0 bg-gradient-to-t from-slate-950 to-slate-950/10" />
+            <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/55 to-slate-950/10" />
             <div className="absolute inset-x-0 bottom-0 p-10 text-white">
               <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-sm font-medium backdrop-blur">
                 <ShieldCheckIcon className="h-5 w-5" />
                 Secure account access
               </div>
-              <p className="max-w-md text-4xl font-semibold leading-tight">
+              <p className="max-w-md text-4xl leading-tight font-semibold">
                 {mode === "signin"
                   ? "Return to your property workspace."
                   : "Start your property journey."}
@@ -191,15 +211,15 @@ const SignInPageContent = () => {
                   : "Create a free account to save properties, place properties, and manage your real estate activity."}
               </p>
               <div className="mt-8 grid grid-cols-3 gap-3">
-                <div className="border-white/15 rounded-lg border bg-white/10 p-4 backdrop-blur">
+                <div className="rounded-lg border border-white/15 bg-white/10 p-4 backdrop-blur">
                   <p className="text-2xl font-semibold">100+</p>
                   <p className="mt-1 text-sm text-white/75">listed homes</p>
                 </div>
-                <div className="border-white/15 rounded-lg border bg-white/10 p-4 backdrop-blur">
+                <div className="rounded-lg border border-white/15 bg-white/10 p-4 backdrop-blur">
                   <p className="text-2xl font-semibold">24/7</p>
                   <p className="mt-1 text-sm text-white/75">account access</p>
                 </div>
-                <div className="border-white/15 rounded-lg border bg-white/10 p-4 backdrop-blur">
+                <div className="rounded-lg border border-white/15 bg-white/10 p-4 backdrop-blur">
                   <p className="text-2xl font-semibold">EU</p>
                   <p className="mt-1 text-sm text-white/75">Euro pricing</p>
                 </div>
@@ -222,7 +242,7 @@ const SignInPageContent = () => {
                   <BuildingOffice2Icon className="h-4 w-4" />
                   Real estate account
                 </div>
-                <h1 className="text-[34px] font-semibold leading-tight tracking-normal text-slate-950 md:text-[42px]">
+                <h1 className="text-[34px] leading-tight font-semibold tracking-normal text-slate-950 md:text-[42px]">
                   {mode === "signin"
                     ? "Sign in to Homfli"
                     : "Create an account"}
@@ -437,7 +457,7 @@ const SignInPageContent = () => {
                     <div className="w-full border-t border-slate-100" />
                   </div>
                   <div className="relative flex justify-center text-xs">
-                    <span className="bg-white px-3 uppercase tracking-wide text-slate-400">
+                    <span className="bg-white px-3 tracking-wide text-slate-400 uppercase">
                       or
                     </span>
                   </div>

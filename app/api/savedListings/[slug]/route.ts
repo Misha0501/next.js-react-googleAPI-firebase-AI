@@ -23,7 +23,7 @@ export async function DELETE(
 
     if (isNaN(id)) throw new ResponseError("ID must be a valid number", 422);
 
-    const { user: applicationUser } = await requireUser();
+    const { user: applicationUser } = await requireUser(request);
 
     const savedListing = await fetchSavedListing(id);
 

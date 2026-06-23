@@ -16,7 +16,7 @@ import {
  */
 export async function POST(req: NextRequest) {
   try {
-    const { user: applicationUser } = await requireUser();
+    const { user: applicationUser } = await requireUser(req);
 
     const parsedValues = membershipSchema.parse(await req.json());
     const { companyMembershipInviteId } = parsedValues;

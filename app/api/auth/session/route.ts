@@ -8,6 +8,7 @@ import { assertSameOrigin } from "@/app/lib/auth/origin";
 import {
   SESSION_COOKIE_NAME,
   SESSION_DURATION_MS,
+  isRecentlyAuthenticated,
   sessionCookieOptions,
   toCurrentUserDto,
 } from "@/app/lib/auth/session";
@@ -18,7 +19,7 @@ import {
  */
 export async function POST(req: Request) {
   try {
-    await assertSameOrigin();
+    await assertSameOrigin(req);
 
     const ip = req.headers.get("x-forwarded-for") ?? "unknown";
     if (!(await checkRateLimit(`rate:auth-session:${ip}`, 10, 60))) {
@@ -32,6 +33,13 @@ export async function POST(req: Request) {
     }
 
     const decoded = await getFirebaseAdminAuth().verifyIdToken(idToken, true);
+
+    if (!isRecentlyAuthenticated(decoded)) {
+      throw new ResponseError(
+        "Please sign in again to start a new session.",
+        401,
+      );
+    }
 
     if (!decoded.email) {
       throw new ResponseError(
@@ -60,13 +68,40 @@ export async function POST(req: Request) {
         },
         include: membershipInclude,
       });
-    } else if (!applicationUser.displayName && decoded.name) {
-      // Backfill a missing display name; never overwrite one the user has set.
-      applicationUser = await prisma.applicationUser.update({
-        where: { id: applicationUser.id },
-        data: { displayName: decoded.name },
-        include: membershipInclude,
-      });
+    } else {
+      if (
+        applicationUser.firebaseUID &&
+        applicationUser.firebaseUID !== decoded.uid
+      ) {
+        throw new ResponseError(
+          "An account with this email already exists. Please use its original sign-in method.",
+          409,
+        );
+      }
+
+      const updateData: {
+        displayName?: string;
+        firebaseUID?: string;
+        providerId?: string;
+      } = {};
+
+      // Backfill missing identity fields; never overwrite user-edited profile data.
+      if (!applicationUser.firebaseUID) updateData.firebaseUID = decoded.uid;
+      if (!applicationUser.providerId) {
+        updateData.providerId =
+          decoded.firebase?.sign_in_provider || "firebase";
+      }
+      if (!applicationUser.displayName && decoded.name) {
+        updateData.displayName = decoded.name;
+      }
+
+      if (Object.keys(updateData).length > 0) {
+        applicationUser = await prisma.applicationUser.update({
+          where: { id: applicationUser.id },
+          data: updateData,
+          include: membershipInclude,
+        });
+      }
     }
 
     const sessionCookie = await getFirebaseAdminAuth().createSessionCookie(

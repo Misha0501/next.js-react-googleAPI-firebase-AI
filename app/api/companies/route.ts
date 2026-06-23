@@ -18,7 +18,7 @@ import {
  */
 export async function POST(req: Request) {
   try {
-    const { user: applicationUser } = await requireUser();
+    const { user: applicationUser } = await requireUser(req);
 
     const parsedValues = companySchema.parse(await req.json());
     let { name, description, phoneNumber, address, email } = parsedValues;
@@ -72,7 +72,7 @@ export async function POST(req: Request) {
  */
 export async function PUT(req: Request) {
   try {
-    const { user: applicationUser } = await requireUser();
+    const { user: applicationUser } = await requireUser(req);
     const parsedValues = companyPUTSchema.parse(await req.json());
     const { id, description, address, phoneNumber, email, name } = parsedValues;
 

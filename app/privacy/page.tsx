@@ -431,14 +431,12 @@ const PrivacyPage = () => {
                   </thead>
                   <tbody>
                     <tr>
-                      <td className="px-4 py-3 font-mono text-xs">
-                        __session
-                      </td>
+                      <td className="px-4 py-3 font-mono text-xs">__session</td>
                       <td className="px-4 py-3">
                         Session authentication with a Firebase session
                         credential
                       </td>
-                      <td className="whitespace-nowrap px-4 py-3">7 days</td>
+                      <td className="px-4 py-3 whitespace-nowrap">7 days</td>
                     </tr>
                   </tbody>
                 </table>
@@ -464,8 +462,7 @@ const PrivacyPage = () => {
               </p>
               <p>
                 This cookie is necessary for login and session functionality.
-                Without it, authenticated parts of Homfli may not work
-                properly.
+                Without it, authenticated parts of Homfli may not work properly.
               </p>
             </div>
           ),
@@ -484,8 +481,8 @@ const PrivacyPage = () => {
                 <li>Retargeting pixels</li>
                 <li>Browser fingerprinting scripts</li>
                 <li>
-                  Persistent device identifiers beyond authentication/session
-                  tokens
+                  Persistent device identifiers beyond the necessary
+                  authentication session cookie
                 </li>
               </ul>
               <p>
@@ -588,8 +585,9 @@ const PrivacyPage = () => {
                 </h3>
                 <p className="mt-2">
                   Firebase Authentication, provided by Google, is used to
-                  authenticate users and issue session tokens. It may process
-                  email addresses and authentication metadata.
+                  authenticate users. Homfli exchanges verified Firebase ID
+                  tokens for a server-managed httpOnly session cookie. Firebase
+                  may process email addresses and authentication metadata.
                 </p>
               </div>
 
@@ -887,11 +885,11 @@ const PrivacyPage = () => {
                   <code className="rounded bg-slate-100 px-1 py-0.5 font-mono text-xs">
                     httpOnly
                   </code>{" "}
-                  authentication token cookie
+                  session cookie
                 </li>
                 <li>
                   <code className="rounded bg-slate-100 px-1 py-0.5 font-mono text-xs">
-                    sameSite: strict
+                    sameSite: lax
                   </code>{" "}
                   cookies
                 </li>

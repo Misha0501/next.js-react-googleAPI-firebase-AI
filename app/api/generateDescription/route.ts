@@ -8,7 +8,7 @@ export const maxDuration = 60;
 
 export async function POST(request: Request) {
   try {
-    const { firebase } = await requireUser();
+    const { firebase } = await requireUser(request);
 
     if (!(await checkRateLimit(`rate:desc:${firebase.uid}`, 5, 60))) {
       return new Response("Too many requests", { status: 429 });

@@ -19,7 +19,7 @@ const MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024;
  */
 export async function POST(req: Request) {
   try {
-    const { user } = await requireUser();
+    const { user } = await requireUser(req);
 
     const formData = await req.formData();
     const file = formData.get("file");
@@ -70,11 +70,14 @@ export async function POST(req: Request) {
  */
 export async function DELETE(req: Request) {
   try {
-    await requireUser();
+    await requireUser(req);
 
     const { imagePath } = await req.json();
 
-    if (typeof imagePath !== "string" || !imagePath.startsWith("publicImages/")) {
+    if (
+      typeof imagePath !== "string" ||
+      !imagePath.startsWith("publicImages/")
+    ) {
       throw new ResponseError("A valid imagePath is required.", 400);
     }
 
